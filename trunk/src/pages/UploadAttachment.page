@@ -1,0 +1,42 @@
+<apex:page sidebar="false" showHeader="false" controller="UploadAttachmentController">
+	
+	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/uploadAttachment.css')}" />
+
+	<apex:includeScript value="{!URLFOR($Resource.WikiResource, 'inc/js/uploadAttachment.js')}" />
+	
+	<apex:stylesheet value="{!URLFOR($Resource.portalStyles, 'portal.css')}" />
+	<link rel="stylesheet" media="screen" href="{!URLFOR($Resource.TeamsResources, 'inc/css/teamsOverlaysTemplate.css')}" />
+	<apex:includeScript value="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/prototype.js')}"/>
+	<!-- Portal Support -->
+	<apex:includeScript value="{!$Resource.portalSupport}"/>	
+
+	<apex:outputpanel rendered="{!IF(parentId == null, true, false)}">
+		<div id="uploadFinished"></div>
+	</apex:outputpanel>
+	<apex:outputpanel rendered="{!IF(parentId == null, false, true)}">
+		<div class="overlayMainContent">
+			<apex:form >
+				<div class="inputFileDiv">	
+					<div class="overlayFormContent">
+						<strong>Select the File</strong><br>
+						<span class="infoText">Type the path of the file or click the Browse button to find the file.</span><br/>
+						<apex:inputFile value="{!newAttach.Body}" id="newAttach" contentType="{!newAttach.ContentType}" filename="{!newAttach.Name}" fileSize="{!newAttach.BodyLength}"/><br/>
+						<apex:outputPanel rendered="{!NOT validAttSize}">
+							<span class="errorText"><b>Error:</b> The attachment size must be less than 5 mb</span>
+						</apex:outputPanel>
+					</div>
+					<div class="overlaySeparateLine"></div>
+					<!-- Saven and Cancel Buttons -->
+					<div class="overlayFromButtons" align="center">
+						<apex:commandButton styleclass="overlaySaveBtn" action="{!saveNewAttach}" value="Done"/>
+						<apex:commandButton styleClass="overlayCancelBtn" value="Cancel" onclick="cancelAction(); return false;"  />
+					</div>
+				</div>
+			</apex:form>
+		</div>
+		<div id="uploadCancel" style="display: none;"></div>
+	</apex:outputpanel>
+	<script>	
+		readPortalCSSRules();
+	</script>	
+</apex:page>

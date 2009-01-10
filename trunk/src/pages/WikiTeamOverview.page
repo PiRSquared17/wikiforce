@@ -1,0 +1,246 @@
+<apex:page id="WikiOverview" controller="WikiTeamOverviewController" tabStyle="WikiPage__c" sidebar="false" >
+	<apex:includeScript value="/soap/ajax/11.1/connection.js" />
+	<!-- Scripts -->
+	<apex:includeScript value="{!URLFOR($Resource.WikiResource, 'inc/js/common.js')}"/>
+	<apex:includeScript value="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}"/>
+	<apex:includeScript value="{!URLFOR($Resource.Script_aculo_us, 'scriptaculous.js')}"/>
+	<apex:includeScript value="{!URLFOR($Resource.Script_aculo_us, 'effects.js')}"/>
+	<apex:includeScript value="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/common.js')}"/>
+	<!-- Portal Support -->
+	<apex:includeScript value="{!$Resource.portalSupport}"/>
+	<apex:includeScript value="{!URLFOR($Resource.OverlayFunctionsFixed, 'js/overlayFunction.js')}"/>
+	<apex:includeScript value="{!URLFOR($Resource.WikiResource, 'inc/js/WikiOverview.js')}"/>
+    <!-- CSS styles for Portal Integration -->
+    <apex:stylesheet value="{!URLFOR($Resource.portalStyles, 'portal.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/headerTeams.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/widgetTeam.css')}" />
+	<!-- Styles -->
+	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/commonLayout.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/WikiOverview.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/fonts.css')}" />
+	
+	 
+	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/wikiTeamOverview.css')}" />
+	
+	<apex:includeScript value="{!URLFOR($Resource.WikiResource, 'inc/js/wikiTeamOverview.js')}" />
+	
+	<style>	
+		div.wikiPageTree div.wikiPageContainer div.wikiPage {
+			background:url('{!URLFOR($Resource.WikiResource, 'images/layout/icons/wikipage.png')}') no-repeat top left;
+		}
+		/*
+		.SidebarTitle{
+			margin-left: 195px;
+			background: #ffffff;
+			margin-top: -5px;
+			height: 200px;
+			border-top: -5px;
+		}
+		*/
+		
+		div.bPageFooter{
+			background: #ffffff !important;
+			margin-top: -2px;
+			margin-left: 201px;
+			margin-right: 0px;
+		}
+		.bodyTable{
+			margin-bottom: -2px;
+		}
+		
+
+
+	</style>
+	<script>
+		/**
+        * Namespace Prefix Getter
+        */
+        var namespace = "{!namespace}";
+
+
+		var staticURLFORWiki = '{!$Resource.WikiResource}';
+		var API_SESSION_ID = '{!$Api.Session_ID}';
+
+		var globalExpandWiki = "{!URLFOR($Resource.WikiResource, 'images/layout/icons/expandwiki.gif')}";
+		var globalCollapseWiki = "{!URLFOR($Resource.WikiResource, 'images/layout/icons/collapsewiki.gif')}";
+	</script>
+
+	<apex:outputpanel rendered="{!userPermissions.canCreate}">
+		<c:WikiNewPageWidget />
+	</apex:outputpanel>
+	<apex:form >
+		<apex:actionFunction name="refreshTeamOverview" action="{!genWikiTree}" rerender="wikiTreePanel, updatedPanel" />
+	</apex:form>
+	<div class="BodyPage">
+		
+		<!-- Overlay -->	
+		<div class="UPF__overlay__" id="UPF__overlay__" style="display:none;"></div>
+		
+		<!--  Loader -->
+		<div class="loader__" id="loader__" style="display:none;"><center><img src="{!URLFOR($Resource.commonResources, 'images/loaders/bigLoader.gif')}" /></center><br />Loading...</div>
+			
+		<!-- Header -->
+		<apex:composition template="HeaderTemplate">
+			<apex:define name="moduleId"><apex:variable var="moduleId" value="headerWiki"/></apex:define>
+		    <apex:define name="module">Wiki</apex:define>
+		    <apex:define name="title">Overview</apex:define>
+		    <apex:define name="search">
+		    	<c:Search module="wiki" />
+		    </apex:define>
+	    </apex:composition>
+	     
+	    
+		<div class="MainPage">
+			<div class="PageBlock">	
+			
+				<!-- Left Sidebar  -->
+				<table border="0" class="bodyTable" >
+					<tr>
+						<td valign="top" class="sideBarTD">
+							
+							<!-- My Favorites Widget -->
+							<c:WikiWidgetMyFavorites />
+							
+							
+							<!-- My Recent Changes Widget -->
+							<c:WikiWidgetMyRecentChanges />
+								
+												
+						</td>
+						<td valign="top" class="mainContentTD">
+			
+							<!-- Main Content DIV-->
+							<div class="MainContent">
+								<apex:outputpanel rendered="{!userPermissions.canCreate}">
+									<div align="center" class="addWikiPageBtn">
+										<form>
+											<input type="button" value="Add Wiki Page" onclick="createOverlay('','AddChildForm','305','');" class="btn" />
+										</form>
+									</div>
+								</apex:outputpanel>
+								<table border="0" cellspacing="8" style="width:100%;">
+									<tr>
+										<td width="50%" valign="top" id="wikipageDirectoryTD">
+											<div class="teamBlockTitle" style="margin-bottom:10px;">
+												<h4>Wiki Page directory</h4>
+											</div>
+											<strong><a href="/apex/TeamsRedirect?id={!currentTeam.Id}">{!currentTeam.Name}</a></strong>
+											<br style="clear:both;"/>
+											<br style="clear:both;"/>
+											<!-- Wiki Page Tree Start -->											
+											<div class="wikiPageTree" id="wikiPageTree">
+												<apex:outputpanel id="wikiTreePanel">
+													<apex:repeat value="{!wpl}" var="wiki">												
+														<div id="pagecontainer-{!wiki.Id}" class="wikiPageContainer">
+															<div class="WPwrapper">
+																<div id="actionContainer-{!wiki.Id}" class="actions">
+																	<apex:outputpanel rendered="{!wiki.hasChilds}" styleClass="wikiChilds" >
+																		<a href="javascript:;" onclick="expandCollapse('{!wiki.Id}','collapse');"><img src="{!URLFOR($Resource.WikiResource, 'images/layout/icons/collapsewiki.gif')}" alt="" title="" /></a>
+																	</apex:outputpanel>
+																</div>
+																<div class="wikiPage">
+																	<a href="/apex/WikiPage?idWP={!wiki.Id}"><apex:outputText value="{!wiki.Name}"/></a>
+																</div>
+															</div>
+															<apex:outputpanel rendered="{!wiki.hasChilds}" layout="block">
+																<div id="childs-{!wiki.Id}" class="wikiChilds">
+																	<apex:repeat value="{!wiki.childs}" var="wikiChild">
+																		<div id="pagecontainer-{!wikiChild.Id}" class="wikiPageContainer">
+																			<div id="actionContainer-{!wikiChild.Id}" class="actions">
+																				<apex:outputpanel rendered="{!wikiChild.hasChilds}" styleClass="wikiChilds" >
+																					<a href="javascript:;" onclick="expandCollapse('{!wikiChild.Id}','expand');"><img src="{!URLFOR($Resource.WikiResource, 'images/layout/icons/expandwiki.gif')}" alt="" title="" /></a>
+																				</apex:outputpanel>
+																			</div>
+																			<div class="wikiPage">
+																				<a href="/apex/WikiPage?idWP={!wikiChild.Id}"><apex:outputText value="{!wikiChild.Name}"/></a>
+																			</div>
+																			<apex:outputpanel rendered="{!wikiChild.hasChilds}" layout="block">
+																				<div id="childs-{!wikiChild.Id}" class="wikiChilds"></div>
+																			</apex:outputpanel>	
+																		</div>																	
+																	</apex:repeat>
+																</div>
+															</apex:outputpanel>
+														</div>
+													</apex:repeat>	
+												</apex:outputpanel>												
+											</div>											
+											<!-- Wiki Page Tree End -->											
+										</td>
+										<td style="width:3px;"></td>
+										<td width="50%" valign="top">
+												
+											<!-- Recently Updated -->
+											<div class="teamBlockTitle">
+												<h4>Recently Updated Pages</h4>
+											</div>										
+											<apex:outputpanel id="updatedPanel">
+												<apex:form id="formRecentlyUpdate">
+													<apex:repeat value="{!recentlyUpdated}" var="item">
+														<div class="recentlyUpdated">
+															<table border="0">
+																<tr>
+																	<td valign="top">
+																		<apex:outputpanel rendered="{!IF(item.modifiedByPicture == '',true,false)}">
+																			<apex:image styleclass="userPicture" value="{!URLFOR($Resource.commonResources, 'images/placeholders/unknownperson32x32.jpg')}" />
+																		</apex:outputpanel>
+																		<apex:outputpanel rendered="{!IF(item.modifiedByPicture == '',false,true)}">
+																			<apex:image styleclass="userPicture" value="/servlet/servlet.FileDownload?file={!item.modifiedByPicture}" />
+																		</apex:outputpanel>
+																	</td>
+																	<td valign="top">
+																		<apex:commandLink onclick="location.href='https://na1.salesforce.com/apex/WikiPage?idWP={!item.Id}';"
+																			value="{!item.Name}"
+																			styleclass="WikiLink"
+																			rerender="auxPanel">
+																		</apex:commandLink><br>
+																		<div class="description">{!item.shortDescription}</div>
+																		<span class="updatedDate">
+																			<apex:commandLink rerender="auxPanel" onclick="location.href ='https://na1.salesforce.com/apex/PeopleProfileDisplay?id={!item.LastModifiedById}';" value="{!item.LastModifiedBy}" styleclass="WikiSite" />&nbsp; in 
+																			&nbsp;
+																			<apex:commandLink onclick="location.href='https://na1.salesforce.com/apex/WikiPage?idS={!item.parentId}';"
+																				value="{!item.parentName}" 
+																				styleclass="WikiSite"
+																				rerender="auxPanel">
+																			</apex:commandLink>&nbsp;
+																			on {!item.LastModifiedDate} 
+																		</span>
+																	</td>
+																</tr>
+															</table>
+														</div>
+													</apex:repeat>
+												</apex:form>
+											</apex:outputpanel>
+											
+										</td>
+									</tr>
+								</table>
+								<apex:outputpanel rendered="{!userPermissions.canCreate}">
+									<div align="center" class="addWikiPageBtn">
+										<form class="ff">
+											<input type="button" value="Add Wiki Page" onclick="createOverlay('','AddChildForm','305','');" class="btn" />
+										</form>
+									</div>
+								</apex:outputpanel>
+							</div>
+						</td>
+					</tr>
+				
+					<!--  tr>
+						<td class="SidebarTitleContainer" colspan="2">
+							<div class="SidebarTitle" /></div>
+						</td>
+					</tr -->
+					
+				</table>
+			</div>
+		</div>
+	</div>
+	<apex:outputpanel id="auxPanel" style="display:none;">
+	</apex:outputpanel>	
+	<script>
+		readPortalCSSRules();
+	</script>
+
+</apex:page>

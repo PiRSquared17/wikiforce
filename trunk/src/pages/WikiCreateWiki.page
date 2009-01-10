@@ -1,0 +1,59 @@
+<apex:page >
+
+<div id=mainContent>
+	<div id="title">Create New Wiki</div>
+	<div class="tabContainer">
+		<apex:form >
+			<ul class="tabs">
+				<li class="selected" id="settingsTab">
+					<apex:commandLink action="{!refreshTab}" value="Settings" 
+						onclick="switchTab('settingsTab'); switchOverlay(true);" 
+							rerender="settingsMembersPanel" 
+							oncomplete="switchOverlay(false);">
+							<apex:param name="settings" value="false" />
+					</apex:commandLink>
+				</li>
+				<li id="members">
+					<apex:commandLink action="{!refreshTab}" value="Members" 
+						onclick="switchTab('allTeamTab'); switchOverlay(true);" 
+						rerender="settingsMembersPanel" 
+						oncomplete="switchOverlay(false);">
+						<apex:param name="members" value="true" />
+					</apex:commandLink>
+				</li>					
+			</ul>
+		</apex:form>
+	</div>
+	<!-- Settings Form -->
+	<form action="">
+		<table>
+			<tr>
+				<td>Wiki Name</td>
+				<td><input type="text" id="wikiName" /></td>
+				<td>= Required information</td>
+			</tr>
+			<tr>
+				<td>Description</td>
+				<td>
+					<textarea cols="38" rows="4" style="height: 83px; width: 430px"></textarea>
+					<br/>
+					<span class="explain">(32k character limit) - Characters remaining:</span>
+					<span class="explain" id="stringSizeCounter">32700</span>
+				</td>
+			</tr>
+			<tr>
+				<td>Wiki Avatar</td>
+				<td></td>
+			</tr>
+			<tr>
+			</tr>
+			<tr>
+			</tr>
+			<tr>
+			</tr>
+		</table>
+	</form>
+	<!-- End Settings Form -->
+</div>
+
+</apex:page>
