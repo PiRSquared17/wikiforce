@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <value>Wiki Version</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Wiki Versions</value>
+    </caseValues>
+    <fields>
+        <label><!-- Body --></label>
+        <name>Body__c</name>
+    </fields>
+    <fields>
+        <label><!-- Revision Count --></label>
+        <name>RevisionCount__c</name>
+    </fields>
+    <fields>
+        <label><!-- Wiki Page --></label>
+        <name>WikiPageId__c</name>
+        <relationshipLabel><!-- Wiki Versions --></relationshipLabel>
+    </fields>
+    <startsWith>Consonant</startsWith>
+</CustomObjectTranslation>

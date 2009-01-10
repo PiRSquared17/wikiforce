@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <value>Wiki Link</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Wiki Links</value>
+    </caseValues>
+    <fields>
+        <label><!-- FromLink --></label>
+        <name>FromLink__c</name>
+        <relationshipLabel><!-- Wiki Links (FromLink) --></relationshipLabel>
+    </fields>
+    <fields>
+        <label><!-- ToLink --></label>
+        <name>ToLink__c</name>
+        <relationshipLabel><!-- Wiki Links --></relationshipLabel>
+    </fields>
+    <startsWith>Consonant</startsWith>
+</CustomObjectTranslation>

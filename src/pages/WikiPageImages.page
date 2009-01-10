@@ -1,0 +1,50 @@
+<apex:page sidebar="false" showHeader="false" controller="WikiPageImagesController">
+	
+	
+	<apex:includeScript value="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/prototype.js')}"/>
+	
+	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/wikiPageImages.css')}"/>
+	
+	<apex:includeScript value="{!URLFOR($Resource.WikiResource, 'inc/js/wikiPageImages.js')}"/>
+	
+	<div class="title"><strong>Upload Image</strong></div>
+	<span class="infoText">Type the path of the file or click the Browse button to find it.</span><br/>
+	<div class="form">
+		<apex:form >
+			<apex:inputFile value="{!newAttach.Body}" id="newAttach" styleclass="newAttach" contentType="{!newAttach.ContentType}" filename="{!newAttach.Name}" fileSize="{!newAttach.BodyLength}" onchange="active_desactive();" /><br/>
+			<apex:outputPanel rendered="{!NOT validAttSize}">
+				<span class="errorText"><b>Error:</b> The attachment size must be less than 5 mb</span>
+			</apex:outputPanel>
+			<div class="divButton">
+				<apex:commandButton action="{!saveNewImage}" value="Done" styleclass="doneBtn" onclick="show_uping();" />
+				<span id="uping" style="display: none;" >Uploading...</span>
+			</div>
+		</apex:form>
+	</div>
+	<div class="title"><strong>Attached Images</strong></div>
+	<div class="imagesWrapper">
+		<apex:repeat value="{!attachments}" var="item">
+			<div class="imageItem">
+				<div class="imageHolder">
+					<a href="Javascript:;" onclick="SelectFile('https://na1.salesforce.com/servlet/servlet.FileDownload?file={!item.Id}');">
+						<img src="https://na1.salesforce.com/servlet/servlet.FileDownload?file={!item.Id}" width="56" height="56" />
+					</a>
+				</div>
+				<div class="imageName">
+					<a href="Javascript:;" onclick="SelectFile('https://na1.salesforce.com/servlet/servlet.FileDownload?file={!item.Id}');">
+						{!item.Name}
+					</a>
+					<br />
+				</div>
+				<div class="clear" />
+			</div>
+		</apex:repeat>
+	</div>
+	<div class="closeBtn">
+		<input type="button" class="btn" value="Cancel" onclick="window.close();" />
+	</div>
+	<script>
+		//Execute for disabled 'Done' button first time
+		active_desactive();
+	</script> 
+</apex:page>
