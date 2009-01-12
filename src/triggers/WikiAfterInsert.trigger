@@ -62,16 +62,9 @@ trigger WikiAfterInsert on Wiki__c bulk(after insert) {
 			   	 
 			   	QueueSobject allowComments = new QueueSobject(SobjectType = Schema.SObjectType.Comment__c.getName() ,QueueId = wikiQueueId);
 			   	sobjectsQueueAllowed.add(allowComments);
-			   	
-			   	upsert sobjectsQueueAllowed;
-			   					
-			    System.debug('\n******************'+ sobjectsQueueAllowed +'*************************'); 
-			    
-				// Insert all the allowed sobjects       	
-	
-			   	
-			    
-			   	
+					    
+				//Insert all the allowed sobjects       	
+				upsert sobjectsQueueAllowed;
 			   	
 			   	//Upsert Team owner
 			   	Wiki__c tempTeam = [select ownerId, Id, Name from Wiki__c where Id =: team.Id limit 1];
