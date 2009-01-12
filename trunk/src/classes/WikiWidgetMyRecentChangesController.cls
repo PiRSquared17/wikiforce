@@ -51,38 +51,6 @@ public with sharing class WikiWidgetMyRecentChangesController {
    		String parentName;
    		String parentId;
    		String shortDescription;
-   		String modifiedByPicture;
-   		
-		/**
-		*@param String
-		*/
-		public void setModifiedByPicture (String modById) {
-			String PictureId = '';
-			List<Wiki__c> itemProfile = new List<Wiki__c>();
-			itemProfile = [SELECT PictureId__c FROM Wiki__c WHERE LastModifiedById =:modById];
-			
-			if (itemProfile != null) {
-				if (itemProfile.size() > 0) {
-					Wiki__c picture = new Wiki__c();
-					picture = itemProfile.get(0);
-			        if(picture.PictureId__c == '' || picture.PictureId__c == null) {                	                                          	 
-				     	PictureId = '';
-					}else {
-						PictureId = picture.PictureId__c;
-					} 
-				}else {
-					PictureId = '';
-				}
-			}
-   			this.modifiedByPicture = PictureId ;
-   		}
-   		
-   		/**
-   		*@return String
-   		*/
-   		public String getModifiedByPicture () {
-   			return modifiedByPicture;
-   		}
    		
    		/**
    		*@param String
