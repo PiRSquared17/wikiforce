@@ -225,9 +225,7 @@
 		<div class="UpdatedInfo"><apex:outputpanel rendered="{!IF(infoWiki.LastModifiedDate == infoWiki.CreatedDate,true,false)}">
 							This page hasn't been updated
 						</apex:outputpanel> <apex:outputpanel rendered="{!IF(infoWiki.LastModifiedDate == infoWiki.CreatedDate,false,true)}">
-							Updated {!infoWiki.LastModifiedDate} by <a
-				href="/apex/PeopleProfileDisplay?id={!infoWiki.LastModifiedById}">{!infoWiki.LastModifiedBy}</a> (<a
-				href="javascript:;" class="WikiLink">more...</a>)
+							Updated {!infoWiki.LastModifiedDate} by {!infoWiki.LastModifiedBy}
 						</apex:outputpanel></div>
 	</apex:outputpanel> <!-- - - - - - - - - - - - - - - - - - - - - --> <!-- - - - - - - - 	 BUTTONS   - - - - - - - -->
 	<!-- - - - - - - - - - - - - - - - - - - - - --> <apex:outputpanel id="bodyPageHeader">
@@ -568,14 +566,9 @@
 												<div align="right"><b>{!item.showShortCommentBy}</b><br>
 												<span class="infoText">{!item.commentDate}</span></div>
 												</td>
-												<td valign="top"><apex:outputpanel rendered="{!IF(item.commentPicture == 'nopicture',true,false)}">
-													<img alt=""
-														src="{!URLFOR($Resource.commonResources, 'images/placeholders/unknownperson32x32.jpg')}"
-														width="32">
-												</apex:outputpanel> <apex:outputpanel rendered="{!IF(item.commentPicture == 'nopicture',false,true)}">
-													<apex:image style="width:25px;"
-														value="/servlet/servlet.FileDownload?file={!item.commentPicture}" />
-												</apex:outputpanel></td>
+												<td valign="top">
+													<img alt="" src="{!URLFOR($Resource.commonResources, 'images/placeholders/unknownperson32x32.jpg')}" width="32">
+												</td>
 											</tr>
 										</table>
 										</td>

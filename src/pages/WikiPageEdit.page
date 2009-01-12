@@ -45,7 +45,6 @@
 		    	<c:Search module="wiki" />
 		    </apex:define>
 	    </apex:composition>
-	    
 		<!-- - - - - - - - - - - - - - - - - - - - - -->	
 		<!-- - - - - - - - PAGE HEADER - - - - - - - -->
 		<!-- - - - - - - - - - - - - - - - - - - - - -->		

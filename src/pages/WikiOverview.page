@@ -106,7 +106,7 @@
 										<tr>
 											<td width="50%" valign="top">
 												<div class="teamBlockTitle">
-													<h4>{!$ObjectType.Wiki__c.label} Wikis</h4>
+													<h4>{!$ObjectType.Wiki__c.label}</h4>
 												</div>
 												<br>
 												<apex:image id="twistImage" style="vertical-align:middle;" styleclass="twistImg" onclick="hideSection(this,'filterDiv')" value="{!URLFOR($Resource.WikiResource, 'images/layout/rc_boxes/arrow_down.gif')}" title="Hide Section" alt="Hide Section" />&nbsp; 
@@ -334,12 +334,7 @@
 																<table border="0">
 																	<tr>
 																		<td valign="top">
-																			<apex:outputpanel rendered="{!IF(item.modifiedByPicture == '',true,false)}">
-																				<apex:image value="{!URLFOR($Resource.commonResources, 'images/placeholders/unknownperson32x32.jpg')}" />
-																			</apex:outputpanel>
-																			<apex:outputpanel rendered="{!IF(item.modifiedByPicture == '',false,true)}">
-																				<apex:image value="/servlet/servlet.FileDownload?file={!item.modifiedByPicture}" />
-																			</apex:outputpanel>
+																			<apex:image value="{!URLFOR($Resource.commonResources, 'images/placeholders/unknownperson32x32.jpg')}" />
 																		</td> 
 																		<td valign="top">
 																			<a href="/apex/WikiPage?idWP={!item.Id}" class="WikiLink">{!item.Name}</a>
