@@ -455,38 +455,6 @@ public with sharing class WikiOverviewController {
    		String parentName;
    		String parentId;
    		String shortDescription;
-   		String modifiedByPicture;
-   		
-		/**
-		*@param String
-		*/
-		public void setModifiedByPicture (String modById) {
-			String PictureId = '';
-			List<Wiki__c> itemProfile = new List<Wiki__c>();
-			itemProfile = [select PictureId__c from Wiki__c where LastModifiedById =: modById];
-			
-			if (itemProfile != null) {
-				if (itemProfile.size() > 0) {
-					Wiki__c picture = new Wiki__c();
-					picture = itemProfile.get(0);
-			        if(picture.PictureId__c == '' || picture.PictureId__c == null) {                	                                          	 
-				     	PictureId = '';
-					}else {
-						PictureId = picture.PictureId__c;
-					} 
-				}else {
-					PictureId = '';
-				}
-			}
-   			this.modifiedByPicture = PictureId ;
-   		}
-   		
-   		/**
-   		*@return String
-   		*/
-   		public String getModifiedByPicture () {
-   			return modifiedByPicture;
-   		}
    		
    		/**
    		*@param String
@@ -635,9 +603,6 @@ public with sharing class WikiOverviewController {
    			wiki.setName(item.Name);
    			wiki.setLastModifiedBy(item.LastModifiedById);
    			wiki.setLastModifiedById(item.LastModifiedById);
-   			
-   			/* TO DO! */
-   			wiki.setModifiedByPicture(item.LastModifiedById);
    			
    			wiki.setLastModifiedDate(item.LastModifiedDate);
    			wiki.setParentName(item.Wiki__r.Name);

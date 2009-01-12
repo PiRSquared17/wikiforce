@@ -23,7 +23,7 @@ public class SearchController {
 		//'people_keyword' => Page.PeopleKeywordSearchResults,
 		//'team' => Page.TeamSearchResult,
 		//'team_detail' => Page.TeamDetailSearchResult,
-		//'wiki' => Page.WikiSearchResult
+		'wiki' => Page.WikiSearchResult
 		};
 	
 	/**

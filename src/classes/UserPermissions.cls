@@ -138,8 +138,20 @@ public class UserPermissions {
 							  and Wiki__c=:Team 
 							  limit 1];
 				}
+				
+				List<Wiki__c> myWiki = new List<Wiki__c>();
+				myWiki = [select Type__c from Wiki__c where id=:Team limit 1];
+				// If the Wiki is open everyone will be able to Create Pages.
+				if(myWiki[0].Type__c == 'open'){
+				
+					canCreate = true;
+					canComment = true;
+				
+				} 
+				
+				
 				// If the user is a member of the team we should use the profile assigned to that user
-				if (members.size() > 0) {
+				else if (members.size() > 0) {
 					profile = members[0].WikiProfile__r;
 				
 				// If the user is not a member of the team then we have to go to the public profile of the team

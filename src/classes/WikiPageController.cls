@@ -151,9 +151,9 @@ public with sharing class WikiPageController {
 		String teamName = '';
 		if (idWikiSite != null) {
 			Wiki__c teamNameResult = [select id, Name from Wiki__c where id=:idWikiSite];
-			
+			Schema.DescribeSObjectResult dsor = Wiki__c.sObjectType.getDescribe();
 			if (teamNameResult != null) {
-				teamName = '<a href="/apex/TeamsRedirect?id=' + teamNameResult.Id + '">' + teamNameResult.name + '</a> > <a href="/apex/WikiTeamOverview?tid=' + teamNameResult.Id + '">Wiki</a> > ';	
+				teamName = '<a href="/apex/WikiOverview?save_new=1">' + dsor.labelPlural + '</a> > <a href="/apex/WikiTeamOverview?tid=' + teamNameResult.Id + '">' + teamNameResult.name + '</a> > ';	
 			}
 		}
 		return teamName;
@@ -2118,7 +2118,6 @@ public with sharing class WikiPageController {
    		String comment;
    		String commentName;
    		String commentBy;
-   		String commentPicture;
    		
    		/**
 		*@param String
@@ -2153,27 +2152,6 @@ public with sharing class WikiPageController {
 		*/
 	   	public String getCommentName () {
 	   		return commentName;
-	   	}
-	   	
-	   	/**
-		*@param PeopleProfile__c
-		*/
-	   	public void setCommentPicture (Wiki__c wiki) {
-			String PictureId;
-			
-			if(wiki.PictureId__c == null || wiki.PictureId__c == ''){
-				PictureId = 'nopicture';
-			}else{
-				PictureId = wiki.PictureId__c;
-			}
-   			this.commentPicture = PictureId ;
-   		}
-   		
-   		/**
-		*@return String
-		*/
-	   	public String getCommentPicture () {
-	   		return commentPicture;
 	   	}
 	   	
 	   	/**

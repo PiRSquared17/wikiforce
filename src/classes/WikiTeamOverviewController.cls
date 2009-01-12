@@ -316,40 +316,6 @@ public with sharing class WikiTeamOverviewController {
    		String parentName;
    		String parentId;
    		String shortDescription;
-   		String modifiedByPicture;
-   		
-		/** FIX
-		*@param String
-		
-		public void setModifiedByPicture (String modById) {
-			String PictureId = '';
-			
-			List<PeopleProfile__c> itemProfile = new List<PeopleProfile__c>();
-			itemProfile = [SELECT Picture__c FROM PeopleProfile__c WHERE User__c =:modById];
-			if (itemProfile != null) {
-				if (itemProfile.size() > 0) {
-					PeopleProfile__c picture = new PeopleProfile__c();
-					picture = itemProfile.get(0);
-			        if(picture.Picture__c == '' || picture.Picture__c == null) {                	                                          	 
-				     	PictureId = '';
-					}else {
-						PictureId = picture.Picture__c;
-					} 
-				}else {
-					PictureId = '';
-				}
-			}
-   			this.modifiedByPicture = PictureId ;
-   		}
-   		*/
-   		
-   		
-   		/**
-   		*@return String
-   		*/
-   		public String getModifiedByPicture () {
-   			return modifiedByPicture;
-   		}
    		
    		/**
    		*@param String
@@ -473,7 +439,6 @@ public with sharing class WikiTeamOverviewController {
    			wiki.setName(item.Name);
    			wiki.setLastModifiedBy(item.LastModifiedById);
    			wiki.setLastModifiedById(item.LastModifiedById);
-   			//wiki.setModifiedByPicture(item.LastModifiedById);
    			wiki.setLastModifiedDate(item.LastModifiedDate);
    			wiki.setParentName(item.Wiki__r.Name);
    			wiki.setParentId(item.Wiki__r.Id);

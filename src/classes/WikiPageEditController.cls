@@ -2069,6 +2069,8 @@ public without sharing class WikiPageEditController {
 						}else {
 							tmpLnkCntWP = wiki;
 						}
+						if(tmpLnkCntWP.linkCount__c == null)
+							tmpLnkCntWP.linkCount__c = 0;
 						tmpLnkCntWP.linkCount__c = tmpLnkCntWP.linkCount__c + 1;
 						wikiMap.put(tmpLnkCntWP.id, tmpLnkCntWP);
 						//System.debug('\n\n////////////////////////////////////////\n CURRENT SOQL: ' + Limits.getQueries() + '\n/////////////////////////////\n\n');
@@ -2108,8 +2110,9 @@ public without sharing class WikiPageEditController {
 		String teamName = '';
 		if (idWikiSite != null) {
 			Wiki__c teamNameResult = [select id, Name from Wiki__c where id=:idWikiSite];
+			Schema.DescribeSObjectResult dsor = Wiki__c.sObjectType.getDescribe();
 			if (teamNameResult != null) {
-				teamName = '<a href="/apex/TeamsRedirect?id=' + teamNameResult.Id + '">' + teamNameResult.name + '</a> > <a href="/apex/WikiTeamOverview?tid=' + teamNameResult.Id + '">Wiki</a> > ';	
+				teamName = '<a href="/apex/WikiOverview?save_new=1">' + dsor.labelPlural + '</a> > <a href="/apex/WikiTeamOverview?tid=' + teamNameResult.Id + '">' + teamNameResult.name + '</a> > ';	
 			}
 		}
 		return teamName;
