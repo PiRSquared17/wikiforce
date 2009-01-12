@@ -39,6 +39,14 @@
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>WikiMembersListController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>WikiMembersWidgetController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>WikiNewPageWidgetController</apexClass>
         <enabled>true</enabled>
     </classAccesses>
@@ -56,6 +64,14 @@
     </classAccesses>
     <classAccesses>
         <apexClass>WikiPageImagesController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>WikiPageLinksController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>WikiSearchResultController</apexClass>
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
@@ -1285,6 +1301,10 @@
         <enabled>true</enabled>
     </pageAccesses>
     <pageAccesses>
+        <apexPage>WikiMembersList</apexPage>
+        <enabled>true</enabled>
+    </pageAccesses>
+    <pageAccesses>
         <apexPage>WikiOverview</apexPage>
         <enabled>true</enabled>
     </pageAccesses>
@@ -1298,6 +1318,14 @@
     </pageAccesses>
     <pageAccesses>
         <apexPage>WikiPageImages</apexPage>
+        <enabled>true</enabled>
+    </pageAccesses>
+    <pageAccesses>
+        <apexPage>WikiPageLinks</apexPage>
+        <enabled>true</enabled>
+    </pageAccesses>
+    <pageAccesses>
+        <apexPage>WikiSearchResult</apexPage>
         <enabled>true</enabled>
     </pageAccesses>
     <pageAccesses>
