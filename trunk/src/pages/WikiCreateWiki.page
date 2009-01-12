@@ -1,59 +1,432 @@
-<apex:page >
+<apex:page id="WikiCreateWiki" controller="WikiCreateWikiController" tabStyle="WikiPage__c" sidebar="false" >
+	<!-- Scripts --> 
+	<apex:includeScript value="{!URLFOR($Resource.WikiResource, 'inc/js/common.js')}"/>
+	<apex:includeScript value="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}"/>
+	<apex:includeScript value="{!URLFOR($Resource.Script_aculo_us, 'scriptaculous.js')}"/>
+	<apex:includeScript value="{!URLFOR($Resource.Script_aculo_us, 'effects.js')}"/>
+	
+	<!-- Portal Support -->
+	<apex:includeScript value="{!$Resource.portalSupport}"/>
+	<apex:includeScript value="{!URLFOR($Resource.OverlayFunctionsFixed, 'js/overlayFunction.js')}"/>
+	<apex:includeScript value="{!URLFOR($Resource.WikiResource, 'inc/js/WikiOverview.js')}"/>
+	
+    <!-- CSS styles for Portal Integration -->  
+    <apex:stylesheet value="{!URLFOR($Resource.portalStyles, 'portal.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/headerTeams.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/widgetTeam.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamsCreateNewTeam.css')}" />
+    
+	<!-- Styles -->
+	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/commonLayout.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/WikiOverview.css')}" /> 
+	<apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/myTeamsAllTeamsTabs.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/fonts.css')}" />
+	
+	
+		<!-- CSS de TS -->
+	<link rel="stylesheet"  href="{!URLFOR($Resource.commonResources, '/inc/css/validator.css')}" />	
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/commonLayout.css')}" />	
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/teamDetailEdit.css')}" />	
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/teamDetail.css')}" />	
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/teamCreateNew.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamOverview.css')}" />	
+	
+	<!-- Common Js for All Sections -->
+	<apex:includeScript value="{!URLFOR($Resource.commonResources, 'inc/js/common.js')}"/>
+	<apex:includeScript value="{!URLFOR($Resource.commonResources, 'inc/js/validator.js')}"/>
+    
+	<apex:includeScript value="{!URLFOR($Resource.TeamsResources, 'inc/js/teamsCreateNewTeam.js')}" />
+	
+	
+	<style>
+		.noWikisYet {
+			text-align: center;
+			margin: 40px;
+		} 
+			
+	</style>
+	<div class="BodyPage">
+		<!-- - - - - - - - - - - - - - - - - - - - - -->	
+		<!-- - - - - - - -   OVERLAY   - - - - - - - -->
+		<!-- - - - - - - - - - - - - - - - - - - - - -->
+		<!-- 		  Overlay		-->
+		<div class="UPF__overlay__" id="UPF__overlay__" style="display:none;">
+		</div>
+		<!-- Overlay -->
+		<!-- Loader	-->
+		<div class="loader__" id="loader__" style="display:none;"><center><img src="{!URLFOR($Resource.commonResources, 'images/loaders/bigLoader.gif')}" /></center><br />Loading...</div>
+		<!-- Loader -->
+		<script>
+			function fixHeader () {
+				var inputWidth = 390 - $('labelDisc').getWidth();
+				var inputDisc = $('inputDisc');
+				inputDisc.style.width = inputWidth -2 + 'px';
+			}
 
-<div id=mainContent>
-	<div id="title">Create New Wiki</div>
-	<div class="tabContainer">
-		<apex:form >
-			<ul class="tabs">
-				<li class="selected" id="settingsTab">
-					<apex:commandLink action="{!refreshTab}" value="Settings" 
-						onclick="switchTab('settingsTab'); switchOverlay(true);" 
-							rerender="settingsMembersPanel" 
-							oncomplete="switchOverlay(false);">
-							<apex:param name="settings" value="false" />
-					</apex:commandLink>
-				</li>
-				<li id="members">
-					<apex:commandLink action="{!refreshTab}" value="Members" 
-						onclick="switchTab('allTeamTab'); switchOverlay(true);" 
-						rerender="settingsMembersPanel" 
-						oncomplete="switchOverlay(false);">
-						<apex:param name="members" value="true" />
-					</apex:commandLink>
-				</li>					
-			</ul>
-		</apex:form>
+			var version;
+			if (navigator.appName == "Microsoft Internet Explorer") {
+				version = navigator.appVersion;
+				if (version.indexOf("MSIE 6") != -1) {
+					document.getElementById('loader__').className = 'loaderIE6__';
+					document.getElementById('loader__').style.position = 'absolute';
+				}
+			}
+		</script>	
+		<!-- Header -->
+		<apex:composition template="HeaderTemplate">
+			<apex:define name="moduleId"><apex:variable var="moduleId" value="headerWiki"/></apex:define>
+		    <apex:define name="module">Wiki pages</apex:define>
+		    <apex:define name="title">OverView</apex:define>
+		    <apex:define name="search">
+		    	<c:Search module="wiki" />
+		    </apex:define>
+	    </apex:composition>
+	    
+	    <div class="MainPage">
+			<div class="PageBlock">	
+				<!-- - - - - - - - - - - - - - - - - - - - - -->	
+				<!-- - - - - - - LEFT SIDEBAR  - - - - - - - -->
+				<!-- - - - - - - - - - - - - - - - - - - - - -->	
+				<table border="0" class="bodyTable">
+					<tr>
+						<td valign="top" class="sideBarTD">
+							<!-- My Favorites Widget -->
+							<c:WikiWidgetMyFavorites />
+							<!-- My Recent Changes Widget -->
+							<c:WikiWidgetMyRecentChanges />
+						</td>
+						<td valign="top" class="mainContentTD">
+							<!-- - - - - - - - - - - - - - - - - - - - - -->	
+							<!-- - - - - - - MAIN CONTENT DIV  - - - - - -->
+							<!-- - - - - - - - - - - - - - - - - - - - - --> 
+								
+									<div class="main_content" id="main_content">
+										<div class="teamTitle" style="{!IF(Wiki.Id == null, '', 'display:none')}" >Create New {!$ObjectType.Wiki__c.label}</div>
+										<div class="teamTitle" style="{!IF(Wiki.Id == null, 'display:none', '')}" >Edit {!$ObjectType.Wiki__c.label}</div>
+																		
+									<div class="tabContainer">									
+								<apex:form style="margin-top: 7px; margin-left:2px">
+										<ul class="tabs">
+											<li class="selected" id="myTeamTab">
+												<apex:commandLink value="Settings" 
+																	onclick="switchTab('myTeamTab'); switchOverlay(true);" 
+																	rerender="myTeamsAllTeamsPanel" 
+																	oncomplete="switchOverlay(false);">
+													<apex:param name="allTeams" value="false" />
+												</apex:commandLink>
+											</li>
+											<li id="allTeamTab">
+												<apex:commandLink value="Members" 
+																	onclick="switchTab('allTeamTab'); switchOverlay(true);" 
+																	rerender="myTeamsAllTeamsPanel" 
+																	oncomplete="switchOverlay(false);">
+													<apex:param name="allTeams" value="true" />
+												</apex:commandLink>
+											</li>					
+										</ul>
+								</apex:form>
+								<div class="tabBorder"></div>
+							</div>
+							
+		<div>
+			<div class="holder">				
+				<!-- <div class="border_body_top">&nbsp;</div> -->
+							
+				<div class="body_center">
+					<a id="anchorForError"></a>
+					<div id="warning_to_user" class="message_to_user" style="display:none;" >
+				    	<div class="f_left">
+				      		<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/error_icon.gif')}" />
+				    	</div>
+				    	<div class="f_left">
+							<strong>We had trouble unserstanding one or more of your entries or we need more information</strong><br />
+					 		<span id="messageErrorText">Please see the field(s) highlighted</span>
+						</div>
+					  	<div class="clear"></div>
+				  	</div>		
+					<div align="right">
+						<table border="0" style="margin: 5px 0px 5px 0px;">
+							<tr>
+								<td style="width: 4px;">
+									<span class="requiredLegend"></span>
+								</td>
+								<td>
+									<span class="infoText" style="font-size: 9px; font-family: Arial, Helvetica, sans-serif;">
+										=&nbsp;Required Information 
+									</span>
+								</td>
+							</tr>
+						</table>
+					</div>
+					<apex:form id="createNewTeamForm" onsubmit="if(validateFormInfo())return false;"> 
+						<apex:outputpanel style="display:none;" id="currentTeamId">{!Wiki.Id}</apex:outputpanel>
+						<apex:inputHidden value="{!Wiki.PictureId__c}" id="teamPicture" />
+						<div class="div_Body">
+							<table cellpadding="0" cellspacing="0" class="newTeamForm">
+								<tr>
+									<td class="alignTop">
+										<span class="inputInfoTitle">{!$ObjectType.Wiki__c.label} Name</span>
+									</td>
+									<td style="width: 4px; vertical-align:top;">
+										<span class="requiredLegend"></span>
+									</td>
+									<td colspan="2">&nbsp;
+										<apex:inputText value="{!Wiki.Name}" id="TeamName" styleClass="RQ_String" ></apex:inputText>
+										<br />
+										<span id="TeamNameErrorMessage" class="errorText" style="display:none;">
+											<b>Error:</b> You must enter a name for this {!$ObjectType.Wiki__c.label}
+										</span>
+									</td>
+								</tr>
+								<tr>
+									<td height="7px"></td>
+								</tr>
+								<tr>
+									<td class="alignTop">
+										<span class="inputInfoTitle">Description</span>
+									</td>
+									<td></td>
+									<td colspan="2">&nbsp;
+										<apex:inputTextarea value="{!Wiki.Description__c}" id="TeamDescription" cols="38" rows="4" style="height: 83px; width: 430px" onkeyup="countStringLimit(this, 'stringSizeCounter');" />
+									</td>
+								</tr>
+								<tr>
+									<td></td>
+									<td></td>
+									<td colspan="2">&nbsp;
+										<span class="explain">(32k character limit) - Characters remaining:</span>
+										<span class="explain" id="stringSizeCounter">32700</span>
+										<br />
+									</td>
+								</tr>
+								<tr>
+									<td height="10px"></td>
+								</tr>
+								<tr>
+									<td class="alignTop">
+										<!--  <span class="inputInfoTitle">{!$ObjectType.Wiki__c.label} Email</span> -->
+									</td>
+									<td style="width: 4px; vertical-align:top;">
+									</td>
+									<td colspan="2">&nbsp;
+										<!-- <apex:inputText value="{!Wiki.ContactEmail__c}" id="TeamContactEmail"></apex:inputText> -->
+									</td>
+								</tr>
+								<tr>
+									<td height="10px"></td>
+								</tr>
+								<tr>
+									<td class="alignTop">
+										<span class="inputInfoTitle">{!$ObjectType.Wiki__c.label} Avatar</span>
+									</td>
+									<td></td>
+									<td>&nbsp;
+										<img width="99" src="{!IF(wikiPicture == '', URLFOR($Resource.TeamsResources, '/images/layout/pic_upload.gif'), wikiPicture)}" class="imgBorder" />
+										<br />
+										<span class="explain">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;current picture</span>
+									</td>
+									<td valign="top">
+										<table cellpadding="0" cellspacing="0" width="400px">
+											<tr>
+												<td>
+													<span class="inputInfoDescription">Select the image file</span>
+												</td>
+											</tr>
+											<tr>
+												<td>
+													<span class="inputInfoSubDescription" style="padding-left: 10px;">Type the path of the file or
+													click the Browse button to find the file.</span>
+												</td>
+											</tr>
+											<tr>
+												<td></td> 
+											</tr>
+											<tr>
+												<td class="paddingLeft" id="imageTeamContainer" >
+													<apex:inputFile value="{!document.body}" id="teamImage" filename="{!document.name}" contentType="{!document.contentType}" fileSize="{!document.BodyLength}"/> 
+													<br />
+													<span id="fileExtensionError" class="errorText" style="display:none;">
+														<b>Error:</b> You must enter a jpg, gif or png files only
+													</span>
+													<apex:outputpanel rendered="{!NOT validSizePicture}">
+													<span id="fileSizeError" class="errorText">
+														<b>Error:</b> The images size must be less than 512 kb
+													</span>
+													</apex:outputpanel>
+												<td>
+											</tr>
+											<tr>
+												<td></td>
+											</tr>
+											<tr>
+												<td class="paddingLeft"><span class="explain">File size	limit 512KB. If your upload does not work, try a smaller picture. </span>
+												</td>
+											</tr>
+											<tr>
+												<td class="paddingLeft">
+													<span class="explain">Ideal	size is 100 pixels high by 100 pixels wide.</span>
+												</td>
+											</tr>
+											<tr>
+												<td></td>
+											</tr>
+											<tr>
+												<td class="paddingLeft">
+													<div class="imageRightsHolder" id="imageRightsHolder">
+														<input id="imageRights" type="checkbox" />
+													</div>
+													<div class="messageRigthHolder">
+														<span class="inputInfoSubDescription">I certify that I have the right to distribute this picture and that it does not violate the <a href="/apex/TeamsIconTerms" target="_blank">Terms of Use</a></span>
+														<br />
+														<span id="RightsErrorMessage" class="errorText" style="display:none;">
+															<b>Error:</b> You must agree to the <a href="/apex/TeamsIconTerms" target="_blank">Terms of Use</a> to use images for this team.															
+														</span>
+													</div>
+													<div class="clear"></div>													
+												</td>
+											</tr>
+											<tr>
+												<td></td>
+											</tr>	
+										</table>
+									</td>
+								</tr>
+								<tr>
+									<td height="10px"></td>
+								</tr>
+								<tr>
+									<td class="alignTop">
+										<!-- <span class="inputInfoTitle">
+											{!$ObjectType.Wiki__c.label} Type
+										</span>
+										-->
+									</td>
+									<td style="width: 4px; vertical-align:top;">
+										<!-- <span class="requiredLegend"></span> -->
+									</td>
+									<td colspan="2">&nbsp;	
+										<!-- <apex:selectList id="TeamType" value="{!Wiki.Type__c}" title="" multiselect="false" size="1" >
+								  	 	 	<apex:selectOptions value="{!Types}"/>
+								  	 	</apex:selectList>
+								  	 	<span id="TeamTypeErrorMessage" class="errorText" style="display:none;">
+											<b>Error:</b> You must enter a {!$ObjectType.Wiki__c.label} Type for this {!$ObjectType.Wiki__c.label}.								  	 	
+								  	 	</span> -->	
+									</td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+									<td class="alignTop">
+										<!-- <span class="inputInfoTitle">{!$ObjectType.Wiki__c.label} Parent</span> -->
+									</td>
+									<td></td>
+									<td colspan="2">&nbsp;
+										
+									</td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+	                                <td class="alignTop"><span class="inputInfoTitle">Access</span></td>
+									<td></td>
+	                                <td colspan="2">
+	                                	&nbsp;<input type="radio" id="openTeam" checked="checked" name="access" onclick="setAccess(this);"/>
+	                                	<span class="inputInfoDescription">Open</span>
+	                                </td>
+								</tr>  	
+								<tr>
+	                                <td class="alignTop"><span class="inputInfoTitle"></span></td>
+									<td></td>
+	                                <td colspan="2">&nbsp;<span class="inputInfoList">&nbsp;</span><span class="inputInfoSubDescription">Anyone can join. Anyone can see the {!$ObjectType.Wiki__c.label} information and content.</span></td>
+								</tr>	
+								<tr>
+									<td colspan="6" >
+								
+									</td>
+								</tr>					
+								<tr>
+	                                <td  class="alignTop"><span class="inputInfoTitle"></span></td>
+									<td></td>
+	                                <td colspan="2">
+	                                	&nbsp;<input type="radio" id="closedTeam" name="access" onclick="setAccess(this);"/>
+	                                	<span class="inputInfoDescription">Closed</span>
+	                                </td>
+								</tr>   
+								<tr>
+	                                <td class="alignTop"><span class="inputInfoTitle"></span></td>
+									<td></td>
+	                                <td colspan="2">
+	                                	<span class="inputInfoList">&nbsp;</span>
+	                                	<span class="inputInfoSubDescription">{!$ObjectType.Wiki__c.label} Administrator must invite users to join. Anyone can see the {!$ObjectType.Wiki__c.label} information and content.</span>
+	                                </td>
+								</tr> 
+								<tr>
+									<td colspan="6">
+									
+									</td>
+								</tr>	
+								<tr>
+	                                <td class="alignTop"><span class="inputInfoTitle"></span></td>
+									<td></td>
+	                                <td colspan="2">
+	                                	&nbsp;<input type="radio" id="privateTeam" name="access" onclick="setAccess(this);"/>
+	                                	<span class="inputInfoDescription">Private</span>
+	                                </td>
+								</tr>   
+								<tr>
+	                                <td class="alignTop"><span class="inputInfoTitle"></span></td>
+									<td></td>
+	                                <td colspan="2">
+	                                	&nbsp;<span class="inputInfoList">
+	                                	&nbsp;</span>
+	                                	<span class="inputInfoSubDescription">This {!$ObjectType.Wiki__c.label} will not appear in search results or in the profiles of its members. </span>
+	                                </td>
+								</tr> 
+								<tr>
+	                                <td class="alignTop"><span class="inputInfoTitle"></span></td>
+									<td></td>
+	                                <td colspan="2">&nbsp;<span class="inputInfoList">&nbsp;</span><span class="inputInfoSubDescription">Membership is by invitation only, and only members can see the {!$ObjectType.Wiki__c.label}</span></td>
+								</tr>   
+								<tr>
+	                                <td class="alignTop"><span class="inputInfoTitle"></span></td>
+									<td></td>
+	                                <td colspan="2">&nbsp;<span class="inputInfoList">&nbsp;</span><span class="inputInfoSubDescription">information and content.</span></td>
+								</tr>   
+							</table>
+							<div class="DivBtn">
+								<div class="title_line_btn"></div>	
+								
+								
+													
+								<div align="center">
+									<span id="currentEventAction"></span><br />
+									<apex:commandButton styleClass="SaveBtn" action="{!saveWiki}"  value="Save" id="saveButton"  />
+									<apex:commandButton styleClass="SaveBtn" action="{!saveWikiAndAddMembers}"  value="Save And Add Members" id="saveAndAddMembersButton" />
+									<apex:commandButton styleClass="cancelBtn" onclick="history.go(-1);" value="Cancel" id="cancelButton"/> 
+								</div>
+							</div>
+						</div>
+					</apex:form>
+				</div>
+			</div>
+		</div>
 	</div>
-	<!-- Settings Form -->
-	<form action="">
-		<table>
-			<tr>
-				<td>Wiki Name</td>
-				<td><input type="text" id="wikiName" /></td>
-				<td>= Required information</td>
-			</tr>
-			<tr>
-				<td>Description</td>
-				<td>
-					<textarea cols="38" rows="4" style="height: 83px; width: 430px"></textarea>
-					<br/>
-					<span class="explain">(32k character limit) - Characters remaining:</span>
-					<span class="explain" id="stringSizeCounter">32700</span>
-				</td>
-			</tr>
-			<tr>
-				<td>Wiki Avatar</td>
-				<td></td>
-			</tr>
-			<tr>
-			</tr>
-			<tr>
-			</tr>
-			<tr>
-			</tr>
-		</table>
-	</form>
-	<!-- End Settings Form -->
-</div>
-
+						</td>
+					</tr>
+					<!--<tr>
+						 <td colspan="2">
+							<div class="SidebarTitle" />
+						</td> 
+					</tr>-->
+				</table>
+			</div>
+		</div>
+	</div>
+	<apex:outputpanel id="auxPanel" style="display:none;">
+	</apex:outputpanel>	
+	<script>
+		readPortalCSSRules();
+	</script>	
 </apex:page>
