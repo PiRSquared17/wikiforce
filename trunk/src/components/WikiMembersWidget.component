@@ -1,0 +1,143 @@
+<apex:component controller="WikiMembersWidgetController" allowDml="true">
+
+	<!-- Attribute Definitions -->
+	<apex:attribute name="wikiId" description="The team ID" type="String"
+		required="true" assignTo="{!Wiki}" />
+	<apex:attribute name="type" description="The list type" type="String"
+		required="false" assignTo="{!typeList}" />
+
+
+	<!-- ### JavaScript ### -->
+	<script	src="{!URLFOR($Resource.TeamsResources, 'inc/js/autocomplete.js')}" />
+	
+	
+	<apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/teamMembersWidget.css')}" />
+
+	<apex:includeScript value="{!URLFOR($Resource.commonResources, 'inc/js/teamMembersWidget.js')}" />
+
+	<apex:includeScript value="{!URLFOR($Resource.TeamsResources, 'inc/js/TeamsWidgetCommon.js')}" />
+
+
+	<!-- NEW MEMBER OVERLAY -->
+	<apex:outputpanel > <!-- rendered="{!IF(UserPermissions.canManage, true, false)}" -->
+		<!-- Common CSS Styling  -->
+		<link rel="stylesheet"
+			href="{!URLFOR($Resource.PeopleResourceFiles, 'inc/css/autocomplete.css')}"
+			type="text/css" media="screen" charset="utf-8" />
+		<link rel="stylesheet"
+			href="{!URLFOR($Resource.TeamsResources, 'inc/css/teamOverlyInviteNewMember.css')}"
+			type="text/css" />
+
+
+		<!-- Content  -->
+		<div id="inviteTeam" style="display: none;" class="overlayForm">
+		<div class="swirly_overlay" style="display: none;"></div>
+		<!-- Overlay Title -->
+		<div class="overlayTitleContent">
+		<div class="overlayTitle">Add new member to {!WikiName}</div>
+		<div class="overlayCloseEvent"><a href="Javascript:;"
+			onclick="modal.close();"> <img
+			src="{!URLFOR($Resource.TeamsResources, 'images/layout/genericClose.gif')}"
+			alt="Close Window" title="Close Window" /> </a></div>
+		</div>
+		<div class="overlayMainContent"><!-- Required Information --> <span
+			class="overlayRequiredInfo">= Required Information</span> <apex:form id="newMemberForm"
+			onSubmit="if(validateColleguesInput()){showSwirly('swirly_overlay');Form.disable(this.id);}else return false;">
+			<div class="overlayFormContent">
+			<table cellpadding="0" cellspacing="0"
+				style="margin: 0px; padding: 0px; width: 100%;">
+				<tr>
+					<td class="inputInfoTitle"><span class="inputInfoTitle">Add
+					colleagues</span><br />
+					<span class="explainBottom">(enter name or email)</span></td>
+					<td style="width: 4px;"><span
+						style="display: block; width: 4px; height: 67px; background-color: #C0272D;"></span>
+					</td>
+					<td>
+					<div id="ajaxResult" style="display: none;"></div>
+
+					&nbsp; <apex:inputTextArea id="colleaguesNames"
+						styleClass="colleaguesNames" style="width:310px; height:63px;"
+						value="{!newMemberVars.colleagueNames}"
+						onFocus="javascript:									
+										var options = {
+												script: function (input) {var b = '{!$Component.newTeamProfile}';
+												document.getElementById(b).style.visibility = 'hidden';	
+										 		return ('SuggestDispatcher?input='+input+'&class=colleagueNames&wikiId={!WikiId}'); },
+										        callback: function ()
+										        		  {
+										        		  	var b = '{!$Component.newTeamProfile}';
+										        		  	document.getElementById(b).style.visibility = 'visible';
+										        		  }										        		    
+												}; 
+												xml = new AutoComplete('{!$Component.colleaguesNames}',options);return true;"
+						onBlur="javascript: hideSuggest(); var b = '{!$Component.newTeamProfile}'; document.getElementById(b).style.visibility = 'visible';" />
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td>&nbsp;<span class="explain">(comma separated)</span> <br />
+					</td>
+				</tr>
+				<tr>
+					<td height="10px">
+						<!-- <span class="inputInfoTitle">Email notifications </span> <apex:inputCheckBox value="{!EmailNotifications(true)}" id="emailNotifications"/> -->
+					</td>
+				</tr>
+				<tr>
+					
+				</tr>
+				<tr>
+					<td height="7px"></td>
+				</tr>
+				<tr>
+					
+				</tr>
+				<tr>
+					<td height="7px"></td>
+				</tr>
+				<tr>
+					
+				</tr>
+				<tr>
+					<td height="15px"></td>
+				</tr>
+			</table>
+			</div>
+			<div class="informationPanel clear" id="infoToUser"
+				style="display: none;"></div>
+			<div id="paginationOverlay" style="display: none;">
+			<div class="loader"><img
+				src="{!URLFOR($Resource.discussionResourceFiles, 'images/common/layout/big-loader.gif')}"
+				alt="Loading..." title="Loading..." /></div>
+			</div>
+			<div class="overlaySeparateLine"></div>
+			<!-- Save and Cancel Buttons -->
+			<div class="overlayFromButtons" align="center"><apex:commandButton action="{!saveMembers}"
+				oncomplete="statusSending(this);setTimeout('modal.close(); hideSwirly(\'swirly_overlay\')', 5000); showMessageToUser(); showSwirly('swirly_members');"
+				styleclass="overlaySaveBtn" value="Send"
+				rerender="membersListContainer" /> <apex:commandButton action="{!saveMembersNew}"
+				oncomplete="statusSending(this);$('{!$Component.newMemberForm}').reset(); statusNormal(this);hideSwirly('swirly_overlay'); showSwirly('swirly_members');chargeMatrix(myMembersIds);"
+				styleclass="overlaySaveBtn" value="Send & add more members"
+				rerender="membersListContainer" /> <input
+				class="btn overlayCancelBtn" type="button" value="Cancel"
+				onclick="modal.close();stopFunction();" /></div>
+		</apex:form></div>
+		</div>
+
+	</apex:outputpanel>
+	
+	<!-- NEW MEMBER OVERLAY -->
+	<apex:outputPanel layout="block" id="membersListContainer">
+		<apex:form >
+			<apex:actionPoller action="{!syncSaveMembers}"
+				enabled="{!initAddMembers}"
+				rerender="membersListContainer" interval="5"
+				onComplete="refreshCount(); refreshSwirly();" />
+			<!-- Action Function for Refresh Member List -->
+			<apex:actionFunction name="rerenderMemberList"
+				action="{!refreshMethod}" rerender="membersListContainer" />
+		</apex:form>
+	</apex:outputPanel>
+</apex:component>

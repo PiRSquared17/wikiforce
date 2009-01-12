@@ -32,12 +32,7 @@
 							<apex:repeat value="{!myRecentChanges}" var="item">
 								<tr>
 									<td width="28px" valign="top">
-										<apex:outputpanel rendered="{!IF(item.modifiedByPicture == '',true,false)}">
-											<apex:image styleclass="userPicture" value="{!URLFOR($Resource.commonResources, 'images/placeholders/unknownperson32x32.jpg')}" />
-										</apex:outputpanel>
-										<apex:outputpanel rendered="{!IF(item.modifiedByPicture == '',false,true)}">
-											<apex:image styleclass="userPicture" value="/servlet/servlet.FileDownload?file={!item.modifiedByPicture}" />
-										</apex:outputpanel>
+										<apex:image styleclass="userPicture" value="{!URLFOR($Resource.commonResources, 'images/placeholders/unknownperson32x32.jpg')}" />
 									</td>
 									<td>
 										<a href="/apex/WikiPage?idWP={!item.Id}" class="WikiLink">{!item.Name}</a>

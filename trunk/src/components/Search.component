@@ -2,7 +2,6 @@
 	<apex:includeScript value="{!URLFOR($Resource.commonResources, 'inc/js/search.js')}" />
 	<script>
 		var globalDefaultText = "{!DefaultText}";
-		
 	</script>
 	<apex:attribute name="module" description="Type of search" type="String" required="true" assignTo="{!module}" />	
 	<apex:attribute name="teamId" description="Id for team detail search" type="String" required="false" assignTo="{!teamId}" />
