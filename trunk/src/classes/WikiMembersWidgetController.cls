@@ -13,15 +13,15 @@ public with sharing class WikiMembersWidgetController {
 	public WikiMembersWidgetController(){
 		
 	}
-		
+
 	/**
 	* Return the Namespace Prefix
 	*@return String
 	*/
-	/**public String getNamespace () {
-        return WikiUtil.getNamespace();
-    } */
-	
+	public String getNamespace () {
+        return TeamUtil.getNamespace();
+    }
+
 	/**
 	* Setter method for Wiki Id variable
 	*@param String idWiki
@@ -132,10 +132,10 @@ public with sharing class WikiMembersWidgetController {
     }
     
      /**
-    * Returns a String with Ids of the Wiki
+    * Returns a String with Ids of the Wiki separated by '-'
     *@return String
     */
-    /**public String getWikispaceMembersIds(){
+    public String getWikispaceMembersIds(){
     	String ret = '';
     	List<WikiMember> l = getWikispaceMembers();
     	for(Integer i = 0; i < l.size(); i++){
@@ -147,7 +147,7 @@ public with sharing class WikiMembersWidgetController {
     		}	
     	}
     	return ret;
-    } */
+    } 
     
     /**
     * Inner class for WikiMeber type
