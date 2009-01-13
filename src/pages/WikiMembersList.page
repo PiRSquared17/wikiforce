@@ -58,7 +58,14 @@
 	<!-- DiscussionOverview CSS  
 	<apex:stylesheet value="{!URLFOR($Resource.discussionResources, 'inc/css/discussionOverview.css')}" />
 	-->
-
+	<script>
+     	/**
+        * Namespace Prefix Getter
+        */
+     	var globalTeamId = "{!WikiId}";
+     	var globalArrowDown = "{!URLFOR($Resource.commonResources, 'images/arrows/arrow_down.gif')}";
+     	var globalArrowUp = "{!URLFOR($Resource.commonResources, 'images/arrows/arrow_up.gif')}";;
+     </script>
 
 	<!-- Modal JS -->
 	<script	src="{!URLFOR($Resource.commonResources, 'inc/js/modal.js')}" />
@@ -127,7 +134,7 @@
 		    </apex:define>
 	    </apex:composition>
 	    
-	    <div><c:WikiMembersWidget wikiId="{!WikiId}" type="adminList" /></div>
+	    
 	    
 	    <div class="MainPage">
 			<div class="PageBlock">	
@@ -137,10 +144,16 @@
 				<table border="0" class="bodyTable">
 					<tr>
 						<td valign="top" class="sideBarTD">
-							<!-- My Favorites Widget -->
-							<c:WikiWidgetMyFavorites />
-							<!-- My Recent Changes Widget -->
-							<c:WikiWidgetMyRecentChanges />
+							
+								<!-- My Favorites Widget -->
+								<c:WikiWidgetMyFavorites />							
+							
+								<!-- My Recent Changes Widget -->
+								<c:WikiWidgetMyRecentChanges />
+								
+								<!-- My Wiki Members -->
+								<c:WikiMembersWidget wikiId="{!WikiId}" type="adminList" />							
+							
 						</td>
 						<td valign="top" class="mainContentTD">
 							<!-- - - - - - - - - - - - - - - - - - - - - -->	

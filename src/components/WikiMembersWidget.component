@@ -17,6 +17,30 @@
 
 	<apex:includeScript value="{!URLFOR($Resource.TeamsResources, 'inc/js/TeamsWidgetCommon.js')}" />
 
+	<script>
+
+		/**
+        * Namespace Prefix Getter
+        */		
+	
+		var API_SESSION_ID = "{!$Api.Session_ID}";
+		var rootResource = "{!URLFOR($Resource.TeamsResources)}";	
+		
+		var globalTeamLabel = "{!$ObjectType.Wiki__c.label}";		
+		var globalCollaguesNames = "{!$Component.colleaguesNames}";
+		var globalNewTeamProfile = "{!$Component.newWikiProfile}";
+		var globalUnknownTeam = "{!URLFOR($Resource.commonResources, 'images/placeholders/unknowteam_big.gif')}";
+		var globalListToolkitCount = {!memberListToolkitCount};
+		var globalUserNotPicture= "{!URLFOR($Resource.TeamsResources, 'images/layout/icons/user_not_picture.gif')}";
+		
+		var teamIDActive = '{!Wiki}';
+		var currentUser = '{!currentUser}';
+		
+		var myTeamId = "{!WikiId}";
+		
+		window.onload = onloadFunctions();
+		
+	</script>
 
 	<!-- NEW MEMBER OVERLAY -->
 	<apex:outputpanel > <!-- rendered="{!IF(UserPermissions.canManage, true, false)}" -->
@@ -129,15 +153,118 @@
 	</apex:outputpanel>
 	
 	<!-- NEW MEMBER OVERLAY -->
-	<apex:outputPanel layout="block" id="membersListContainer">
+
+	<!-- On Hover Bubble team member -->
+	<div id="bubble" class="bubble">
+	<div class="top_border">&nbsp;</div>
+	<div class="content"><img class="arrowBubble"
+		src="{!URLFOR($Resource.TeamsResources, '/images/layout/bubbles/arrow.gif')}" />
+	<!-- Content here -->
+	<div class="innerContBubble"
+		onmouseover="clearTimeout(hideBubbleTimeout);"
+		onmouseout="setTimeoutToHide();">
+	<div class="bubbleOverlay" style="display: none;" id="bubbleOverlay">
+	<div class="swirl blue"><img
+		src="{!URLFOR($Resource.TeamsResources, '/images/layout/small_loader.gif')}" />
+	Loading.....</div>
+	</div>
+	<div class="topLink" id="bubbleTopLink"></div>
+	<div class="memberHeader" id="memberInfo">
+	<div class="img_holder"></div>
+	<div class="memberInfo"></div>
+	</div>
+	<div class="contact_info" id="contact_info">
+	<div class="contact_info_title">Contact Info</div>
+	<div class="contact_info_desc">
+	<div class="c_email f_left"></div>
+	<div class="clear"></div>
+	<div class="c_phone f_left"></div>
+	</div>
+	</div>
+	<div class="recent_activity" id='recent_activity_desc'></div>
+	</div>
+	<!-- End Content here --></div>
+	<div class="bottom_border">&nbsp;</div>
+	</div>
+	<!-- On Hover Bubble Team member -->
+
+
+
+	<!-- Team Details Widget -->
+	<div class="teamWidget mySmallWidget" id="teamMemberID"><!-- Widget Title -->
+	<div class="thinHeader"><apex:outputpanel rendered="{!(ComponentHeader!='Team Admins')}">
+		<div>
+		<div>
+		<h4>{!$ObjectType.Wiki__c.label} Members</h4>
+		</div>
+		</div>
+	</apex:outputpanel> <apex:outputpanel rendered="{!(ComponentHeader=='Team Admins')}">
+		<div>
+		<div>
+		<h4>{!$ObjectType.Wiki__c.label} Admins</h4>
+		</div>
+		</div>
+	</apex:outputpanel></div>
+	<!-- Widget Container -->
+	<div class="box_content">
+	<div class="swirly_members" style="display: none;"></div>
+	<div class="thinBody">
+	<div class="contentHolder"><apex:outputpanel rendered="{!renderLinkAction}">
+		<div class="linkAction"><apex:outputpanel >
+			<a onclick="showNewMembersOverlay();" href="javascript:;">New</a> |
+							</apex:outputpanel> <a href="#"
+			onclick="location.href='/apex/TeamsMembersList?id={!Wiki}'"
+			class="topRightLinks">See More&#187;</a></div>
+	</apex:outputpanel></div>
+
+	  <apex:outputPanel layout="block" id="membersListContainer">
+		<!-- Sync Save Members -->
 		<apex:form >
 			<apex:actionPoller action="{!syncSaveMembers}"
 				enabled="{!initAddMembers}"
-				rerender="membersListContainer" interval="5"
+				rerender="auxPanel, membersListContainer" interval="5"
 				onComplete="refreshCount(); refreshSwirly();" />
 			<!-- Action Function for Refresh Member List -->
 			<apex:actionFunction name="rerenderMemberList"
 				action="{!refreshMethod}" rerender="membersListContainer" />
 		</apex:form>
-	</apex:outputPanel>
+		<!-- Members Repeat --> 
+		<apex:repeat value="{!WikispaceMembers}" var="tm" id="repMembers">
+			<div id="memberRow-{!tm.Id}" style="clear: both;"><apex:outputPanel layout="block"
+				onmouseover="showBubbleMatrixPreload('member',this,'{!tm.Id}');"
+				style="clear:both;position:relative;display:block;">
+				<apex:outputPanel layout="block" styleClass="membersImageHolder"
+					>
+					<a href="/{!tm.Id}"> <apex:image width="25" height="25"
+						url="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/no_image_small.gif')}"
+						style="vertical-align:middle;" /> </a>
+				</apex:outputPanel>
+				<apex:outputPanel layout="block" styleClass="membersImageHolder"
+					>
+					
+				</apex:outputPanel>
+				<apex:outputPanel layout="block" styleClass="membersDescription"
+					style="float:left;width:120px;">
+					<a href="/{!tm.Id}"
+						style="text-decoration: none;"> <apex:outputText value="{!tm.Username}"></apex:outputText> </a>
+					
+					<br />
+					<!-- <apex:outputPanel rendered="{!IF(tm.isPrivate,'false','true')}">
+						<apex:outputPanel >{!tm.status}</apex:outputPanel>
+					</apex:outputPanel> -->
+				</apex:outputPanel>
+			</apex:outputPanel> <apex:outputPanel layout="block" styleClass="clear"></apex:outputPanel>
+			</div>
+		</apex:repeat>
+	</apex:outputPanel></div>
+	</div> 
+
+	<!-- Widget Holder Foot -->
+	<div class="bottom_borders">
+	<div>
+	<div></div>
+	</div>
+	</div>
+	</div>
+	<div class="clear"></div>
 </apex:component>
