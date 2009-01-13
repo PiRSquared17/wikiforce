@@ -1,47 +1,44 @@
 <apex:page id="WikiOverview" controller="WikiOverviewController" tabStyle="WikiPage__c" sidebar="false" action="{!genProfiles}" >
+	
 	<!-- Scripts --> 
 	<apex:includeScript value="{!URLFOR($Resource.WikiResource, 'inc/js/common.js')}"/>
 	<apex:includeScript value="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}"/>
 	<apex:includeScript value="{!URLFOR($Resource.Script_aculo_us, 'scriptaculous.js')}"/>
 	<apex:includeScript value="{!URLFOR($Resource.Script_aculo_us, 'effects.js')}"/>
+	
 	<!-- Portal Support -->
 	<apex:includeScript value="{!$Resource.portalSupport}"/>
 	<apex:includeScript value="{!URLFOR($Resource.OverlayFunctionsFixed, 'js/overlayFunction.js')}"/>
 	<apex:includeScript value="{!URLFOR($Resource.WikiResource, 'inc/js/WikiOverview.js')}"/>
+    
     <!-- CSS styles for Portal Integration -->  
     <apex:stylesheet value="{!URLFOR($Resource.portalStyles, 'portal.css')}" />
     <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/headerTeams.css')}" />
     <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/widgetTeam.css')}" />
+	
 	<!-- Styles -->
 	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/commonLayout.css')}" />
-	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/WikiOverview.css')}" /> 
 	<apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/myTeamsAllTeamsTabs.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/WikiOverview.css')}" /> 
 	<apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/fonts.css')}" />
-	<style>
-		.noWikisYet {
-			text-align: center;
-			margin: 40px;
-		} 
-			
-	</style>
+	
 	<div class="BodyPage">
-		<!-- - - - - - - - - - - - - - - - - - - - - -->	
-		<!-- - - - - - - -   OVERLAY   - - - - - - - -->
-		<!-- - - - - - - - - - - - - - - - - - - - - -->
-		<!-- 		  Overlay		-->
+		
+		<!-- Overlay -->
 		<div class="UPF__overlay__" id="UPF__overlay__" style="display:none;">
 		</div>
-		<!-- Overlay -->
+		
 		<!-- Loader	-->
 		<div class="loader__" id="loader__" style="display:none;"><center><img src="{!URLFOR($Resource.commonResources, 'images/loaders/bigLoader.gif')}" /></center><br />Loading...</div>
-		<!-- Loader -->
+		
 		<script>
 			function fixHeader () {
 				var inputWidth = 390 - $('labelDisc').getWidth();
 				var inputDisc = $('inputDisc');
 				inputDisc.style.width = inputWidth -2 + 'px';
 			}
-
+			
+			
 			var version;
 			if (navigator.appName == "Microsoft Internet Explorer") {
 				version = navigator.appVersion;
@@ -51,6 +48,7 @@
 				}
 			}
 		</script>	
+
 		<!-- Header -->
 		<apex:composition template="HeaderTemplate">
 			<apex:define name="moduleId"><apex:variable var="moduleId" value="headerWiki"/></apex:define>
@@ -62,9 +60,8 @@
 	    </apex:composition>
 	    <div class="MainPage">
 			<div class="PageBlock">	
-				<!-- - - - - - - - - - - - - - - - - - - - - -->	
-				<!-- - - - - - - LEFT SIDEBAR  - - - - - - - -->
-				<!-- - - - - - - - - - - - - - - - - - - - - -->	
+				
+				<!-- Left Sidebar -->
 				<table border="0" class="bodyTable">
 					<tr>
 						<td valign="top" class="sideBarTD">
@@ -74,9 +71,7 @@
 							<c:WikiWidgetMyRecentChanges />
 						</td>
 						<td valign="top" class="mainContentTD">
-							<!-- - - - - - - - - - - - - - - - - - - - - -->	
-							<!-- - - - - - - MAIN CONTENT DIV  - - - - - -->
-							<!-- - - - - - - - - - - - - - - - - - - - - --> 
+							<!-- Main Content Div -->
 							<div class="MainContent">	
 								<div class="tabContainer">
 									<apex:form >
@@ -96,9 +91,13 @@
 																	oncomplete="switchOverlay(false);">
 													<apex:param name="allTeams" value="true" />
 												</apex:commandLink>
-											</li>					
+											</li>		
+											<li id="CreateNewWikiContainer">
+												<a href="/apex/WikiCreateWiki" class="CreateNewDiscussionForum"><img id="createNewForumButton" src="{!URLFOR($Resource.WikiResource, '/images/WikiButtons/newwikiaction.png')}" ></a>
+											</li>		
 										</ul>
 									</apex:form>
+										
 								</div>
 								<div class="tabBorder"></div>
 								<apex:outputpanel id="myTeamsAllTeamsPanel">
@@ -111,9 +110,8 @@
 												<br>
 												<apex:image id="twistImage" style="vertical-align:middle;" styleclass="twistImg" onclick="hideSection(this,'filterDiv')" value="{!URLFOR($Resource.WikiResource, 'images/layout/rc_boxes/arrow_down.gif')}" title="Hide Section" alt="Hide Section" />&nbsp; 
 												<a href="javascript:;" onclick="hideSection(document.getElementById('WikiOverview:twistImage'),'filterDiv')" style="text-decoration:none;font-weight:bold;">Filter</a>
-												<!-- - - - - - - - - - - - - - - - - - - -->	
-												<!-- 			LETTER FILTER			 -->
-												<!-- - - - - - - - - - - - - - - - - - - -->
+
+												<!-- Letter Filter -->
 												<div class="filter" id="filterDiv"  style="">
 													<div align="center">
 														<apex:form id="filterForm">
@@ -160,10 +158,8 @@
 													No {!$ObjectType.Wiki__c.label} Wikis Yet.
 												</apex:outputpanel>
 												<apex:outputpanel id="wikiSitesPanel" rendered="{!IF(cntPagination == 0, false, true)}">
-													<!-- - - - - - - - - - - - - - - - - -->	
-													<!-- 			PAGINATION			 -->
-													<!-- - - - - - - - - - - - - - - - - -->
 													
+													<!-- Pagination -->
 													<div class="pagination">
 														<apex:outputpanel id="paginationPanelTop">
 															<apex:form id="paginationFormTop">
@@ -218,9 +214,8 @@
 														
 													</div>
 													<hr style="border: 0px solid ; background-color: #333434; height: 1px;"/>
-													<!-- - - - - - - - - - - - - - - - - - - - - -->	
-													<!-- - - - - - - - - WIKI SITES  - - - - - - -->
-													<!-- - - - - - - - - - - - - - - - - - - - - -->
+	
+													<!-- Wiki Sites -->
 													<apex:outputpanel id="wikiSitesForm">
 														<apex:repeat rows="{!numSitesRows}" first="{!firstRow}" value="{!wikiSites}" var="item">
 															<div class="recentlyUpdated">
@@ -259,10 +254,8 @@
 															</div>
 														</apex:repeat>
 													</apex:outputpanel>
-													<!-- - - - - - - - - - - - - - - -->	
-													<!-- 		 PAGINATION			 -->
-													<!-- - - - - - - - - - - - - - - -->
-													
+
+													<!-- Pagination -->
 													<div class="pagination">
 														<apex:outputpanel id="paginationPanelBottom">
 															<apex:form id="paginationFormBottom">
@@ -320,9 +313,8 @@
 											</td>
 											<td style="width:3px;"></td>
 											<td width="50%" valign="top">
-												<!-- - - - - - - - - - - - - - - - - - - - - -->	
-												<!-- - - - - - - RECENTLY UPDATED  - - - - - -->
-												<!-- - - - - - - - - - - - - - - - - - - - - -->
+
+												<!-- Recently Updated -->
 												<div class="teamBlockTitle">
 													<h4>Recently Updated Pages</h4>
 												</div>

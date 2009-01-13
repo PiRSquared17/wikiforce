@@ -144,22 +144,26 @@
 				<table border="0" class="bodyTable">
 					<tr>
 						<td valign="top" class="sideBarTD">
-							
-								<!-- My Favorites Widget -->
-								<c:WikiWidgetMyFavorites />							
-							
-								<!-- My Recent Changes Widget -->
-								<c:WikiWidgetMyRecentChanges />
+							<div class="sidebar">
+								<!-- My Wiki Details Widget -->
+								<c:WikiDetailsWidget teamId="{!WikiId}" /> 
 								
 								<!-- My Wiki Members -->
-								<c:WikiMembersWidget wikiId="{!WikiId}" type="adminList" />							
-							
+								<c:WikiMembersWidget wikiId="{!WikiId}" type="adminList" />	
+						
+								<!-- My Favorites Widget -->
+								<c:WikiWidgetMyFavorites />							
+													
+								<!-- My Recent Changes Widget -->
+								<c:WikiWidgetMyRecentChanges />
+							</div>
 						</td>
 						<td valign="top" class="mainContentTD">
 							<!-- - - - - - - - - - - - - - - - - - - - - -->	
 							<!-- - - - - - - MAIN CONTENT DIV  - - - - - -->
 							<!-- - - - - - - - - - - - - - - - - - - - - --> 
-								
+
+		
 	<div class="main_cont" id="main_cont"><apex:form >
 		<apex:outputPanel layout="block" styleClass="okMessage"
 			style="display:none;">
