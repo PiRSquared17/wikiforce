@@ -96,7 +96,7 @@ public with sharing class WikiMembersWidgetController {
 	* Get Wiki Members
 	*@return List<WikiMember>
 	*/
-	/**public List<WikiMember> getWikispaceMembers() {
+	public List<WikiMember> getWikispaceMembers() {
 		List<WikiMember__c> temp = new List<WikiMember__c>();
       	
         if(typeList == 'adminList') {
@@ -105,30 +105,22 @@ public with sharing class WikiMembersWidgetController {
         		temp = [select User__r.Id, User__r.Name from WikiMember__c where Wiki__c =: Wiki and User__r.IsActive != false order by User__r.Name];
         }
         Set<Id> users = new Set<Id>();
-        for(WikiMember__c t: temp) {
-        	users.add(t.User__c);
+        for(WikiMember__c wm: temp) {
+        	users.add(wm.User__c);
 		}
-		Map<Id, WikiProfile__c> userMap = new Map<Id, WikiProfile__c>();
-        for(WikiProfile__c p: [SELECT Id,
-        								Name 
-						         		YahooIM__c,
-						         		Skype__c,
-						         		Status__c,
-						         		Picture__c,
-						         		isPrivate__c,
-						         		User__c 
-						         FROM  WikiProfile__c
-						         WHERE User__c IN: users]) {
-			//userMap.put(p.User__c, p);
-			userMap.put(p.User__c, p);				          	
+		Map<Id, User> userMap = new Map<Id, User>();
+        for(User u: [SELECT Id, Name
+						         FROM  User
+						         WHERE Id IN: users]) {
+			userMap.put(u.Id, u);				          	
 		}
                     	
         List<WikiMember> members = new List<WikiMember>();
 		if(temp.size() > 0){ 
-	        for(WikiMember__c t: temp) {
-	            WikiMember m = new WikiMember(t, userMap.get(t.User__c));
-	            m.Id = t.User__r.Id;
-	            String nameAux = t.User__r.Name;
+	        for(WikiMember__c w: temp) {
+	            WikiMember m = new WikiMember(w, userMap.get(w.User__c));
+	            m.Id = w.User__r.Id;
+	            String nameAux = w.User__r.Name;
 	            if(nameAux.length() > 20)
 	            	nameAux = nameAux.substring(0,20);
 	            m.username = nameAux;
@@ -137,7 +129,7 @@ public with sharing class WikiMembersWidgetController {
 		}
 		temp = null; 
 		return members;
-    }*/
+    }
     
      /**
     * Returns a String with Ids of the Wiki
@@ -164,10 +156,8 @@ public with sharing class WikiMembersWidgetController {
     public class WikiMember{
         
         WikiMember__c member;
-        WikiProfile__c profile = new WikiProfile__c();
+        User profile = new User();
         String username = null;
-        String yahoo = '';
-        String skype = '';
         String Id = '';
         String picture = '';
         Boolean isPrivate = false;
@@ -175,48 +165,22 @@ public with sharing class WikiMembersWidgetController {
 		/**
 		* Costructor
 		*@param WikiMember__c
-		*@param WikiProfile__c
+		*@param User__c
 		*/
-        public WikiMember(WikiMember__c m, WikiProfile__c p) {
+        public WikiMember(WikiMember__c m, User p) {
             member = m; 
             profile = p;                     
-			
-			/**if(profile != null){ 
-	            if(profile.YahooIM__c != null){
-	            	yahoo = profile.YahooIM__c;
-	            }else { 
-	            	yahoo = ''; 
-	            }
-	            
-	            isPrivate = profile.isPrivate__c;
-	            if(profile.Skype__c != null){
-	            	skype = profile.Skype__c;
-	            }else { 
-	            	skype = ''; 
-	            }
-	            
-	            if(profile.Picture__c != null){
-	            	picture = profile.Picture__c;
-	            }else {
-	            	picture = ''; 
-	            }
-	            
-	        }else {
-	        	yahoo = '';
-	        	skype = '';
-	        	picture = '';
-	        }*/
         }       
         
         /**
-        *@return String idWikiMember
+        *@return String idTeamMember
         */
         public String getId(){
         	return Id;
         }
 		
 		/**
-		*@return WikiMember__c
+		*@return TeamMember__c
 		*/
         public WikiMember__c getMember() {
             return member;
@@ -236,62 +200,18 @@ public with sharing class WikiMembersWidgetController {
        		return isPrivate; 
         }
         
-        /**
-        *@return String
-        */
-        public String getYahoo(){
-        	if(profile != null){
-        		return yahoo;
-        	}else {
-        	 	return '';
-        	}
-        }
         
         /**
-        *@return String
+        *@return User
         */
-        public String getSkype(){
-        	if(profile != null){	
-        		return skype;
-        	} else {
-        	 	return '';
-        	}
-        }
-        
-        /**
-        *@return String
-        */
-       /** public String getStatus() {	
-        	if(profile != null){		 
-				return profile.Status__c;
-        	}else {
-        		return '';
-        	}
-        }*/
-        
-        /**
-        *@return WikiProfile__c
-        */
-        public WikiProfile__c getProfile(){         
+        public User getProfile(){         
          	 if(profile != null){
          	 	return profile;
          	 } else {
-         	 	return new WikiProfile__c();
+         	 	return new User();
          	 }
        	}
-		
-        /**
-        *@return String
-        */
-        public String getImage() {
-        	if(profile != null){
-        		return picture;
-        	} else {
-         		return '';
-         	}
-        }
     }
-	
 	
 	// Add new Member
 	public String idWiki = System.currentPageReference().getParameters().get('id');
