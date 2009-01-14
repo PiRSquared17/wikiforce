@@ -11,19 +11,21 @@
 	<script	src="{!URLFOR($Resource.TeamsResources, 'inc/js/autocomplete.js')}" />
 	
 	
+	<script src="/soap/ajax/11.1/connection.js" type="text/javascript"></script>
+	
 	<apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/teamMembersWidget.css')}" />
 
 	<apex:includeScript value="{!URLFOR($Resource.commonResources, 'inc/js/teamMembersWidget.js')}" />
 
 	<apex:includeScript value="{!URLFOR($Resource.TeamsResources, 'inc/js/TeamsWidgetCommon.js')}" />
 
-	<script src="/soap/ajax/11.1/connection.js" type="text/javascript"></script>
+	
 
 	<script>
 
 		/**
         * Namespace Prefix Getter
-        */		
+        */
 		var namespace = "{!namespace}";	
 		var API_SESSION_ID = "{!$Api.Session_ID}";
 		var rootResource = "{!URLFOR($Resource.TeamsResources)}";	
@@ -39,13 +41,14 @@
 		var currentUser = '{!currentUser}';
 		
 		var myTeamId = "{!WikiId}";
+		
 		var myMembersIds = "{!WikispaceMembersIds}";
-		 
+		
 		function hola(){
 			alert(myMembersIds);
 		}
 		
-		window.onload = onloadFunctions();
+		/**window.onload = onloadFunctions();*/
 		
 	</script>
 

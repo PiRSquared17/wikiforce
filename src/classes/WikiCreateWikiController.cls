@@ -1,25 +1,7 @@
 public class WikiCreateWikiController {
-   /**
-    * Constructor
-    */
-    public WikiCreateWikiController(){
-        if (param != null){
-        	setWiki(param);
-        	genPermissions();
-        	
-        	if(!userPermissions.getCanManage())
-        		throw new CustomException('Insufficient Privileges');
-        }
-    }
-    
-	/**
-	* Return the Namespace Prefix
-	*@return String 
-	*/
-	/**public String getNamespace () {
-        return WikiUtil.getNamespace();
-    } */
-    
+   
+   
+   
     //Get id from team item
     String param = System.currentPageReference().getParameters().get('id');
     
@@ -30,8 +12,56 @@ public class WikiCreateWikiController {
     String wikiPicture = '';
     Boolean validSizePicture = true;
    
+   	Boolean inEdition = false;
+   	Boolean hasMembers = false;
    
     public Attachment document = new Attachment();
+    
+    /**
+    * Constructor
+    */
+    public WikiCreateWikiController(){
+        if (param != null){
+       		setWiki(param);
+        	genPermissions();
+        	/**
+        	if(!userPermissions.getCanManage()){
+        		throw new CustomException('Insufficient Privileges');
+        	}
+        	*/
+        	inEdition = true;
+         }
+    }
+    
+    /**
+    *@return hasMembers
+    */
+    public Boolean getHasMembers(){
+    	//Perform a check ...
+    	if(param!=null){
+    		String Id = [select Id from Wiki__c where Id=:param limit 1].Id;
+			if((Id != null) && (Id != '')){
+				hasMembers = true;
+			}		    	
+    	}
+    	return hasMembers;
+    }
+    
+    
+    
+    
+	/**
+	* Return the Namespace Prefix
+	*@return String 
+	*/
+	/**public String getNamespace () {
+        return WikiUtil.getNamespace();
+    } */
+    
+
+    
+
+
 	
 	/**
 	*@param Attachment
@@ -107,17 +137,15 @@ public class WikiCreateWikiController {
     *@void
     */
     public void setWiki (String tId){
-	    theWiki = [Select t.Type__c,  
-	    			//t.ContactEmail__c,
-	                //t.ParentWiki__c,
+	    theWiki = [	select t.Type__c,  
 	                t.PublicProfile__c,
 	                t.NewMemberProfile__c,
-	                //t.ParentWiki__r.Name, 
 	                t.Name,
 	                t.PictureId__c, 
 	                t.Id, 
 	                t.Description__c 
-	                From Wiki__c t Where t.Id =:tId];
+	                from Wiki__c t 
+	                where t.Id =:tId];
 	    if(theWiki.Type__c != null){
 	    	WikiType = theWiki.Type__c;
 	    }
