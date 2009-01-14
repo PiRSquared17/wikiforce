@@ -23,7 +23,7 @@
 	<apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/fonts.css')}" />
 	
 	
-		<!-- CSS de TS -->
+	<!-- CSS de TS -->
 	<link rel="stylesheet"  href="{!URLFOR($Resource.commonResources, '/inc/css/validator.css')}" />	
 	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/commonLayout.css')}" />	
 	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/teamDetailEdit.css')}" />	
@@ -35,28 +35,15 @@
 	<apex:includeScript value="{!URLFOR($Resource.commonResources, 'inc/js/common.js')}"/>
 	<apex:includeScript value="{!URLFOR($Resource.commonResources, 'inc/js/validator.js')}"/>
     
+    <!-- 
 	<apex:includeScript value="{!URLFOR($Resource.TeamsResources, 'inc/js/teamsCreateNewTeam.js')}" />
+	 -->
 	
 	
-	<style>
-		.noWikisYet {
-			text-align: center;
-			margin: 40px;
-		} 
-			
-	</style>
-	<div class="BodyPage">
-		<!-- - - - - - - - - - - - - - - - - - - - - -->	
-		<!-- - - - - - - -   OVERLAY   - - - - - - - -->
-		<!-- - - - - - - - - - - - - - - - - - - - - -->
-		<!-- 		  Overlay		-->
-		<div class="UPF__overlay__" id="UPF__overlay__" style="display:none;">
-		</div>
-		<!-- Overlay -->
-		<!-- Loader	-->
-		<div class="loader__" id="loader__" style="display:none;"><center><img src="{!URLFOR($Resource.commonResources, 'images/loaders/bigLoader.gif')}" /></center><br />Loading...</div>
-		<!-- Loader -->
-		<script>
+	
+	
+	
+	<script>
 			function fixHeader () {
 				var inputWidth = 390 - $('labelDisc').getWidth();
 				var inputDisc = $('inputDisc');
@@ -71,7 +58,426 @@
 					document.getElementById('loader__').style.position = 'absolute';
 				}
 			}
+			
+			//Temp Code
+			
+			/**
+			* Forward to Detail
+			*/
+			function forwardToDetail(){
+				var teamId = $('TeamsCreateNewTeam:createNewTeamForm:currentTeamId').innerHTML;
+				location.href = '/apex/TeamsRedirect?id=' + teamId;
+			}
+			
+			/**
+			* For update 
+			*/
+			function initializeTeamDetail(){
+				currentTeam = $('TeamsCreateNewTeam:createNewTeamForm:currentTeamId').innerHTML;
+				if(currentTeam != ''){
+					$('TeamsCreateNewTeam:createNewTeamForm:saveButton').value = 'Update ' + globalTeamLabel;
+					if(publicProfile != '' && newMemberProfile != ''){
+						$('openTeam').checked = true;
+						$('openTeam').onclick();
+					}else if(publicProfile != '' && newMemberProfile == ''){
+						$('closedTeam').checked = true;
+						$('closedTeam').onclick();
+					}else{
+						$('privateTeam').checked = true;
+						$('privateTeam').onclick();
+					}
+					$('TeamsCreateNewTeam:createNewTeamForm:TeamType').disabled = true;
+				}else{
+					$('TeamsCreateNewTeam:createNewTeamForm:openOrClosed').value = 'open';  
+				}
+			}
+			
+			/**
+			* Enabled & Disable selects for selected team access
+			*@param Object radio
+			*/
+			function setAccess(radio){
+				if(radio.checked == true && radio.id == 'openTeam'){
+					$('TeamsCreateNewTeam:createNewTeamForm:openOrClosed').value = 'open';
+					$('TeamsCreateNewTeam:createNewTeamForm:closedPublicProfileSelect').disabled = true;
+					$('TeamsCreateNewTeam:createNewTeamForm:memberProfileSelect').disabled = false;
+					$('TeamsCreateNewTeam:createNewTeamForm:publicProfileSelect').disabled = false;				
+				}else if (radio.checked == true && radio.id == 'closedTeam'){
+					$('TeamsCreateNewTeam:createNewTeamForm:openOrClosed').value = 'close';
+					$('TeamsCreateNewTeam:createNewTeamForm:memberProfileSelect').disabled = true;
+					$('TeamsCreateNewTeam:createNewTeamForm:publicProfileSelect').disabled = true;
+					$('TeamsCreateNewTeam:createNewTeamForm:closedPublicProfileSelect').disabled = false;
+				}else if (radio.checked == true && radio.id == 'privateTeam'){
+					$('TeamsCreateNewTeam:createNewTeamForm:openOrClosed').value = 'private';
+					$('TeamsCreateNewTeam:createNewTeamForm:memberProfileSelect').disabled = true;
+					$('TeamsCreateNewTeam:createNewTeamForm:publicProfileSelect').disabled = true;
+					$('TeamsCreateNewTeam:createNewTeamForm:closedPublicProfileSelect').disabled = true;				
+				}
+			}
+			
+			/**
+			* Count character length
+			*@param Obeject area
+			*@param String Id indicator
+			*/
+			function countStringLimit(area, indicator){
+				$(indicator).innerHTML = (32700 - area.value.length);
+			}
+			
+			/**
+			* Show error div & inject custom message
+			*@param String message
+			*/
+			function showError(message){
+				//$('messageErrorText').innerHTML = '*' + message;
+				Effect.Appear('warning_to_user');
+				Effect.ScrollTo('anchorForError');
+			}
+			
+			/**
+			* Validate form
+			*@void
+			*/
+			function validateFormInfo(){
+				$('currentEventAction').innerHTML = 'Validate form information...';
+				var inputAction = $('TeamsCreateNewTeam:createNewTeamForm:saveButton');
+				inputAction.style.background = '#666666';
+				inputAction.disabled = true;
+				var name = $('TeamsCreateNewTeam:createNewTeamForm:TeamName');
+				var error = false;
+				//Name Validate
+				if(name.value == ''){
+					name.style.border = 'solid #C0272D 2px';
+					Effect.Appear('TeamNameErrorMessage');
+					error = true;
+				}else{
+					name.style.border = '';
+					Effect.Fade('TeamNameErrorMessage');
+				}
+				
+				//Image right validate
+				if($$('#imageTeamContainer input')[0].value != '' && $('imageRights').checked == false){
+					$('imageRightsHolder').style.background = '#C0272D';
+					Effect.Appear('RightsErrorMessage');
+					error = true;
+				}else{
+					$('imageRightsHolder').style.background = '';
+					Effect.Fade('RightsErrorMessage');
+				}
+			
+				//Check team type
+				if($F('TeamsCreateNewTeam:createNewTeamForm:TeamType') == ''){
+					$('TeamsCreateNewTeam:createNewTeamForm:TeamType').style.border = 'solid #C0272D 2px';
+					Effect.Appear('TeamTypeErrorMessage');
+					error = true;
+				}else{
+					$('TeamsCreateNewTeam:createNewTeamForm:TeamType').style.border = '';
+					$('TeamTypeErrorMessage').innerHTML = '';				
+				}
+				
+				if($('TeamsCreateNewTeam:createNewTeamForm:parentTeam_lkid').value){
+					var parentTeam = $('TeamsCreateNewTeam:createNewTeamForm:parentTeam_lkid');
+					init();
+					result = sforce.connection.query("Select Id, TeamProfile__c from TeamMember__c where User__c = '" + globalUserId + "' and Team__c = '" + parentTeam.value + "'");
+					records = result.getArray("records");
+					if (records.length > 0){
+						result = sforce.connection.query("Select ManageTeams__c, Id from TeamProfile__c where Id = '" + records[0].TeamProfile__c + "'");
+						records = result.getArray("records");
+						if (records.length > 0){
+							if(!records[0].ManageTeams__c || records[0].ManageTeams__c == 'false'){
+								var parent = $('TeamsCreateNewTeam:createNewTeamForm:parentTeam');
+								parent.style.border = 'solid #C0272D 2px';
+								$('ParentTeamErrorMessage').innerHTML = '<b>Error:</b> You need manager permissions to create a sub-'+ globalTeamLabel +' for <b>' + parent.value + '</b>';
+								Effect.Appear('ParentTeamErrorMessage');
+								error = true;
+							}					
+						}				
+					}else{
+						$('TeamsCreateNewTeam:createNewTeamForm:parentTeam').style.border = '';
+						Effect.Fade('ParentTeamErrorMessage');	
+					}	
+				}
+				
+				//Check error
+				if(error){
+					showError('');
+				}else{
+					Effect.Fade('warning_to_user');
+					$('currentEventAction').innerHTML = 'Saving '+ globalTeamLabel +' Information...';
+				} 
+				
+				inputAction.style.background = '#287B9B';
+				inputAction.disabled = false;
+				$('currentEventAction').innerHTML = '';
+				return error;		
+			}
+			
+			/* ### Bubble ###*/
+			
+			/**
+			* Get XY position for current element
+			*@param Object element
+			*@return Object position
+			*/
+			function getXY(obj){				
+				var pos = Position.cumulativeOffset(obj)
+				var y = pos[1];
+				var x = pos[0];
+				var x2 = x + parseInt(obj.offsetWidth);
+				var y2 = y + parseInt(obj.offsetHeight);
+				return {'x':x, 'y':y, 'x2':x2, 'y2':y2};
+			}
+			
+			/**
+			* Show bubble overlay
+			*@param Object element
+			*@param String selectId
+			*/
+			var isShowBubble = false;
+			function showBubble(currentElement, selectId){
+				isShowBubble = true;
+				var container = $('bubble');
+				var position = getXY(currentElement);
+				var selectValue = $F('TeamsCreateNewTeam:createNewTeamForm:' + selectId);
+				container.style.display = 'block';	
+				init();
+				result = sforce.connection.query("Select Id, Description__c from TeamProfile__c where Id = '" + selectValue + "'");
+				records = result.getArray("records");			
+				
+				container.style.top = position.y2 + 'px';
+				container.style.left = position.x2 + 'px';
+				$('innerContBubble').innerHTML = records[0].Description__c;
+				
+				if(Prototype.Browser.IE){
+					topPosition = position.y2 - 150;	
+					leftPosition = position.x2 - 70;
+					container.style.top = topPosition + 'px';												
+					container.style.left = leftPosition + 'px';
+				}else{
+					// For mozilla
+					topPosition = position.y2 - 155;	
+					container.style.top = topPosition + 'px';												
+				}
+			}
+			
+			/**
+			* Hide bubble
+			*@void
+			*/
+			function hideBubble(){
+				isShowBubble = false;
+				setTimeout('if(!isShowBubble){Effect.Fade(\'bubble\');}', 1500);
+			}
+			
+			/* ### Util Functions ### */
+			
+			/**
+			* Get URL param
+			*@return string param
+			*@param string param
+			*/
+			function getURLParam(strParamName){
+			  var strReturn = "";
+			  var strHref = window.location.href;
+			  if ( strHref.indexOf("?") > -1 ){
+				var strQueryString = strHref.substr(strHref.indexOf("?"));
+				var aQueryString = strQueryString.split("&");
+				for ( var iParam = 0; iParam < aQueryString.length; iParam++ ){
+				  if (aQueryString[iParam].indexOf(strParamName + "=") > -1 ){
+					var aParam = aQueryString[iParam].split("=");
+					strReturn = aParam[1];
+					break;
+				  }
+				}
+			  }
+			  return unescape(strReturn);
+			}	
+			
+			/**
+			* Check if the parent id param is here.
+			*@return string param
+			*@param string param
+			*/
+			function subTeamCheck(){
+				var parentId = getURLParam('parent');
+				if((parentId != null) && (parentId != '')){
+					init();
+					var q = 'SELECT Id, Name FROM Team__c WHERE Id = \'' + parentId + '\'';
+					var result = sforce.connection.query(q,{
+						onSuccess:function(result){
+							var records = result.getArray("records");
+							var input = $('TeamsCreateNewTeam:createNewTeamForm:parentTeam');
+							input.value = records[0].Name;
+						},
+						onFailure:function(error){	 
+							alert(error);
+						}
+					});
+				}
+			}
+			
+			var showingBubble = false;		
+			var time = '';
+			
+			function tooltip2(obj, selectId, h){
+				// Tooltip
+				var tooltip = $('divToolTip2');
+				var tooltipMessage = $('messageTooltip2');
+				var selectValue = $F(selectId);
+				var markup = '';
+				var height = h;
+				init();
+				queryString ="Select Id, Description__c, Name, PostWikiComments__c, PostDiscussionTopicReplies__c, PostBookmarkComments__c, PostBlogComments__c, ManageWikis__c, ManageTeams__c, ManageProjectTasks__c, ManageDiscussionForums__c, ManageBookmarks__c, ManageBlogs__c, CreateWikiPages__c, CreateProjectTasks__c, CreateDiscussionTopics__c, CreateBookmarks__c, CreateBlogs__c from TeamProfile__c where Id = '" + selectValue + "'";
+				result = sforce.connection.query(queryString);
+				records = result.getArray("records");
+				markup += '<b>"'+ records[0].Name + '" profile:</b><br/>';
+				//Teams permissions
+				if(records[0].ManageTeams__c == 'true'){
+					markup += '<br/><b>Team</b><br/>-Manage '+ globalTeamLabel +'<br/>';
+					height += 43;
+				}
+				//Blogs permissions
+				if(records[0].ManageBlogs__c == 'true'){
+					markup += '<br/><b>Blogs</b><br/>-Manage Blogs<br/>-Post comments<br/>-Create blogs<br/>';
+					height += 71;
+				}else if(records[0].PostBlogComments__c == 'true'){
+					markup += '<br/><b>Blogs</b><br/>-Post comments<br/>';
+					height += 43;
+					if(records[0].CreateBlogs__c == 'true'){
+						markup += '-Create blogs<br/>';
+						height += 16;
+					}
+				}else if(records[0].CreateBlogs__c == 'true'){
+					markup += '<br/><b>Blogs</b><br/>-Create blogs<br/>';
+					height += 43;
+				}
+				//Discussions permissions
+				if(records[0].ManageDiscussionForums__c == 'true'){
+					markup += '<br/><b>Discussion</b><br/>-Manage forums<br/>-Post topic replies<br/>-Create topics<br/>';
+					height += 71;
+				}else if(records[0].PostDiscussionTopicReplies__c == 'true'){
+					markup += '<br/><b>Discussion</b><br/>-Post topic replies<br/>';
+					height += 43;
+					if(records[0].CreateDiscussionTopics__c == 'true'){
+						markup += '-Create discussion topics<br/>';
+						height += 16;
+					}
+				}else if(records[0].CreateDiscussionTopics__c == 'true'){
+					markup += '<br/><b>Discussion</b><br/>-Create discussion topics<br/>';
+					height += 43;
+				}
+				//Wiki permissions
+				if(records[0].ManageWikis__c == 'true'){
+					markup += '<br/><b>Wiki</b><br/>-Manage wiki<br/>-Post comments<br/>-Create wiki pages<br/>';
+					height += 71;
+				}else if(records[0].PostWikiComments__c == 'true'){
+					markup += '<br/><b>Wiki</b><br/>-Post comments<br/>';
+					height += 43;
+					if(records[0].CreateWikiPages__c == 'true'){
+						markup += '-Create wiki pages<br/>';
+						height += 16;
+					}
+				}else if(records[0].CreateWikiPages__c == 'true'){
+					markup += '<br/><b>Wiki</b><br/>-Create wiki pages<br/>';
+					height += 43;
+				}
+				//Project permissions
+				if(records[0].ManageProjectTasks__c == 'true'){
+					markup += '<br/><b>Project</b><br/>-Manage project tasks<br/>-Create project tasks<br/>';
+					height += 57;
+				}else if(records[0].CreateProjectTasks__c == 'true'){
+					markup += '<br/><b>Project</b><br/>-Create project tasks<br/>';
+					height += 43;
+				}
+				//Bookmark permissions
+				if(records[0].ManageBookmarks__c == 'true'){
+					markup += '<br/><b>Bookmark</b><br/>-Manage bookmarks<br/>-Post comments<br/>-Create bookmarks<br/>';
+					height += 71;
+				}else if(records[0].PostBookmarkComments__c == 'true'){
+					markup += '<br/><b>Bookmark</b><br/>-Post comments<br/>';
+					height += 43;
+					if(records[0].CreateBookmarks__c == 'true'){
+						markup += '-Create bookmarks<br/>';
+						height += 16;
+					}
+				}else if(records[0].CreateBookmarks__c == 'true'){
+					markup += '<br/><b>Bookmark</b><br/>-Create bookmarks<br/>';
+					height += 43;
+				}
+				tooltipMessage.innerHTML = markup;				
+				tooltip.style.display = 'block';
+				tooltip.style.top = ((height - (height * 2)) / 2) + 'px';
+				showingBubble = true;
+				clearTimeout(time);
+				time = setTimeout("Effect.Fade('divToolTip2')",3000);
+			}
+			
+			function tooltipoff2(){
+				// Tooltip
+				showingBubble = false;
+				clearTimeout(time);
+				var tooltip = $('divToolTip2');
+				tooltip.style.display = 'none';
+			}				
 		</script>	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<style>>
+		.noWikisYet {
+			text-align: center;
+			margin: 40px;
+		} 
+		
+		.teamTitle{
+			color: #526921;
+		}
+		
+		div.main_content{
+			margin: 15px;
+		}
+		
+		.body_center{
+			background-color:#E1E1E1;
+		}
+			
+		div.tabContainer {
+			height: 32px;
+			background-color:#FFFFFF;
+		}	
+		div.tabBorder {
+			margin-left: 0px;
+			
+		}
+		
+		ul.tabs li{
+			height: 20px;
+		}
+		
+		a.disable{
+			color: #C9C9C9;
+		}
+		
+	</style>
+	<div class="BodyPage">
+		<!-- - - - - - - - - - - - - - - - - - - - - -->	
+		<!-- - - - - - - -   OVERLAY   - - - - - - - -->
+		<!-- - - - - - - - - - - - - - - - - - - - - -->
+		<!-- 		  Overlay		-->
+		<div class="UPF__overlay__" id="UPF__overlay__" style="display:none;">
+		</div>
+		<!-- Overlay -->
+		<!-- Loader	-->
+		<div class="loader__" id="loader__" style="display:none;"><center><img src="{!URLFOR($Resource.commonResources, 'images/loaders/bigLoader.gif')}" /></center><br />Loading...</div>
+		<!-- Loader -->
+
 		<!-- Header -->
 		<apex:composition template="HeaderTemplate">
 			<apex:define name="moduleId"><apex:variable var="moduleId" value="headerWiki"/></apex:define>
@@ -99,36 +505,25 @@
 							<!-- - - - - - - - - - - - - - - - - - - - - -->	
 							<!-- - - - - - - MAIN CONTENT DIV  - - - - - -->
 							<!-- - - - - - - - - - - - - - - - - - - - - --> 
-								
-									<div class="main_content" id="main_content">
-										<div class="teamTitle" style="{!IF(Wiki.Id == null, '', 'display:none')}" >Create New {!$ObjectType.Wiki__c.label}</div>
-										<div class="teamTitle" style="{!IF(Wiki.Id == null, 'display:none', '')}" >Edit {!$ObjectType.Wiki__c.label}</div>
-																		
-									<div class="tabContainer">									
-								<apex:form style="margin-top: 7px; margin-left:2px">
-										<ul class="tabs">
-											<li class="selected" id="myTeamTab">
-												<apex:commandLink value="Settings" 
-																	onclick="switchTab('myTeamTab'); switchOverlay(true);" 
-																	rerender="myTeamsAllTeamsPanel" 
-																	oncomplete="switchOverlay(false);">
-													<apex:param name="allTeams" value="false" />
-												</apex:commandLink>
-											</li>
-											<li id="allTeamTab">
-												<apex:commandLink value="Members" 
-																	onclick="switchTab('allTeamTab'); switchOverlay(true);" 
-																	rerender="myTeamsAllTeamsPanel" 
-																	oncomplete="switchOverlay(false);">
-													<apex:param name="allTeams" value="true" />
-												</apex:commandLink>
-											</li>					
-										</ul>
-								</apex:form>
-								<div class="tabBorder"></div>
-							</div>
 							
-		<div>
+							<div class="main_content" id="main_content">
+								<div class="teamTitle" style="{!IF(Wiki.Id == null, '', 'display:none')}" >Create New {!$ObjectType.Wiki__c.label}</div>
+								<div class="teamTitle" style="{!IF(Wiki.Id == null, 'display:none', '')}" >Edit {!$ObjectType.Wiki__c.label}</div>
+								
+								
+							<!-- Tab container -->
+							<div class='tabContainer' >
+								<ul class="tabs">
+									<li  class="selected" id="myTeamTab">
+										<apex:outputLink styleClass="tabLinks" value="?my=true" id="My_teams">Settings</apex:outputLink>
+									</li>
+									<li id="allTeamTab">
+										<apex:outputLink styleClass="{!IF((hasMembers == false),'disable','')}" value="{!IF((hasMembers == false),'disable','/apex/WikiMembersList')}">Members</apex:outputLink>
+									</li>					 
+								</ul>	
+							<div class="tabBorder"></div>
+							</div>
+						
 			<div class="holder">				
 				<!-- <div class="border_body_top">&nbsp;</div> -->
 							

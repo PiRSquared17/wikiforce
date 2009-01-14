@@ -109,9 +109,7 @@ public with sharing class WikiMembersWidgetController {
         	users.add(wm.User__c);
 		}
 		Map<Id, User> userMap = new Map<Id, User>();
-        for(User u: [SELECT Id, Name
-						         FROM  User
-						         WHERE Id IN: users]) {
+        for(User u: [SELECT Id, Name FROM  User WHERE Id IN: users]) {
 			userMap.put(u.Id, u);				          	
 		}
                     	
@@ -587,25 +585,25 @@ public with sharing class WikiMembersWidgetController {
     }	
     
     // Sharing rules
-	//public UserPermissions userPermissions = WikiDetailController.userPermission.clone();
+	public UserPermissions userPermissions = WikiDetailsController.userPermission.clone();
 	
 	/**
 	* Generate user permissions
 	*/
-	/**public void genPermissions() {
+	public void genPermissions() {
 		userPermissions.setId(UserInfo.getUserId());
-		userPermissions.setWiki(Wiki);
+		userPermissions.setTeam(Wiki);
 		userPermissions.setObjectType('Wiki');
 		userPermissions.setPermissions();		
-	}*/
+	}
 	
 	/**
 	* Return user permissions
 	*@return UserPermissions
 	*/
-	/**public UserPermissions getUserPermissions () {
+	public UserPermissions getUserPermissions () {
 		return userPermissions;
-	}	*/
+	}
 	
 	/**
 	* Rerender use only
