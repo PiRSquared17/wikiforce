@@ -6,6 +6,10 @@
 	<apex:includeScript value="{!URLFOR($Resource.Script_aculo_us, 'scriptaculous.js')}"/>
 	<apex:includeScript value="{!URLFOR($Resource.Script_aculo_us, 'effects.js')}"/>
 	
+	<!-- Modal JS -->
+	<script type="text/javascript" src="{!URLFOR($Resource.commonResources, 'inc/js/modal.js')}"></script>
+	<link rel="stylesheet" media="screen" href="{!URLFOR($Resource.commonResources, 'inc/css/modal.css')}" />
+	
 	<!-- Portal Support -->
 	<apex:includeScript value="{!$Resource.portalSupport}"/>
 	<apex:includeScript value="{!URLFOR($Resource.OverlayFunctionsFixed, 'js/overlayFunction.js')}"/>
@@ -21,6 +25,14 @@
 	<apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/myTeamsAllTeamsTabs.css')}" />
 	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/WikiOverview.css')}" /> 
 	<apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/fonts.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamsOverlaysTemplate.css')}" />
+	
+	<a href="#modal_container" id="initializeModal" style="display: none;"></a>
+	<div id="modal_container"></div>
+	<script>createOverlay('initializeModal')</script>
+	
+	<!-- Delete Forum -->
+	<c:WikiOverlayDeleteWiki />
 	
 	<div class="BodyPage">
 		
@@ -48,7 +60,7 @@
 				}
 			}
 		</script>	
-
+		
 		<!-- Header -->
 		<apex:composition template="HeaderTemplate">
 			<apex:define name="moduleId"><apex:variable var="moduleId" value="headerWiki"/></apex:define>
@@ -218,17 +230,21 @@
 													<!-- Wiki Sites -->
 													<apex:outputpanel id="wikiSitesForm">
 														<apex:repeat rows="{!numSitesRows}" first="{!firstRow}" value="{!wikiSites}" var="item">
-															<div class="recentlyUpdated">
+															<div class="recentlyUpdated" id="row-{!item.Id}">
 																<table border="0" style="width:100%;">
 																	<tr>
+																		<td width="90px">
+																			<apex:outputpanel rendered="{!IF(item.IsAdmin,true,false)}" >
+																				<a href="WikiCreateWiki?id={!item.Id}" >Edit</a> | <a href="Javascript:;" onclick="deleteWikiOverlay('{!item.Id}');">Del</a>
+																			</apex:outputpanel>
+																		</td>
 																		<td width="110px" valign="top">
 																			<apex:outputpanel rendered="{!IF(item.picture == '', true, false)}">
-																				<apex:image onclick="location.href='/apex/WikiTeamOverview?tid={!item.id}';" styleclass="teamPicture" value="{!URLFOR($Resource.commonResources, '/images/placeholders/default_team_100x100.png')}" />
+																				<apex:image width="53px" onclick="location.href='/apex/WikiTeamOverview?tid={!item.id}';" styleclass="teamPicture" value="{!URLFOR($Resource.commonResources, '/images/placeholders/default_team_100x100.png')}" />
 																			</apex:outputpanel>
 																			<apex:outputpanel rendered="{!IF(item.picture == '', false, true)}">
-																				<apex:image onclick="location.href='/apex/WikiTeamOverview?tid={!item.id}';" styleclass="teamPicture" value="/servlet/servlet.FileDownload?file={!item.picture}" />
+																				<apex:image width="53px" onclick="location.href='/apex/WikiTeamOverview?tid={!item.id}';" styleclass="teamPicture" value="/servlet/servlet.FileDownload?file={!item.picture}" />
 																			</apex:outputpanel>
-																			<!-- <apex:image styleclass="teamPicture" value="{!URLFOR($Resource.WikiResource, 'images/WikiImages/pic_big.jpg')}" /> -->
 																		</td>
 																		<td valign="top">
 																			<table border="0" style="width:99%;">
@@ -350,14 +366,14 @@
 										</tr>
 									</table>
 								</apex:outputpanel>
+								<apex:form >
+									<apex:actionFunction name="refreshDeleteList" action="{!refreshTab}"
+										rerender="wikiSitesForm"
+										oncomplete="showHideOverlay(); showMessageToUser('The wiki has been deleted.', 'success');" />
+								</apex:form> 
 							</div>
 						</td>
 					</tr>
-					<!--<tr>
-						 <td colspan="2">
-							<div class="SidebarTitle" />
-						</td> 
-					</tr>-->
 				</table>
 			</div>
 		</div>

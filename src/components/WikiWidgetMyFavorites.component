@@ -6,7 +6,7 @@
 		}
 	</style>
 		
-	<div class="sidebar">
+	<!-- <div class="sidebar"> -->
 		
 		<!-- Widget -->
 		<div class="teamWidget mySmallWidget" >
@@ -49,5 +49,5 @@
 			</div>
 		</div>
 		<div class="clear"></div>
-	</div>	
+	<!-- </div> -->	
 </apex:component>

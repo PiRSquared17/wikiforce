@@ -481,7 +481,6 @@ public with sharing class WikiMembersWidgetController {
 				//newMember.WikiRole__c = newMemberVars.WikiRole;
 				newMemberList.add(newMember);
 				mailList.add(user);
-				
 			}
 		}
 		
@@ -491,13 +490,17 @@ public with sharing class WikiMembersWidgetController {
 		
 		memberListToolkit = newMemberList;
 		memberListToolkitCount = newMemberList.size();
-		    
+		
 		//Insert newMemberList;
 		membersToInsert = newMemberList;
+		if(membersToInsert.size() > 0){
+			emailNotifications = true;
+		}
 		newMemberVars.colleagueNames = '';
 		newMemberVars.WikiRole = '';
 		newMemberVars.profileId = '';
 		newMemberVars.message = '';
+		
 	}
 	
 	//New save
@@ -509,6 +512,8 @@ public with sharing class WikiMembersWidgetController {
 	*@return PageReference
 	*/
 	public PageReference syncSaveMembers(){
+		
+		//emailNotifications = true;
 		if(emailNotifications){
 			Integer endIt =  countSaved + 2;
 			for(Integer it = countSaved; it <= endIt; it++){

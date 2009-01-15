@@ -7,6 +7,7 @@ public with sharing class WikiOverviewController {
    	List<Wiki__c> teamList = new List<Wiki__c>();
    	Letters currentLetter = new Letters();
    	List<Wiki> wikis = new List<Wiki>();
+   	String USERID = UserInfo.getUserId();
 	
 	/**
 	* Costructor
@@ -58,7 +59,7 @@ public with sharing class WikiOverviewController {
 	*/
 	public void genMyTeams() {
 		tmp = new List<Id>();
-		for(WikiMember__c tm : [Select Wiki__c From WikiMember__c WHERE User__c =: UserInfo.getUserId() ] ) { 
+		for(WikiMember__c tm : [Select Wiki__c From WikiMember__c WHERE User__c =: USERID ] ) { 
 			tmp.add(tm.Wiki__c);
 		}
 	}
@@ -108,20 +109,38 @@ public with sharing class WikiOverviewController {
 	   		sites = [select Id, Name, Description__c, PictureId__c from Wiki__c order by Name];
     	}else{
 			sites = [select Id, Name, Description__c, PictureId__c from Wiki__c where Id in: myTeams() order by Name];
-    	}		
+    	}
+    	
+    	List<User> teamAdmin = [Select Id, Profile.PermissionsModifyAllData From User where id =:USERID limit 1];
 		
+		Map<Id, String> wAdmin = this.getWikisAdmin();
 		List<TeamWikis> teamWikiList = new List<TeamWikis>();
 		for (Wiki__c item : sites) {
 			TeamWikis teamWikiItem = new TeamWikis();
 			teamWikiItem.setId(item.Id);
 			teamWikiItem.setName(item.Name);
+			String nameProfileAdmin = 'Wiki Administrator';
+			teamWikiItem.setIsAdmin(teamAdmin[0].Profile.PermissionsModifyAllData || nameProfileAdmin.equals(wAdmin.get(item.Id)));
 			teamWikiItem.setDescription(item.Description__c);
 			teamWikiItem.setPicture(item.PictureId__c);
 			teamWikiList.add(teamWikiItem);
 		}
 		wikiSites = teamWikiList;
 	}
-
+	
+	/**
+	* Return a map with a grop of wikis id where the user is admin
+	*@return Map<String, String>
+	*/	
+	private Map<Id, String> getWikisAdmin(){
+		Map<Id, String> wikis = new Map<Id, String>();
+		for(WikiMember__c m : [select Wiki__c, WikiProfile__r.Name from WikiMember__c where User__c =: USERID]){
+			wikis.put(m.Wiki__c, m.WikiProfile__r.Name);
+		}
+		
+		return wikis;
+	}
+	
    	public Integer cntLetterSites;
 
    	/**
@@ -306,6 +325,7 @@ public with sharing class WikiOverviewController {
    		String name;
    		String description;
    		String picture;
+   		Boolean isAdmin;
    		
    		/**
    		*@return String
@@ -333,6 +353,13 @@ public with sharing class WikiOverviewController {
    		*/
    		public String getPicture () {
    			return picture;
+   		}
+   		
+   		/**
+   		*@return Boolean
+   		*/
+   		public Boolean getIsAdmin(){
+   			return isAdmin;
    		}
    		
    		/**
@@ -377,7 +404,14 @@ public with sharing class WikiOverviewController {
 	        }else {
 	        	this.picture = '';
 	        }
-   		}   	
+   		}
+   		
+   		/**
+   		*@param Boolean
+   		*/
+   		public void setIsAdmin(Boolean is){
+   			isAdmin = is;
+   		}
    	}
    	
    	public String letter = '';
@@ -428,11 +462,16 @@ public with sharing class WikiOverviewController {
    				cntPagination++;
 		}
 		
+		List<User> teamAdmin = [Select Id, Profile.PermissionsModifyAllData From User where id =:USERID limit 1];
+		
+		Map<Id, String> wAdmin = this.getWikisAdmin();
 		List<TeamWikis> teamWikiList = new List<TeamWikis>();
 		for (Wiki__c item : sites) {
 			TeamWikis teamWikiItem = new TeamWikis();
 			teamWikiItem.setId(item.Id);
 			teamWikiItem.setName(item.Name);
+			String nameProfileAdmin = 'Wiki Administrator';
+			teamWikiItem.setIsAdmin(teamAdmin[0].Profile.PermissionsModifyAllData || nameProfileAdmin.equals(wAdmin.get(item.Id)));
 			teamWikiItem.setDescription(item.Description__c);
 			teamWikiItem.setPicture(item.PictureId__c);
 			teamWikiList.add(teamWikiItem);

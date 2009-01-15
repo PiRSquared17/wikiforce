@@ -13,7 +13,7 @@
         <label>Wiki Profile</label>
         <referenceTo>WikiProfile__c</referenceTo>
         <relationshipLabel>Wiki Members</relationshipLabel>
-        <relationshipName>WikiMember</relationshipName>
+        <relationshipName>WikiProfile</relationshipName>
         <type>Lookup</type>
     </fields>
     <fields>

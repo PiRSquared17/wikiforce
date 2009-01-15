@@ -15,6 +15,14 @@
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>DeleteWikiController</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>JoinWikiController</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>SearchController</apexClass>
         <enabled>false</enabled>
     </classAccesses>
@@ -1299,6 +1307,10 @@
     </pageAccesses>
     <pageAccesses>
         <apexPage>WikiMembersList</apexPage>
+        <enabled>false</enabled>
+    </pageAccesses>
+    <pageAccesses>
+        <apexPage>WikiMembersMassiveRemove</apexPage>
         <enabled>false</enabled>
     </pageAccesses>
     <pageAccesses>
