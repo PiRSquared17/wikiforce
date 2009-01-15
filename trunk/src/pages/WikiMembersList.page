@@ -1,5 +1,12 @@
 <apex:page id="WikiMembersList" controller="WikiMembersListController" tabStyle="WikiPage__c" sidebar="false" >
+	
 	<!-- Scripts --> 
+	
+	<apex:includeScript value="/soap/ajax/12.0/connection.js" />
+	<script>
+		var API_SESSION_ID = '{!$Api.Session_ID}'; 
+	</script>
+	
 	<script src="{!URLFOR($Resource.WikiResource, 'inc/js/common.js')}"/>
 	
 	<!-- Portal Support -->
@@ -144,7 +151,9 @@
 				<table border="0" class="bodyTable">
 					<tr>
 						<td valign="top" class="sideBarTD">
-							<div class="sidebar">
+						
+							
+							 <div class="sidebar" style="overflow: visible">
 								<!-- My Wiki Details Widget -->
 								<c:WikiDetailsWidget teamId="{!WikiId}" /> 
 								
@@ -156,7 +165,8 @@
 													
 								<!-- My Recent Changes Widget -->
 								<c:WikiWidgetMyRecentChanges />
-							</div>
+							 </div> 
+						
 						</td>
 						<td valign="top" class="mainContentTD">
 							<!-- - - - - - - - - - - - - - - - - - - - - -->	
@@ -299,7 +309,7 @@
 						<td width="9%"><apex:outputpanel style="font-weight:bold;">Action</apex:outputpanel> <!-- rendered="{!userPermissions.canManage}" --> 
 						</td>
 						<td width="29%" colspan="2"><apex:commandLink styleclass="member_title_description" action="{!sortList}"
-							value="Name" rerender="membersList">
+							value="Full Name" rerender="membersList">
 							<apex:param name="sb" value="User__r.Name" />
 						</apex:commandLink>&nbsp; <apex:outputpanel rendered="{!IF(sortBy == 'name',true,false)}">
 							<apex:outputpanel rendered="{!sortByDesc}">
@@ -392,7 +402,7 @@
 								</apex:commandLink>
 								<!-- <a href="javascript:;" class="member_detail_description_underline">Delete</a> -->
 							</apex:outputpanel></td>
-							<td class="memberImg"><apex:outputpanel rendered="{!IF(item.memberImg == '',true,false)}">
+							<!-- <td class="memberImg"><apex:outputpanel rendered="{!IF(item.memberImg == '',true,false)}">
 								<div class="photoWrapper_32px"><img
 									src="{!URLFOR($Resource.commonResources, 'images/placeholders/unknownperson32x32.jpg')}"
 									width="32" /></div>
@@ -400,14 +410,15 @@
 								<div class="photoWrapper_32px"><img
 									src="/servlet/servlet.FileDownload?file={!item.memberImg}"
 									width="32" /></div>
-							</apex:outputpanel></td>
+							</apex:outputpanel></td> -->
 							<td class="member_detail_description"><a href="javascript:;"
 								onclick="location.href='https://na1.salesforce.com/apex/PeopleProfileDisplay?id={!item.userId}'"
-								class="member_detail_description_underline">{!item.Name}</a> <img
-								class="imgState"
-								src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/online.gif')}" />
-							<img class="imgState"
-								src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/skype.gif')}" />
+								class="member_detail_description_underline">{!item.Name}</a> 
+								<!-- <img class="imgState"
+									src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/online.gif')}" />
+								<img class="imgState"
+									src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/skype.gif')}" />
+								-->
 							</td>
 							<td class="member_detail_description">{!item.company}</td>
 							<td class="member_detail_description">{!item.title}</td>

@@ -124,7 +124,7 @@
 											<div class="teamBlockTitle" style="margin-bottom:10px;">
 												<h4>Wiki Page directory</h4>
 											</div>
-											<strong><a href="/apex/TeamsRedirect?id={!currentTeam.Id}">{!currentTeam.Name}</a></strong>
+											<strong><a href="/apex/WikiCreateWiki?id={!currentTeam.Id}">{!currentTeam.Name}</a></strong>
 											<br style="clear:both;"/>
 											<br style="clear:both;"/>
 											<!-- Wiki Page Tree Start -->											

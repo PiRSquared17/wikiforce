@@ -35,402 +35,14 @@
 	<apex:includeScript value="{!URLFOR($Resource.commonResources, 'inc/js/common.js')}"/>
 	<apex:includeScript value="{!URLFOR($Resource.commonResources, 'inc/js/validator.js')}"/>
     
+    
+    <apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/wikiCreateWiki.css')}" />
+    
+    
     <!-- 
 	<apex:includeScript value="{!URLFOR($Resource.TeamsResources, 'inc/js/teamsCreateNewTeam.js')}" />
 	 -->
-	
-	
-	
-	
-	
-	<script>
-			function fixHeader () {
-				var inputWidth = 390 - $('labelDisc').getWidth();
-				var inputDisc = $('inputDisc');
-				inputDisc.style.width = inputWidth -2 + 'px';
-			}
-
-			var version;
-			if (navigator.appName == "Microsoft Internet Explorer") {
-				version = navigator.appVersion;
-				if (version.indexOf("MSIE 6") != -1) {
-					document.getElementById('loader__').className = 'loaderIE6__';
-					document.getElementById('loader__').style.position = 'absolute';
-				}
-			}
-			
-			//Temp Code
-			
-			/**
-			* Forward to Detail
-			*/
-			function forwardToDetail(){
-				var teamId = $('TeamsCreateNewTeam:createNewTeamForm:currentTeamId').innerHTML;
-				location.href = '/apex/TeamsRedirect?id=' + teamId;
-			}
-			
-			/**
-			* For update 
-			*/
-			function initializeTeamDetail(){
-				currentTeam = $('TeamsCreateNewTeam:createNewTeamForm:currentTeamId').innerHTML;
-				if(currentTeam != ''){
-					$('TeamsCreateNewTeam:createNewTeamForm:saveButton').value = 'Update ' + globalTeamLabel;
-					if(publicProfile != '' && newMemberProfile != ''){
-						$('openTeam').checked = true;
-						$('openTeam').onclick();
-					}else if(publicProfile != '' && newMemberProfile == ''){
-						$('closedTeam').checked = true;
-						$('closedTeam').onclick();
-					}else{
-						$('privateTeam').checked = true;
-						$('privateTeam').onclick();
-					}
-					$('TeamsCreateNewTeam:createNewTeamForm:TeamType').disabled = true;
-				}else{
-					$('TeamsCreateNewTeam:createNewTeamForm:openOrClosed').value = 'open';  
-				}
-			}
-			
-			/**
-			* Enabled & Disable selects for selected team access
-			*@param Object radio
-			*/
-			function setAccess(radio){
-				if(radio.checked == true && radio.id == 'openTeam'){
-					$('TeamsCreateNewTeam:createNewTeamForm:openOrClosed').value = 'open';
-					$('TeamsCreateNewTeam:createNewTeamForm:closedPublicProfileSelect').disabled = true;
-					$('TeamsCreateNewTeam:createNewTeamForm:memberProfileSelect').disabled = false;
-					$('TeamsCreateNewTeam:createNewTeamForm:publicProfileSelect').disabled = false;				
-				}else if (radio.checked == true && radio.id == 'closedTeam'){
-					$('TeamsCreateNewTeam:createNewTeamForm:openOrClosed').value = 'close';
-					$('TeamsCreateNewTeam:createNewTeamForm:memberProfileSelect').disabled = true;
-					$('TeamsCreateNewTeam:createNewTeamForm:publicProfileSelect').disabled = true;
-					$('TeamsCreateNewTeam:createNewTeamForm:closedPublicProfileSelect').disabled = false;
-				}else if (radio.checked == true && radio.id == 'privateTeam'){
-					$('TeamsCreateNewTeam:createNewTeamForm:openOrClosed').value = 'private';
-					$('TeamsCreateNewTeam:createNewTeamForm:memberProfileSelect').disabled = true;
-					$('TeamsCreateNewTeam:createNewTeamForm:publicProfileSelect').disabled = true;
-					$('TeamsCreateNewTeam:createNewTeamForm:closedPublicProfileSelect').disabled = true;				
-				}
-			}
-			
-			/**
-			* Count character length
-			*@param Obeject area
-			*@param String Id indicator
-			*/
-			function countStringLimit(area, indicator){
-				$(indicator).innerHTML = (32700 - area.value.length);
-			}
-			
-			/**
-			* Show error div & inject custom message
-			*@param String message
-			*/
-			function showError(message){
-				//$('messageErrorText').innerHTML = '*' + message;
-				Effect.Appear('warning_to_user');
-				Effect.ScrollTo('anchorForError');
-			}
-			
-			/**
-			* Validate form
-			*@void
-			*/
-			function validateFormInfo(){
-				$('currentEventAction').innerHTML = 'Validate form information...';
-				var inputAction = $('TeamsCreateNewTeam:createNewTeamForm:saveButton');
-				inputAction.style.background = '#666666';
-				inputAction.disabled = true;
-				var name = $('TeamsCreateNewTeam:createNewTeamForm:TeamName');
-				var error = false;
-				//Name Validate
-				if(name.value == ''){
-					name.style.border = 'solid #C0272D 2px';
-					Effect.Appear('TeamNameErrorMessage');
-					error = true;
-				}else{
-					name.style.border = '';
-					Effect.Fade('TeamNameErrorMessage');
-				}
-				
-				//Image right validate
-				if($$('#imageTeamContainer input')[0].value != '' && $('imageRights').checked == false){
-					$('imageRightsHolder').style.background = '#C0272D';
-					Effect.Appear('RightsErrorMessage');
-					error = true;
-				}else{
-					$('imageRightsHolder').style.background = '';
-					Effect.Fade('RightsErrorMessage');
-				}
-			
-				//Check team type
-				if($F('TeamsCreateNewTeam:createNewTeamForm:TeamType') == ''){
-					$('TeamsCreateNewTeam:createNewTeamForm:TeamType').style.border = 'solid #C0272D 2px';
-					Effect.Appear('TeamTypeErrorMessage');
-					error = true;
-				}else{
-					$('TeamsCreateNewTeam:createNewTeamForm:TeamType').style.border = '';
-					$('TeamTypeErrorMessage').innerHTML = '';				
-				}
-				
-				if($('TeamsCreateNewTeam:createNewTeamForm:parentTeam_lkid').value){
-					var parentTeam = $('TeamsCreateNewTeam:createNewTeamForm:parentTeam_lkid');
-					init();
-					result = sforce.connection.query("Select Id, TeamProfile__c from TeamMember__c where User__c = '" + globalUserId + "' and Team__c = '" + parentTeam.value + "'");
-					records = result.getArray("records");
-					if (records.length > 0){
-						result = sforce.connection.query("Select ManageTeams__c, Id from TeamProfile__c where Id = '" + records[0].TeamProfile__c + "'");
-						records = result.getArray("records");
-						if (records.length > 0){
-							if(!records[0].ManageTeams__c || records[0].ManageTeams__c == 'false'){
-								var parent = $('TeamsCreateNewTeam:createNewTeamForm:parentTeam');
-								parent.style.border = 'solid #C0272D 2px';
-								$('ParentTeamErrorMessage').innerHTML = '<b>Error:</b> You need manager permissions to create a sub-'+ globalTeamLabel +' for <b>' + parent.value + '</b>';
-								Effect.Appear('ParentTeamErrorMessage');
-								error = true;
-							}					
-						}				
-					}else{
-						$('TeamsCreateNewTeam:createNewTeamForm:parentTeam').style.border = '';
-						Effect.Fade('ParentTeamErrorMessage');	
-					}	
-				}
-				
-				//Check error
-				if(error){
-					showError('');
-				}else{
-					Effect.Fade('warning_to_user');
-					$('currentEventAction').innerHTML = 'Saving '+ globalTeamLabel +' Information...';
-				} 
-				
-				inputAction.style.background = '#287B9B';
-				inputAction.disabled = false;
-				$('currentEventAction').innerHTML = '';
-				return error;		
-			}
-			
-			/* ### Bubble ###*/
-			
-			/**
-			* Get XY position for current element
-			*@param Object element
-			*@return Object position
-			*/
-			function getXY(obj){				
-				var pos = Position.cumulativeOffset(obj)
-				var y = pos[1];
-				var x = pos[0];
-				var x2 = x + parseInt(obj.offsetWidth);
-				var y2 = y + parseInt(obj.offsetHeight);
-				return {'x':x, 'y':y, 'x2':x2, 'y2':y2};
-			}
-			
-			/**
-			* Show bubble overlay
-			*@param Object element
-			*@param String selectId
-			*/
-			var isShowBubble = false;
-			function showBubble(currentElement, selectId){
-				isShowBubble = true;
-				var container = $('bubble');
-				var position = getXY(currentElement);
-				var selectValue = $F('TeamsCreateNewTeam:createNewTeamForm:' + selectId);
-				container.style.display = 'block';	
-				init();
-				result = sforce.connection.query("Select Id, Description__c from TeamProfile__c where Id = '" + selectValue + "'");
-				records = result.getArray("records");			
-				
-				container.style.top = position.y2 + 'px';
-				container.style.left = position.x2 + 'px';
-				$('innerContBubble').innerHTML = records[0].Description__c;
-				
-				if(Prototype.Browser.IE){
-					topPosition = position.y2 - 150;	
-					leftPosition = position.x2 - 70;
-					container.style.top = topPosition + 'px';												
-					container.style.left = leftPosition + 'px';
-				}else{
-					// For mozilla
-					topPosition = position.y2 - 155;	
-					container.style.top = topPosition + 'px';												
-				}
-			}
-			
-			/**
-			* Hide bubble
-			*@void
-			*/
-			function hideBubble(){
-				isShowBubble = false;
-				setTimeout('if(!isShowBubble){Effect.Fade(\'bubble\');}', 1500);
-			}
-			
-			/* ### Util Functions ### */
-			
-			/**
-			* Get URL param
-			*@return string param
-			*@param string param
-			*/
-			function getURLParam(strParamName){
-			  var strReturn = "";
-			  var strHref = window.location.href;
-			  if ( strHref.indexOf("?") > -1 ){
-				var strQueryString = strHref.substr(strHref.indexOf("?"));
-				var aQueryString = strQueryString.split("&");
-				for ( var iParam = 0; iParam < aQueryString.length; iParam++ ){
-				  if (aQueryString[iParam].indexOf(strParamName + "=") > -1 ){
-					var aParam = aQueryString[iParam].split("=");
-					strReturn = aParam[1];
-					break;
-				  }
-				}
-			  }
-			  return unescape(strReturn);
-			}	
-			
-			/**
-			* Check if the parent id param is here.
-			*@return string param
-			*@param string param
-			*/
-			function subTeamCheck(){
-				var parentId = getURLParam('parent');
-				if((parentId != null) && (parentId != '')){
-					init();
-					var q = 'SELECT Id, Name FROM Team__c WHERE Id = \'' + parentId + '\'';
-					var result = sforce.connection.query(q,{
-						onSuccess:function(result){
-							var records = result.getArray("records");
-							var input = $('TeamsCreateNewTeam:createNewTeamForm:parentTeam');
-							input.value = records[0].Name;
-						},
-						onFailure:function(error){	 
-							alert(error);
-						}
-					});
-				}
-			}
-			
-			var showingBubble = false;		
-			var time = '';
-			
-			function tooltip2(obj, selectId, h){
-				// Tooltip
-				var tooltip = $('divToolTip2');
-				var tooltipMessage = $('messageTooltip2');
-				var selectValue = $F(selectId);
-				var markup = '';
-				var height = h;
-				init();
-				queryString ="Select Id, Description__c, Name, PostWikiComments__c, PostDiscussionTopicReplies__c, PostBookmarkComments__c, PostBlogComments__c, ManageWikis__c, ManageTeams__c, ManageProjectTasks__c, ManageDiscussionForums__c, ManageBookmarks__c, ManageBlogs__c, CreateWikiPages__c, CreateProjectTasks__c, CreateDiscussionTopics__c, CreateBookmarks__c, CreateBlogs__c from TeamProfile__c where Id = '" + selectValue + "'";
-				result = sforce.connection.query(queryString);
-				records = result.getArray("records");
-				markup += '<b>"'+ records[0].Name + '" profile:</b><br/>';
-				//Teams permissions
-				if(records[0].ManageTeams__c == 'true'){
-					markup += '<br/><b>Team</b><br/>-Manage '+ globalTeamLabel +'<br/>';
-					height += 43;
-				}
-				//Blogs permissions
-				if(records[0].ManageBlogs__c == 'true'){
-					markup += '<br/><b>Blogs</b><br/>-Manage Blogs<br/>-Post comments<br/>-Create blogs<br/>';
-					height += 71;
-				}else if(records[0].PostBlogComments__c == 'true'){
-					markup += '<br/><b>Blogs</b><br/>-Post comments<br/>';
-					height += 43;
-					if(records[0].CreateBlogs__c == 'true'){
-						markup += '-Create blogs<br/>';
-						height += 16;
-					}
-				}else if(records[0].CreateBlogs__c == 'true'){
-					markup += '<br/><b>Blogs</b><br/>-Create blogs<br/>';
-					height += 43;
-				}
-				//Discussions permissions
-				if(records[0].ManageDiscussionForums__c == 'true'){
-					markup += '<br/><b>Discussion</b><br/>-Manage forums<br/>-Post topic replies<br/>-Create topics<br/>';
-					height += 71;
-				}else if(records[0].PostDiscussionTopicReplies__c == 'true'){
-					markup += '<br/><b>Discussion</b><br/>-Post topic replies<br/>';
-					height += 43;
-					if(records[0].CreateDiscussionTopics__c == 'true'){
-						markup += '-Create discussion topics<br/>';
-						height += 16;
-					}
-				}else if(records[0].CreateDiscussionTopics__c == 'true'){
-					markup += '<br/><b>Discussion</b><br/>-Create discussion topics<br/>';
-					height += 43;
-				}
-				//Wiki permissions
-				if(records[0].ManageWikis__c == 'true'){
-					markup += '<br/><b>Wiki</b><br/>-Manage wiki<br/>-Post comments<br/>-Create wiki pages<br/>';
-					height += 71;
-				}else if(records[0].PostWikiComments__c == 'true'){
-					markup += '<br/><b>Wiki</b><br/>-Post comments<br/>';
-					height += 43;
-					if(records[0].CreateWikiPages__c == 'true'){
-						markup += '-Create wiki pages<br/>';
-						height += 16;
-					}
-				}else if(records[0].CreateWikiPages__c == 'true'){
-					markup += '<br/><b>Wiki</b><br/>-Create wiki pages<br/>';
-					height += 43;
-				}
-				//Project permissions
-				if(records[0].ManageProjectTasks__c == 'true'){
-					markup += '<br/><b>Project</b><br/>-Manage project tasks<br/>-Create project tasks<br/>';
-					height += 57;
-				}else if(records[0].CreateProjectTasks__c == 'true'){
-					markup += '<br/><b>Project</b><br/>-Create project tasks<br/>';
-					height += 43;
-				}
-				//Bookmark permissions
-				if(records[0].ManageBookmarks__c == 'true'){
-					markup += '<br/><b>Bookmark</b><br/>-Manage bookmarks<br/>-Post comments<br/>-Create bookmarks<br/>';
-					height += 71;
-				}else if(records[0].PostBookmarkComments__c == 'true'){
-					markup += '<br/><b>Bookmark</b><br/>-Post comments<br/>';
-					height += 43;
-					if(records[0].CreateBookmarks__c == 'true'){
-						markup += '-Create bookmarks<br/>';
-						height += 16;
-					}
-				}else if(records[0].CreateBookmarks__c == 'true'){
-					markup += '<br/><b>Bookmark</b><br/>-Create bookmarks<br/>';
-					height += 43;
-				}
-				tooltipMessage.innerHTML = markup;				
-				tooltip.style.display = 'block';
-				tooltip.style.top = ((height - (height * 2)) / 2) + 'px';
-				showingBubble = true;
-				clearTimeout(time);
-				time = setTimeout("Effect.Fade('divToolTip2')",3000);
-			}
-			
-			function tooltipoff2(){
-				// Tooltip
-				showingBubble = false;
-				clearTimeout(time);
-				var tooltip = $('divToolTip2');
-				tooltip.style.display = 'none';
-			}				
-		</script>	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	<style>>
+	<style>
 		.noWikisYet {
 			text-align: center;
 			margin: 40px;
@@ -445,12 +57,18 @@
 		}
 		
 		.body_center{
-			background-color:#E1E1E1;
+			height: 700px !important;
+			background:#FFFFFF none repeat scroll 0 0;
+			border:1px solid #B5B5B5;	
+		
 		}
-			
+
 		div.tabContainer {
-			height: 32px;
-			background-color:#FFFFFF;
+			background-color:transparent;
+			margin-left: 20px;
+			margin-right: 20px;
+			height:16px;
+			overflow:visible;
 		}	
 		div.tabBorder {
 			margin-left: 0px;
@@ -459,26 +77,181 @@
 		
 		ul.tabs li{
 			height: 20px;
+			margin-top: 7px;
 		}
 		
 		a.disable{
-			color: #C9C9C9;
+			color:#C9C9C9 !important;
+			cursor:auto;
+		}
+		
+		div.holder{
+			margin:16px 1px 1px !important;
+			_margin-top: 0 !important;
+		}
+		
+		body#bodyWiki table.bodyTable td.sideBarTD {
+			width:194px;
+		}
+		
+		.SaveBtn{
+			background:#526921 none repeat scroll 0 50%;
+			width:auto !important;
+		}
+		
+		.title_line_btn {
+			border-bottom:1px solid #999999;
+			margin-left: 70px !important;
+		}
+		
+		div.main_content div.holder div.message_to_user {
+			margin:10px 31px 0;
 		}
 		
 	</style>
-	<div class="BodyPage">
-		<!-- - - - - - - - - - - - - - - - - - - - - -->	
-		<!-- - - - - - - -   OVERLAY   - - - - - - - -->
-		<!-- - - - - - - - - - - - - - - - - - - - - -->
-		<!-- 		  Overlay		-->
-		<div class="UPF__overlay__" id="UPF__overlay__" style="display:none;">
-		</div>
-		<!-- Overlay -->
-		<!-- Loader	-->
-		<div class="loader__" id="loader__" style="display:none;"><center><img src="{!URLFOR($Resource.commonResources, 'images/loaders/bigLoader.gif')}" /></center><br />Loading...</div>
-		<!-- Loader -->
+	<script>
+		
+				
+		var inEdition = {!inEdition};
+		var wikiType = "{!Wiki.Type__c}";
+	
+		if(inEdition == false){
+			var globalSaveButton = 'Create';
+			var globalMembersButton = 'Create And Add Members';
+		}else{
+			var globalSaveButton = 'Update';
+		}
 
-		<!-- Header -->
+		
+		document.observe('dom:loaded',startupFunc);
+		
+		function startupFunc(){
+			$('WikiCreateWiki:createNewTeamForm:openOrClosed').value = 'open';
+
+			if((wikiType != null) && (wikiType != '') && (inEdition == false)){
+				if(wikiType == 'open'){
+					$('openTeam').checked= true;
+				}
+				else if(wikiType == 'closed'){
+					$('closedTeam').checked= true;
+				}
+				else if(wikiType == 'private'){
+					$('privateTeam').checked= true;
+				}		
+			}
+
+			var version;
+			if (navigator.appName == "Microsoft Internet Explorer") {
+				version = navigator.appVersion;
+				if (version.indexOf("MSIE 6") != -1) {
+					document.getElementById('loader__').className = 'loaderIE6__';
+					document.getElementById('loader__').style.position = 'absolute';
+				}
+			}
+		}
+			
+		function fixHeader () {
+			var inputWidth = 390 - $('labelDisc').getWidth();
+			var inputDisc = $('inputDisc');
+			inputDisc.style.width = inputWidth -2 + 'px';
+		}
+			
+		/**
+		* Validate form
+		*@void
+		*/
+		function validateWikiFormInfo(){
+			$('WikiCreateWiki:createNewTeamForm:saveButton').value = 'Saving';
+			$('WikiCreateWiki:createNewTeamForm:cancelButton').value = 'Saving';
+			if(inEdition == false){
+				$('WikiCreateWiki:createNewTeamForm:saveAndAddMembersButton').value = 'Saving';
+			}	
+				
+			$('currentEventAction').innerHTML = 'Validate form information...';
+			var inputAction = $('WikiCreateWiki:createNewTeamForm:saveButton');
+			var name = $('WikiCreateWiki:createNewTeamForm:TeamName');
+			var error = false;
+			//Name Validate
+			if(name.value == ''){
+				name.style.border = 'solid #C0272D 2px';
+				Effect.Appear('TeamNameErrorMessage');
+				error = true;
+			}else{
+				name.style.border = '';
+				Effect.Fade('TeamNameErrorMessage');
+			}
+		
+			//Image right validate
+			if($$('#imageTeamContainer input')[0].value != '' && $('imageRights').checked == false){
+				$('imageRightsHolder').style.background = '#C0272D';
+				Effect.Appear('RightsErrorMessage');
+				error = true;
+			}else{
+				$('imageRightsHolder').style.background = '';
+				Effect.Fade('RightsErrorMessage');
+			}
+			
+			//Check error
+			if(error){
+				
+				$('.body_center');
+				$('WikiCreateWiki:createNewTeamForm:saveButton').value = globalSaveButton;
+				$('WikiCreateWiki:createNewTeamForm:cancelButton').value = 'Cancel';
+				if(inEdition == false){
+					$('WikiCreateWiki:createNewTeamForm:saveAndAddMembersButton').value = globalMembersButton;
+				}
+				showError('');
+			}else{
+				Effect.Fade('warning_to_user');
+				$('currentEventAction').innerHTML = 'Saving Wiki Information...';
+			} 
+			$('currentEventAction').innerHTML = '';
+			return error;		
+		}
+			
+		/**
+		* Enabled & Disable selects for selected team access
+		*@param Object radio
+		*/
+		function setAccess(radio){
+			if(radio.checked == true && radio.id == 'openTeam'){
+				$('WikiCreateWiki:createNewTeamForm:openOrClosed').value = 'open';
+			}else if (radio.checked == true && radio.id == 'closedTeam'){
+				$('WikiCreateWiki:createNewTeamForm:openOrClosed').value = 'close';
+			}else if (radio.checked == true && radio.id == 'privateTeam'){
+				$('WikiCreateWiki:createNewTeamForm:openOrClosed').value = 'private';
+			}
+		}
+		
+		/**
+		* Count character length
+		*@param Obeject area
+		*@param String Id indicator
+		*/
+		function countStringLimit(area, indicator){
+			$(indicator).innerHTML = (32700 - area.value.length);
+		}
+		
+		/**
+		* Show error div & inject custom message
+		*@param String message
+		*/
+		function showError(message){
+			//$('messageErrorText').innerHTML = '*' + message;
+			Effect.Appear('warning_to_user');
+			Effect.ScrollTo('anchorForError');
+		}
+	</script>		
+
+	<div class="BodyPage">
+
+		<!-- OVERLAY -->
+		<div class="UPF__overlay__" id="UPF__overlay__" style="display:none;"></div>
+		
+		<!-- LOADER	-->
+		<div class="loader__" id="loader__" style="display:none;"><center><img src="{!URLFOR($Resource.commonResources, 'images/loaders/bigLoader.gif')}" /></center><br />Loading...</div>
+		
+		<!-- HEADER -->
 		<apex:composition template="HeaderTemplate">
 			<apex:define name="moduleId"><apex:variable var="moduleId" value="headerWiki"/></apex:define>
 		    <apex:define name="module">Wiki pages</apex:define>
@@ -488,30 +261,30 @@
 		    </apex:define>
 	    </apex:composition>
 	    
+	    <!-- MAIN PAGE -->
 	    <div class="MainPage">
 			<div class="PageBlock">	
-				<!-- - - - - - - - - - - - - - - - - - - - - -->	
-				<!-- - - - - - - LEFT SIDEBAR  - - - - - - - -->
-				<!-- - - - - - - - - - - - - - - - - - - - - -->	
+
+				<!-- LEFT SIDEBAR  -->
 				<table border="0" class="bodyTable">
 					<tr>
 						<td valign="top" class="sideBarTD">
-							<!-- My Favorites Widget -->
+							<!-- MY FAVORITES WIDGET -->
 							<c:WikiWidgetMyFavorites />
-							<!-- My Recent Changes Widget -->
+							
+							
+							<!-- MY RECENT CHANGES WIDGET -->
 							<c:WikiWidgetMyRecentChanges />
+							
+							
 						</td>
 						<td valign="top" class="mainContentTD">
-							<!-- - - - - - - - - - - - - - - - - - - - - -->	
-							<!-- - - - - - - MAIN CONTENT DIV  - - - - - -->
-							<!-- - - - - - - - - - - - - - - - - - - - - --> 
-							
+				
+							<!--  MAIN CONTENT DIV  - -->
 							<div class="main_content" id="main_content">
-								<div class="teamTitle" style="{!IF(Wiki.Id == null, '', 'display:none')}" >Create New {!$ObjectType.Wiki__c.label}</div>
-								<div class="teamTitle" style="{!IF(Wiki.Id == null, 'display:none', '')}" >Edit {!$ObjectType.Wiki__c.label}</div>
-								
-								
-							<!-- Tab container -->
+								<div class="teamTitle">{!IF(inEdition == false, 'Create New', 'Edit')} {!$ObjectType.Wiki__c.label}</div>
+							
+							<!-- TAB CONTAINER -->
 							<div class='tabContainer' >
 								<ul class="tabs">
 									<li  class="selected" id="myTeamTab">
@@ -521,293 +294,294 @@
 										<apex:outputLink styleClass="{!IF((hasMembers == false),'disable','')}" value="{!IF((hasMembers == false),'disable','/apex/WikiMembersList')}">Members</apex:outputLink>
 									</li>					 
 								</ul>	
-							<div class="tabBorder"></div>
 							</div>
-						
-			<div class="holder">				
-				<!-- <div class="border_body_top">&nbsp;</div> -->
 							
-				<div class="body_center">
-					<a id="anchorForError"></a>
-					<div id="warning_to_user" class="message_to_user" style="display:none;" >
-				    	<div class="f_left">
-				      		<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/error_icon.gif')}" />
-				    	</div>
-				    	<div class="f_left">
-							<strong>We had trouble unserstanding one or more of your entries or we need more information</strong><br />
-					 		<span id="messageErrorText">Please see the field(s) highlighted</span>
-						</div>
-					  	<div class="clear"></div>
-				  	</div>		
-					<div align="right">
-						<table border="0" style="margin: 5px 0px 5px 0px;">
-							<tr>
-								<td style="width: 4px;">
-									<span class="requiredLegend"></span>
-								</td>
-								<td>
-									<span class="infoText" style="font-size: 9px; font-family: Arial, Helvetica, sans-serif;">
-										=&nbsp;Required Information 
-									</span>
-								</td>
-							</tr>
-						</table>
-					</div>
-					<apex:form id="createNewTeamForm" onsubmit="if(validateFormInfo())return false;"> 
-						<apex:outputpanel style="display:none;" id="currentTeamId">{!Wiki.Id}</apex:outputpanel>
-						<apex:inputHidden value="{!Wiki.PictureId__c}" id="teamPicture" />
-						<div class="div_Body">
-							<table cellpadding="0" cellspacing="0" class="newTeamForm">
-								<tr>
-									<td class="alignTop">
-										<span class="inputInfoTitle">{!$ObjectType.Wiki__c.label} Name</span>
-									</td>
-									<td style="width: 4px; vertical-align:top;">
-										<span class="requiredLegend"></span>
-									</td>
-									<td colspan="2">&nbsp;
-										<apex:inputText value="{!Wiki.Name}" id="TeamName" styleClass="RQ_String" ></apex:inputText>
-										<br />
-										<span id="TeamNameErrorMessage" class="errorText" style="display:none;">
-											<b>Error:</b> You must enter a name for this {!$ObjectType.Wiki__c.label}
-										</span>
-									</td>
-								</tr>
-								<tr>
-									<td height="7px"></td>
-								</tr>
-								<tr>
-									<td class="alignTop">
-										<span class="inputInfoTitle">Description</span>
-									</td>
-									<td></td>
-									<td colspan="2">&nbsp;
-										<apex:inputTextarea value="{!Wiki.Description__c}" id="TeamDescription" cols="38" rows="4" style="height: 83px; width: 430px" onkeyup="countStringLimit(this, 'stringSizeCounter');" />
-									</td>
-								</tr>
-								<tr>
-									<td></td>
-									<td></td>
-									<td colspan="2">&nbsp;
-										<span class="explain">(32k character limit) - Characters remaining:</span>
-										<span class="explain" id="stringSizeCounter">32700</span>
-										<br />
-									</td>
-								</tr>
-								<tr>
-									<td height="10px"></td>
-								</tr>
-								<tr>
-									<td class="alignTop">
-										<!--  <span class="inputInfoTitle">{!$ObjectType.Wiki__c.label} Email</span> -->
-									</td>
-									<td style="width: 4px; vertical-align:top;">
-									</td>
-									<td colspan="2">&nbsp;
-										<!-- <apex:inputText value="{!Wiki.ContactEmail__c}" id="TeamContactEmail"></apex:inputText> -->
-									</td>
-								</tr>
-								<tr>
-									<td height="10px"></td>
-								</tr>
-								<tr>
-									<td class="alignTop">
-										<span class="inputInfoTitle">{!$ObjectType.Wiki__c.label} Avatar</span>
-									</td>
-									<td></td>
-									<td>&nbsp;
-										<img width="99" src="{!IF(wikiPicture == '', URLFOR($Resource.TeamsResources, '/images/layout/pic_upload.gif'), wikiPicture)}" class="imgBorder" />
-										<br />
-										<span class="explain">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;current picture</span>
-									</td>
-									<td valign="top">
-										<table cellpadding="0" cellspacing="0" width="400px">
-											<tr>
-												<td>
-													<span class="inputInfoDescription">Select the image file</span>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<span class="inputInfoSubDescription" style="padding-left: 10px;">Type the path of the file or
-													click the Browse button to find the file.</span>
-												</td>
-											</tr>
-											<tr>
-												<td></td> 
-											</tr>
-											<tr>
-												<td class="paddingLeft" id="imageTeamContainer" >
-													<apex:inputFile value="{!document.body}" id="teamImage" filename="{!document.name}" contentType="{!document.contentType}" fileSize="{!document.BodyLength}"/> 
-													<br />
-													<span id="fileExtensionError" class="errorText" style="display:none;">
-														<b>Error:</b> You must enter a jpg, gif or png files only
-													</span>
-													<apex:outputpanel rendered="{!NOT validSizePicture}">
-													<span id="fileSizeError" class="errorText">
-														<b>Error:</b> The images size must be less than 512 kb
-													</span>
-													</apex:outputpanel>
-												<td>
-											</tr>
-											<tr>
-												<td></td>
-											</tr>
-											<tr>
-												<td class="paddingLeft"><span class="explain">File size	limit 512KB. If your upload does not work, try a smaller picture. </span>
-												</td>
-											</tr>
-											<tr>
-												<td class="paddingLeft">
-													<span class="explain">Ideal	size is 100 pixels high by 100 pixels wide.</span>
-												</td>
-											</tr>
-											<tr>
-												<td></td>
-											</tr>
-											<tr>
-												<td class="paddingLeft">
-													<div class="imageRightsHolder" id="imageRightsHolder">
-														<input id="imageRights" type="checkbox" />
-													</div>
-													<div class="messageRigthHolder">
-														<span class="inputInfoSubDescription">I certify that I have the right to distribute this picture and that it does not violate the <a href="/apex/TeamsIconTerms" target="_blank">Terms of Use</a></span>
-														<br />
-														<span id="RightsErrorMessage" class="errorText" style="display:none;">
-															<b>Error:</b> You must agree to the <a href="/apex/TeamsIconTerms" target="_blank">Terms of Use</a> to use images for this team.															
+							<!-- HOLDER -->
+							<div class="holder">				
+								<div class="body_center">
+									<a id="anchorForError"></a>
+										<div id="warning_to_user" class="message_to_user" style="display:none;" >
+				    						<div class="f_left">
+				      							<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/error_icon.gif')}" />
+				    						</div>
+				    						<div class="f_left">
+												<strong>We had trouble unserstanding one or more of your entries or we need more information</strong><br />
+					 							<span id="messageErrorText">Please see the field(s) highlighted</span>
+											</div>
+					  						<div class="clear"></div>
+				  						</div>		
+										<div align="right">	
+											<table border="0" style="margin: 5px 0px 5px 0px;">
+												<tr>
+													<td style="width: 4px;">
+														<span class="requiredLegend"></span>
+													</td>
+													<td>		
+														<span class="infoText" style="font-size: 9px; font-family: Arial, Helvetica, sans-serif;">
+															=&nbsp;Required Information 
 														</span>
-													</div>
-													<div class="clear"></div>													
-												</td>
-											</tr>
-											<tr>
-												<td></td>
-											</tr>	
-										</table>
-									</td>
-								</tr>
-								<tr>
-									<td height="10px"></td>
-								</tr>
-								<tr>
-									<td class="alignTop">
-										<!-- <span class="inputInfoTitle">
-											{!$ObjectType.Wiki__c.label} Type
-										</span>
-										-->
-									</td>
-									<td style="width: 4px; vertical-align:top;">
-										<!-- <span class="requiredLegend"></span> -->
-									</td>
-									<td colspan="2">&nbsp;	
-										<!-- <apex:selectList id="TeamType" value="{!Wiki.Type__c}" title="" multiselect="false" size="1" >
-								  	 	 	<apex:selectOptions value="{!Types}"/>
-								  	 	</apex:selectList>
-								  	 	<span id="TeamTypeErrorMessage" class="errorText" style="display:none;">
-											<b>Error:</b> You must enter a {!$ObjectType.Wiki__c.label} Type for this {!$ObjectType.Wiki__c.label}.								  	 	
-								  	 	</span> -->	
-									</td>
-								</tr>
-								<tr>
-									<td>&nbsp;</td>
-								</tr>
-								<tr>
-									<td class="alignTop">
-										<!-- <span class="inputInfoTitle">{!$ObjectType.Wiki__c.label} Parent</span> -->
-									</td>
-									<td></td>
-									<td colspan="2">&nbsp;
-										
-									</td>
-								</tr>
-								<tr>
-									<td>&nbsp;</td>
-								</tr>
-								<tr>
-	                                <td class="alignTop"><span class="inputInfoTitle">Access</span></td>
-									<td></td>
-	                                <td colspan="2">
-	                                	&nbsp;<input type="radio" id="openTeam" checked="checked" name="access" onclick="setAccess(this);"/>
-	                                	<span class="inputInfoDescription">Open</span>
-	                                </td>
-								</tr>  	
-								<tr>
-	                                <td class="alignTop"><span class="inputInfoTitle"></span></td>
-									<td></td>
-	                                <td colspan="2">&nbsp;<span class="inputInfoList">&nbsp;</span><span class="inputInfoSubDescription">Anyone can join. Anyone can see the {!$ObjectType.Wiki__c.label} information and content.</span></td>
-								</tr>	
-								<tr>
-									<td colspan="6" >
-								
-									</td>
-								</tr>					
-								<tr>
-	                                <td  class="alignTop"><span class="inputInfoTitle"></span></td>
-									<td></td>
-	                                <td colspan="2">
-	                                	&nbsp;<input type="radio" id="closedTeam" name="access" onclick="setAccess(this);"/>
-	                                	<span class="inputInfoDescription">Closed</span>
-	                                </td>
-								</tr>   
-								<tr>
-	                                <td class="alignTop"><span class="inputInfoTitle"></span></td>
-									<td></td>
-	                                <td colspan="2">
-	                                	<span class="inputInfoList">&nbsp;</span>
-	                                	<span class="inputInfoSubDescription">{!$ObjectType.Wiki__c.label} Administrator must invite users to join. Anyone can see the {!$ObjectType.Wiki__c.label} information and content.</span>
-	                                </td>
-								</tr> 
-								<tr>
-									<td colspan="6">
-									
-									</td>
-								</tr>	
-								<tr>
-	                                <td class="alignTop"><span class="inputInfoTitle"></span></td>
-									<td></td>
-	                                <td colspan="2">
-	                                	&nbsp;<input type="radio" id="privateTeam" name="access" onclick="setAccess(this);"/>
-	                                	<span class="inputInfoDescription">Private</span>
-	                                </td>
-								</tr>   
-								<tr>
-	                                <td class="alignTop"><span class="inputInfoTitle"></span></td>
-									<td></td>
-	                                <td colspan="2">
-	                                	&nbsp;<span class="inputInfoList">
-	                                	&nbsp;</span>
-	                                	<span class="inputInfoSubDescription">This {!$ObjectType.Wiki__c.label} will not appear in search results or in the profiles of its members. </span>
-	                                </td>
-								</tr> 
-								<tr>
-	                                <td class="alignTop"><span class="inputInfoTitle"></span></td>
-									<td></td>
-	                                <td colspan="2">&nbsp;<span class="inputInfoList">&nbsp;</span><span class="inputInfoSubDescription">Membership is by invitation only, and only members can see the {!$ObjectType.Wiki__c.label}</span></td>
-								</tr>   
-								<tr>
-	                                <td class="alignTop"><span class="inputInfoTitle"></span></td>
-									<td></td>
-	                                <td colspan="2">&nbsp;<span class="inputInfoList">&nbsp;</span><span class="inputInfoSubDescription">information and content.</span></td>
-								</tr>   
-							</table>
-							<div class="DivBtn">
-								<div class="title_line_btn"></div>	
-								
-								
+													</td>
+												</tr>
+											</table>
+										</div>
+										<apex:form id="createNewTeamForm" onsubmit="if(validateWikiFormInfo())return false;" >
+										<!-- <apex:form id="createNewTeamForm" > --> 
+											<apex:outputpanel style="display:none;" id="currentTeamId">{!Wiki.Id}</apex:outputpanel>
+											<apex:inputHidden value="{!Wiki.PictureId__c}" id="teamPicture" />
+											<div class="div_Body">
+												<table cellpadding="0" cellspacing="0" class="newTeamForm">
+													<tr>
+														<td class="alignTop">
+															<span class="inputInfoTitle">{!$ObjectType.Wiki__c.label} Name</span>
+														</td>
+														<td style="width: 4px; vertical-align:top;">
+															<span class="requiredLegend"></span>
+														</td>
+														<td colspan="2">&nbsp;
+															<apex:inputText value="{!Wiki.Name}" id="TeamName" styleClass="RQ_String" ></apex:inputText>
+															<br />
+															<span id="TeamNameErrorMessage" class="errorText" style="display:none;">
+																<b>Error:</b> You must enter a name for this {!$ObjectType.Wiki__c.label}
+															</span>
+														</td>
+													</tr>
+													<tr>
+														<td height="7px"></td>
+													</tr>
+													<tr>
+														<td class="alignTop">
+															<span class="inputInfoTitle">Description</span>
+														</td>
+														<td></td>
+														<td colspan="2">&nbsp;
+															<apex:inputTextarea value="{!Wiki.Description__c}" id="TeamDescription" cols="38" rows="4" style="height: 83px; width: 430px" onkeyup="countStringLimit(this, 'stringSizeCounter');" />
+														</td>
+													</tr>
+													<tr>
+														<td></td>
+														<td></td>
+														<td colspan="2">&nbsp;
+															<span class="explain">(32k character limit) - Characters remaining:</span>
+															<span class="explain" id="stringSizeCounter">32700</span>
+															<br />
+														</td>
+													</tr>
+													<tr>
+														<td height="10px"></td>
+													</tr>
+													<tr>
+														<td class="alignTop">
+															<!--  <span class="inputInfoTitle">{!$ObjectType.Wiki__c.label} Email</span> -->
+														</td>
+														<td style="width: 4px; vertical-align:top;">
+														</td>
+														<td colspan="2">&nbsp;
+															<!-- <apex:inputText value="{!Wiki.ContactEmail__c}" id="TeamContactEmail"></apex:inputText> -->
+														</td>
+													</tr>
+													<tr>
+														<td height="10px"></td>
+													</tr>
+													<tr>
+														<td class="alignTop">
+															<span class="inputInfoTitle">{!$ObjectType.Wiki__c.label} Avatar</span>
+														</td>
+														<td></td>
+														<td>&nbsp;
+															<img width="99" src="{!IF(wikiPicture == '', URLFOR($Resource.TeamsResources, '/images/layout/pic_upload.gif'), wikiPicture)}" class="imgBorder" />
+															<br />
+															<span class="explain">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;current picture</span>
+														</td>
+														<td valign="top">
+															<table cellpadding="0" cellspacing="0" width="400px">
+																<tr>
+																	<td>
+																		<span class="inputInfoDescription">Select the image file</span>
+																	</td>
+																</tr>
+																<tr>
+																	<td>
+																		<span class="inputInfoSubDescription" style="padding-left: 10px;">Type the path of the file or
+																		click the Browse button to find the file.</span>
+																	</td>
+																</tr>
+																<tr>
+																	<td></td> 
+																</tr>
+																<tr>
+																	<td class="paddingLeft" id="imageTeamContainer" >
+																		<apex:inputFile value="{!document.body}" id="teamImage" filename="{!document.name}" contentType="{!document.contentType}" fileSize="{!document.BodyLength}"/> 
+																		<br />
+																		<span id="fileExtensionError" class="errorText" style="display:none;">
+																			<b>Error:</b> You must enter a jpg, gif or png files only
+																		</span>
+																		<apex:outputpanel rendered="{!NOT validSizePicture}">
+																		<span id="fileSizeError" class="errorText">
+																			<b>Error:</b> The images size must be less than 512 kb
+																		</span>
+																		</apex:outputpanel>
+																	<td>
+																</tr>
+																<tr>
+																	<td></td>
+																</tr>
+																<tr>
+																	<td class="paddingLeft"><span class="explain">File size	limit 512KB. If your upload does not work, try a smaller picture. </span>
+																	</td>
+																</tr>
+																<tr>
+																	<td class="paddingLeft">
+																		<span class="explain">Ideal	size is 100 pixels high by 100 pixels wide.</span>
+																	</td>
+																</tr>
+																<tr>
+																	<td></td>
+																</tr>
+																<tr>
+																	<td class="paddingLeft">
+																		<div class="imageRightsHolder" id="imageRightsHolder">
+																			<input id="imageRights" type="checkbox" />
+																		</div>
+																		<div class="messageRigthHolder">
+																			<span class="inputInfoSubDescription">I certify that I have the right to distribute this picture and that it does not violate the <a href="/apex/TeamsIconTerms" target="_blank">Terms of Use</a></span>
+																			<br />
+																			<span id="RightsErrorMessage" class="errorText" style="display:none;">
+																				<b>Error:</b> You must agree to the <a href="/apex/TeamsIconTerms" target="_blank">Terms of Use</a> to use images for this team.															
+																			</span>
+																		</div>
+																		<div class="clear"></div>													
+																	</td>
+																</tr>
+																<tr>
+																	<td></td>
+																</tr>	
+															</table>
+														</td>
+													</tr>
+													<tr>
+														<td height="10px"></td>
+													</tr>
+													<tr>
+														<td class="alignTop">
+															<!-- <span class="inputInfoTitle">
+																{!$ObjectType.Wiki__c.label} Type
+															</span>
+															-->
+														</td>
+														<td style="width: 4px; vertical-align:top;">
+															<!-- <span class="requiredLegend"></span> -->
+														</td>
+														<td colspan="2">&nbsp;	
+															<!-- <apex:selectList id="TeamType" value="{!Wiki.Type__c}" title="" multiselect="false" size="1" >
+													  	 	 	<apex:selectOptions value="{!Types}"/>
+													  	 	</apex:selectList>
+													  	 	<span id="TeamTypeErrorMessage" class="errorText" style="display:none;">
+																<b>Error:</b> You must enter a {!$ObjectType.Wiki__c.label} Type for this {!$ObjectType.Wiki__c.label}.								  	 	
+													  	 	</span> -->	
+														</td>
+													</tr>
+													<tr>
+														<td>&nbsp;</td>
+													</tr>
+													<tr>
+														<td class="alignTop">
+															<!-- <span class="inputInfoTitle">{!$ObjectType.Wiki__c.label} Parent</span> -->
+														</td>
+														<td></td>
+														<td colspan="2">&nbsp;
+															
+														</td>
+													</tr>
+													<tr>
+														<td>&nbsp;</td>
+													</tr>
+													<tr>
+						                                <td class="alignTop"><span class="inputInfoTitle">Access</span></td>
+														<td></td>
+						                                <td colspan="2">
+						                                	&nbsp;<input type="radio" id="openTeam" checked="checked" name="access" onclick="setAccess(this);"/>
+						                                	<span class="inputInfoDescription">Open</span>
+						                                </td>
+													</tr>  	
+													<tr>
+						                                <td class="alignTop"><span class="inputInfoTitle"></span></td>
+														<td></td>
+						                                <td colspan="2">&nbsp;<span class="inputInfoList">&nbsp;</span><span class="inputInfoSubDescription">Anyone can join. Anyone can see the {!$ObjectType.Wiki__c.label} information and content.</span></td>
+													</tr>	
+													<tr>
+														<td colspan="6" >
 													
-								<div align="center">
-									<span id="currentEventAction"></span><br />
-									<apex:commandButton styleClass="SaveBtn" action="{!saveWiki}"  value="Save" id="saveButton"  />
-									<apex:commandButton styleClass="SaveBtn" action="{!saveWikiAndAddMembers}"  value="Save And Add Members" id="saveAndAddMembersButton" />
-									<apex:commandButton styleClass="cancelBtn" onclick="history.go(-1);" value="Cancel" id="cancelButton"/> 
+														</td>
+													</tr>					
+													<tr>
+						                                <td  class="alignTop"><span class="inputInfoTitle"></span></td>
+														<td></td>
+						                                <td colspan="2">
+						                                	&nbsp;<input type="radio" id="closedTeam" name="access" onclick="setAccess(this);"/>
+						                                	<span class="inputInfoDescription">Closed</span>
+						                                </td>
+													</tr>   
+													<tr>
+						                                <td class="alignTop"><span class="inputInfoTitle"></span></td>
+														<td></td>
+						                                <td colspan="2">
+						                                	<span class="inputInfoList">&nbsp;</span>
+						                                	<span class="inputInfoSubDescription">{!$ObjectType.Wiki__c.label} Administrator must invite users to join. Anyone can see the {!$ObjectType.Wiki__c.label} information and content.</span>
+						                                </td>
+													</tr> 
+													<tr>
+														<td colspan="6">
+														
+														</td>
+													</tr>	
+													<tr>
+						                                <td class="alignTop"><span class="inputInfoTitle"></span></td>
+														<td></td>
+						                                <td colspan="2">
+						                                	&nbsp;<input type="radio" id="privateTeam" name="access" onclick="setAccess(this);"/>
+						                                	<span class="inputInfoDescription">Private</span>
+						                                </td>
+													</tr>   
+													<tr>
+						                                <td class="alignTop"><span class="inputInfoTitle"></span></td>
+														<td></td>
+						                                <td colspan="2">
+						                                	&nbsp;<span class="inputInfoList">
+						                                	&nbsp;</span>
+						                                	<span class="inputInfoSubDescription">This {!$ObjectType.Wiki__c.label} will not appear in search results or in the profiles of its members. </span>
+						                                </td>
+													</tr> 
+													<tr>
+						                                <td class="alignTop"><span class="inputInfoTitle"></span></td>
+														<td></td>
+						                                <td colspan="2">&nbsp;<span class="inputInfoList">&nbsp;</span><span class="inputInfoSubDescription">Membership is by invitation only, and only members can see the {!$ObjectType.Wiki__c.label}</span></td>
+													</tr>   
+													<tr>
+						                                <td class="alignTop"><span class="inputInfoTitle"></span></td>
+														<td></td>
+						                                <td colspan="2">&nbsp;<span class="inputInfoList">&nbsp;</span><span class="inputInfoSubDescription">information and content.</span></td>
+													</tr>   
+												</table>
+												<div class="DivBtn">
+													<div class="title_line_btn"></div>	
+													
+													
+													<apex:inputHidden value="{!Wiki.Type__c}" id="openOrClosed" />					
+													<div align="center">
+														<span id="currentEventAction"></span><br />
+														<apex:commandButton styleClass="SaveBtn" action="{!saveWiki}"  value="{!IF(inEdition == false, 'Create', 'Update')}" id="saveButton"  />
+														<apex:outputpanel rendered="{!NOT inEdition}">
+															<apex:commandButton styleClass="SaveBtn" action="{!saveWikiAndAddMembers}"  value="Create And Add Members" id="saveAndAddMembersButton" />
+														</apex:Outputpanel>
+														<apex:commandButton styleClass="cancelBtn" onclick="history.go(-1);" value="Cancel" id="cancelButton"/> 
+													</div>
+												</div>
+											</div>
+										</apex:form>
+									</div>
 								</div>
 							</div>
 						</div>
-					</apex:form>
-				</div>
-			</div>
-		</div>
-	</div>
 						</td>
 					</tr>
 					<!--<tr>

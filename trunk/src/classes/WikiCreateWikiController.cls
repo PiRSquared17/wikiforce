@@ -1,7 +1,52 @@
 public class WikiCreateWikiController {
+   /**
+    * Constructor
+    */
+    public WikiCreateWikiController(){
+        if (param != null){
+        	setWiki(param);
+        	genPermissions();
+        	
+        	if(!userPermissions.getCanManage())
+        		throw new CustomException('Insufficient Privileges');
+        }
+    }
+    
+   //Flag to determine if the Members tab will be available.
+    Boolean hasMembers = false;
    
-   
-   
+    /**
+    *@return hasMembers
+    */
+    public Boolean getHasMembers(){
+    	hasMembers = false;
+    	if(param!=null){
+    		String Id = [select Id from Wiki__c where Id=:param limit 1].Id;
+			if((Id != null) && (Id != '')){
+				hasMembers = true;
+			}		    	
+    	}
+    	return hasMembers;
+    }
+    
+	//Flag to determine if is in edition.
+    Boolean inEdition = false; 
+    
+    /**
+    *@return inEdition
+    */
+    public Boolean getInEdition(){
+    	inEdition = false;
+    	if(param!=null){
+    		String Id = [select Id from Wiki__c where Id=:param limit 1].Id;
+    		if((Id != null) && (Id != '')){
+    			inEdition = true;
+    		}
+    	}
+    	return inEdition;
+    }
+
+    
     //Get id from team item
     String param = System.currentPageReference().getParameters().get('id');
     
@@ -12,56 +57,8 @@ public class WikiCreateWikiController {
     String wikiPicture = '';
     Boolean validSizePicture = true;
    
-   	Boolean inEdition = false;
-   	Boolean hasMembers = false;
    
     public Attachment document = new Attachment();
-    
-    /**
-    * Constructor
-    */
-    public WikiCreateWikiController(){
-        if (param != null){
-       		setWiki(param);
-        	genPermissions();
-        	/**
-        	if(!userPermissions.getCanManage()){
-        		throw new CustomException('Insufficient Privileges');
-        	}
-        	*/
-        	inEdition = true;
-         }
-    }
-    
-    /**
-    *@return hasMembers
-    */
-    public Boolean getHasMembers(){
-    	//Perform a check ...
-    	if(param!=null){
-    		String Id = [select Id from Wiki__c where Id=:param limit 1].Id;
-			if((Id != null) && (Id != '')){
-				hasMembers = true;
-			}		    	
-    	}
-    	return hasMembers;
-    }
-    
-    
-    
-    
-	/**
-	* Return the Namespace Prefix
-	*@return String 
-	*/
-	/**public String getNamespace () {
-        return WikiUtil.getNamespace();
-    } */
-    
-
-    
-
-
 	
 	/**
 	*@param Attachment
@@ -120,13 +117,11 @@ public class WikiCreateWikiController {
 	* Load permission for cuerrent user
 	*/
 	public void genPermissions () {
-		/**
 		userPermissions = new UserPermissions();
 		userPermissions.setId(UserInfo.getUserId());
-		userPermissions.setWiki(param);
+		userPermissions.setTeam(param);
 		userPermissions.setObjectType('Wiki');
 		userPermissions.setPermissions();
-		*/	
 	}
 	
 	public String WikiType {get; set;}
@@ -137,15 +132,14 @@ public class WikiCreateWikiController {
     *@void
     */
     public void setWiki (String tId){
-	    theWiki = [	select t.Type__c,  
+	    theWiki = [Select t.Type__c,  
 	                t.PublicProfile__c,
 	                t.NewMemberProfile__c,
 	                t.Name,
 	                t.PictureId__c, 
 	                t.Id, 
 	                t.Description__c 
-	                from Wiki__c t 
-	                where t.Id =:tId];
+	                From Wiki__c t Where t.Id =:tId];
 	    if(theWiki.Type__c != null){
 	    	WikiType = theWiki.Type__c;
 	    }
@@ -159,24 +153,6 @@ public class WikiCreateWikiController {
     		}
 	    } 
     }
-    
-    
-    /** Team Type Select
-    *@return List<SelectOption>
-    */   
-    /**public List<SelectOption> getTypes() {
-        List<Type__c> wikiType = new List<Type__c>();  
-        List<SelectOption> options = new List<SelectOption>();
-        
-        wikiType = [Select t.Name, t.Id From Type__c t order by t.Name asc];  
-        options.add(new SelectOption('', '-- select team type --'));
-        for(Type__c c: wikiType){
-            options.add(new SelectOption(c.Id, c.Name));
-        }
-        return options;
-    }*/
-    
-    
     /**
     * Team Profile Select
     *@return List<SelectOption>
@@ -258,8 +234,7 @@ public class WikiCreateWikiController {
 		    		}
 		    		update theWiki;
 		    	}
-		    	//PageReference pageRef = new PageReference('/apex/WikisRedirect?id=' + theWiki.Id);
-		    	PageReference pageRef = new PageReference('/apex/WikiTeamOverview?tid=' + theWiki.Id);
+		       	PageReference pageRef = new PageReference('/apex/WikiTeamOverview?tid=' + theWiki.Id);
 	            pageRef.setRedirect(true);
 	            return pageRef; 
     		}
