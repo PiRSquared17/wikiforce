@@ -233,17 +233,26 @@
 															<div class="recentlyUpdated" id="row-{!item.Id}">
 																<table border="0" style="width:100%;">
 																	<tr>
-																		<td width="90px">
-																			<apex:outputpanel rendered="{!IF(item.IsAdmin,true,false)}" >
-																				<a href="WikiCreateWiki?id={!item.Id}" >Edit</a> | <a href="Javascript:;" onclick="deleteWikiOverlay('{!item.Id}');">Del</a>
-																			</apex:outputpanel>
+																		<td width="110px">
+																			<apex:form >
+																				<apex:commandLink value="Join" action="{!joinWiki}" rendered="{!IF(AND(NOT(item.isMember),item.isPublic),true,false)}" onclick="changeJoinStatus(this);" oncomplete="joinComplete();" >
+																					<apex:param name="wid" value="{!item.Id}" />
+																					<apex:param name="allTeams" value="false" />
+																				</apex:commandLink>
+																				<apex:commandLink value="Unjoin" action="{!unjoinWiki}" rendered="{!IF(item.isMember,true,false)}" onclick="changeJoinStatus(this);" oncomplete="refreshDeleteList();" >
+																					<apex:param name="wid" value="{!item.Id}" />
+																				</apex:commandLink> | 
+																				<apex:outputpanel rendered="{!IF(item.IsAdmin,true,false)}" >
+																					<a href="WikiCreateWiki?id={!item.Id}" >Edit</a> | <a href="Javascript:;" onclick="deleteWikiOverlay('{!item.Id}');relocateOverlay();">Del</a>
+																				</apex:outputpanel>
+																			</apex:form>
 																		</td>
 																		<td width="110px" valign="top">
 																			<apex:outputpanel rendered="{!IF(item.picture == '', true, false)}">
-																				<apex:image width="53px" onclick="location.href='/apex/WikiTeamOverview?tid={!item.id}';" styleclass="teamPicture" value="{!URLFOR($Resource.commonResources, '/images/placeholders/default_team_100x100.png')}" />
+																				<apex:image width="32px" onclick="location.href='/apex/WikiTeamOverview?tid={!item.id}';" styleclass="teamPicture" value="{!URLFOR($Resource.commonResources, '/images/placeholders/default_team_100x100.png')}" />
 																			</apex:outputpanel>
 																			<apex:outputpanel rendered="{!IF(item.picture == '', false, true)}">
-																				<apex:image width="53px" onclick="location.href='/apex/WikiTeamOverview?tid={!item.id}';" styleclass="teamPicture" value="/servlet/servlet.FileDownload?file={!item.picture}" />
+																				<apex:image width="32px" onclick="location.href='/apex/WikiTeamOverview?tid={!item.id}';" styleclass="teamPicture" value="/servlet/servlet.FileDownload?file={!item.picture}" />
 																			</apex:outputpanel>
 																		</td>
 																		<td valign="top">
@@ -368,7 +377,7 @@
 								</apex:outputpanel>
 								<apex:form >
 									<apex:actionFunction name="refreshDeleteList" action="{!refreshTab}"
-										rerender="wikiSitesForm"
+										rerender="myTeamsAllTeamsPanel"
 										oncomplete="showHideOverlay(); showMessageToUser('The wiki has been deleted.', 'success');" />
 								</apex:form> 
 							</div>
@@ -382,5 +391,17 @@
 	</apex:outputpanel>	
 	<script>
 		readPortalCSSRules();
+		
+		function joinComplete(){
+			refreshDeleteList(); 
+			switchTab('myTeamTab');
+		}
+		
+		function changeJoinStatus(obj){
+			var txt = obj.innerHTML;
+			if(txt == 'Join' || txt == 'Unjoin'){
+				obj.innerHTML = 'Loading...';
+			}
+		}
 	</script>	
 </apex:page>

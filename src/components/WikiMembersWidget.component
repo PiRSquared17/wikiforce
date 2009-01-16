@@ -43,9 +43,6 @@
 		
 		var myMembersIds = "{!WikispaceMembersIds}";
 		
-		function hola(){
-			alert(myMembersIds);
-		}
 		
 		window.onload = onloadFunctions();
 		
@@ -117,7 +114,7 @@
 				</tr>
 				<tr>
 					<td height="10px">
-						<!-- <span class="inputInfoTitle">Email notifications </span> <apex:inputCheckBox value="{!EmailNotifications(true)}" id="emailNotifications"/> -->
+						<span class="inputInfoTitle">Email notifications </span> <apex:inputCheckBox value="{!emailNotifications}" id="emailNotifications"/>
 					</td>
 				</tr>
 				<tr>
