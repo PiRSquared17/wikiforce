@@ -55,6 +55,10 @@
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>WikiMemberController</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>WikiMembersListController</apexClass>
         <enabled>true</enabled>
     </classAccesses>

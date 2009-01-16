@@ -114,7 +114,7 @@
 								<apex:outputpanel rendered="{!userPermissions.canCreate}">
 									<div align="center" class="addWikiPageBtn">
 										<form>
-											<input type="button" value="Add Wiki Page" onclick="createOverlay('','AddChildForm','305','');" class="btn" />
+											<input type="button" value="Add Wiki Page" onclick="createOverlay('','AddChildForm','305',''); relocateOverlay();" class="btn" />
 										</form>
 									</div>
 								</apex:outputpanel>
@@ -214,7 +214,7 @@
 								<apex:outputpanel rendered="{!userPermissions.canCreate}">
 									<div align="center" class="addWikiPageBtn">
 										<form class="ff">
-											<input type="button" value="Add Wiki Page" onclick="createOverlay('','AddChildForm','305','');" class="btn" />
+											<input type="button" value="Add Wiki Page" onclick="createOverlay('','AddChildForm','305',''); relocateOverlay();" class="btn" />
 										</form>
 									</div>
 								</apex:outputpanel>

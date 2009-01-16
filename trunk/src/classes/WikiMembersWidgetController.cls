@@ -480,7 +480,8 @@ public with sharing class WikiMembersWidgetController {
 				newMember.WikiProfile__c = newMemberVars.profileId;
 				//newMember.WikiRole__c = newMemberVars.WikiRole;
 				newMemberList.add(newMember);
-				mailList.add(user);
+				if(this.emailNotifications)
+					mailList.add(user);
 			}
 		}
 		
@@ -493,14 +494,10 @@ public with sharing class WikiMembersWidgetController {
 		
 		//Insert newMemberList;
 		membersToInsert = newMemberList;
-		if(membersToInsert.size() > 0){
-			emailNotifications = true;
-		}
 		newMemberVars.colleagueNames = '';
 		newMemberVars.WikiRole = '';
 		newMemberVars.profileId = '';
 		newMemberVars.message = '';
-		
 	}
 	
 	//New save
@@ -512,9 +509,6 @@ public with sharing class WikiMembersWidgetController {
 	*@return PageReference
 	*/
 	public PageReference syncSaveMembers(){
-		
-		//emailNotifications = true;
-		if(emailNotifications){
 			Integer endIt =  countSaved + 2;
 			for(Integer it = countSaved; it <= endIt; it++){
 				if(it < membersToInsert.size()){
@@ -540,9 +534,6 @@ public with sharing class WikiMembersWidgetController {
 				countSaved += 3;
 			}
 			return null;
-		}else{
-			return null;
-		}
 	}
 	
 	/**
