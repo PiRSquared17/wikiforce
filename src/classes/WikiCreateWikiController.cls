@@ -1,15 +1,5 @@
 public class WikiCreateWikiController {
   
-  	Boolean showMembersSection = false; 
-  	
-  	public void setShowMembersSection(Boolean b){
-  		this.showMembersSection = b;
-  	}
-  	
-  	public Boolean getShowMembersSection(){
-  		return this.showMembersSection;
-  	}
-  
    /**
     * Constructor
     */
@@ -204,6 +194,53 @@ public class WikiCreateWikiController {
     	return newProfile;
     }
     
+    public void save(){
+    	  	try{
+    		System.debug('LEN:' + document.BodyLength);
+    		if(document.BodyLength <= MAX_SIZE || (document.name == null || document.name == '')){
+    			validSizePicture = true;
+	    		if(newProfile.wikiOpenOrClosed == 'open'){
+	    			List<WikiProfile__c> wp = [Select Name, Id From WikiProfile__c Where Name = 'Public Profile' limit 1];
+	    			theWiki.PublicProfile__c = wp[0].Id;
+	    			theWiki.NewMemberProfile__c = newProfile.newProfileOpen;	    			
+	    		}else if (newProfile.wikiOpenOrClosed == 'close') {
+	    			theWiki.PublicProfile__c = newProfile.publicProfileClosed;
+	    			theWiki.NewMemberProfile__c = null;
+	    		}else if (newProfile.wikiOpenOrClosed == 'private'){
+	    			theWiki.PublicProfile__c = null;
+	    			theWiki.NewMemberProfile__c = null;
+	    		}
+	    		
+	    		
+	    		if(theWiki.Id == null){
+		    		insert theWiki;
+		    		if(document.name != null && document.name != ''){
+			    			document.ParentId = theWiki.Id;
+				    		insert document;
+			    			theWiki.PictureId__c = document.Id;
+				    		update theWiki;	
+		    		}	
+	    		}else {
+	       			if(document.name != null && document.name != ''){
+		    			document.ParentId = theWiki.Id;
+		    			insert document;
+		    			theWiki.PictureId__c = document.Id;
+		    		}
+		    		if(theWiki.Type__c == null){
+		    			theWiki.Type__c = WikiType; 
+		    		}
+		    		update theWiki;
+		    	}
+    		}
+    		else{
+    			validSizePicture=false;
+    			document = new Attachment();
+    		}
+    	}catch(Exception e){
+    		throw e;
+    	}
+    }
+    
     /**
     * Save Wiki
     *@return wiki detail page reference
@@ -211,105 +248,25 @@ public class WikiCreateWikiController {
     */    
     public PageReference saveWiki(){
     	try{
-    		System.debug('LEN:' + document.BodyLength);
-    		if(document.BodyLength <= MAX_SIZE || (document.name == null || document.name == '')){
-    			validSizePicture = true;
-	    		if(newProfile.wikiOpenOrClosed == 'open'){
-	    			theWiki.PublicProfile__c = newProfile.publicProfileOpen;
-	    			theWiki.NewMemberProfile__c = newProfile.newProfileOpen;	    			
-	    		}else if (newProfile.wikiOpenOrClosed == 'close') {
-	    			theWiki.PublicProfile__c = newProfile.publicProfileClosed;
-	    			theWiki.NewMemberProfile__c = null;
-	    		}else if (newProfile.wikiOpenOrClosed == 'private'){
-	    			theWiki.PublicProfile__c = null;
-	    			theWiki.NewMemberProfile__c = null;
-	    		}
-	    		
-	    		
-	    		if(theWiki.Id == null){
-		    		insert theWiki;
-		    		if(document.name != null && document.name != ''){
-			    			document.ParentId = theWiki.Id;
-				    		insert document;
-			    			theWiki.PictureId__c = document.Id;
-				    		update theWiki;	
-		    		}	
-	    		}else {
-	       			if(document.name != null && document.name != ''){
-		    			document.ParentId = theWiki.Id;
-		    			insert document;
-		    			theWiki.PictureId__c = document.Id;
-		    		}
-		    		if(theWiki.Type__c == null){
-		    			theWiki.Type__c = WikiType; 
-		    		}
-		    		update theWiki;
-		    	}
-		       	PageReference pageRef = new PageReference('/apex/WikiTeamOverview?tid=' + theWiki.Id);
-	            pageRef.setRedirect(true);
-	            return pageRef; 
-    		}
-    		else{
-    			validSizePicture=false;
-    			document = new Attachment();
-    			return null;
-    		}
+	    	save();
+			PageReference pageRef = new PageReference('/apex/WikiTeamOverview?tid=' + theWiki.Id);
+			pageRef.setRedirect(true);
+			return pageRef;
     	}catch(Exception e){
     		throw e;
-    	}
+    	}  
     }
     
   	public PageReference saveWikiAndAddMembers(){
-  		try{
-    		System.debug('LEN:' + document.BodyLength);
-    		if(document.BodyLength <= MAX_SIZE || (document.name == null || document.name == '')){
-    			validSizePicture = true;
-	    		if(newProfile.wikiOpenOrClosed == 'open'){
-	    			theWiki.PublicProfile__c = newProfile.publicProfileOpen;
-	    			theWiki.NewMemberProfile__c = newProfile.newProfileOpen;	    			
-	    		}else if (newProfile.wikiOpenOrClosed == 'close') {
-	    			theWiki.PublicProfile__c = newProfile.publicProfileClosed;
-	    			theWiki.NewMemberProfile__c = null;
-	    		}else if (newProfile.wikiOpenOrClosed == 'private'){
-	    			theWiki.PublicProfile__c = null;
-	    			theWiki.NewMemberProfile__c = null;
-	    		}
-	    		
-	    		
-	    		if(theWiki.Id == null){
-		    		insert theWiki;
-		    		if(document.name != null && document.name != ''){
-			    			document.ParentId = theWiki.Id;
-				    		insert document;
-			    			theWiki.PictureId__c = document.Id;
-				    		update theWiki;	
-		    		}	
-	    		}else {
-	       			if(document.name != null && document.name != ''){
-		    			document.ParentId = theWiki.Id;
-		    			insert document;
-		    			theWiki.PictureId__c = document.Id;
-		    		}
-		    		if(theWiki.Type__c == null){
-		    			theWiki.Type__c = WikiType; 
-		    		}
-		    		update theWiki;
-		    	}
-		    	//PageReference pageRef = new PageReference('/apex/WikiMembersList?id=' + theWiki.Id);
-		    	showMembersSection = true;
-		    	PageReference pageRef = new PageReference('/apex/WikiCreateWiki?id=' + theWiki.Id + '&sms=true');
-			    pageRef.setRedirect(true);
-			    return pageRef; 
-    		}
-    		else{
-    			validSizePicture=false;
-    			document = new Attachment();
-    			return null;
-    		}
-    		//genMembers();
-    	}catch(Exception e){
-    		throw e;
-    	}
+		try{
+			save();
+			PageReference pageRef = new PageReference('/apex/WikiCreateWiki?id=' + theWiki.Id + '&add=true');
+			pageRef.setRedirect(true);
+			return pageRef;
+		}catch(Exception e){
+			throw e;
+		}
+		
   	}
   	
   	/********************************
@@ -317,7 +274,7 @@ public class WikiCreateWikiController {
   	*********************************
   	*/
   	
-  		public String idWiki = System.currentPageReference().getParameters().get('id');
+  	public String idWiki = System.currentPageReference().getParameters().get('id');
 	public String removeMemberId = System.currentPageReference().getParameters().get('delId');
 	public String delName;
 	
@@ -375,8 +332,12 @@ public class WikiCreateWikiController {
 	*@return String Name
 	*/	
 	public String getWikiName () {
-		Wiki__c currentWiki = [select Name from Wiki__c where id=: idWiki];
-		return currentWiki.Name;	 
+		String ret;
+		if(idWiki != null){
+			Wiki__c currentWiki = [select Name from Wiki__c where Id =: idWiki];
+			ret = currentWiki.Name;
+		}
+		return ret;
 	}
 
 	/**
@@ -1428,4 +1389,250 @@ public class WikiCreateWikiController {
 		members = membersList;	
 	}
 
+//WIKI MEMBERS WIDGET LOGIC
+
+	public MemberS newMemberVars = new MemberS();
+	public List<WikiMember__c> memberListToolkit = new List<WikiMember__c>();
+	public Integer memberListToolkitCount = 0;
+	public List<WikiMember__c> membersToInsert = new List<WikiMember__c>();
+	public List<User> mailList = new List<User>();
+	Boolean emailNotifications;
+	Boolean makeMembersAdmins;
+	
+	public Boolean getMakeMembersAdmins(){
+		return makeMembersAdmins;
+	}
+	
+	public void setMakeMembersAdmins(Boolean makeMembersAdmins){
+		this.makeMembersAdmins = makeMembersAdmins;
+	}
+	
+	public Boolean getEmailNotifications(){
+		return emailNotifications;
+	}
+	
+	public void setEmailNotifications(Boolean emailNotifications){
+		this.emailNotifications = emailNotifications;
+	}
+	
+	/**
+	*@return Integer
+	*/
+	public Integer getMemberListToolkitCount () {
+		return memberListToolkitCount;
+	}
+	
+	/**
+	*@return MemberS
+	*/	
+	public MemberS getNewMemberVars () {
+		return newMemberVars;	
+	}
+	
+	/**
+	*@param MemberS vars
+	*/
+	public void setNewMemberVars (MemberS vars) {
+		this.newMemberVars = vars;
+	}
+	
+	Boolean already = false;
+	
+	/**
+	*@return already exist
+	*/
+	public Boolean getAlready(){
+		return already;
+	}	
+	
+		/**
+	* Save MemberS and New
+	*@void
+	*/
+	public void saveMembersNew () {
+		List<WikiMember__c> newMemberList = new List<WikiMember__c>();
+		List<String> newMembers = newMemberVars.colleagueNames.split(',');
+		List<User> userList = new List<User>();
+		already = false;
+		for(String item: newMembers) {
+			List<User> userItem = new List<User>();
+			String itemTrim = item.trim();
+			userItem = [select id, Name, Email from User where IsActive != false and Name =:itemTrim limit 1];
+			if (userItem.size() > 0) {
+				already = false;
+				Integer listPos = 0;
+				while (!already && listPos < userList.size()) {
+					if(userList[listPos].Name == userItem[0].Name) {
+						already = true;
+					}
+					listPos++;
+				}
+				if (!already) {
+					userList.add(userItem[0]);
+				}
+				else
+					already = true;
+			}
+		}
+		
+		for (User user : userList) {
+			Integer isMember = [select count() from WikiMember__c where Wiki__c =:idWiki and User__r.IsActive != false and user__c =: user.id];
+			if (isMember == 0) {
+				WikiMember__c newMember = new WikiMember__c();
+				newMember.User__c = user.id;
+				newMember.Name = user.Name;
+				newMember.Wiki__c = idWiki;
+				newMember.WikiProfile__c = newMemberVars.profileId;
+				//newMember.WikiRole__c = newMemberVars.WikiRole;
+				newMemberList.add(newMember); 
+				if(this.emailNotifications)
+					mailList.add(user);
+				 
+			}
+		}
+		
+		userList.clear();
+		
+		memberListToolkit = newMemberList;
+		memberListToolkitCount = newMemberList.size();
+		
+		membersToInsert = newMemberList;	
+		
+		newMemberVars.colleagueNames = '';
+		newMemberVars.WikiRole = '';
+		newMemberVars.profileId = '';
+		newMemberVars.message = '';
+	}
+
+	/**
+	* Save Members
+	*@void
+	*/
+	public void saveMembers () {
+		List<WikiMember__c> newMemberList = new List<WikiMember__c>();
+		List<String> newMembers = newMemberVars.colleagueNames.split('[ ]*,[ ]*');
+		List<User> userList = new List<User>();
+		already = false;
+		Map<String, User> usersMap = new Map<String, User>();
+		for (User iterUser :[select id, Name, IsActive, Email from User where Name in:newMembers]) {
+			usersMap.put(iterUser.Name, iterUser);
+		}
+		for(String item: newMembers) {
+			if (usersMap.get(item) != null) {
+				already = false;
+				Integer listPos = 0;
+				while (!already && listPos < userList.size()) {
+					if(userList[listPos].Name == usersMap.get(item).Name) {
+						already = true;
+					}
+					listPos++;
+				}
+				if (!already) {
+					userList.add(usersMap.get(item));
+				}else {
+					already = true;
+				}
+			}
+		}
+		
+		Map<Id, WikiMember__c> WikiMemberMap = new Map<Id, WikiMember__c>();
+		for (WikiMember__c iterMember : [select id, User__c  from WikiMember__c where Wiki__c =:idWiki]) {
+			WikiMemberMap.put(iterMember.User__c,iterMember);
+		}
+
+		for (User user : userList) {
+			if (WikiMemberMap.get(user.Id) == null && usersMap.get(user.Name).IsActive != false) {
+				WikiMember__c newMember = new WikiMember__c();
+				newMember.User__c = user.id;
+				newMember.Name = user.Name;
+				newMember.Wiki__c = idWiki;
+				newMember.WikiProfile__c = newMemberVars.profileId;
+				//newMember.WikiRole__c = newMemberVars.WikiRole;
+				newMemberList.add(newMember);
+				if(this.emailNotifications)
+					mailList.add(user);
+			}
+		}
+		
+		userList.clear();
+		WikiMemberMap.clear();
+		usersMap.clear();
+		
+		memberListToolkit = newMemberList;
+		memberListToolkitCount = newMemberList.size();
+		
+		//Insert newMemberList;
+		membersToInsert = newMemberList;
+		newMemberVars.colleagueNames = '';
+		newMemberVars.WikiRole = '';
+		newMemberVars.profileId = '';
+		newMemberVars.message = '';
+	}
+	
+	/**
+	*@class
+	*/
+	public class MemberS {
+		String profileId;
+		String message;
+		String WikiRole;
+		String colleagueNames;
+		
+		/**
+        *@return String
+        */
+		public String getColleagueNames () {
+			return colleagueNames;
+		}
+		
+		/**
+        *@param String names
+        */
+		public void setColleagueNames (String names) {
+			this.colleagueNames = names;
+		}
+		
+		/**
+        *@return String ID
+        */
+		public String getProfileId () {
+			return profileId;
+		}
+		
+		/**
+        *@param String ID
+        */
+		public void setProfileId (String profile) {
+			this.profileId = profile;
+		}	
+		
+		/**
+        *@return String Message
+        */
+		public String getMessage () {
+			return message;
+		}
+		
+		/**
+        *@param String Message
+        */
+		public void setMessage (String msj) {
+			this.message = msj;
+		}
+		
+		/**
+        *@return String Role
+        */
+		public String getWikiRole () {
+			return WikiRole;
+		}
+		
+		/**
+        *@param String Role
+        */
+		public void setWikiRole (String tRole) {
+			this.WikiRole = tRole;
+		}	
+		
+	}
 }

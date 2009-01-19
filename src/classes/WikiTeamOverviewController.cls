@@ -5,6 +5,7 @@ public with sharing class WikiTeamOverviewController {
 	
 	// Wiki__c given in the url
 	public String TEAMID = System.currentPageReference().getParameters().get('tid');
+   	public WikiMemberController wmc = new WikiMemberController();
 
 	/**
 	* Costructor
@@ -51,6 +52,7 @@ public with sharing class WikiTeamOverviewController {
 			genWikiSites();
 			genPermissions();
 			genPermissionsTeam();
+			genIsAdmin();
 			if(!userPermissionsTeam.getCanView()) 
 				throw new CustomException('Insufficient Privileges');	
 		}
@@ -75,6 +77,15 @@ public with sharing class WikiTeamOverviewController {
 		return userPermissions;
 	}
 	
+	/**
+	* Redirect after delete wiki
+	*@return PageReference
+	*/
+	public PageReference redirectAfterDelete(){
+		PageReference wikiOverview = Page.WikiOverview;
+		wikiOverview.setRedirect(true);
+		return wikiOverview;
+	}
 	
 	public UserPermissions userPermissionsTeam = new UserPermissions();
 		
@@ -84,7 +95,7 @@ public with sharing class WikiTeamOverviewController {
 	public void genPermissionsTeam () {
 		userPermissionsTeam.setId(UserInfo.getUserId());
 		userPermissionsTeam.setTeam(TEAMID);
-		userPermissionsTeam.setObjectType('Team');
+		userPermissionsTeam.setObjectType('Wiki');
 		userPermissionsTeam.setPermissions();		
 	}
 	
@@ -96,10 +107,81 @@ public with sharing class WikiTeamOverviewController {
 		return userPermissionsTeam;
 	}
 	
-	
-		
 	Wiki__c currentTeam = new Wiki__c();
+	private Boolean isMember;
+	private Boolean isPublic;
 	
+	/**
+	* Join to wiki
+	*/
+	public void joinWiki(){
+		wmc.setWikiId(System.currentPageReference().getParameters().get('wid'));
+		wmc.joinWiki();
+	}
+	
+	/**
+	* Unjoin to wiki
+	*/
+	
+	public void unjoinWiki(){
+		wmc.setWikiId(System.currentPageReference().getParameters().get('wid'));
+		wmc.unjoinWiki();
+	}
+	
+	/**
+	*@param Boolean
+	*/
+	public void setIsMember(Boolean ism){
+		this.isMember = ism;
+	}
+	
+	/**
+	*@param Boolean
+	*/
+	public void setIsPublic(Boolean isp){
+		this.isPublic = isp;
+	}
+	
+	/**
+	*@return Boolean
+	*/
+	public Boolean getIsMember(){
+		return this.isMember;
+	}
+	
+	/**
+	*@return Boolean
+	*/
+	public Boolean getIsPublic(){
+		return this.isPublic;
+	}
+	
+	private Boolean isAdmin;
+	
+    /**
+    *@param Boolean
+    */
+    public void setIsAdmin(Boolean isa){
+    	this.isAdmin = isa;
+    }
+    
+    /**
+    *@return Boolean
+    */
+    public Boolean getIsAdmin(){
+    	return this.isAdmin;
+    }
+    
+    /**
+    * Verify if current user is admin
+    */
+    private void genIsAdmin(){
+    	List<User> teamAdmin = [Select Id, Profile.PermissionsModifyAllData From User where id =: UserInfo.getUserId() limit 1];
+    	List<WikiMember__c> wiki = [select WikiProfile__r.Name from WikiMember__c where Wiki__c =: TEAMID and User__c =: UserInfo.getUserId() limit 1];
+    	String nameProfileAdmin = 'Wiki Administrator';
+    	this.setIsAdmin(teamAdmin[0].Profile.PermissionsModifyAllData || nameProfileAdmin.equals(wiki[0].WikiProfile__r.Name));
+    }
+    
 	/**
 	*@return Wiki__c
 	*/
@@ -111,8 +193,19 @@ public with sharing class WikiTeamOverviewController {
 	* Load team for current teamid
 	*/
 	public void genTeamData(){
-		if(TEAMID != null)
-			currentTeam = [select Id, Name from Wiki__c where id =: TEAMID];
+		if(TEAMID != null){
+			currentTeam = [select Id, Name, PublicProfile__c from Wiki__c where id =: TEAMID];
+			if(currentTeam.PublicProfile__c != null)
+				this.setIsPublic(true);
+			else 
+				this.setIsPublic(false);
+			
+			List<WikiMember__c> member = [select Id from WikiMember__c where Wiki__c =: TEAMID and User__c =: UserInfo.getUserId() ];
+			if(member.size() > 0)
+				this.setIsMember(true);
+			else 
+				this.setIsMember(false);
+		}
 	}
 	
 	/** FIX
@@ -218,6 +311,7 @@ public with sharing class WikiTeamOverviewController {
 	public void genWikiSites () {
 		List<Wiki__c> sites;
 		sites = [select Id, Name, Description__c from Wiki__c order by Name limit 10];
+		
 		
 		List<TeamWikis> teamWikiList = new List<TeamWikis>();
 		for (Wiki__c item : sites) {

@@ -27,6 +27,10 @@
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>SuggestController</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>TeamUtil</apexClass>
         <enabled>false</enabled>
     </classAccesses>
@@ -1424,6 +1428,10 @@
     </pageAccesses>
     <pageAccesses>
         <apexPage>Start_Here</apexPage>
+        <enabled>false</enabled>
+    </pageAccesses>
+    <pageAccesses>
+        <apexPage>SuggestDispatcher</apexPage>
         <enabled>false</enabled>
     </pageAccesses>
     <pageAccesses>
