@@ -27,6 +27,10 @@
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>SuggestController</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>TeamUtil</apexClass>
         <enabled>true</enabled>
     </classAccesses>
@@ -1300,6 +1304,10 @@
     <pageAccesses>
         <apexPage>Start_Here</apexPage>
         <enabled>true</enabled>
+    </pageAccesses>
+    <pageAccesses>
+        <apexPage>SuggestDispatcher</apexPage>
+        <enabled>false</enabled>
     </pageAccesses>
     <pageAccesses>
         <apexPage>UploadAttachment</apexPage>

@@ -223,10 +223,8 @@
 																</div>
 															</apex:form>
 														</apex:outputpanel>
-														
 													</div>
 													<hr style="border: 0px solid ; background-color: #333434; height: 1px;"/>
-	
 													<!-- Wiki Sites -->
 													<apex:outputpanel id="wikiSitesForm">
 														<apex:repeat rows="{!numSitesRows}" first="{!firstRow}" value="{!wikiSites}" var="item">
@@ -247,12 +245,12 @@
 																				</apex:outputpanel>
 																			</apex:form>
 																		</td>
-																		<td width="110px" valign="top">
+																		<td width="70px" valign="top">
 																			<apex:outputpanel rendered="{!IF(item.picture == '', true, false)}">
-																				<apex:image width="32px" onclick="location.href='/apex/WikiTeamOverview?tid={!item.id}';" styleclass="teamPicture" value="{!URLFOR($Resource.commonResources, '/images/placeholders/default_team_100x100.png')}" />
+																				<apex:image onclick="location.href='/apex/WikiTeamOverview?tid={!item.id}';" styleclass="teamPicture" value="{!URLFOR($Resource.commonResources, '/images/placeholders/default_team_100x100.png')}" />
 																			</apex:outputpanel>
 																			<apex:outputpanel rendered="{!IF(item.picture == '', false, true)}">
-																				<apex:image width="32px" onclick="location.href='/apex/WikiTeamOverview?tid={!item.id}';" styleclass="teamPicture" value="/servlet/servlet.FileDownload?file={!item.picture}" />
+																				<apex:image onclick="location.href='/apex/WikiTeamOverview?tid={!item.id}';" styleclass="teamPicture" value="/servlet/servlet.FileDownload?file={!item.picture}" />
 																			</apex:outputpanel>
 																		</td>
 																		<td valign="top">
