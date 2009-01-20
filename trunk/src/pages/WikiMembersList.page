@@ -412,7 +412,7 @@
 									width="32" /></div>
 							</apex:outputpanel></td> -->
 							<td class="member_detail_description"><a href="javascript:;"
-								onclick="location.href='https://na1.salesforce.com/apex/PeopleProfileDisplay?id={!item.userId}'"
+								onclick="location.href='https://na1.salesforce.com/{!item.userId}'"
 								class="member_detail_description_underline">{!item.Name}</a> 
 								<!-- <img class="imgState"
 									src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/online.gif')}" />
