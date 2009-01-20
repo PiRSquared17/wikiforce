@@ -7,14 +7,18 @@ public class WikiCreateWikiController {
         if (param != null){
         	setWiki(param);
         	genPermissions();
-        	
         	if(!userPermissions.getCanManage())
         		throw new CustomException('Insufficient Privileges');
+        	genMembers();
         }
     }
     
    //Flag to determine if the Members tab will be available.
     Boolean hasMembers = false;
+   
+   	public void switchTabsController(){
+   	
+   	}
    
     /**
     *@return hasMembers
@@ -185,7 +189,7 @@ public class WikiCreateWikiController {
     	public String publicProfileOpen { set; get; }
     	public String newProfileOpen { set; get; }
     	public String publicProfileClosed { set; get; }
-    	public String wikiOpenOrClosed { set; get; }     	
+    	public String openOrClosed { set; get; }     	
     }
     
     wikiProfile newProfile = new wikiProfile();
@@ -195,18 +199,20 @@ public class WikiCreateWikiController {
     }
     
     public void save(){
-    	  	try{
+    	System.debug('\n\n############## Profile #############\n' + newProfile.openOrClosed);
+		try{
     		System.debug('LEN:' + document.BodyLength);
     		if(document.BodyLength <= MAX_SIZE || (document.name == null || document.name == '')){
     			validSizePicture = true;
-	    		if(newProfile.wikiOpenOrClosed == 'open'){
+    			System.debug('\n\n############## Profile #############\n' + newProfile.openOrClosed);
+	    		if(theWiki.Type__c == 'open'){
 	    			List<WikiProfile__c> wp = [Select Name, Id From WikiProfile__c Where Name = 'Public Profile' limit 1];
 	    			theWiki.PublicProfile__c = wp[0].Id;
 	    			theWiki.NewMemberProfile__c = newProfile.newProfileOpen;	    			
-	    		}else if (newProfile.wikiOpenOrClosed == 'close') {
+	    		}else if (theWiki.Type__c == 'close') {
 	    			theWiki.PublicProfile__c = newProfile.publicProfileClosed;
 	    			theWiki.NewMemberProfile__c = null;
-	    		}else if (newProfile.wikiOpenOrClosed == 'private'){
+	    		}else if (theWiki.Type__c == 'private'){
 	    			theWiki.PublicProfile__c = null;
 	    			theWiki.NewMemberProfile__c = null;
 	    		}
@@ -236,7 +242,7 @@ public class WikiCreateWikiController {
     			validSizePicture=false;
     			document = new Attachment();
     		}
-    	}catch(Exception e){
+		}catch(Exception e){
     		throw e;
     	}
     }
@@ -784,6 +790,8 @@ public class WikiCreateWikiController {
 		
 		if(System.currentPageReference().getParameters().get('ltr') != null)
 			letter = System.currentPageReference().getParameters().get('ltr');
+		else
+			letter = 'ALL';
 				
 		if (letter == null || letter == '' || letter== 'ALL') {
 			for (WikiMember__c item: [select id, Name, WikiProfile__r.Name, WikiProfile__r.ManageWikis__c, User__r.Name, User__r.Title, User__r.Id, User__r.CompanyName from WikiMember__c where Wiki__c =:idWiki and User__r.IsActive != false order by User__r.Name]) {

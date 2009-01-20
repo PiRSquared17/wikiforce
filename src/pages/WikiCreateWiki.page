@@ -307,46 +307,59 @@
 			var insideSettingsTab = true;
 			
 			function showSettingsSection(){
-				if(isAdd != null && !insideSettingsTab){
-					membersBackUp = $('body_center').innerHTML;
-					$('body_center').innerHTML = settingsBackUp;
-					insideSettingsTab = true;
-				}
+				membersBackUp = $('body_center').innerHTML;
+				$('body_center').innerHTML = settingsBackUp;
+				console.info('Inside: * showSettingsSection *');
 			}
 			
 			function showMembersSectionTabs(){
-				if(insideSettingsTab){
 					settingsBackUp = $('body_center').innerHTML;
-					$('body_center').innerHTML = membersBackUp;
-				}
+					$('body_center').innerHTML = membersBackUp;					
 			}
 			
 		
 			function showMembersSectionMetod(){
-				insideSettingsTab = false;
-				$('OutputLinkMembers').className = '';
-				
-				settingsBackUp = $('body_center').innerHTML;
-				membersBackUp = $('membersListDiv').innerHTML;
-				$('membersListDiv').innerHTML = '';
+				$('WikiCreateWiki:tabsForm:allTeamsLink').className= ''; //take off the disable style
 				
 				$('body_center').innerHTML = membersBackUp;
+				
+				$('myTeamTab').className = '';
+				$('allTeamTab').className = 'selected';
+				insideSettingsTab = false;
 			}
 			
-
+			function backUpDivsForFirstTime(){
+				settingsBackUp = $('body_center').innerHTML;
+				membersBackUp = $('membersListDiv').innerHTML;
+			}
 			
 			
 			/**
 			* Execute onload to show members tab and open add members overlay
 			*/
 			function showAddMembersSection(){
-				if(isAdd != '')
-				{
+				backUpDivsForFirstTime();
+				if(isAdd != ''){
 					showMembersSectionMetod();
 					createOverlay('','inviteTeam','auto','showSelects()');
 				}
 			}
 			
+			function switchTabs (element){
+				var currentTab = $(element);
+				if(currentTab.className != 'selected' && currentTab.id == 'myTeamTab' && insideSettingsTab == false){
+					$('allTeamTab').className = '';
+					currentTab.className = 'selected';
+					insideSettingsTab = true;
+					showSettingsSection();
+				}else if (currentTab.className != 'selected' && currentTab.id == 'allTeamTab' && insideSettingsTab == true){
+					$('myTeamTab').className = '';
+					currentTab.className = 'selected';
+					insideSettingsTab = false;
+					showMembersSectionTabs();
+				}
+				
+			}
 			
 		</script>
 	<!-- End of scripts to show the new members overlay and the members list -->
@@ -383,7 +396,7 @@
 							<!-- MY RECENT CHANGES WIDGET -->
 							<c:WikiWidgetMyRecentChanges />
 							
-							
+							 
 						</td>
 						<td valign="top" class="mainContentTD">
 				
@@ -391,7 +404,7 @@
 							<div class="main_content" id="main_content">
 								<div class="teamTitle">{!IF(inEdition == false, 'Create New', 'Edit')} {!$ObjectType.Wiki__c.label}</div>
 							
-							<!-- TAB CONTAINER -->
+							<!-- TAB CONTAINER
 							<div class='tabContainer' >
 								<ul class="tabs">
 									<li  class="selected" id="myTeamTab">
@@ -401,7 +414,28 @@
 										<span id="OutputLinkMembers" class="{!IF((hasMembers == false),'disable','')}" onclick="showMembersSectionTabs();">Members</span>
 									</li>					 
 								</ul>	
-							</div>
+							</div> -->
+							
+							
+								<div class="tabContainer">
+									<apex:form id="tabsForm">
+										<ul class="tabs">
+											<li class="selected" id="myTeamTab">
+												<apex:commandLink id="My_teams" action="{!switchTabsController}" value="Settings" 
+																	onclick="switchTabs('myTeamTab');" 
+																	rerender="holder">
+													<apex:param name="allTeams" value="false" />
+												</apex:commandLink>
+											</li>
+											<li id="allTeamTab" >
+												<apex:commandLink id="allTeamsLink" action="{!switchTabsController}" value="Members" onclick="switchTabs('allTeamTab');"
+																	 rerender="holder" styleClass="{!IF((hasMembers == false),'disable','')}">
+													<apex:param name="allTeams" value="true" />
+												</apex:commandLink>
+											</li>					
+										</ul>
+									</apex:form>
+								</div>
 							
 							<!-- HOLDER -->
 							<div class="holder">				
@@ -430,13 +464,13 @@
 													</td>
 												</tr>
 											</table>
-										</div>
+										</div> 
 										<apex:form id="createNewTeamForm" onsubmit="if(validateWikiFormInfo())return false;" >
 										<!-- <apex:form id="createNewTeamForm" > --> 
 											<apex:outputpanel style="display:none;" id="currentTeamId">{!Wiki.Id}</apex:outputpanel>
 											<apex:inputHidden value="{!Wiki.PictureId__c}" id="teamPicture" />
 											<div class="div_Body">
-												<table cellpadding="0" cellspacing="0" class="newTeamForm">
+												<table cellpadding="0" cellspacing="0" style="margin-left: 40px;" class="newTeamForm">
 													<tr>
 														<td class="alignTop">
 															<span class="inputInfoTitle">{!$ObjectType.Wiki__c.label} Name</span>
@@ -900,23 +934,9 @@
 								</apex:commandLink>
 								<!-- <a href="javascript:;" class="member_detail_description_underline">Delete</a> -->
 							</apex:outputpanel></td>
-							<!-- <td class="memberImg"><apex:outputpanel rendered="{!IF(item.memberImg == '',true,false)}">
-								<div class="photoWrapper_32px"><img
-									src="{!URLFOR($Resource.commonResources, 'images/placeholders/unknownperson32x32.jpg')}"
-									width="32" /></div>
-							</apex:outputpanel> <apex:outputpanel rendered="{!IF(item.memberImg == '',false,true)}">
-								<div class="photoWrapper_32px"><img
-									src="/servlet/servlet.FileDownload?file={!item.memberImg}"
-									width="32" /></div>
-							</apex:outputpanel></td> -->
 							<td class="member_detail_description"><a href="javascript:;"
 								onclick="location.href='https://na1.salesforce.com/apex/PeopleProfileDisplay?id={!item.userId}'"
-								class="member_detail_description_underline">{!item.Name}</a> 
-								<!-- <img class="imgState"
-									src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/online.gif')}" />
-								<img class="imgState"
-									src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/skype.gif')}" />
-								-->
+								class="member_detail_description_underline">{!item.Name}</a>
 							</td>
 							<td class="member_detail_description">{!item.company}</td>
 							<td class="member_detail_description">{!item.title}</td>
@@ -1014,53 +1034,57 @@
 			onSubmit="if(validateColleguesInput()){showSwirly('swirly_overlay');Form.disable(this.id);}else return false;">
 			<div class="overlayFormContent">
 			
-			
-			<table>
+			<table cellpadding="0" cellspacing="0"	style="margin: 0px; padding: 0px; width: 100%;">
 				<tr>
-					<td>
+					<td class="inputInfoTitle">
 						<span class="inputInfoTitle">Add colleagues</span><br />
-						<span class="explainBottom">(enter name or email)</span>
-					</td>
+						<span class="explainBottom">(enter name or email)</span></td>
+						
+						<td style="width: 4px;">
+							<span style="display: block; width: 4px; height: 67px; background-color: #C0272D;"></span>
+						</td>
+						
+						<td>
+							&nbsp; <apex:inputTextArea id="colleaguesNames"
+							styleClass="colleaguesNames" style="width:310px; height:63px;"
+							value="{!newMemberVars.colleagueNames}"
+									onFocus="javascript:									
+														var options = {
+																script: function (input) {	
+														 					return ('SuggestDispatcher?input='+input+'&class=colleagueNames&wikiId={!WikiId}');
+														 				}									        		    
+																}; 
+														xml = new AutoComplete('{!$Component.colleaguesNames}',options);return true;"
+							onBlur="javascript: hideSuggest();" /> <br/>
+						</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
 					<td>
-						<tr>
-							<td>
-								<tr>
-									<td width="auto">
-										<span style="display: block; width: 4px; height: 67px; background-color: #C0272D;"></span>
-												<div id="ajaxResult" style="display: none;"></div>
-									</td>
-									<td>									
-										&nbsp; <apex:inputTextArea id="colleaguesNames"
-											styleClass="colleaguesNames" style="width:310px; height:63px;"
-											value="{!newMemberVars.colleagueNames}"
-											onFocus="javascript:									
-															var options = {
-																	script: function (input) {	
-															 					return ('SuggestDispatcher?input='+input+'&class=colleagueNames&wikiId={!WikiId}');
-															 				}									        		    
-																	}; 
-																	xml = new AutoComplete('{!$Component.colleaguesNames}',options);return true;"
-											onBlur="javascript: hideSuggest();" /> <br/>
-											&nbsp;<span class="explain">(comma separated)</span>
-									</td>
-								</tr>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<apex:inputCheckBox value="{!emailNotifications}" id="emailNotifications"/> <span class="inputInfoTitle">Email notifications </span>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<apex:inputCheckBox value="{!makeMembersAdmins}" id="makeMembersAdmins" styleClass="inputInfoTitle"/><span class="inputInfoTitle">Make members administrators</span>
-							</td>
-						</tr>
+						&nbsp;<span class="explain">(comma separated)</span><br />
 					</td>
 				</tr>
+			
+				<tr>
+					<td></td>
+					<td></td>
+					<td >
+						<apex:inputCheckBox value="{!emailNotifications}" id="emailNotifications" />
+						<span style="font-weight: bold; font-size: 13px; font-family: Arial, Helvetica, sans-serif; color: #666666;">Email notifications </span>
+					</td>					
+				</tr>
+				
+			
+				<tr>
+					<td></td>
+					<td></td>
+					<td >
+						<apex:inputCheckBox value="{!makeMembersAdmins}" id="makeMembersAdmins"  />				
+						<span style="font-weight: bold; font-size: 13px; font-family: Arial, Helvetica, sans-serif; color: #666666;">Make members administrators</span>					
+					</td>					
+				</tr>
 			</table>
-			
-			
 			
 			</div>
 			<div class="informationPanel clear" id="infoToUser"
@@ -1071,17 +1095,19 @@
 				alt="Loading..." title="Loading..." /></div>
 			</div>
 			<div class="overlaySeparateLine"></div>
+			
 			<!-- Save and Cancel Buttons -->
-			<div class="overlayFromButtons" align="center"><apex:commandButton action="{!saveMembers}"
-				oncomplete="statusSending(this);setTimeout('modal.close(); hideSwirly(\'swirly_overlay\')', 5000); showMessageToUser(); showSwirly('swirly_members');"
-				styleclass="overlaySaveBtn" value="Send"
-				rerender="membersListContainer" /> <apex:commandButton action="{!saveMembersNew}"
-				oncomplete="statusSending(this);$('{!$Component.newMemberForm}').reset(); statusNormal(this);hideSwirly('swirly_overlay'); showSwirly('swirly_members');chargeMatrix(myMembersIds);"
-				styleclass="overlaySaveBtn" value="Send & add more members"
-				rerender="membersListContainer" /> <input
-				class="btn overlayCancelBtn" type="button" value="Cancel"
-				onclick="modal.close();stopFunction();" /></div>
-		</apex:form></div>
+			<div class="overlayFromButtons" align="center">
+				<apex:commandButton action="{!saveMembers}"
+					oncomplete="statusSending(this);setTimeout('modal.close(); hideSwirly(\'swirly_overlay\')', 5000); showMessageToUser(); showSwirly('swirly_members');"
+					styleclass="overlaySaveBtn" value="Send"
+					rerender="membersListContainer" /> <apex:commandButton action="{!saveMembersNew}"
+					oncomplete="statusSending(this);$('{!$Component.newMemberForm}').reset(); statusNormal(this);hideSwirly('swirly_overlay'); showSwirly('swirly_members');chargeMatrix(myMembersIds);"
+					styleclass="overlaySaveBtn" value="Send & add more members"
+					rerender="membersListContainer" />
+					<input class="btn overlayCancelBtn" type="button" value="Cancel" onclick="modal.close();" /></div>
+				</apex:form>
+			</div>
 		</div>
 
 	</apex:outputpanel>

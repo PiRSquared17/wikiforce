@@ -121,7 +121,7 @@
 													<apex:form >
 														<apex:outputPanel rendered="{!IF(IsAdmin,true,false)}" >
 															<apex:commandButton styleclass="btn" onclick="location.href = 'WikiCreateWiki?id={!currentTeam.Id}'; return false;" value="Edit Wiki" />
-															<apex:commandButton styleclass="btn" onclick="deleteWikiOverlay('{!currentTeam.Id}'); relocateOverlay(); return false;" value="Del Wiki" />
+															<apex:commandButton styleclass="btn" onclick="deleteWikiOverlay('{!currentTeam.Id}'); relocateOverlay(); return false;" value="Delete Wiki" />
 														</apex:outputPanel>
 														<apex:outputPanel rendered="{!userPermissions.canCreate}">
 															<input type="button" value="Add Wiki Page" onclick="createOverlay('','AddChildForm','305',''); relocateOverlay();" class="btn" />
@@ -210,7 +210,7 @@
 																		</apex:commandLink><br>
 																		<div class="description">{!item.shortDescription}</div>
 																		<span class="updatedDate">
-																			<apex:commandLink rerender="auxPanel" onclick="location.href ='https://na1.salesforce.com/apex/PeopleProfileDisplay?id={!item.LastModifiedById}';" value="{!item.LastModifiedBy}" styleclass="WikiSite" />&nbsp; in 
+																			<apex:commandLink rerender="auxPanel" onclick="location.href ='https://na1.salesforce.com/{!item.LastModifiedById}';" value="{!item.LastModifiedBy}" styleclass="WikiSite" />&nbsp; in 
 																			&nbsp;
 																			<apex:commandLink onclick="location.href='https://na1.salesforce.com/apex/WikiTeamOverview?tid={!item.parentId}';"
 																				value="{!item.parentName}" 

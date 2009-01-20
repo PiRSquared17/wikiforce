@@ -405,7 +405,7 @@
 							<td valign="top" class="dashed"
 								style="padding-left: 7px; width: 25%"><span
 								class="infoText">Created By:</span>&nbsp;<a
-								href="/apex/PeopleProfileDisplay?id={!infoWiki.createdById}">{!infoWiki.CreatedBy}</a><br>
+								href="/{!infoWiki.createdById}">{!infoWiki.CreatedBy}</a><br>
 							<span class="infoText">Created Date:</span>&nbsp;
 							{!infoWiki.CreatedDate}</td>
 							<td valign="top" class="dashed"
@@ -522,7 +522,7 @@
 										{!item5.Name} </a></td>
 										<td class="date"><apex:outputtext value="{!item5.createdDate}" /></td>
 										<td class="user"><a
-											href="/apex/PeopleProfileDisplay?id={!item5.lastModifiedById}">{!item5.lastModifiedBy}</a>
+											href="/{!item5.lastModifiedById}">{!item5.lastModifiedBy}</a>
 										</td>
 										<td class="date"><apex:outputtext value="{!item5.lastModifiedDate}" /></td>
 									</tr>
