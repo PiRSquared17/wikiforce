@@ -18,7 +18,7 @@ public class SuggestController {
 		 String inputValue = System.currentPageReference().getParameters().get('input').trim();
 		 paramInput = '%' + inputValue + '%';
 		 paramClass = System.currentPageReference().getParameters().get('class');		
-		 paramTeamId = System.currentPageReference().getParameters().get('teamId');
+		 paramTeamId = System.currentPageReference().getParameters().get('wikiId');
 		
 		//Suggestion for colleague names object
 		if (paramClass == 'colleagueNames'){

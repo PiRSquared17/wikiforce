@@ -1,4 +1,4 @@
-<apex:page id="WikiCreateWiki" controller="WikiCreateWikiController" tabStyle="WikiPage__c" sidebar="false" >
+<apex:page id="WikiCreateWiki" controller="WikiCreateWikiController" tabStyle="Wiki__c" sidebar="false" >
 	<!-- Scripts --> 
 	<apex:includeScript value="{!URLFOR($Resource.WikiResource, 'inc/js/common.js')}"/>
 	<apex:includeScript value="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}"/>
@@ -15,57 +15,37 @@
     <apex:stylesheet value="{!URLFOR($Resource.portalStyles, 'portal.css')}" />
     <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/headerTeams.css')}" />
     <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/widgetTeam.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/fonts.css')}" />    
     <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamsCreateNewTeam.css')}" />
     
 	<!-- Styles -->
 	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/commonLayout.css')}" />
 	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/WikiOverview.css')}" /> 
 	<apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/myTeamsAllTeamsTabs.css')}" />
-	<apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/fonts.css')}" />
-	
 	
 	<!-- CSS de TS -->
-	<link rel="stylesheet"  href="{!URLFOR($Resource.commonResources, '/inc/css/validator.css')}" />	
-	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/commonLayout.css')}" />	
-	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/teamDetailEdit.css')}" />	
-	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/teamDetail.css')}" />	
-	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/teamCreateNew.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.commonResources, '/inc/css/validator.css')}" />	
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, '/inc/css/commonLayout.css')}" />	
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, '/inc/css/teamDetailEdit.css')}" />	
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, '/inc/css/teamDetail.css')}" />	
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, '/inc/css/teamCreateNew.css')}" />
 	
-	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamOverview.css')}" />	
-	
-	<!-- Common Js for All Sections -->
-	<apex:includeScript value="{!URLFOR($Resource.commonResources, 'inc/js/validator.js')}"/>
-    
-    
     <apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/wikiCreateWiki.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamOverview.css')}" />	
+	<apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/modal.css')}" />
+
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, '/inc/css/teamOverlyInviteNewMember.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamsOverlaysTemplate.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/widgets/TeamMemberWidget.css')}" />
     
-    
-    <!-- ****************************************************************************** -->
-    
-    	<!-- Scripts --> 
-	
+	<apex:includeScript value="{!URLFOR($Resource.commonResources, 'inc/js/validator.js')}"/>    
 	<apex:includeScript value="/soap/ajax/12.0/connection.js" />
 	<script>
 		var API_SESSION_ID = '{!$Api.Session_ID}'; 
 	</script>
-
 	<script src="{!URLFOR($Resource.TeamsResources, 'inc/js/teamsCreateNewTeam.js')}" />
-
-	<!-- Common Js for All Sections -->
 	<script src="{!URLFOR($Resource.commonResources, 'inc/js/common.js')}" />
 	<script src="{!URLFOR($Resource.TeamsResources, 'inc/js/TeamMemberList.js')}" />
-
-	<!-- Common css for modal -->
-	<link rel="stylesheet" media="screen" href="{!URLFOR($Resource.commonResources, 'inc/css/modal.css')}" />
-
-	<!-- CSS de TS -->
-	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, '/inc/css/teamOverlyManage.css')}" />
-	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, '/inc/css/teamMemberList.css')}" />
-	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, '/inc/css/teamOverlyInviteNewMember.css')}" />
-
-	<!-- CSS styles for Portal Integration -->
-	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamsOverlaysTemplate.css')}" />
-	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/widgets/TeamMemberWidget.css')}" />
 
 	<script>
      	/**
@@ -92,6 +72,7 @@
 	</apex:form>
 
 	<!-- TeamsMemebersList CSS 	-->
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamMemberList.css')}" />
 	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamsMembersList.css')}" />
 
 	<!-- TeamsMemebersList JS  -->
@@ -116,8 +97,8 @@
 		.body_center{
 			height: 700px !important;
 			background:#FFFFFF none repeat scroll 0 0;
-			border:1px solid #B5B5B5;	
-		
+			border:1px solid #B5B5B5;
+			padding: 10px;	
 		}
 
 		div.tabContainer {
@@ -165,6 +146,14 @@
 			margin:10px 31px 0;
 		}
 		
+		td.teamTitleButton{
+			color: #526921;
+			font-family: Arial,Helvetica,sans-serif;
+			font-size: 16px;
+			font-weight: bold;
+			padding-right: 30px;
+		}
+		
 	</style>
 	<script>
 		var inEdition = {!inEdition};
@@ -181,7 +170,6 @@
 		document.observe('dom:loaded',startupFunc);
 		
 		function startupFunc(){
-
 			if((wikiType != null) && (wikiType != '') && (inEdition == true)){
 				if(wikiType == 'open'){
 					$('openTeam').checked= true;
@@ -300,72 +288,72 @@
 	</script>		
 
 	<!-- Scripts to show the new members overlay and the members list -->
-		<script>
-			var settingsBackUp = '';
-			var membersBackUp = '';
-			var isAdd = getURLParam('add');
-			var insideSettingsTab = true;
-			
-			function showSettingsSection(){
-				membersBackUp = $('body_center').innerHTML;
-				$('body_center').innerHTML = settingsBackUp;
-				console.info('Inside: * showSettingsSection *');
-			}
-			
-			function showMembersSectionTabs(){
-					settingsBackUp = $('body_center').innerHTML;
-					$('body_center').innerHTML = membersBackUp;					
-			}
-			
+	<script>
+		var settingsBackUp = '';
+		var membersBackUp = '';
+		var isAdd = getURLParam('add');
+		var insideSettingsTab = true;
 		
-			function showMembersSectionMetod(){
-				$('WikiCreateWiki:tabsForm:allTeamsLink').className= ''; //take off the disable style
-				
-				$('body_center').innerHTML = membersBackUp;
-				
-				$('myTeamTab').className = '';
-				$('allTeamTab').className = 'selected';
-				insideSettingsTab = false;
-			}
-			
-			function backUpDivsForFirstTime(){
+		function showSettingsSection(){
+			membersBackUp = $('body_center').innerHTML;
+			$('body_center').innerHTML = settingsBackUp;
+			console.info('Inside: * showSettingsSection *');
+		}
+		
+		function showMembersSectionTabs(){
 				settingsBackUp = $('body_center').innerHTML;
-				membersBackUp = $('membersListDiv').innerHTML;
+				$('body_center').innerHTML = membersBackUp;					
+		}
+		
+	
+		function showMembersSectionMetod(){
+			$('WikiCreateWiki:tabsForm:allTeamsLink').className= ''; //take off the disable style
+			
+			$('body_center').innerHTML = membersBackUp;
+			
+			$('myTeamTab').className = '';
+			$('allTeamTab').className = 'selected';
+			insideSettingsTab = false;
+		}
+		
+		function backUpDivsForFirstTime(){
+			settingsBackUp = $('body_center').innerHTML;
+			membersBackUp = $('membersListDiv').innerHTML;
+		}
+		
+		
+		/**
+		* Execute onload to show members tab and open add members overlay
+		*/
+		function showAddMembersSection(){
+			backUpDivsForFirstTime();
+			if(isAdd != ''){
+				showMembersSectionMetod();
+				createOverlay('','inviteTeam','240','showSelects()');
+			}
+		}
+		
+		function switchTabs (element){
+			var currentTab = $(element);
+			if(currentTab.className != 'selected' && currentTab.id == 'myTeamTab' && insideSettingsTab == false){
+				$('allTeamTab').className = '';
+				currentTab.className = 'selected';
+				insideSettingsTab = true;
+				showSettingsSection();
+			}else if (currentTab.className != 'selected' && currentTab.id == 'allTeamTab' && insideSettingsTab == true){
+				$('myTeamTab').className = '';
+				currentTab.className = 'selected';
+				insideSettingsTab = false;
+				showMembersSectionTabs();
 			}
 			
-			
-			/**
-			* Execute onload to show members tab and open add members overlay
-			*/
-			function showAddMembersSection(){
-				backUpDivsForFirstTime();
-				if(isAdd != ''){
-					showMembersSectionMetod();
-					createOverlay('','inviteTeam','auto','showSelects()');
-				}
-			}
-			
-			function switchTabs (element){
-				var currentTab = $(element);
-				if(currentTab.className != 'selected' && currentTab.id == 'myTeamTab' && insideSettingsTab == false){
-					$('allTeamTab').className = '';
-					currentTab.className = 'selected';
-					insideSettingsTab = true;
-					showSettingsSection();
-				}else if (currentTab.className != 'selected' && currentTab.id == 'allTeamTab' && insideSettingsTab == true){
-					$('myTeamTab').className = '';
-					currentTab.className = 'selected';
-					insideSettingsTab = false;
-					showMembersSectionTabs();
-				}
-				
-			}
-			
-		</script>
+		}
+		
+	</script>
 	<!-- End of scripts to show the new members overlay and the members list -->
 
 	<div class="BodyPage">
-
+		
 		<!-- OVERLAY -->
 		<div class="UPF__overlay__" id="UPF__overlay__" style="display:none;"></div>
 		
@@ -391,32 +379,13 @@
 						<td valign="top" class="sideBarTD">
 							<!-- MY FAVORITES WIDGET -->
 							<c:WikiWidgetMyFavorites />
-							
-							
 							<!-- MY RECENT CHANGES WIDGET -->
 							<c:WikiWidgetMyRecentChanges />
-							
-							 
 						</td>
 						<td valign="top" class="mainContentTD">
-				
 							<!--  MAIN CONTENT DIV  - -->
 							<div class="main_content" id="main_content">
 								<div class="teamTitle">{!IF(inEdition == false, 'Create New', 'Edit')} {!$ObjectType.Wiki__c.label}</div>
-							
-							<!-- TAB CONTAINER
-							<div class='tabContainer' >
-								<ul class="tabs">
-									<li  class="selected" id="myTeamTab">
-										<span id="My_teams" class="tabLinks" onclick="showSettingsSection();">Settings</span>
-									</li>
-									<li id="allTeamTab">
-										<span id="OutputLinkMembers" class="{!IF((hasMembers == false),'disable','')}" onclick="showMembersSectionTabs();">Members</span>
-									</li>					 
-								</ul>	
-							</div> -->
-							
-							
 								<div class="tabContainer">
 									<apex:form id="tabsForm">
 										<ul class="tabs">
@@ -753,7 +722,7 @@
 				<tr>
 					<td>
 					<div><!-- BUTTONS --> <apex:outputpanel rendered="true" > 
-						<a onclick="createOverlay('','inviteTeam','auto','showSelects()');"
+						<a onclick="createOverlay('','inviteTeam','240','showSelects()');"
 							href="javascript:;" class="blackbutton">New</a>
 						<a href="javascript:;" class="blackbutton"
 							onclick="massiveRemoveOverlay();">Remove</a>
@@ -973,7 +942,7 @@
 						<td>
 						<div><!-- BUTTONS --> <apex:outputpanel > <!-- rendered="{!userPermissions.canManage}" -->
 							<a
-								onclick="createOverlay('','inviteTeam','400','showSelects()');"
+								onclick="createOverlay('','inviteTeam','240','showSelects()');"
 								href="javascript:;" class="blackbutton">New</a>
 							<a href="javascript:;" class="blackbutton"
 								onclick="massiveRemoveOverlay();">Remove</a>
@@ -1007,115 +976,111 @@
     
     <!-- NEW MEMBER OVERLAY -->
     <div id="newMemberDiv" style="visibility: hidden;">
-    	
-			<apex:outputpanel rendered="{!If(WikiName != null, true, false)}"> <!-- rendered="{!IF(UserPermissions.canManage, true, false)}" -->
-		<!-- Common CSS Styling  -->
-		<link rel="stylesheet"
-			href="{!URLFOR($Resource.PeopleResourceFiles, 'inc/css/autocomplete.css')}"
-			type="text/css" media="screen" charset="utf-8" />
-		<link rel="stylesheet"
-			href="{!URLFOR($Resource.TeamsResources, 'inc/css/teamOverlyInviteNewMember.css')}"
-			type="text/css" /> 
-
-
-		<!-- Content  -->
-		<div id="inviteTeam" style="display: none;" class="overlayForm">
-		<div class="swirly_overlay" style="display: none;"></div>
-		<!-- Overlay Title -->
-		<div class="overlayTitleContent">
-		<div class="overlayTitle">Add new member to {!WikiName}</div>
-		<div class="overlayCloseEvent"><a href="Javascript:;"
-			onclick="modal.close();"> <img
-			src="{!URLFOR($Resource.TeamsResources, 'images/layout/genericClose.gif')}"
-			alt="Close Window" title="Close Window" /> </a></div>
-		</div>
-		<div class="overlayMainContent"><!-- Required Information --> <span
-			class="overlayRequiredInfo">= Required Information</span> <apex:form id="newMemberForm"
-			onSubmit="if(validateColleguesInput()){showSwirly('swirly_overlay');Form.disable(this.id);}else return false;">
-			<div class="overlayFormContent">
+		<apex:outputpanel rendered="{!If(WikiName != null, true, false)}"> <!-- rendered="{!IF(UserPermissions.canManage, true, false)}" -->
 			
-			<table cellpadding="0" cellspacing="0"	style="margin: 0px; padding: 0px; width: 100%;">
-				<tr>
-					<td class="inputInfoTitle">
-						<span class="inputInfoTitle">Add colleagues</span><br />
-						<span class="explainBottom">(enter name or email)</span></td>
+			<!-- Common CSS Styling  -->
+			<link rel="stylesheet" href="{!URLFOR($Resource.PeopleResourceFiles, 'inc/css/autocomplete.css')}" type="text/css" media="screen" charset="utf-8" />
+			<link rel="stylesheet" href="{!URLFOR($Resource.TeamsResources, 'inc/css/teamOverlyInviteNewMember.css')}" type="text/css" /> 
+	
+			<!-- Content  -->
+			<div id="inviteTeam" style="display: none;" class="overlayForm">
+				<div class="swirly_overlay" style="display: none;"></div>
+				<!-- Overlay Title -->
+				<div class="overlayTitleContent">
+					<div class="overlayTitle">Add new member to {!WikiName}</div>
+						<div class="overlayCloseEvent"><a href="Javascript:;"
+							onclick="modal.close();"> <img
+							src="{!URLFOR($Resource.TeamsResources, 'images/layout/genericClose.gif')}"
+							alt="Close Window" title="Close Window" /> </a>
+					</div>
+				</div>
+				<div class="overlayMainContent"><!-- Required Information --> 
+					<span class="overlayRequiredInfo">= Required Information</span> 
+					<apex:form id="newMemberForm" onSubmit="if(validateColleguesInput()){showSwirly('swirly_overlay');Form.disable(this.id);}else return false;">
+						<div class="overlayFormContent">
+							<table cellpadding="0" cellspacing="0"	style="margin: 0px; padding: 0px; width: 100%;">
+								<tr>
+									<td class="inputInfoTitle">
+										<span class="inputInfoTitle">Add colleagues</span><br />
+										<span class="explainBottom">(enter name or email)</span>
+									</td>
+									<td style="width: 4px;">
+										<span style="display: block; width: 4px; height: 67px; background-color: #C0272D;"></span>
+									</td>
+									<td>
+										&nbsp; <apex:inputTextArea id="colleaguesNames"
+										styleClass="colleaguesNames" style="width:310px; height:63px;" value="{!newMemberVars.colleagueNames}"
+												onFocus="javascript:									
+																	var options = {
+																			script: function (input) {	
+																	 					return ('SuggestDispatcher?input='+input+'&class=colleagueNames&wikiId={!WikiId}');
+																	 				}									        		    
+																			}; 
+																	xml = new AutoComplete('{!$Component.colleaguesNames}',options);return true;"
+												onBlur="javascript: hideSuggest();" /> <br/>
+									</td>
+								</tr>
+								<tr>
+									<td></td>
+									<td></td>
+									<td>
+										&nbsp;<span class="explain">(comma separated)</span><br />
+									</td>
+								</tr>
+							
+								<tr>
+									<td></td>
+									<td></td>
+									<td >
+										<apex:inputCheckBox value="{!emailNotifications}" id="emailNotifications" />
+										<span style="font-weight: bold; font-size: 13px; font-family: Arial, Helvetica, sans-serif; color: #666666;">Email notifications </span>
+									</td>					
+								</tr>
+								
+							
+								<tr>
+									<td></td>
+									<td></td>
+									<td >
+										<apex:inputCheckBox value="{!makeMembersAdmins}" id="makeMembersAdmins"  />				
+										<span style="font-weight: bold; font-size: 13px; font-family: Arial, Helvetica, sans-serif; color: #666666;">Make members administrators</span>					
+									</td>					
+								</tr>
+							</table>
+						</div>
+						<div class="informationPanel clear" id="infoToUser"
+							style="display: none;"></div>
+						<div id="paginationOverlay" style="display: none;">
+						<div class="loader"><img
+							src="{!URLFOR($Resource.discussionResourceFiles, 'images/common/layout/big-loader.gif')}"
+							alt="Loading..." title="Loading..." /></div>
+						</div>
+						<div class="overlaySeparateLine"></div>
 						
-						<td style="width: 4px;">
-							<span style="display: block; width: 4px; height: 67px; background-color: #C0272D;"></span>
-						</td>
-						
-						<td>
-							&nbsp; <apex:inputTextArea id="colleaguesNames"
-							styleClass="colleaguesNames" style="width:310px; height:63px;"
-							value="{!newMemberVars.colleagueNames}"
-									onFocus="javascript:									
-														var options = {
-																script: function (input) {	
-														 					return ('SuggestDispatcher?input='+input+'&class=colleagueNames&wikiId={!WikiId}');
-														 				}									        		    
-																}; 
-														xml = new AutoComplete('{!$Component.colleaguesNames}',options);return true;"
-							onBlur="javascript: hideSuggest();" /> <br/>
-						</td>
-				</tr>
-				<tr>
-					<td></td>
-					<td></td>
-					<td>
-						&nbsp;<span class="explain">(comma separated)</span><br />
-					</td>
-				</tr>
-			
-				<tr>
-					<td></td>
-					<td></td>
-					<td >
-						<apex:inputCheckBox value="{!emailNotifications}" id="emailNotifications" />
-						<span style="font-weight: bold; font-size: 13px; font-family: Arial, Helvetica, sans-serif; color: #666666;">Email notifications </span>
-					</td>					
-				</tr>
-				
-			
-				<tr>
-					<td></td>
-					<td></td>
-					<td >
-						<apex:inputCheckBox value="{!makeMembersAdmins}" id="makeMembersAdmins"  />				
-						<span style="font-weight: bold; font-size: 13px; font-family: Arial, Helvetica, sans-serif; color: #666666;">Make members administrators</span>					
-					</td>					
-				</tr>
-			</table>
-			
+						<!-- Save and Cancel Buttons -->
+						<div class="overlayFromButtons" align="center">
+							<apex:commandButton action="{!saveMembers}"
+								oncomplete="statusSending(this);setTimeout('modal.close(); hideSwirly(\'swirly_overlay\')', 5000); showMessageToUser(); showSwirly('swirly_members');"
+								styleclass="overlaySaveBtn" value="Send"
+								rerender="membersListContainer" /> <apex:commandButton action="{!saveMembersNew}"
+								oncomplete="statusSending(this);$('{!$Component.newMemberForm}').reset(); statusNormal(this);hideSwirly('swirly_overlay'); showSwirly('swirly_members');chargeMatrix(myMembersIds);"
+								styleclass="overlaySaveBtn" value="Send & add more members"
+								rerender="membersListContainer" />
+								<input class="btn overlayCancelBtn" type="button" value="Cancel" onclick="modal.close();" />
+						</div>
+					</apex:form>
+				</div>
 			</div>
-			<div class="informationPanel clear" id="infoToUser"
-				style="display: none;"></div>
-			<div id="paginationOverlay" style="display: none;">
-			<div class="loader"><img
-				src="{!URLFOR($Resource.discussionResourceFiles, 'images/common/layout/big-loader.gif')}"
-				alt="Loading..." title="Loading..." /></div>
-			</div>
-			<div class="overlaySeparateLine"></div>
-			
-			<!-- Save and Cancel Buttons -->
-			<div class="overlayFromButtons" align="center">
-				<apex:commandButton action="{!saveMembers}"
-					oncomplete="statusSending(this);setTimeout('modal.close(); hideSwirly(\'swirly_overlay\')', 5000); showMessageToUser(); showSwirly('swirly_members');"
-					styleclass="overlaySaveBtn" value="Send"
-					rerender="membersListContainer" /> <apex:commandButton action="{!saveMembersNew}"
-					oncomplete="statusSending(this);$('{!$Component.newMemberForm}').reset(); statusNormal(this);hideSwirly('swirly_overlay'); showSwirly('swirly_members');chargeMatrix(myMembersIds);"
-					styleclass="overlaySaveBtn" value="Send & add more members"
-					rerender="membersListContainer" />
-					<input class="btn overlayCancelBtn" type="button" value="Cancel" onclick="modal.close();" /></div>
-				</apex:form>
-			</div>
-		</div>
-
-	</apex:outputpanel>
+		</apex:outputpanel>
 	</div>
 	<!-- END NEW MEMBER OVERLAY -->
-	
+
+	<!--
+	<apex:outputpanel id="overlaysPanel">
+    	<apex:include pageName="WikiMembersRemove" />
+    </apex:outputpanel>
+	-->
 	<script>
-		showAddMembersSection();
+		setTimeout('showAddMembersSection();', 1000);
 	</script>
-	
 </apex:page>
