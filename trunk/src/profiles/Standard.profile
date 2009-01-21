@@ -67,6 +67,10 @@
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>WikiMembersRemoveController</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>WikiMembersWidgetController</apexClass>
         <enabled>true</enabled>
     </classAccesses>
@@ -1323,6 +1327,10 @@
     </pageAccesses>
     <pageAccesses>
         <apexPage>WikiMembersMassiveRemove</apexPage>
+        <enabled>false</enabled>
+    </pageAccesses>
+    <pageAccesses>
+        <apexPage>WikiMembersRemove</apexPage>
         <enabled>false</enabled>
     </pageAccesses>
     <pageAccesses>

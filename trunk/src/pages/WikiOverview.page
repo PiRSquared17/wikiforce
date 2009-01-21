@@ -1,4 +1,4 @@
-<apex:page id="WikiOverview" controller="WikiOverviewController" tabStyle="WikiPage__c" sidebar="false" action="{!genProfiles}" >
+<apex:page id="WikiOverview" controller="WikiOverviewController" tabStyle="Wiki__c" sidebar="false" action="{!genProfiles}" >
 	
 	<!-- Scripts --> 
 	<apex:includeScript value="{!URLFOR($Resource.WikiResource, 'inc/js/common.js')}"/>
