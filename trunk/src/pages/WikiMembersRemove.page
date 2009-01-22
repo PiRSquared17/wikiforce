@@ -1,0 +1,51 @@
+<apex:page sidebar="false" tabStyle="Wiki__c" controller="WikiMembersRemoveController">
+	
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamsMembersRemove.css')}" />
+
+	<!-- Content  -->
+	<div id="removeMemberOverlay" style="display:none;" class="overlayForm">	
+		<!-- Overlay Title -->
+		<div class="overlayTitleContent">
+			<div class="overlayTitle">Confirmation</div>
+			<div class="overlayCloseEvent">
+				<a href="Javascript:;" onclick="modal.close();">
+					<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/genericClose.gif')}" alt="Close Window" title="Close Window" />
+				</a>
+			</div>
+		</div>
+		<div class="overlayMainContent">
+			<apex:form id="newMemberForm">
+				<div class="overlayFormContent" style="padding-bottom: 10px;">
+					<apex:outputPanel rendered="{!IF(isLastMemberAdmin, false, true)}">
+						<table style="width:95%;"> 
+							<tr>
+								<td ><span class="inputInfoDark">Are you sure you want to remove {!delName} from {!wikiName}?</span></td>
+							</tr>
+							<tr>
+								<td ><span class="inputInfo">Once a member is removed there is no way to undo this action.</span></td>
+							</tr>			
+						</table>
+					</apex:outputPanel>
+					<apex:outputPanel rendered="{!IF(isLastMemberAdmin, true, false)}">  
+						<table style="width:95%;"> 
+							<tr>
+								<td ><span class="inputInfoDark">You could not remove {!delName} from {!wikiName} because is the last Wiki Adminstrator</span></td>
+							</tr>			
+						</table>
+					</apex:outputPanel>
+				</div>
+				<div class="overlaySeparateLine" />
+				<!-- Saven and Cancel Buttons -->
+				<div class="overlayFromButtons" align="center">
+					<apex:outputPanel rendered="{!IF(isLastMemberAdmin, false, true)}">
+						<apex:commandButton styleclass="overlaySaveBtn" action="{!removeMember}" oncomplete="modal.close(); reloadMemberList();" value="Continue" rerender="auxPanel"/> 
+						<input class="overlayCancelBtn" type="button" value="Cancel" onclick="modal.close();"/>
+					</apex:outputPanel>
+					<apex:outputPanel rendered="{!IF(isLastMemberAdmin, true, false)}">
+						<input class="overlayCancelBtn" type="button" value="Cancel" onclick="modal.close();"/>
+					</apex:outputPanel>
+				</div>
+			</apex:form>
+		</div>
+	</div>
+</apex:page>
