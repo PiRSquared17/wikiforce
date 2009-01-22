@@ -27,7 +27,6 @@
 	<apex:stylesheet value="{!URLFOR($Resource.commonResources, '/inc/css/validator.css')}" />	
 	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, '/inc/css/commonLayout.css')}" />	
 	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, '/inc/css/teamDetailEdit.css')}" />	
-	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, '/inc/css/teamDetail.css')}" />	
 	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, '/inc/css/teamCreateNew.css')}" />
 	
     <apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/wikiCreateWiki.css')}" />
@@ -46,6 +45,7 @@
 	<script src="{!URLFOR($Resource.TeamsResources, 'inc/js/teamsCreateNewTeam.js')}" />
 	<script src="{!URLFOR($Resource.commonResources, 'inc/js/common.js')}" />
 	<script src="{!URLFOR($Resource.TeamsResources, 'inc/js/TeamMemberList.js')}" />
+	<script src="{!URLFOR($Resource.TeamsResources, 'inc/js/TeamsWidgetCommon.js')}" />	
 
 	<script>
      	/**
@@ -67,8 +67,7 @@
 	</script>	
 	
 	<apex:form >
-		<apex:actionFunction name="reloadMemberList" action="{!refresh}"
-			rerender="membersList" />
+		<apex:actionFunction name="reloadMemberList" action="{!refresh}" rerender="membersList" />
 	</apex:form>
 
 	<!-- TeamsMemebersList CSS 	-->
@@ -77,8 +76,6 @@
 
 	<!-- TeamsMemebersList JS  -->
 	<script src="{!URLFOR($Resource.TeamsResources, 'inc/js/teamsMembersList.js')}" />
-
-    <!-- ****************************************************************************** -->
     
 	<style>
 		.noWikisYet {
@@ -103,10 +100,8 @@
 
 		div.tabContainer {
 			background-color:transparent;
-			margin-left: 20px;
-			margin-right: 20px;
-			height:16px;
-			overflow:visible;
+			height: 32px;
+			overflow: visible;
 		}	
 		div.tabBorder {
 			margin-left: 0px;
@@ -121,11 +116,6 @@
 		a.disable{
 			color:#C9C9C9 !important;
 			cursor:auto;
-		}
-		
-		div.holder{
-			margin:16px 1px 1px !important;
-			_margin-top: 0 !important;
 		}
 		
 		body#bodyWiki table.bodyTable td.sideBarTD {
@@ -201,7 +191,7 @@
 		}
 			
 		/**
-		* Validate form
+		* Validate create/edit Wiki form
 		*@void
 		*/
 		function validateWikiFormInfo(){
@@ -285,6 +275,20 @@
 			Effect.Appear('warning_to_user');
 			Effect.ScrollTo('anchorForError');
 		}
+		
+		/**
+		* Validate add member collegues textarea
+		*@return bool error
+		*/
+		function validateColleguesInput(){
+			var colleagues = $$('textarea.colleaguesNames')[0];
+			if (colleagues.value == '') {
+				alert('Please search or add a user in Add colleagues field.');
+				return false;
+			}else{
+				return true;
+			}
+		}		
 	</script>		
 
 	<!-- Scripts to show the new members overlay and the members list -->
@@ -297,7 +301,6 @@
 		function showSettingsSection(){
 			membersBackUp = $('body_center').innerHTML;
 			$('body_center').innerHTML = settingsBackUp;
-			console.info('Inside: * showSettingsSection *');
 		}
 		
 		function showMembersSectionTabs(){
@@ -407,7 +410,7 @@
 								</div>
 							
 							<!-- HOLDER -->
-							<div class="holder">				
+							<div class="holder" style="margin: 0px !important;">				
 								<div id="body_center" class="body_center">
 									<a id="anchorForError"></a>
 										<div id="warning_to_user" class="message_to_user" style="display:none;" >
@@ -701,11 +704,7 @@
 			</div>
 		</div>
 	</div>
-	<apex:outputpanel id="auxPanel" style="display:none;">
-	</apex:outputpanel>	
-	<script>
-		readPortalCSSRules();
-	</script>	
+	<apex:outputpanel id="auxPanel" style="display:none;"></apex:outputpanel>	
 	
 	<!-- MEMBERS LIST --> 
     	<div id="membersListDiv" class="holder" style="visibility: hidden;">
@@ -721,26 +720,12 @@
 			<table width="270">
 				<tr>
 					<td>
-					<div><!-- BUTTONS --> <apex:outputpanel rendered="true" > 
-						<a onclick="createOverlay('','inviteTeam','240','showSelects()');"
-							href="javascript:;" class="blackbutton">New</a>
-						<a href="javascript:;" class="blackbutton"
-							onclick="massiveRemoveOverlay();">Remove</a>
-						<!-- <div class="editProfile"><a href="javascript:;"
-							class="blackbutton" onclick="showHideOptions();">Edit
-						{!$ObjectType.Wiki__c.label} Profile | v</a>
-						<div id="profileOptions" class="profileOptions"
-							style="display: none;">
-						<ul>
-							<apex:repeat value="{!WikiEditProfiles}" var="item">
-								<li onclick="massiveMemberUpdate(this);"
-									onmouseover="bckColor(this)" onmouseout="bckColor(this)"
-									id="{!item.Id}">{!item.Name}</li>
-							</apex:repeat>
-						</ul>
+						<div>
+							<apex:outputpanel rendered="true" > 
+								<a onclick="createOverlay('','inviteTeam','240','showSelects()');" href="javascript:;" class="blackbutton">New</a>
+								<a href="javascript:;" class="blackbutton" onclick="massiveRemoveOverlay();">Remove</a>
+							</apex:outputpanel>
 						</div>
-						</div> -->
-					</apex:outputpanel> <!-- BUTTONS --></div>
 					</td>
 				</tr>
 			</table>
@@ -750,10 +735,7 @@
 		</tr>
 	</table>
 	<div class="border_body_top"></div>
-	<!-- - - - - - - - - - - - - - - - - - - - - -->
-	<!-- 			LETTER FILTER			     -->
 	<br>
-
 	<div style="position: relative; overflow: hidden"><img
 		id="twistImage" style="vertical-align: middle;" class="twistImg"
 		onclick="showHideElement(document.getElementById('filterDiv'),this);"
@@ -848,33 +830,19 @@
 									src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_top.gif')}" />
 							</apex:outputpanel>
 						</apex:outputpanel></td>
-						<td width="16%"><apex:commandLink styleclass="member_title_description" action="{!sortList}"
-							value="{!$ObjectType.Wiki__c.label} Profile"
-							rerender="membersList">
-							<apex:param name="sb" value="TeamProfile__r.Name" />
-						</apex:commandLink>&nbsp; <apex:outputpanel rendered="{!IF(sortBy == 'profile',true,false)}">
-							<apex:outputpanel rendered="{!sortByDesc}">
-								<img
-									src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_down.gif')}" />
+						<td width="16%">
+							<apex:commandLink styleclass="member_title_description" action="{!sortList}" value="{!$ObjectType.Wiki__c.label} Profile" rerender="membersList">
+								<apex:param name="sb" value="TeamProfile__r.Name" />
+							</apex:commandLink>&nbsp; 
+							<apex:outputpanel rendered="{!IF(sortBy == 'profile',true,false)}">
+								<apex:outputpanel rendered="{!sortByDesc}">
+									<img src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_down.gif')}" />
+								</apex:outputpanel>
+								<apex:outputpanel rendered="{!NOT(sortByDesc)}">
+									<img src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_top.gif')}" />
+								</apex:outputpanel>
 							</apex:outputpanel>
-							<apex:outputpanel rendered="{!NOT(sortByDesc)}">
-								<img
-									src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_top.gif')}" />
-							</apex:outputpanel>
-						</apex:outputpanel></td>
-						<!-- <td width="12%px"><apex:commandLink styleclass="member_title_description" action="{!sortList}"
-							value="{!$ObjectType.Wiki__c.label} Role" rerender="membersList">
-							<apex:param name="sb" value="WikiRole__c" />
-						</apex:commandLink>&nbsp; <apex:outputpanel rendered="{!IF(sortBy == 'role',true,false)}">
-							<apex:outputpanel rendered="{!sortByDesc}">
-								<img
-									src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_down.gif')}" />
-							</apex:outputpanel>
-							<apex:outputpanel rendered="{!NOT(sortByDesc)}">
-								<img
-									src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_top.gif')}" />
-							</apex:outputpanel>
-						</apex:outputpanel></td> -->
+						</td>
 					</tr>
 				</thead>
 				<!-- Description  -->
@@ -886,23 +854,16 @@
 								<input value="{!item.wikiMemberId}" class="actionCheck"
 									type="checkbox" />
 							</apex:outputpanel></td>
-							<td> <!-- <apex:outputpanel rendered="{!userPermissions.canManage}">
-								<apex:commandLink styleclass="member_detail_description_underline" value="Edit"
-									action="{!assignEditId}" rerender="overlaysPanel"
-									onclick="createOverlay('','editMemberInfoLoading','270','');"
-									oncomplete="createOverlay('','editMemberInfo','270','showSelects()');">
-									<apex:param name="editId" value="{!item.userId}" />
-								</apex:commandLink>
-								<!-- <a href="javascript:;" class="member_detail_description_underline">Edit</a>&nbsp;| 
-							</apex:outputpanel> <apex:outputpanel rendered="{!userPermissions.canManage}">|</apex:outputpanel> -->
-							<apex:outputpanel > <!-- rendered="{!userPermissions.canManage}" --> 
-								<apex:commandLink styleclass="member_detail_description_underline" value="Del"
-									action="{!assignRemoveId}" rerender="overlaysPanel"
-									oncomplete="createOverlay('','removeMemberOverlay','155','');">
-									<apex:param name="delId" value="{!item.userId}" />
-								</apex:commandLink>
-								<!-- <a href="javascript:;" class="member_detail_description_underline">Delete</a> -->
-							</apex:outputpanel></td>
+							<td> 
+								<apex:outputpanel > <!-- rendered="{!userPermissions.canManage}" --> 
+									<apex:commandLink styleclass="member_detail_description_underline" value="Del"
+										action="{!assignRemoveId}" rerender="overlaysPanel"
+										oncomplete="createOverlay('','removeMemberOverlay','155','');">
+										<apex:param name="delId" value="{!item.userId}" />
+									</apex:commandLink>
+									<!-- <a href="javascript:;" class="member_detail_description_underline">Delete</a> -->
+								</apex:outputpanel>
+							</td>
 							<td class="member_detail_description"><a href="javascript:;"
 								onclick="location.href='https://na1.salesforce.com/apex/PeopleProfileDisplay?id={!item.userId}'"
 								class="member_detail_description_underline">{!item.Name}</a>
@@ -972,115 +933,16 @@
 		<br>
 	</apex:outputpanel>
 	</div>
-    <!-- END OF MEMBERS LIST -->
-    
-    <!-- NEW MEMBER OVERLAY -->
-    <div id="newMemberDiv" style="visibility: hidden;">
-		<apex:outputpanel rendered="{!If(WikiName != null, true, false)}"> <!-- rendered="{!IF(UserPermissions.canManage, true, false)}" -->
-			
-			<!-- Common CSS Styling  -->
-			<link rel="stylesheet" href="{!URLFOR($Resource.PeopleResourceFiles, 'inc/css/autocomplete.css')}" type="text/css" media="screen" charset="utf-8" />
-			<link rel="stylesheet" href="{!URLFOR($Resource.TeamsResources, 'inc/css/teamOverlyInviteNewMember.css')}" type="text/css" /> 
-	
-			<!-- Content  -->
-			<div id="inviteTeam" style="display: none;" class="overlayForm">
-				<div class="swirly_overlay" style="display: none;"></div>
-				<!-- Overlay Title -->
-				<div class="overlayTitleContent">
-					<div class="overlayTitle">Add new member to {!WikiName}</div>
-						<div class="overlayCloseEvent"><a href="Javascript:;"
-							onclick="modal.close();"> <img
-							src="{!URLFOR($Resource.TeamsResources, 'images/layout/genericClose.gif')}"
-							alt="Close Window" title="Close Window" /> </a>
-					</div>
-				</div>
-				<div class="overlayMainContent"><!-- Required Information --> 
-					<span class="overlayRequiredInfo">= Required Information</span> 
-					<apex:form id="newMemberForm" onSubmit="if(validateColleguesInput()){showSwirly('swirly_overlay');Form.disable(this.id);}else return false;">
-						<div class="overlayFormContent">
-							<table cellpadding="0" cellspacing="0"	style="margin: 0px; padding: 0px; width: 100%;">
-								<tr>
-									<td class="inputInfoTitle">
-										<span class="inputInfoTitle">Add colleagues</span><br />
-										<span class="explainBottom">(enter name or email)</span>
-									</td>
-									<td style="width: 4px;">
-										<span style="display: block; width: 4px; height: 67px; background-color: #C0272D;"></span>
-									</td>
-									<td>
-										&nbsp; <apex:inputTextArea id="colleaguesNames"
-										styleClass="colleaguesNames" style="width:310px; height:63px;" value="{!newMemberVars.colleagueNames}"
-												onFocus="javascript:									
-																	var options = {
-																			script: function (input) {	
-																	 					return ('SuggestDispatcher?input='+input+'&class=colleagueNames&wikiId={!WikiId}');
-																	 				}									        		    
-																			}; 
-																	xml = new AutoComplete('{!$Component.colleaguesNames}',options);return true;"
-												onBlur="javascript: hideSuggest();" /> <br/>
-									</td>
-								</tr>
-								<tr>
-									<td></td>
-									<td></td>
-									<td>
-										&nbsp;<span class="explain">(comma separated)</span><br />
-									</td>
-								</tr>
-							
-								<tr>
-									<td></td>
-									<td></td>
-									<td >
-										<apex:inputCheckBox value="{!emailNotifications}" id="emailNotifications" />
-										<span style="font-weight: bold; font-size: 13px; font-family: Arial, Helvetica, sans-serif; color: #666666;">Email notifications </span>
-									</td>					
-								</tr>
-								
-							
-								<tr>
-									<td></td>
-									<td></td>
-									<td >
-										<apex:inputCheckBox value="{!makeMembersAdmins}" id="makeMembersAdmins"  />				
-										<span style="font-weight: bold; font-size: 13px; font-family: Arial, Helvetica, sans-serif; color: #666666;">Make members administrators</span>					
-									</td>					
-								</tr>
-							</table>
-						</div>
-						<div class="informationPanel clear" id="infoToUser"
-							style="display: none;"></div>
-						<div id="paginationOverlay" style="display: none;">
-						<div class="loader"><img
-							src="{!URLFOR($Resource.discussionResourceFiles, 'images/common/layout/big-loader.gif')}"
-							alt="Loading..." title="Loading..." /></div>
-						</div>
-						<div class="overlaySeparateLine"></div>
-						
-						<!-- Save and Cancel Buttons -->
-						<div class="overlayFromButtons" align="center">
-							<apex:commandButton action="{!saveMembers}"
-								oncomplete="statusSending(this);setTimeout('modal.close(); hideSwirly(\'swirly_overlay\')', 5000); showMessageToUser(); showSwirly('swirly_members');"
-								styleclass="overlaySaveBtn" value="Send"
-								rerender="membersListContainer" /> <apex:commandButton action="{!saveMembersNew}"
-								oncomplete="statusSending(this);$('{!$Component.newMemberForm}').reset(); statusNormal(this);hideSwirly('swirly_overlay'); showSwirly('swirly_members');chargeMatrix(myMembersIds);"
-								styleclass="overlaySaveBtn" value="Send & add more members"
-								rerender="membersListContainer" />
-								<input class="btn overlayCancelBtn" type="button" value="Cancel" onclick="modal.close();" />
-						</div>
-					</apex:form>
-				</div>
-			</div>
-		</apex:outputpanel>
-	</div>
-	<!-- END NEW MEMBER OVERLAY -->
 
-	<!--
+    <!-- Wiki Member Widget -->
+	<c:WikiMembersWidget wikiId="{!Wiki.Id}" showWidget="false" /> 
+
 	<apex:outputpanel id="overlaysPanel">
     	<apex:include pageName="WikiMembersRemove" />
     </apex:outputpanel>
-	-->
+	
 	<script>
 		setTimeout('showAddMembersSection();', 1000);
+		readPortalCSSRules();
 	</script>
 </apex:page>
