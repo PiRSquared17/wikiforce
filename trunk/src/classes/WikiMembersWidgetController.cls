@@ -10,9 +10,7 @@ public with sharing class WikiMembersWidgetController {
 	/**
 	* Constructor
 	*/
-	public WikiMembersWidgetController(){
-		
-	}
+	public WikiMembersWidgetController(){}
 
 	/**
 	* Return the Namespace Prefix
@@ -21,7 +19,17 @@ public with sharing class WikiMembersWidgetController {
 	public String getNamespace () {
         return TeamUtil.getNamespace();
     }
-
+    
+	Boolean makeMembersAdmins;
+	
+	public Boolean getMakeMembersAdmins(){
+		return makeMembersAdmins;
+	}
+	
+	public void setMakeMembersAdmins(Boolean makeMembersAdmins){
+		this.makeMembersAdmins = makeMembersAdmins;
+	}
+	
 	/**
 	* Setter method for Wiki Id variable
 	*@param String idWiki
@@ -52,44 +60,21 @@ public with sharing class WikiMembersWidgetController {
 		return Wiki;
 	}
 
-	String typeList;
+	public Boolean showWidget;
 	
 	/**
 	* Setter method for Wiki Id variable
-	*@param String typeList
+	*@param Boolean showWidget
 	*/
-	public void setTypeList(String typeL) {
-		typeList = typeL;		
-	}
-	
-	
-	public void getIsWikiAdmin(){}	
-	
-	/**
-	*@return String typeList
-	*/
-	public String getTypeList(){
-		return typeList;
+	public void setShowWidget(Boolean s) {
+		showWidget = s;		
 	}
 	
 	/**
-	* Return component title
-	*@return String
+	*@return Boolean show widget
 	*/
-	public String getComponentHeader () {
-		if (typeList == 'adminList') {
-			return 'Wiki Admins';	
-		}else {
-			return 'Wiki Members';	
-		}
-	}
-	
-	/**
-	* Return conditional for LinkAction
-	*@return Boolean
-	*/
-	public Boolean getRenderLinkAction () {
-		return (typeList != 'adminList');
+	public Boolean getShowWidget(){
+		return showWidget;
 	}
 	
 	/**
@@ -99,15 +84,13 @@ public with sharing class WikiMembersWidgetController {
 	public List<WikiMember> getWikispaceMembers() {
 		List<WikiMember__c> temp = new List<WikiMember__c>();
       	
-        if(typeList == 'adminList') {
-        		temp = [select User__r.Id, User__r.Name from WikiMember__c where Wiki__c =: Wiki and User__r.IsActive != false and WikiProfile__r.ManageWikis__c = true order by User__r.Name];
-        }else{
-        		temp = [select User__r.Id, User__r.Name from WikiMember__c where Wiki__c =: Wiki and User__r.IsActive != false order by User__r.Name];
-        }
+    	temp = [select User__r.Id, User__r.Name from WikiMember__c where Wiki__c =: Wiki and User__r.IsActive != false order by User__r.Name];
+        
         Set<Id> users = new Set<Id>();
         for(WikiMember__c wm: temp) {
         	users.add(wm.User__c);
 		}
+		
 		Map<Id, User> userMap = new Map<Id, User>();
         for(User u: [SELECT Id, Name FROM  User WHERE Id IN: users]) {
 			userMap.put(u.Id, u);				          	
