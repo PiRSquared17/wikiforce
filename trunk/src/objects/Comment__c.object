@@ -21,7 +21,7 @@
         <label>Wiki Page</label>
         <referenceTo>WikiPage__c</referenceTo>
         <relationshipLabel>Coments</relationshipLabel>
-        <relationshipName>Coments</relationshipName>
+        <relationshipName>Comments1</relationshipName>
         <type>Lookup</type>
     </fields>
     <fields>
@@ -41,7 +41,7 @@
         <label>Wiki Page</label>
         <referenceTo>WikiPage__c</referenceTo>
         <relationshipLabel>Coments (Wiki Page)</relationshipLabel>
-        <relationshipName>Coments1</relationshipName>
+        <relationshipName>Comments</relationshipName>
         <type>Lookup</type>
     </fields>
     <label>Comment</label>

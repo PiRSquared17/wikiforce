@@ -210,7 +210,7 @@
 																		</apex:commandLink><br>
 																		<div class="description">{!item.shortDescription}</div>
 																		<span class="updatedDate">
-																			<apex:commandLink rerender="auxPanel" onclick="location.href ='https://na1.salesforce.com/{!item.LastModifiedById}';" value="{!item.LastModifiedBy}" styleclass="WikiSite" />&nbsp; in 
+																			<apex:commandLink rerender="auxPanel" onclick="location.href='https://na1.salesforce.com/{!item.LastModifiedById}';" value="{!item.LastModifiedBy}" styleclass="WikiSite" />&nbsp; in 
 																			&nbsp;
 																			<apex:commandLink onclick="location.href='https://na1.salesforce.com/apex/WikiTeamOverview?tid={!item.parentId}';"
 																				value="{!item.parentName}" 

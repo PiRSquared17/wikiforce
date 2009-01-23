@@ -227,12 +227,12 @@
 													<hr style="border: 0px solid ; background-color: #333434; height: 1px;"/>
 													<!-- Wiki Sites -->
 													<apex:outputpanel id="wikiSitesForm">
-														<apex:repeat rows="{!numSitesRows}" first="{!firstRow}" value="{!wikiSites}" var="item">
-															<div class="recentlyUpdated" id="row-{!item.Id}">
-																<table border="0" style="width:100%;">
-																	<tr>
-																		<td width="110px">
-																			<apex:form >
+														<apex:form >
+															<apex:repeat rows="{!numSitesRows}" first="{!firstRow}" value="{!wikiSites}" var="item">
+																<div class="recentlyUpdated" id="row-{!item.Id}">
+																	<table border="0" style="width:100%;">
+																		<tr>
+																			<td width="110px">
 																				<apex:commandLink value="Join" action="{!joinWiki}" rendered="{!IF(AND(NOT(item.isMember),item.isPublic),true,false)}" onclick="changeJoinStatus(this);" oncomplete="joinComplete();" >
 																					<apex:param name="wid" value="{!item.Id}" />
 																					<apex:param name="allTeams" value="false" />
@@ -243,39 +243,39 @@
 																				<apex:outputpanel rendered="{!IF(item.IsAdmin,true,false)}" >
 																					<a href="WikiCreateWiki?id={!item.Id}" >Edit</a> | <a href="Javascript:;" onclick="deleteWikiOverlay('{!item.Id}');relocateOverlay();">Del</a>
 																				</apex:outputpanel>
-																			</apex:form>
-																		</td>
-																		<td width="70px" valign="top">
-																			<apex:outputpanel rendered="{!IF(item.picture == '', true, false)}">
-																				<apex:image onclick="location.href='/apex/WikiTeamOverview?tid={!item.id}';" styleclass="teamPicture" value="{!URLFOR($Resource.commonResources, '/images/placeholders/default_team_100x100.png')}" />
-																			</apex:outputpanel>
-																			<apex:outputpanel rendered="{!IF(item.picture == '', false, true)}">
-																				<apex:image onclick="location.href='/apex/WikiTeamOverview?tid={!item.id}';" styleclass="teamPicture" value="/servlet/servlet.FileDownload?file={!item.picture}" />
-																			</apex:outputpanel>
-																		</td>
-																		<td valign="top">
-																			<table border="0" style="width:99%;">
-																				<tr>
-																					<td valign="top" align="left">
-																						<a href="/apex/WikiTeamOverview?tid={!item.id}" class="WikiLink">{!item.name}</a>
-																					</td>
-																					<td valign="top" align="right">
-																						<!-- <a href="javascript:;" class="SiteMap">SITE MAP</a> -->
-																					</td>
-																				</tr>
-																				<tr>
-																					<td valign="top" colspan="2">
-																						<div class="description">
-																							<apex:outputText title="{!item.fullDescription}" escape="false" value="{!item.description}" />
-																						</div>
-																					</td>
-																				</tr>
-																			</table>
-																		</td>
-																	</tr>
-																</table>
-															</div>
-														</apex:repeat>
+																			</td>
+																			<td width="70px" valign="top">
+																				<apex:outputpanel rendered="{!IF(item.picture == '', true, false)}">
+																					<apex:image onclick="location.href='/apex/WikiTeamOverview?tid={!item.id}';" styleclass="teamPicture" value="{!URLFOR($Resource.commonResources, '/images/placeholders/default_team_100x100.png')}" />
+																				</apex:outputpanel>
+																				<apex:outputpanel rendered="{!IF(item.picture == '', false, true)}">
+																					<apex:image onclick="location.href='/apex/WikiTeamOverview?tid={!item.id}';" styleclass="teamPicture" value="/servlet/servlet.FileDownload?file={!item.picture}" />
+																				</apex:outputpanel>
+																			</td>
+																			<td valign="top">
+																				<table border="0" style="width:99%;">
+																					<tr>
+																						<td valign="top" align="left">
+																							<a href="/apex/WikiTeamOverview?tid={!item.id}" class="WikiLink">{!item.name}</a>
+																						</td>
+																						<td valign="top" align="right">
+																							<!-- <a href="javascript:;" class="SiteMap">SITE MAP</a> -->
+																						</td>
+																					</tr>
+																					<tr>
+																						<td valign="top" colspan="2">
+																							<div class="description">
+																								<apex:outputText title="{!item.fullDescription}" escape="false" value="{!item.description}" />
+																							</div>
+																						</td>
+																					</tr>
+																				</table>
+																			</td>
+																		</tr>
+																	</table>
+																</div>
+															</apex:repeat>
+														</apex:form>
 													</apex:outputpanel>
 
 													<!-- Pagination -->

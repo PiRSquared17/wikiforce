@@ -240,7 +240,7 @@
 						class="btnEdit" />
 				</apex:outputpanel> <apex:outputpanel rendered="{!userPermissions.canCreate}">
 					<input type="button" value="Add"
-						onclick="createOverlay('','AddChildForm','305','');"
+						onclick="createOverlay('','AddChildForm','305',''); relocateOverlay();"
 						class="btnAdd" />
 				</apex:outputpanel> <apex:outputpanel rendered="{!userPermissions.canManage}">
 					<input type="button"
@@ -370,7 +370,7 @@
 					class="btnEdit" />
 			</apex:outputpanel> <apex:outputpanel rendered="{!userPermissions.canCreate}">
 				<input type="button" value="Add"
-					onclick="createOverlay('','AddChildForm','305','');" class="btnAdd" />
+					onclick="createOverlay('','AddChildForm','305',''); relocateOverlay();" class="btnAdd" />
 			</apex:outputpanel> <apex:outputpanel rendered="{!userPermissions.canManage}">
 				<input type="button"
 					onclick="createOverlay('','WikiPage:deletePageOverlay','180','');"
