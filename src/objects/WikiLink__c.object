@@ -6,7 +6,7 @@
         <label>FromLink</label>
         <referenceTo>WikiPage__c</referenceTo>
         <relationshipLabel>Wiki Links (FromLink)</relationshipLabel>
-        <relationshipName>R00N30000002lOB6EAM</relationshipName>
+        <relationshipName>FromLink</relationshipName>
         <type>Lookup</type>
     </fields>
     <fields>
@@ -14,7 +14,7 @@
         <label>ToLink</label>
         <referenceTo>WikiPage__c</referenceTo>
         <relationshipLabel>Wiki Links</relationshipLabel>
-        <relationshipName>R00N30000002lODaEAM</relationshipName>
+        <relationshipName>ToLink</relationshipName>
         <type>Lookup</type>
     </fields>
     <label>Wiki Link</label>

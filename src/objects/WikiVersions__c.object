@@ -20,7 +20,7 @@
         <label>Wiki Page</label>
         <referenceTo>WikiPage__c</referenceTo>
         <relationshipLabel>Wiki Versions</relationshipLabel>
-        <relationshipName>R00N30000002lOEwEAM</relationshipName>
+        <relationshipName>WikiVersions</relationshipName>
         <type>Lookup</type>
     </fields>
     <label>Wiki Version</label>

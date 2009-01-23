@@ -215,7 +215,7 @@ public with sharing class WikiMembersWidgetController {
 	*@return String Wiki name
 	*/
 	public String getWikiName () {
-		if(WikiName == null)
+		if(WikiName == null && idWiki != null)
 			WikiName = [select Name from Wiki__c where Id =: idWiki].Name;
 		return WikiName;	
 	}

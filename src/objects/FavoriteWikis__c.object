@@ -13,7 +13,7 @@
         <label>Wiki Page</label>
         <referenceTo>WikiPage__c</referenceTo>
         <relationshipLabel>Favorite Wikis</relationshipLabel>
-        <relationshipName>WikiPage</relationshipName>
+        <relationshipName>FavoriteWikis</relationshipName>
         <type>Lookup</type>
     </fields>
     <fields>
