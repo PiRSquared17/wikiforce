@@ -1,4 +1,4 @@
-<apex:page sidebar="false" id="WikiSearchResult" controller="WikiSearchResultController" tabStyle="WikiPage__c" action="{!search}">
+<apex:page sidebar="false" id="WikiSearchResult" controller="WikiSearchResultController" tabStyle="Wiki__c" action="{!search}">
 	
 	<!-- Scripts -->
 	<apex:includeScript value="{!URLFOR($Resource.WikiResource, 'inc/js/common.js')}"/>

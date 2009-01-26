@@ -1,4 +1,4 @@
-<apex:page id="WikiOverview" controller="WikiTeamOverviewController" tabStyle="WikiPage__c" sidebar="false" >
+<apex:page id="WikiOverview" controller="WikiTeamOverviewController" tabStyle="Wiki__c" sidebar="false" >
 	<apex:includeScript value="/soap/ajax/11.1/connection.js" />
 	<!-- Scripts -->
 	<apex:includeScript value="{!URLFOR($Resource.WikiResource, 'inc/js/common.js')}"/>

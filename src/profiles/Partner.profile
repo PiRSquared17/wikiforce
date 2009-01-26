@@ -1269,6 +1269,9 @@
         <object>Campaign</object>
     </objectPermissions>
     <objectPermissions>
+        <allowCreate>true</allowCreate>
+        <allowEdit>true</allowEdit>
+        <allowRead>true</allowRead>
         <object>Case</object>
     </objectPermissions>
     <objectPermissions>
