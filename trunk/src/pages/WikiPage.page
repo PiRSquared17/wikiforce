@@ -1,4 +1,4 @@
-<apex:page id="WikiPage" tabStyle="WikiPage__c"
+<apex:page id="WikiPage" tabStyle="Wiki__c"
 	controller="WikiPageController" sidebar="false">
 	<apex:includeScript value="/soap/ajax/11.1/connection.js" />
 

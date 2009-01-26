@@ -114,6 +114,93 @@ public without sharing class WikiPageEditController {
     }
  	
  	/**
+    * Created By Miguel Angel Sosa 14.01.09
+    *@return String
+    */
+    private String getMatch(String regExp,String theString) {
+        // convert the parameters to lower case to campare
+        regExp = regExp.toLowerCase();
+        theString = theString.toLowerCase();
+        // Declare variables to use
+        String regExpResult;
+        String tempString;
+        String beforeString;
+        String afterString;
+        // List to save string before and string after the match 
+        List<String> tempBeforeAndAfterString;
+        
+        if(theString.trim().split(regExp,2).size() > 1) {
+
+            tempBeforeAndAfterString = theString.trim().split(regExp,2);
+
+            beforeString = tempBeforeAndAfterString[0].trim().replaceAll('\\(','\\\\(');
+            beforeString = beforeString.replaceAll('\\)','\\\\)');
+            beforeString = beforeString.replaceAll('\\]','\\\\]');
+            beforeString = beforeString.replaceAll('\\[','\\\\[');
+            beforeString = beforeString.replaceAll('\\{','\\\\{');
+            beforeString = beforeString.replaceAll('\\}','\\\\}');
+            beforeString = beforeString.replaceAll('\\*','\\\\*');
+            
+            afterString = tempBeforeAndAfterString[1].trim().replaceAll('\\(','\\\\(');
+            afterString = afterString.replaceAll('\\)','\\\\)');
+            afterString = afterString.replaceAll('\\[','\\\\[');
+            afterString = afterString.replaceAll('\\]','\\\\]');
+            afterString = afterString.replaceAll('\\{','\\\\{');
+            afterString = afterString.replaceAll('\\}','\\\\}');
+            afterString = afterString.replaceAll('\\*','\\\\*');
+            
+            tempString = theString.replaceFirst(beforeString,'');
+            
+            tempString = tempString.trim().replaceAll(afterString.trim(),'');
+            
+            regExpResult = tempString.trim();
+        
+            return regExpResult.trim();
+        } else {
+            return theString.trim();
+        }
+    }
+ 	
+ 	private Boolean found(String regExp, String theString) {
+        regExp = regExp.toLowerCase();
+        //System.debug('El indice de ' + getMatch(regExp,theString) + ' dentro de ' + theString + ' es ' + theString.indexOf(getMatch(regExp,theString)));
+        if(theString.trim().split(regExp,2).size() > 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    private String regExpression(String theString){
+        theString = theString.replaceAll('\\)','\\\\)');
+        theString = theString.replaceAll('\\(','\\\\(');
+        theString = theString.replaceAll('\\[','\\\\[');
+        theString = theString.replaceAll('\\]','\\\\]');
+        theString = theString.replaceAll('\\{','\\\\{');
+        theString = theString.replaceAll('\\}','\\\\}');
+        theString = theString.replaceAll('\\*','\\\\*');
+        return theString;
+    }
+ 	
+ 	private String getSubstringByRegExp(String regExpBefore, String regExpAfter, String theString) {
+        // ACA YA TENGO EL INDICE DEL COMIENZO
+        Integer startIndex = (theString.indexOf(getMatch(regExpBefore,theString)) + getMatch(regExpBefore,theString).length());
+
+        // CON EL INDICE DE COMIENZO CREO UN SUBSTRING PARA CONTINUAR
+        theString = theString.substring(startIndex);
+        
+        // ACA YA TENGO EL INDICE DEL FINAL     
+        Integer finishIndex = theString.indexOf(getMatch(regExpAfter,theString));
+
+        // TENGO LA NUEVA CADENA Y EL INDICE FINAL CON LO CUAL PUEDO CREAR EL SUBSTRING FINAL
+        if(finishIndex > 0) {
+            theString = theString.substring(0,finishIndex);
+        }
+
+        return theString;
+    }
+ 	
+ 	/**
  	*@param Replace
  	*/
  	public void setReplace (Replace replace) {
@@ -373,75 +460,119 @@ public without sharing class WikiPageEditController {
 			}
 		}	
  		
- 		
- 		
-		/* ------------------------ */
- 		/* 		Background color  	*/
- 		
- 		String bgcolorOpen = '[Bgcolor:';	
-		while (html.IndexOf(bgcolorOpen) != -1) {
-			List<String> temp = new List<String>();
-			List<String> temp2 = new List<String>();
-			temp = html.split('\\[Bgcolor:', 2);
-			String tail = temp[1].trim();
-			String endChar = '';
-			
-			if (tail.indexOf('rgb(') == 0) {
-				temp2 = tail.split('\\)', 2);
-				temp2[0] += ')';
-				endChar = ' ';
-			}else {
-				if (tail.indexOf(' ') != -1 || tail.indexOf('<br>') != -1) {
-					if((tail.indexOf(' ') < tail.indexOf('<br>')) || (tail.indexOf('<br>') == -1)) {
-						temp2 = tail.split(' ', 2);
-						endChar = ' ';
-					}else {
-						temp2 = tail.split('(?i)<br>', 2);	
-						endChar = '<br>';
-					}
-				}else {
-					temp2.add(tail);
-					temp2.add(' ');	
-				}
-			}
-			String bgcolorClose = 'Bgcolor\\]';
-			String restHtml = temp2[1].replaceFirst(bgcolorClose,'</span>');
-			html = temp[0] + '<span style="background-color:' + temp2[0] + ';">' + endChar + restHtml;	
-		}
+        /* ------------------------ */
+        /*          HEADINGS        */
 
- 		/* ------------------------ */
- 		/* 		   Text Color	  	*/
+        String headingLevel = '={2,6}';
+        
+        while(found(headingLevel,html)) {
+            String theHeadingTag = getMatch(headingLevel,html);
+            String hLevel = String.valueOf(theHeadingTag.length());
+            String fontSize;
+            
+            if(hLevel == '2') {
+                fontSize = '20';    
+            } else if(hLevel == '3') {
+                fontSize = '18';
+            } else if(hLevel == '4') {
+                fontSize = '16';
+            } else if(hLevel == '5') {
+                fontSize = '14';
+            } else if(hLevel == '6') {
+                fontSize = '13';
+            }
+            
+            String theContentHeader = getSubstringByRegExp(headingLevel,headingLevel,html).trim();
+            String removeBack = '(?i)\\[[a-z]+:[a-z_0-9(), {}\\.\\-\\#]*\\]';
+            String removeFront = '(?i)\\[![a-z]+\\]';
+            theContentHeader = theContentHeader.replaceAll(removeBack,'');
+            theContentHeader = theContentHeader.replaceAll(removeFront,'');
+            html = html.replaceFirst(theHeadingTag,'%%%%<a name="' + theContentHeader + '"></a>%%%%<h' + hLevel + ' style="font-size: ' + fontSize + 'px">');
+            html = html.replaceFirst(theHeadingTag,'</h' + hLevel + '><hr />'); 
+        }
  		
- 		String colorOpen = '[Color:';	
-		while (html.IndexOf(colorOpen) != -1) {
-			List<String> temp = new List<String>();
-			List<String> temp2 = new List<String>();
-			temp = html.split('\\[Color:', 2);
-			String tail = temp[1].trim();
-			String endChar;
-			if (tail.indexOf('rgb(') == 0) {
-				temp2 = tail.split('\\)', 2);
-				temp2[0] += ')';
-				endChar = ' ';
-			}else {
-				if (tail.indexOf(' ') != -1 || tail.indexOf('<br>') != -1) {
-					if((tail.indexOf(' ') < tail.indexOf('<br>')) || (tail.indexOf('<br>') == -1)) {
-						temp2 = tail.split(' ', 2);
-						endChar = ' ';
-					}else {
-						temp2 = tail.split('(?i)<br>', 2);	
-						endChar = '<br>';    
-					}
-				}else {
-					temp2.add(tail);
-					temp2.add('');
-				}
-			}
-			String colorClose = 'Color\\]';
-			String restHtml = temp2[1].replaceFirst(colorClose,'</span>');
-			html = temp[0] + '<span style="color:' + temp2[0] + ';">' + endChar + restHtml;
-		}
-		
+        // Created By Miguel Angel Sosa - 13.01.09
+        // Last Modified ----
+        //////////////////////////////////////////////
+        /*      Span tag parser     */
+        
+        // Expresiones de busqueda de propiedades
+        String tagPropertie = '(?i)\\[[a-z]+:[a-z_0-9(), {}\\.\\-\\#]*\\]';
+        String tagPropertieClose = '(?i)\\[![a-z]+\\]';
+
+        String openerOpenTagPropertie = '[';
+        String closerOpenTagPropertie = ']';
+
+        String actualPropertie = '';
+        String nameActualPropertie = '';
+        String valueActualPropertie = '';
+
+        List<String> partsActualPropertie;
+        String actualPropertieTag = '';
+        String closeActualPropertie = '';
+        
+        //Las propiedades
+        String nameStylePropertie;
+        String valueStylePropertie;
+
+        Integer theCounter = 0;
+
+        while(found(tagPropertie,html)) {
+            // Obtengo la primer propiedad encontrada
+            actualPropertie = html.substring(html.indexOf(openerOpenTagPropertie),(html.indexOf(closerOpenTagPropertie)+1));
+            // Le quito los parentesis rectos y obtengo el nombre y el valor de la propiedad
+            actualPropertieTag = actualPropertie.replaceAll('\\[','');
+            actualPropertieTag = actualPropertieTag.replaceAll('\\]','');
+            actualPropertieTag = actualPropertieTag.replaceAll('\\{','').replaceAll('\\}','');
+            partsActualPropertie = actualPropertieTag.split(':',2);
+            if(partsActualPropertie.size() > 1) {
+                nameActualPropertie = partsActualPropertie[0];
+                valueActualPropertie = partsActualPropertie[1];
+                
+                valueActualPropertie = valueActualPropertie.replaceAll('(?i)[0-9]{1,2}%','');
+                valueActualPropertie = valueActualPropertie.replaceAll('(?i)none','');
+                valueActualPropertie = valueActualPropertie.replaceAll('(?i)repeat','');
+                valueActualPropertie = valueActualPropertie.replaceAll('(?i)scroll','');
+
+                closeActualPropertie = '\\[!' + nameActualPropertie + '\\]';
+                
+                // Seteo la propiedad y el valor
+                valueStylePropertie = valueActualPropertie + ';';
+                if(nameActualPropertie == 'fontFamily') {
+                    nameStylePropertie = 'font-family: ';
+                } else if(nameActualPropertie == 'fontSize') {
+                    nameStylePropertie = 'font-size: ';
+                } else if(nameActualPropertie == 'fontVariant') {
+                    nameStylePropertie = 'font-variant: ';
+                } else if(nameActualPropertie == 'lineHeight') {
+                    nameStylePropertie = 'line-height: ';
+                } else if(nameActualPropertie == 'Bgcolor') {
+                    nameStylePropertie = 'background-color: ';
+                } else if(nameActualPropertie == 'Color') {
+                    nameStylePropertie = 'color: ';
+                } else {
+                    nameStylePropertie = '';
+                    valueStylePropertie = '';
+                }
+            }
+            
+            actualPropertie = actualPropertie.replaceFirst('\\[','\\\\[');
+            actualPropertie = actualPropertie.replaceFirst('\\]','\\\\]');
+            actualPropertie = actualPropertie.replaceFirst('\\(','\\\\(');
+            actualPropertie = actualPropertie.replaceFirst('\\)','\\\\)');
+            actualPropertie = actualPropertie.replaceFirst('\\{','\\\\{');
+            actualPropertie = actualPropertie.replaceFirst('\\}','\\\\}');
+
+                html = html.replaceFirst(actualPropertie,'<span style="' + nameStylePropertie + valueStylePropertie + ' newPropertieHere">');
+                if(nameActualPropertie != '') {
+                    html = html.replaceFirst(closeActualPropertie,'</span>');
+                }
+
+            theCounter++;
+            //System.debug('EL contador esta en ' + theCounter);
+        }
+        //System.debug('Aca el HTML DEBERIA estar casi completo y es ----->' + html);
+
  		/* ------------------------ */
  		/* 			Text Ident 		*/
  		
@@ -597,55 +728,6 @@ public without sharing class WikiPageEditController {
 	 			firstOL = true;
 	 			lastOL = false;
 	 		}
- 		}
- 		
- 		/* ------------------------ */
- 		/* 			HEADINGS 		*/
- 		String header = '=======';
- 		for (Integer i = 6; i > 1; i--) {
-	 		if (header.length() > 1) {
-	 			header = header.substring(1);
-	 		}
-	 				
-	 	while( html.contains('h2>')){
-	 		html.replaceFirst( '<h2>', '==');
-	 		html.replaceFirst( '</h2>', '==');
-	 	}
- 	 		while (html.lastIndexOf(header) != -1) {
-		 		List<String> temp = new List<String>();
-		 		List<String> temp2 = new List<String>();
-		 		Integer indexOfHeader = html.indexOf(header);
-		 		temp = html.split(header, 2);
-		 		html = html.replaceFirst(header,'<h' + i + '>');
-		 		String linkName = '';
-		 		if (temp[1].indexOf(header) != -1 && ((temp[1].indexOf(header) < temp[1].indexOf('<br>')) || temp[1].indexOf('<br>') == -1 ) ) {
-		 			temp2 = temp[1].split(header, 2);
-		 			linkName = temp2[0].trim();
-		 			html = html.replaceFirst(header,'</h' + i + '><hr>');
-		 		}else {
-		 			temp2.add(temp[1]);
-		 			temp2.add('');
-		 		}
-				
-				Integer fontSize;
-				if (i == 2) 
-					fontSize = 20;
-				if (i == 3) 
-					fontSize = 18;
-				if (i == 4) 
-					fontSize = 16;
-				if (i == 5) 
-					fontSize = 14;
-				if (i == 6) 
-					fontSize = 13;
-				
-				if (temp[1].indexOf(header) != -1) {
-		 			html = temp[0] + i + '%%%%<a name="' + linkName + '"></a>%%%%<h' + i + ' style="font-size:' + fontSize + 'px;">' + temp2[0] + '</h' + i + '><hr>' + temp2[1];
-				}else {
-					html = temp[0] + i + '%%%%<a name="' + linkName + '"></a>%%%%<h' + i + ' style="font-size:' + fontSize + 'px;">' + temp2[0];
-				} 
-		 		
-	 		} 
  		}
  		
  		/* ------------------------ */
@@ -953,7 +1035,7 @@ public without sharing class WikiPageEditController {
  				html = temp[0] + temp[1];
  			}
  		}
- 		html = html.replaceAll('  ','&nbsp;');
+ 		html = html.replaceAll('  ','');
   		
   		/* ------------------------ */
  		/* 	   Table of Content 	*/ 	
@@ -965,18 +1047,35 @@ public without sharing class WikiPageEditController {
 	 		List<String> tempToc1;
 	 		List<String> tempToc2;
 	 		
+            /* if(html.split('(?i)' + tocCentinelStart, 2).size() > 1) {
+                System.debug('El html es ' + html);
+                System.debug('Por que cadena estoy cortando? ' + tocCentinelStart);
+                System.debug('Parte 1 de la division ' + html.split('(?i)' + tocCentinelStart, 2)[0]);
+                System.debug('Parte 2 de la division ' + html.split('(?i)' + tocCentinelStart, 2)[1]);
+                //break;
+            } */
+	 		
 	 		tempToc1 = html.split('(?i)' + tocCentinelStart, 2);
 	 		html = html.replaceFirst('(?i)' + tocCentinel,'');
 	 		
 	 		tempToc2 = tempToc1[1].split('(?i)' + tocCentinelEnd, 2);
 	 		html = html.replaceFirst('(?i)' + tocCentinel,'');
 			
-			Integer a = tempToc1[0].length() - 1;
-			String part1 = tempToc1[0].substring(0,a);
-			String numH = tempToc1[0].substring(a,a + 1);
-	 		html = part1 + '<a name="'+ tempToc2[0] + '"></a>' + tempToc2[1]; 
-	 		
-	 		toc += '<a  href="#' + tempToc2[0] + '" style="padding-left:' + numH + '0px;padding-bottom:5px;">' + tempToc2[0] + '</a><br>\n';
+            Integer a;
+            String part1 = '';
+            String numH = '0';
+            if(tempToc1[0] != '') {
+                if(tempToc1[0].length() > 0) {
+                    a = tempToc1[0].length() - 1;
+                } else {
+                    a = 0;
+                }
+                part1 = tempToc1[0].substring(0,a);
+                numH = tempToc1[0].substring(a,a + 1);
+            }
+            html = part1 + '<a name="'+ tempToc2[0] + '"></a>' + tempToc2[1]; 
+            
+            toc += '<a  href="#' + tempToc2[0] + '" style="padding-left:' + numH + '0px;padding-bottom:5px;">' + tempToc2[0] + '</a>\n';
  		}
  		toc = '<table style="padding:20px;background-color:#FFFFFF;border:1px solid #AAAAAA;"><tr><td>' + toc + '</td></tr></table>';
  		html = html.replaceAll(tocSintax, toc);	
@@ -1053,7 +1152,7 @@ public without sharing class WikiPageEditController {
 	
 
  	public void parseWiki() {
- 		System.debug('El contenido de html es --->' + html);
+
   		html = replace.content;
 		html = html.replaceAll('(?i)&nbsp;',' ');
 		html = html.replaceAll('(?i)&amp;','&');
@@ -1071,77 +1170,202 @@ public without sharing class WikiPageEditController {
 		html = html.replaceAll('(?i)<ol[^>]*>[^<]*<li','<ol><li');
 		html = html.replaceAll('(?i)</li>[^<]*</ol>','</li></ol>');
 		// REMOVE ALL THE METADATA AND CSS STYLES INCLUDE FROM WORD
-  		html = html.replaceAll('(?i)<meta[^>]*>[^(</met)]*</meta>','');
-  		html = html.replaceAll('(?i)<fck:meta[^>]*>','');
-  		html = html.replaceAll('(?i)</fck:meta>','');
-  		html = html.replaceAll('(?i)<\\!--[^(-->)]*-->',''); 
-  		html = html.replaceAll('(?i)<style[^>]*>[^style]*style>','');
-  		html = html.replaceAll('(?i)<link[^>]*>','');
-  		
-  		System.debug('El contenido de html es --->' + html);
-  		
+		
+        html = html.replaceAll('(?i)(<(meta[^>]*>|link[^>]*>|w[^>]*>[^><]*</w[^>]*>|w[^>]*>|/w[^>]*>|xml>|/xml>|!(--)?\\[[^>]*>)|/\\*[^*]*\\*/)','');
+        html = html.replaceAll('(?i)<\\!--','');
+        html = html.replaceAll('(?i)-->','');
+        
+        while(found('(?i)<style[^>]*>[^<]*</style>',html)) {
+            html = html.replaceFirst('(?i)<style[^>]*>[^<]*</style>','');
+        }
+
+        html = html.replaceAll('(?i)<b{1} [^>]*="[^\"]*" *>','<b>');
+        html = html.replaceAll('(?i)<i{1} [^>]*="[^\"]*" *>','<i>');
+
   		/* ------------------------ */
  		/* 		Code (no parsed) 	*/ 		
 		html = html.replaceAll('(?i)' + '<table style=\\\"border: 1px solid rgb\\(175, 175, 175\\); padding: 20px; background-color: rgb\\(250, 250, 250\\);\\\"><tbody><tr><td>','{{{');
-		html = html.replaceAll('(?i)' + '<span></span></td></tr></tbody></table>','}}}'); 		
+		html = html.replaceAll('(?i)' + '<span></span></td></tr></tbody></table>','}}}');
+		
+        // Created By Miguel Angel Sosa - 09.01.09
+        // Last Modified 16.01.09 by Miguel Angel Sosa
+        //////////////////////////////////////////////
+        /*      Span tag parser     */
+        // Expresiones de busqueda en la variable [html] para localizar las propiedades
+        String spanTagOpen = '(?i)<span ?';
+        String styleSpanAttribute = '(?i)style=';
+        String fontFamilyProperty = '(?i)font-family:[^>][a-z]*;?';
+        
+        // Expresiones de busqueda en la variable [html] para localizar spans
+        String spanCompleteOpen = '(?i)<span (.[^>]*)>';
+        String spanCompleteClose = '(?i)</span>';
+        String spanCompleteComplete = '(?i)<span ?(.*[^>]*)></span>';
+        
+        String forSpanStyles = '(?i)<span [^>]*style="[^"]*"[^>]*>';
+        String forStylesInside = '(?i)"[^"]*"';
+        String tempSpanStyles;
+        String tempStylesInside;
 
- 		/* ------------------------ */ 
- 		/* 		Background color 	*/ 		
-		String bgcolorOpen = '<span style="[^"]*background-color:';
-		
-		String bgcolorClose = '</span>';
-		List<String> tempBgcolor;
-	
-		while (html.split('(?i)' + bgcolorOpen, 2).size() > 1) {
-			tempBgcolor = html.split('(?i)' + bgcolorOpen, 2);
-			List<String> tail = tempBgcolor[1].split('(?i)' + '[^(;|>)]*"[^>]*>', 2);
-			
-			if (tail[0].trim() == '') {
-				tail = tempBgcolor[1].split('(?i)' + '"[^>]*>', 2);
-			}
-			String color = tail[0].replaceAll(';.*','');
-			String resultHtml = tail[1].replaceFirst('(?i)' + bgcolorClose,' Bgcolor]');
-			html = tempBgcolor[0] + '[Bgcolor:' + color.trim() + ' ' + resultHtml;
-		}
-		
-		bgcolorOpen = '<span style="[^"]*background:';
-		
-		while (html.split('(?i)' + bgcolorOpen, 2).size() > 1) {
-			tempBgcolor = html.split('(?i)' + bgcolorOpen, 2);
-			List<String> tail = tempBgcolor[1].split('(?i)' + '[^(;|>)]*"[^>]*>', 2);
-			
-			if(tail[0].trim() == '') {
-				tail = tempBgcolor[1].split('(?i)' + '"[^>]*>', 2);
-			}
-			String color = tail[0].replaceAll(';.*','');
-			
-			if (color.toLowerCase().indexOf('rgb(') == -1) {
-				color = color.trim().replaceAll('[ ]+.*','');
-			}
-			String resultHtml = tail[1].replaceFirst('(?i)' + bgcolorClose, ' Bgcolor]');
-			html = tempBgcolor[0] + '[Bgcolor:' + color.trim() + ' ' + resultHtml;
-		}		
+        while(found(forSpanStyles,html)) {
+            // Debo eliminar cualquier propiedad dentro de span que no sea style
+            String propertyNoLong = '(?i)lang="[^"]*"';
+            html = html.replaceAll(propertyNoLong,'');
+            
+            // Las nuevas propiedades
+            String fontFamilyPropertie = '';
+            String fontFamilyClose = '';
+            
+            String fontSizePropertie = '';
+            String fontSizeClose = '';
+            
+            String fontVariantPropertie = '';
+            String fontVariantClose = '';
+            
+            String lineHeightPropertie = '';
+            String lineHeightClose = '';
+            
+            String fontStylePropertie = '';
+            String fontStyleClose = '';
+            
+            String fontWeightPropertie = '';
+            String fontWeightClose = '';
+            
+            String fontColorPropertie = '';
+            String fontColorClose = '';
+            
+            String fontBgColorPropertie = '';
+            String fontBgColorClose = '';
+            
+            String newFontStyles = '';
+            String closeFontStyles = '';
+            String spanContent = '';
+            
+            // Obtengo primer span que encuentro y lo guardo temporalmente
+            tempSpanStyles = getMatch(forSpanStyles,html);
+            
+            // Lo sustituyo por una linea clave para despues reemplazarla denuevo\
+            String theSpanTag;
+            theSpanTag = getMatch('<span{1} +[^>]*>.*</span>',html);
+            html = html.replaceFirst(forSpanStyles,'##hereStyles##');
+            
+            tempStylesInside = getMatch(forStylesInside,tempSpanStyles).replaceAll('"','');
+            System.debug('Y los estilos son -----> ' + tempStylesInside);
+            List<String> stylePropertys = tempStylesInside.split(';');
+            
+            for(Integer i = 0; i < stylePropertys.size(); i++ ) {
+                List<String> partsPropertie = stylePropertys[i].split(':',2);
+                
+                if(partsPropertie.size() > 1) {
+                    String namePropertie = partsPropertie[0];
+                    String valuePropertie = partsPropertie[1];
+                    
+                    
+                    String theSpanContent;
+                    String theStyleAttribute;
+                    String theStyleContent;
+                    List<String> thePropertiesStyle;
+                    List<String> sizeAndLineHeight;
+                    System.debug('PROBANDO CON EL HTML ' + html);
+                    // Forma la propiedad encontrada al nuevo modo
+                    if(namePropertie.trim() == 'font' || namePropertie.trim() == 'FONT') {
+                        //theSpanTag = getMatch('<span{1} +[^>]*>.*</span>',html);
+                        theStyleAttribute = getMatch('(?i)style="[^"]*"',theSpanTag);
+                        theStyleContent = getMatch('(?i)"[^"]*"',theStyleAttribute);
+                            System.debug('Todos los estilos ----> ' + theStyleContent);
+                        thePropertiesStyle = theStyleContent.split(' ');
+                            System.debug('Cantidad de propiedades ----> ' + thePropertiesStyle.size());
+                        for(integer k = 0; k < thePropertiesStyle.size(); k++) {
+                            thePropertiesStyle[k] = thePropertiesStyle[k].trim().replaceAll('\'','').replaceAll('\"','');
+                            System.debug('La propiedad ----> ' + thePropertiesStyle[k]);
+                            if(thePropertiesStyle[k].toLowerCase().trim() == 'bold' || thePropertiesStyle[k].toLowerCase().trim() == 'bolder' || thePropertiesStyle[k].toLowerCase().trim() == 'lighter') {
+                                fontWeightPropertie = '\'\'\'';
+                                fontWeightClose = '\'\'\'';
+                            } else if(thePropertiesStyle[k].toLowerCase().trim() == 'italic' || thePropertiesStyle[k].toLowerCase().trim() == 'oblique') {
+                                fontStylePropertie = '\'\'';
+                                fontStyleClose = '\'\'';
+                            } else if(thePropertiesStyle[k].toLowerCase().trim() == 'times' || thePropertiesStyle[k].toLowerCase().trim() == 'verdana' || thePropertiesStyle[k].toLowerCase().trim() == 'arial' || thePropertiesStyle[k].toLowerCase().trim() == 'courier new' || thePropertiesStyle[k].toLowerCase().trim() == 'comic sans ms' || thePropertiesStyle[k].toLowerCase().trim() == 'tahoma') {
+                                if(thePropertiesStyle[k].toLowerCase().trim() == 'times') {
+                                    thePropertiesStyle[k] = thePropertiesStyle[k] + ' new roman';
+                                }
+                                fontFamilyPropertie = '[fontFamily:{' + thePropertiesStyle[k].replaceAll('\'','').replaceAll('\"','').trim() + '}]';
+                                fontFamilyClose = '[!fontFamily]';
+                            } else if(thePropertiesStyle[k].toLowerCase().trim() == 'small-caps') {
+                                fontVariantPropertie = '[fontVariant:' + thePropertiesStyle[k].replaceAll('\'','').replaceAll('"','').trim() + ']';
+                                fontVariantClose = '[!fontVariant]'; 
+                            } else if(thePropertiesStyle[k].split('/',2).size() > 1) {
+                                sizeAndLineHeight = thePropertiesStyle[k].split('/');
+                                fontSizePropertie = '[fontSize:' + sizeAndLineHeight[0].replaceAll('\'','').replaceAll('"','').trim() + ']';
+                                fontSizeClose = '[!fontSize]';
+                                
+                                lineHeightPropertie = '[lineHeight:' + sizeAndLineHeight[1].replaceAll('\'','').replaceAll('"','').trim() + ']';
+                                lineHeightClose = '[!lineHeight]';
+                            }
+                        }
+                    } else if(namePropertie.trim() == 'color' || namePropertie.trim() == 'COLOR') {
+                        if(valuePropertie.trim() != '') {
+                            fontColorPropertie = '[Color:' + valuePropertie.replaceAll('\'','').replaceAll('\"','').trim() + ']';
+                            fontColorClose= '[!Color]';
+                        }
+                    } else if(namePropertie.trim() == 'font-family') {
+                        if(valuePropertie.trim() != '') {
+                            fontFamilyPropertie = '[fontFamily:{' + valuePropertie.replaceAll('\'','').replaceAll('\"','').trim() + '}]';
+                            fontFamilyClose = '[!fontFamily]';
+                        }
+                    } else if(namePropertie.trim() == 'font-size') {
+                        if(valuePropertie != '') {
+                            fontSizePropertie = '[fontSize:' + valuePropertie.replaceAll('\'','').replaceAll('"','').trim() + ']';
+                            fontSizeClose = '[!fontSize]';
+                        }
+                    } else if(namePropertie.trim() == 'font-variant') {
+                        if(valuePropertie != '') {
+                            fontVariantPropertie = '[fontVariant:' + valuePropertie.replaceAll('\'','').replaceAll('"','').trim() + ']';
+                            fontVariantClose = '[!fontVariant]';
+                        }
+                    } else if(namePropertie.trim() == 'line-height') {
+                        if(valuePropertie != '') {
+                            lineHeightPropertie = '[lineHeight:' + valuePropertie.replaceAll('\'','').replaceAll('"','').trim() + ']';
+                            lineHeightClose = '[!lineHeight]';
+                        }
+                    } else if(namePropertie.trim() == 'font-style') {
+                        if(valuePropertie.trim() == '' || valuePropertie.trim() == 'normal') {
+                            fontStylePropertie = '';
+                            fontStyleClose = '';
+                        } else if(valuePropertie.trim() == 'italic' || valuePropertie.trim() == 'oblique') {
+                            fontStylePropertie = ' \'\' ';
+                            fontStyleClose = ' \'\' ';
+                        }
+                    } else if(namePropertie.trim() == 'font-weight') {
+                        if(valuePropertie.trim() == '' || valuePropertie.trim() == 'normal') {
+                            fontWeightPropertie = '';
+                            fontWeightClose = '';
+                        } else if(valuePropertie.trim() == 'bold' || valuePropertie.trim() == 'bolder' || valuePropertie.trim() == 'lighter') {
+                            //System.debug('Estoy en font-weight: Bold');
+                            fontWeightPropertie = ' \'\'\' ';
+                            fontWeightClose = ' \'\'\' ';
+                        }
+                    } else if(namePropertie.trim() == 'background-color' || namePropertie.trim() == 'BACKGROUND-COLOR' || namePropertie.trim() == 'background') {
+                        //System.debug('Estoy en background-color');
+                        if(valuePropertie.trim() != '') {
+                            valuePropertie = valuePropertie.replaceAll('(?i)[0-9]{1,2}%','');
+                            valuePropertie = valuePropertie.replaceAll('(?i)none','');
+                            valuePropertie = valuePropertie.replaceAll('(?i)repeat','');
+                            valuePropertie = valuePropertie.replaceAll('(?i)scroll','');
+                            fontBgColorPropertie = '[Bgcolor:' +  + valuePropertie.replaceAll('\'','').replaceAll('"','').trim() + ']';
+                            fontBgColorClose = '[!Bgcolor]';
+                        }
+                    }
+                }   
+            }
+            
+            newFontStyles = fontBgColorPropertie + fontColorPropertie + fontFamilyPropertie + fontSizePropertie + fontVariantPropertie + lineHeightPropertie + fontWeightPropertie + fontStylePropertie;
+            closeFontStyles = fontStyleClose + fontWeightClose + lineHeightClose + fontVariantClose + fontSizeClose + fontFamilyClose + fontColorClose + fontBgColorClose;
+            
+            //html = html.replaceFirst('</span>','##hereFinish##');
+            html = html.replaceFirst('##hereStyles##',newFontStyles);
+            html = html.replaceFirst('(?i)</span>',closeFontStyles);
+            //System.debug('Ahora html es ' + html);
+        }
 
- 		/* ------------------------ */
- 		/* 		Text color 			*/ 		
-		String colorOpen = '<span[^>]*style="[^"]*color:';
-		String colorClose = '</span>';
-		List<String> tempColor;
-		
-		while (html.toLowerCase().split('<span[^>]*style="[^"]*color:', 2).size() > 1) {
-			tempColor = html.split('(?i)' + colorOpen, 2);
-			List<String> tail = tempColor[1].split('(?i)' + '[^(;|>)]*"[^>]*>', 2);
-			
-			if (tail[0].trim() == '') {
-				tail = tempColor[1].split('(?i)' + '"[^>]*>', 2);
-			}
-			String color = tail[0].replaceAll(';.*','');
-			
-			String resultHtml = tail[1].replaceFirst('(?i)' + colorClose, ' Color]');
-			
-			html = tempColor[0] + '[Color:' + color + ' ' + resultHtml;
-		}
-		
  		/* ------------------------ */
  		/* 			Ident Text 		*/ 		
 		String identOpen = '<p style="margin-left: ';
@@ -1162,8 +1386,6 @@ public without sharing class WikiPageEditController {
 				marginPx = tempIdent[1].split('(?i)' + 'px[^>]*">', 2);
 				numMinus = (integer.valueOf(marginPx[0])) / 20;
 			}
-			
-			System.debug('tempIdent[1].split(\'(?i)\' + \'pt[^>]*">\',2).size() ------>' + tempIdent[1].split('(?i)' + 'pt[^>]*">',2).size());
 			
 			if(tempIdent[1].split('(?i)' + 'pt[^>]*">',2).size() > 1) {
 				Decimal numMargin = (double.valueOf(marginPx[0])) * 1.33;
@@ -1423,6 +1645,14 @@ public without sharing class WikiPageEditController {
  		}
   		
   		String imgTag = '<img ';
+        String notValidImage = 'spacer.gif';
+
+            String spacerRegExp = '(?i)<img[^>]*spacer[^>]*>{1}';
+            if(html.split(spacerRegExp,2).size() > 1) {
+                html = html.replaceFirst(spacerRegExp,'');
+            }
+            // Si todo sale bien tanto puede seguir como volver a empezar
+            
  		while (html.toLowerCase().indexOf(imgTag) != -1) {	
  			Boolean smileImg = false;
  			String imgTagGen = '';
@@ -1828,7 +2058,7 @@ public without sharing class WikiPageEditController {
  				while (tableContent.toLowerCase().indexOf('<tr') != -1) {
  					List<String> trParts = new List<String>();
  					trParts = tableContent.split('(?i)[ ]*<tr',2);
- 					trParts[1] = trParts[1].replaceFirst('>[ ]*','\n');	
+ 					trParts[1] = trParts[1].replaceFirst('>[ ]*','');	
  					tableContent = trParts[0] + '<tr' + trParts[1];
  					tableContent = tableContent.replaceFirst('(?i)[ ]*<tr','|-');
  				
@@ -1862,7 +2092,7 @@ public without sharing class WikiPageEditController {
 	 				tableContent = thParts[0] + '<th' + thParts[1];
 	 				tableContent = tableContent.replaceFirst('(?i)[ ]*<th','!');
 	 			}
- 				tableContent = tableContent.replaceAll('\n','<br>');
+ 				tableContent = tableContent.replaceAll('\n','');
  			}else {
  				htmlTail = htmlParts[1];
  			}
@@ -1908,7 +2138,7 @@ public without sharing class WikiPageEditController {
 	 	//System.debug('\n\n////////////////////////////////////////\n CURRENT SOQL1: ' + Limits.getQueries() + '\n/////////////////////////////\n\n');
  		// out/in Links	
  		List<WikiLink__c> wikiLinksDel = [select Id, Name, FromLink__c, ToLink__c from WikiLink__c where FromLink__c =: editWP.Id];
- 		System.debug('### wikiLinksDel.size[' + wikiLinksDel.size() + ']');
+ 		//System.debug('### wikiLinksDel.size[' + wikiLinksDel.size() + ']');
  		List<Id> wikiPagesLinks = new List<Id>();
  		
  		for(WikiLink__c delLinks : wikiLinksDel){
@@ -2069,8 +2299,6 @@ public without sharing class WikiPageEditController {
 						}else {
 							tmpLnkCntWP = wiki;
 						}
-						if(tmpLnkCntWP.linkCount__c == null)
-							tmpLnkCntWP.linkCount__c = 0;
 						tmpLnkCntWP.linkCount__c = tmpLnkCntWP.linkCount__c + 1;
 						wikiMap.put(tmpLnkCntWP.id, tmpLnkCntWP);
 						//System.debug('\n\n////////////////////////////////////////\n CURRENT SOQL: ' + Limits.getQueries() + '\n/////////////////////////////\n\n');

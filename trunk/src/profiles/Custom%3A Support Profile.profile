@@ -1373,10 +1373,6 @@
         <visible>false</visible>
     </recordTypeVisibilities>
     <tabVisibilities>
-        <tab>Start_Here</tab>
-        <visibility>DefaultOn</visibility>
-    </tabVisibilities>
-    <tabVisibilities>
         <tab>Wiki__c</tab>
         <visibility>DefaultOn</visibility>
     </tabVisibilities>
