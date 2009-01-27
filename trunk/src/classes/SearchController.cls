@@ -91,15 +91,7 @@ public class SearchController {
 	*/
 	public String getLabel(){
 		String txt;
-		if(module == 'discussion'){
-			txt = 'Discussions';
-		}else if(module == 'people_keyword'){
-			txt = 'People';
-		}else if(module == 'team'){
-			txt = 'Teams';
-		}else if(module == 'team_detail'){
-			txt = 'in Teams';
-		}else if(module == 'wiki'){
+		if(module == 'wiki'){
 			txt = 'Wiki Pages';
 		}else {
 			txt = '';
@@ -114,15 +106,7 @@ public class SearchController {
 	*/
 	public String getDefaultText(){
 		String txt = 'Enter ';
-		if(module == 'discussion'){
-			txt = txt + 'name or description...';
-		}else if(module == 'people_keyword'){
-			txt = txt + 'name, competency, experiences...';
-		}else if(module == 'team'){
-			txt = txt + 'Team name...';
-		}else if(module == 'team_detail'){
-			txt = txt + 'Team\'s content...';
-		}else if(module == 'wiki'){
+		if(module == 'wiki'){
 			txt = txt + 'wiki page...';	
 		}else {
 			txt = '';

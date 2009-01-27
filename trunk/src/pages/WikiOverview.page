@@ -117,7 +117,7 @@
 										<tr>
 											<td width="50%" valign="top">
 												<div class="teamBlockTitle">
-													<h4>{!$ObjectType.Wiki__c.label}</h4>
+													<h4>{!$ObjectType.Wiki__c.label}jaja</h4>
 												</div>
 												<br>
 												<apex:image id="twistImage" style="vertical-align:middle;" styleclass="twistImg" onclick="hideSection(this,'filterDiv')" value="{!URLFOR($Resource.WikiResource, 'images/layout/rc_boxes/arrow_down.gif')}" title="Hide Section" alt="Hide Section" />&nbsp; 
@@ -233,6 +233,7 @@
 																	<table border="0" style="width:100%;">
 																		<tr>
 																			<td width="110px">
+                                                                                {!item.stateWiki}
 																				<apex:commandLink value="Join" action="{!joinWiki}" rendered="{!IF(AND(NOT(item.isMember),item.isPublic),true,false)}" onclick="changeJoinStatus(this);" oncomplete="joinComplete();" >
 																					<apex:param name="wid" value="{!item.Id}" />
 																					<apex:param name="allTeams" value="false" />
@@ -252,6 +253,11 @@
 																					<apex:image onclick="location.href='/apex/WikiTeamOverview?tid={!item.id}';" styleclass="teamPicture" value="/servlet/servlet.FileDownload?file={!item.picture}" />
 																				</apex:outputpanel>
 																			</td>
+<!-- ---------------------------------------------------------------------- THAT IS MY CODE - MIGUEL ANGEL SOSA -->
+																			<div>
+																			     The state of the wiki: {!item.stateWiki}
+																			</div>
+<!-- ---------------------------------------------------------------------- THAT IS MY CODE - MIGUEL ANGEL SOSA -->
 																			<td valign="top">
 																				<table border="0" style="width:99%;">
 																					<tr>

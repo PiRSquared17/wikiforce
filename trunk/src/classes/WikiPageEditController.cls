@@ -274,7 +274,8 @@ public without sharing class WikiPageEditController {
  	public void parseHTML() {
  		 
     	String toc = '';
-    			
+    	
+    	String html;		
   		html = replace.content;
 		html = html.replaceAll('\n','<br>');
  		
@@ -493,7 +494,7 @@ public without sharing class WikiPageEditController {
  		
         // Created By Miguel Angel Sosa - 13.01.09
         // Last Modified ----
-        //////////////////////////////////////////////
+        /////////////////////////////////////////////
         /*      Span tag parser     */
         
         // Expresiones de busqueda de propiedades

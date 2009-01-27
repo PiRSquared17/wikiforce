@@ -67,7 +67,7 @@ public with sharing class WikiOverviewController {
 	}
 	
 	/**
-	* Returns my temas list id
+	* Returns my teams list id
 	*@return List<Id>
 	*/
 	public List<Id> myTeams(){
@@ -111,12 +111,18 @@ public with sharing class WikiOverviewController {
     	if(allTeams == '') 
     		allTeams = 'false';
     	
-    	if(allTeams == 'true'){
+    	/* if(allTeams == 'true'){
 	   		sites = [select Id, Name, Description__c, PictureId__c, PublicProfile__c from Wiki__c order by Name];
     	}else{
 			sites = [select Id, Name, Description__c, PictureId__c, PublicProfile__c from Wiki__c where Id in: myTeams() order by Name];
-    	}
+    	} */
     	
+        if(allTeams == 'true'){
+            sites = [select Id, Name, Description__c, PictureId__c, PublicProfile__c, Type__c from Wiki__c order by Name];
+        }else{
+            sites = [select Id, Name, Description__c, PictureId__c, PublicProfile__c, Type__c from Wiki__c where Id in: myTeams() order by Name];
+        }
+        
     	List<String> wikiIds = new List<String>();
     	for(Wiki__c s : sites){
     		wikiIds.add(s.Id);
@@ -144,6 +150,7 @@ public with sharing class WikiOverviewController {
 			teamWikiItem.setIsAdmin(teamAdmin[0].Profile.PermissionsModifyAllData || nameProfileAdmin.equals(wAdmin.get(item.Id)));
 			teamWikiItem.setDescription(item.Description__c);
 			teamWikiItem.setPicture(item.PictureId__c);
+			teamWikiItem.setStateWiki(item.Type__c);
 			teamWikiList.add(teamWikiItem);
 		}
 		wikiSites.clear();
@@ -168,7 +175,7 @@ public with sharing class WikiOverviewController {
 	
 	/**
 	* Return a map with a grop of wikis id where the user is admin
-	*@return Map<String, String>
+	*@return Map with user memberships <wiki id, profile name>
 	*/	
 	private Map<Id, String> getWikisAdmin(){
 		Map<Id, String> wikis = new Map<Id, String>();
@@ -209,14 +216,14 @@ public with sharing class WikiOverviewController {
    	}
    	
    	/**
-   	*@return Integer
+   	*@return num of sites
    	*/
    	public Integer getNumSitesRows () {
    		return numSitesRows;
    	}
    	
    	/**
-   	*@return Integer
+   	*@return paginator first row
    	*/
    	public Integer getFirstRow () {
    		return firstRow;
@@ -239,7 +246,7 @@ public with sharing class WikiOverviewController {
    	}
    	
    	/**
-   	*@return Integer
+   	*@return current page num
    	*/
    	public Integer getCurrentPagination () {
    		return currentPagination;
@@ -312,7 +319,7 @@ public with sharing class WikiOverviewController {
 	}
 	
 	/**
-	*@return List<Letters>
+	*@return list of letters for filter
 	*/
 	public List<Letters> getLetterFilter(){
 		setLetterFilter();
@@ -366,7 +373,8 @@ public with sharing class WikiOverviewController {
    		Boolean isAdmin;
    		Boolean isPublic;
    		Boolean isMember;
-		
+   		String stateWiki;
+   		
    		/**
    		*@return String
    		*/
@@ -481,6 +489,18 @@ public with sharing class WikiOverviewController {
    			return this.isMember;
    		}
    		
+        /**
+        *@param String
+        */   		
+   		public void setStateWiki(String stateWiki) {
+   			this.stateWiki = stateWiki;
+   		}
+        /**
+        *@return String
+        */
+        public String getStateWiki() {
+            return this.stateWiki;
+        }
    	}
    	
    	public String letter = '';
@@ -508,9 +528,9 @@ public with sharing class WikiOverviewController {
 		if (letter == 'ALL' || letter == null || letter == '') {
 			Integer allTeamCount;
 			if (allTeams == 'true') {
-				sites = [select Id, Name, Description__c, PictureId__c from Wiki__c order by Name];
+				sites = [select Id, Name, Description__c, PictureId__c, Type__c from Wiki__c order by Name];
 			}else {
-				sites = [select Id, Name, Description__c, PictureId__c from Wiki__c where id in:myTeamsList order by Name];
+				sites = [select Id, Name, Description__c, PictureId__c, Type__c from Wiki__c where id in:myTeamsList order by Name];
 			}
 			allTeamCount = sites.size();
 			cntPagination = (allTeamCount - (Math.mod(allTeamCount, numSitesRows)))/ numSitesRows;
@@ -520,9 +540,9 @@ public with sharing class WikiOverviewController {
 		}else {
 			Integer lrtTeamCount;
 			if (allTeams == 'true') {
-				sites = [select Id, Name, Description__c, PictureId__c, PublicProfile__c from Wiki__c where Name like :(letter + '%') order by Name];
+				sites = [select Id, Name, Description__c, PictureId__c, PublicProfile__c, Type__c from Wiki__c where Name like :(letter + '%') order by Name];
 			}else {
-				sites = [select Id, Name, Description__c, PictureId__c, PublicProfile__c from Wiki__c where Name like :(letter + '%') and id in:myTeamsList order by Name];
+				sites = [select Id, Name, Description__c, PictureId__c, PublicProfile__c, Type__c from Wiki__c where Name like :(letter + '%') and id in:myTeamsList order by Name];
 			}
 			
 			lrtTeamCount = sites.size();
@@ -560,6 +580,7 @@ public with sharing class WikiOverviewController {
 			teamWikiItem.setIsAdmin(teamAdmin[0].Profile.PermissionsModifyAllData || nameProfileAdmin.equals(wAdmin.get(item.Id)));
 			teamWikiItem.setDescription(item.Description__c);
 			teamWikiItem.setPicture(item.PictureId__c);
+			teamWikiItem.setStateWiki(item.Type__c);
 			teamWikiList.add(teamWikiItem);
 		}
 		
