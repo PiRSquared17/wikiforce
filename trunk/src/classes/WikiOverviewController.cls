@@ -2,6 +2,7 @@
 *@author Yuri Alvarez @ 05/02/2008
 */
 public with sharing class WikiOverviewController {
+//public class WikiOverviewController {
 	
 	public String allTeams = 'false';
 	List<Letters> letterFilter = new List<Letters>();
@@ -10,6 +11,14 @@ public with sharing class WikiOverviewController {
    	List<Wiki> wikis = new List<Wiki>();
    	String USERID = UserInfo.getUserId();
    	public WikiMemberController wmc = new WikiMemberController();
+    public Boolean isLastMemberAdmin = false;
+	
+    /**
+    *@retrun bool is last member admin
+    */
+    public Boolean getIsLastMemberAdmin (){
+        return isLastMemberAdmin;
+    }
 	
 	/**
 	* Costructor
@@ -170,7 +179,12 @@ public with sharing class WikiOverviewController {
 	*/
 	public void unjoinWiki(){
 		wmc.setWikiId(System.currentPageReference().getParameters().get('wid'));
-		wmc.unjoinWiki();
+        if(!wmc.isLastMemberAdmin()){
+            wmc.unjoinWiki();
+            isLastMemberAdmin = false;
+        }else{
+            isLastMemberAdmin = true;
+        }
 	}
 	
 	/**

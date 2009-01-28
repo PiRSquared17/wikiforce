@@ -89,7 +89,6 @@ trigger WikiAfterInsert on Wiki__c bulk(after insert) {
 				/**
 				* Create the first team member (the founder)
 				*/
-				
 				WikiMember__c firstTeamMember = new WikiMember__c();
 				firstTeamMember.User__c = Userinfo.getUserId();
 				firstTeamMember.Name = UserInfo.getName();

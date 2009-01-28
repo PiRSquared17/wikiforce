@@ -1,7 +1,7 @@
 @IsTest private class WikiMembersWidgetControllerTest {
     public static testMethod void testTeam() {
         try{ 
-            
+            //kkjnkjnkj
             GenerateEnvironmentTest.gen();
             Test.startTest();            
                     
@@ -89,8 +89,11 @@
 			member.getProfileId();
 			member.setProfileId( 'Public Profile' );
 
-			team.saveMembersNew();
+	
             team.saveMembers();            
+            team.saveMembers();            
+			
+			team.genPermissions();
 			
             Test.stopTest();
         }catch(Exception e){

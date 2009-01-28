@@ -53,7 +53,7 @@ trigger WikiMemberAfterInsert on WikiMember__c bulk (after insert) {
                 }
                 
                 // ### Determine Wiki access level ###
-                if(t.PublicProfile__c == null){
+                if(t.PublicProfile__c == null || t.NewMemberProfile__c == null){
                     //If team is private
                     GroupMember gm = new GroupMember();
                     gm.GroupId = g.Id;
@@ -104,7 +104,7 @@ trigger WikiMemberAfterInsert on WikiMember__c bulk (after insert) {
                     tms.UserOrGroupId = g.Id;
                     tms.AccessLevel = 'Read';
                     tms.RowCause = 'Manual';
-                    insert tms; 
+                    insert tms;
                 
                 }
             }   

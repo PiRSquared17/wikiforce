@@ -235,7 +235,7 @@
 											<apex:outputpanel id="buttonsDiv2" layout="block" > 
 												<apex:form >
 													<apex:commandButton rendered="{!IF(IsAdmin,true,false)}" value="Edit Wiki" onclick="location.href = 'WikiCreateWiki?id={!currentTeam.Id}'" />
-													<apex:commandButton rendered="{!IF(IsAdmin,true,false)}" value="Del Wiki" onclick="deleteWikiOverlay('{!currentTeam.Id}'); relocateOverlay();" />
+													<apex:commandButton rendered="{!IF(IsAdmin,true,false)}" value="Delete Wiki" onclick="deleteWikiOverlay('{!currentTeam.Id}'); relocateOverlay();" />
 													<apex:outputpanel rendered="{!userPermissions.canCreate}">
 														<input type="button" value="Add Wiki Page" onclick="createOverlay('','AddChildForm','305',''); relocateOverlay();" class="btn" />
 													</apex:outputpanel>

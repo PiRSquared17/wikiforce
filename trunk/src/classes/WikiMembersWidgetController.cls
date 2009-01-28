@@ -360,63 +360,6 @@ public with sharing class WikiMembersWidgetController {
 		return already;
 	}	
 			
-	/**
-	* Save Member and New
-	*@void
-	*/
-	public void saveMembersNew () {
-		List<WikiMember__c> newMemberList = new List<WikiMember__c>();
-		List<String> newMembers = newMemberVars.colleagueNames.split(',');
-		List<User> userList = new List<User>();
-		already = false;
-		for(String item: newMembers) {
-			List<User> userItem = new List<User>();
-			String itemTrim = item.trim();
-			userItem = [select id, Name, Email from User where IsActive != false and Name =:itemTrim limit 1];
-			if (userItem.size() > 0) {
-				already = false;
-				Integer listPos = 0;
-				while (!already && listPos < userList.size()) {
-					if(userList[listPos].Name == userItem[0].Name) {
-						already = true;
-					}
-					listPos++;
-				}
-				if (!already) {
-					userList.add(userItem[0]);
-				}
-				else
-					already = true;
-			}
-		}
-		
-		for (User user : userList) {
-			Integer isMember = [select count() from WikiMember__c where Wiki__c =:idWiki and User__r.IsActive != false and user__c =: user.id];
-			if (isMember == 0) {
-				WikiMember__c newMember = new WikiMember__c();
-				newMember.User__c = user.id;
-				newMember.Name = user.Name;
-				newMember.Wiki__c = idWiki;
-				newMember.WikiProfile__c = newMemberVars.profileId;
-				//newMember.WikiRole__c = newMemberVars.WikiRole;
-				newMemberList.add(newMember); 
-				mailList.add(user);
-				 
-			}
-		}
-		
-		userList.clear();
-		
-		memberListToolkit = newMemberList;
-		memberListToolkitCount = newMemberList.size();
-		
-		membersToInsert = newMemberList;	
-		
-		newMemberVars.colleagueNames = '';
-		newMemberVars.WikiRole = '';
-		newMemberVars.profileId = '';
-		newMemberVars.message = '';
-	}
 
 	/**
 	* Save Members

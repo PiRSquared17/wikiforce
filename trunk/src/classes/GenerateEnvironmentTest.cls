@@ -15,16 +15,13 @@ public class GenerateEnvironmentTest {
 	public static FavoriteWikis__c favorites = new FavoriteWikis__c();
 	public static WikiVersions__c version = new WikiVersions__c();
 
+	public static Attachment attach = new Attachment();
+
     //Boolen for run minimal date gen
     public static Boolean runLite = false;
     
     public static testMethod void gen(){
 
-        TeamUtil.isAdminMemberUser();
-        TeamUtil.getOrganizationGroup();
-        TeamUtil.getNamespace();
-        List<Attachment> attachList = new List<Attachment>();
-        TeamUtil.validateFileSize( attachList );
 			
         
         TeamUtil.isTest = true;
@@ -51,7 +48,6 @@ public class GenerateEnvironmentTest {
             upsert profile;
 			
 			// Create a attachment
-			Attachment attach = new Attachment();
             attach.Name = 'Test';
             attach.Body = Blob.valueOf('Content');
             attach.ParentId = profile.Id;

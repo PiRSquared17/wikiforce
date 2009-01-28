@@ -210,8 +210,10 @@ public class WikiCreateWikiController {
 	    			theWiki.PublicProfile__c = wp[0].Id;
 	    			theWiki.NewMemberProfile__c = newProfile.newProfileOpen;	    			
 	    		}else if (theWiki.Type__c == 'close') {
-	    			theWiki.PublicProfile__c = newProfile.publicProfileClosed;
-	    			theWiki.NewMemberProfile__c = null;
+                    //theWiki.PublicProfile__c = newProfile.publicProfileClosed;
+                    //theWiki.NewMemberProfile__c = null;
+                    theWiki.PublicProfile__c = null;
+                    theWiki.NewMemberProfile__c = newProfile.publicProfileClosed;
 	    		}else if (theWiki.Type__c == 'private'){
 	    			theWiki.PublicProfile__c = null;
 	    			theWiki.NewMemberProfile__c = null;
@@ -506,16 +508,17 @@ public class WikiCreateWikiController {
 	* Redirect after edit a member
 	*@return PageReference
 	*/
-	public PageReference editMemberAction () {	
-		editMember.WikiProfile__c = editMemberProfile;
-		//editMember.WikiRole__c = editMemberRole;
-		update editMember;
-		PageReference pageRef = Page.WikiMembersList;
-		pageRef.getParameters().put('id', idWiki);
-		pageRef.setRedirect(true);
-		return pageRef;
-	}
-	
+	/**
+			public PageReference editMemberAction () {	
+				editMember.WikiProfile__c = editMemberProfile;
+				//editMember.WikiRole__c = editMemberRole;
+				update editMember;
+				PageReference pageRef = Page.WikiMembersList;
+				pageRef.getParameters().put('id', idWiki);
+				pageRef.setRedirect(true);
+				return pageRef;
+			}
+	*/
 	/**
 	*@return profiles select option list
 	*/

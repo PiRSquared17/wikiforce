@@ -29,7 +29,7 @@
 				<div class="overlaySeparateLine" />
 				<!-- Saven and Cancel Buttons -->
 				<div class="overlayFromButtons" align="center">
-					<input type="button" class="overlaySaveBtn" id="massiveRemoveAction" onclick="massiveMemberRemove();" value="Continue"/> 
+					<input type="button" class="overlaySaveBtn" id="massiveRemoveAction" onclick="$('paginationOverlay').show();massiveMemberRemove();" value="Continue"/> 
 					<input class="overlayCancelBtn" type="button" value="Cancel" onclick="modal.close();"/>
 					<!-- <input class="InviteBtn" type="button" value="Send"/> <input class="InviteAndAddBtn" type="button" value="Send & add more members"/><input class="cancelBtn" type="button" value="Cancel" onclick="modal.close();"/> -->
 				</div>
