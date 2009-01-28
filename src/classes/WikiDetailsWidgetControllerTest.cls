@@ -7,6 +7,9 @@
             GenerateEnvironmentTest.gen();
             Test.startTest();
             
+            //lkljlkjlkjk
+            //llkokpokpo
+            
             WikiDetailsWidgetController wdw = new WikiDetailsWidgetController();
             
             wdw.setWiki( GenerateEnvironmentTest.wiki.id );

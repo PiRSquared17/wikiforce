@@ -3,7 +3,7 @@
 	   	GenerateEnvironmentTest.gen();
 		
 		Test.startTest();
-	    
+	    // dfsdfs
 	    WikiPageEditController wiki = new WikiPageEditController();
 	    WikiPageEditController.Replace replace = new WikiPageEditController.Replace();
 
@@ -12,7 +12,7 @@
 	    
 	    Wiki__c newTeam = 	GenerateEnvironmentTest.wiki;
 		WikiPage__c newWiki = new WikiPage__c();
-		newWiki.Body__c = '%TOC%\n\n== Header 2 ==\n=== Header 3 ===\n==== Header 4 ====\n===== Header 5 =====\n====== Header 6 ======\n\n[Image: src:http://www.salesforce.com/logo.jpg; a: right]\n[Image: src:http://www.salesforce.com/logo.jpg]\n[Image: src:11981mercano%20el%20marciano.jpg]\n\n \'\'\' bold \'\'\'\n \'\' italic \'\'\n __underline__\n --(strike)--\n normal^supstring^\n normal,,substring,,\n[[->text ident 20px ->]]\n[[-->text ident 40px-->]]\n[[--->text ident 60px--->]]\n\n* item 1\n* item 2\n* item 3\n\n~ item 1\n~ item 2\n~ item 3\n\n[[Juans Team:Home]]\n\n[[Home]]\n[[]]\n[[New Page Coverage Link]]\n\n[http://www.salesforce.com Salesforce]\n\n{| border="1"\n|-\n|cell 1.1\n|cell 2.1\n|-\n|cell 2.1\n|cell 2.2\n|}\n\n\n{| border="1"\n|+ Caption\n|-\n|cell 1.1\n|cell 2.1\n|}\n\n{|\n|cell 1.1\n|cell 2.1\n|}\n\n{|\n!cell 1.1\n! style="color: red;"|cell 2.1\n|}\n\n{| border="1"\n|+ style="color: red;" |Caption\n|- style="color: red;" \n|style="color: red;" | cell 1.1\n|cell 2.1\n|}\n\n[http://www.salesforce.com [Image: src:11981mercano%20el%20marciano.jpg; w:264; h:300;]]\n[Image: src:11981mercano%20el%20marciano.jpg; w:264; h:300;]\n[File: 11981mercano%20el%20marciano.jpg]\n[File: AttachIcons.zip]\n[File: malgoritmia.rar]\n[File: blabla.rar]\n[Flash: index.swf]\n\n{{{\n\nNo parsed\n\n}}}\n\n[Bgcolor:red red text Bgcolor]\n[Bgcolor:rgb(10,10,10) red text Bgcolor]\n[Bgcolor:red\nred text Bgcolor]\n\n\n\n[Color:blue blue text Color]\n[Color:blue\nblue text Color]\n[Color:rgb(10,10,10) blue text Color]\n\n{||}';//\n\n{|\n\n* item~Last*last[Bgcolor:Bgcolor][Color:Color][Image:[File:[[[http://www.salesforce.com{{{';
+		newWiki.Body__c = '=== Congratulations, this is [Color:rgb(255, 0, 0)][fontFamily:{tahoma}][fontSize:40px][fontVariant:small-caps]  [!Color][!fontFamily][!fontSize][!fontVariant] first wikipage! === You created a new wiki page for your team. Begin by clicking the "Edit" button above to modify this page.[Color:rgb(255, 0, 0)][fontFamily:{ninguna}][fontSize:9px][fontVariant:normal][lineHeight:normal]HOLA MUNDO[!Color][!fontFamily][!fontSize][!fontVariant][!lineHeight]';
 
 		newWiki.Name = 'TestClass Wiki';
 		newWiki.Wiki__c = newTeam.Id;
@@ -137,7 +137,7 @@
 	    
 	    Wiki__c newTeam = 	GenerateEnvironmentTest.wiki;
 		WikiPage__c newWiki = new WikiPage__c();
-		newWiki.Body__c = '%TOC%\n\n== Header 2 ==\n=== Header 3 ===\n==== Header 4 ====\n===== Header 5 =====\n====== Header 6 ======\n\n[Image: src:http://www.salesforce.com/logo.jpg; a: right]\n[Image: src:http://www.salesforce.com/logo.jpg]\n[Image: src:11981mercano%20el%20marciano.jpg]\n\n \'\'\' bold \'\'\'\n \'\' italic \'\'\n __underline__\n --(strike)--\n normal^supstring^\n normal,,substring,,\n[[->text ident 20px ->]]\n[[-->text ident 40px-->]]\n[[--->text ident 60px--->]]\n\n* item 1\n* item 2\n* item 3\n\n~ item 1\n~ item 2\n~ item 3\n\n[[Juans Team:Home]]\n\n[[Home]]\n[[]]\n[[New Page Coverage Link]]\n\n[http://www.salesforce.com Salesforce]\n\n{| border="1"\n|-\n|cell 1.1\n|cell 2.1\n|-\n|cell 2.1\n|cell 2.2\n|}\n\n\n{| border="1"\n|+ Caption\n|-\n|cell 1.1\n|cell 2.1\n|}\n\n{|\n|cell 1.1\n|cell 2.1\n|}\n\n{|\n!cell 1.1\n! style="color: red;"|cell 2.1\n|}\n\n{| border="1"\n|+ style="color: red;" |Caption\n|- style="color: red;" \n|style="color: red;" | cell 1.1\n|cell 2.1\n|}\n\n[http://www.salesforce.com [Image: src:11981mercano%20el%20marciano.jpg; w:264; h:300;]]\n[Image: src:11981mercano%20el%20marciano.jpg; w:264; h:300;]\n[File: 11981mercano%20el%20marciano.jpg]\n[File: AttachIcons.zip]\n[File: malgoritmia.rar]\n[File: blabla.rar]\n[Flash: index.swf]\n\n{{{\n\nNo parsed\n\n}}}\n\n[Bgcolor:red red text Bgcolor]\n[Bgcolor:rgb(10,10,10) red text Bgcolor]\n[Bgcolor:red\nred text Bgcolor]\n\n\n\n[Color:blue blue text Color]\n[Color:blue\nblue text Color]\n[Color:rgb(10,10,10) blue text Color]\n\n{||}';//\n\n{|\n\n* item~Last*last[Bgcolor:Bgcolor][Color:Color][Image:[File:[[[http://www.salesforce.com{{{';
+		newWiki.Body__c = '=== Congratulations, this is [Color:rgb(255, 0, 0)][fontFamily:{tahoma}][fontSize:40px][fontVariant:small-caps]  [!Color][!fontFamily][!fontSize][!fontVariant] first wikipage! === You created a new wiki page for your team. Begin by clicking the "Edit" button above to modify this page.[Color:rgb(255, 0, 0)][fontFamily:{ninguna}][fontSize:9px][fontVariant:normal][lineHeight:normal]HOLA MUNDO[!Color][!fontFamily][!fontSize][!fontVariant][!lineHeight]';
 		newWiki.Wiki__c = newTeam.Id;
 		insert newWiki;
 	    
@@ -247,15 +247,15 @@
 		
 		Test.startTest(); 
 	    
-	    System.currentPageReference().getParameters().put( 'id', GenerateEnvironmentTest.wikiPage.id );
 	    WikiPageEditController wiki = new WikiPageEditController();
+	    System.currentPageReference().getParameters().put( 'id', GenerateEnvironmentTest.wikiPage.id );
 		WikiPageEditController.Replace replace = new WikiPageEditController.Replace();
 		
 	    UserPermissions userPermissions = new UserPermissions();
 	   
 	    wiki.setIdWikiPage(GenerateEnvironmentTest.wiki.Id);
 
-		wiki.constWikiPageEdit();    
+		//wiki.constWikiPageEdit();    
 		wiki.getUserPermissions();     
 		
 		replace.setContent('<a foo');
@@ -280,22 +280,22 @@
 	    
 	    Wiki__c newTeam = 	GenerateEnvironmentTest.wiki;
 		WikiPage__c newWiki = new WikiPage__c();
-		newWiki.Body__c = '%TOC%\n\n== Header 2 ==\n=== Header 3 ===\n==== Header 4 ====\n===== Header 5 =====\n====== Header 6 ======\n\n[Image: src:http://www.salesforce.com/logo.jpg; a: right]\n[Image: src:http://www.salesforce.com/logo.jpg]\n[Image: src:11981mercano%20el%20marciano.jpg]\n\n \'\'\' bold \'\'\'\n \'\' italic \'\'\n __underline__\n --(strike)--\n normal^supstring^\n normal,,substring,,\n[[->text ident 20px ->]]\n[[-->text ident 40px-->]]\n[[--->text ident 60px--->]]\n\n* item 1\n* item 2\n* item 3\n\n~ item 1\n~ item 2\n~ item 3\n\n[[Juans Team:Home]]\n\n[[Home]]\n[[]]\n[[New Page Coverage Link]]\n\n[http://www.salesforce.com Salesforce]\n\n{| border="1"\n|-\n|cell 1.1\n|cell 2.1\n|-\n|cell 2.1\n|cell 2.2\n|}\n\n\n{| border="1"\n|+ Caption\n|-\n|cell 1.1\n|cell 2.1\n|}\n\n{|\n|cell 1.1\n|cell 2.1\n|}\n\n{|\n!cell 1.1\n! style="color: red;"|cell 2.1\n|}\n\n{| border="1"\n|+ style="color: red;" |Caption\n|- style="color: red;" \n|style="color: red;" | cell 1.1\n|cell 2.1\n|}\n\n[http://www.salesforce.com [Image: src:11981mercano%20el%20marciano.jpg; w:264; h:300;]]\n[Image: src:11981mercano%20el%20marciano.jpg; w:264; h:300;]\n[File: 11981mercano%20el%20marciano.jpg]\n[File: AttachIcons.zip]\n[File: malgoritmia.rar]\n[File: blabla.rar]\n[Flash: index.swf]\n\n{{{\n\nNo parsed\n\n}}}\n\n[Bgcolor:red red text Bgcolor]\n[Bgcolor:rgb(10,10,10) red text Bgcolor]\n[Bgcolor:red\nred text Bgcolor]\n\n\n\n[Color:blue blue text Color]\n[Color:blue\nblue text Color]\n[Color:rgb(10,10,10) blue text Color]\n\n{||}';//\n\n{|\n\n* item~Last*last[Bgcolor:Bgcolor][Color:Color][Image:[File:[[[http://www.salesforce.com{{{';
+		newWiki.Body__c = '=== Congratulations, this is [Color:rgb(255, 0, 0)][fontFamily:{tahoma}][fontSize:40px][fontVariant:small-caps]  [!Color][!fontFamily][!fontSize][!fontVariant] first wikipage! === You created a new wiki page for your team. Begin by clicking the "Edit" button above to modify this page.[Color:rgb(255, 0, 0)][fontFamily:{ninguna}][fontSize:9px][fontVariant:normal][lineHeight:normal]HOLA MUNDO[!Color][!fontFamily][!fontSize][!fontVariant][!lineHeight]';
 		newWiki.Name = 'TestClass Wiki';
 		newWiki.Wiki__c = newTeam.Id;
-		newWiki.Parent__c = GenerateEnvironmentTest.wiki.Id;
+		newWiki.Parent__c = GenerateEnvironmentTest.wikiPage.Id;
 		insert newWiki;
 	    
 	    replace.setContent('[[TestClass Wiki]]');  
 		wiki.setReplace(replace);  
 	    wiki.parseWiki();
-	    wiki.SaveEdit();
+	    //!!!wiki.SaveEdit();
 	    
 	    replace.setContent('[[TestClass Wiki]]');  
 		wiki.setReplace(replace);  
 	    wiki.parseWiki();
 	    
-	    wiki.SaveEdit();
+	    //!!!wiki.SaveEdit();
 	    wiki.CancelEdit();
 	    wiki.setIdWikiPage(newWiki.Id);
 		wiki.getBreadCrumbing();

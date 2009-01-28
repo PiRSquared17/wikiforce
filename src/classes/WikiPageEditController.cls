@@ -275,7 +275,6 @@ public without sharing class WikiPageEditController {
  		 
     	String toc = '';
     	
-    	String html;		
   		html = replace.content;
 		html = html.replaceAll('\n','<br>');
  		

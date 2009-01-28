@@ -50,7 +50,8 @@
 		<script>
 			var remaingToSave = '{!initAddMembers}';
 			if (remaingToSave == 'false' && !firstExecuteTime){
-				//Show swirly here
+				//Show swirly here 
+				$('paginationOverlay').show();
 				reloadMemberList();
 			}
 			firstExecuteTime = false;
@@ -143,13 +144,9 @@
 					<!-- Save and Cancel Buttons -->
 					<div class="overlayFromButtons" align="center">
 						<apex:commandButton action="{!saveMembers}"
-							oncomplete="setTimeout('modal.close(); hideSwirly(\'swirly_overlay\')', 5000); showMessageToUser(); showSwirly('swirly_members');"
+							oncomplete="setTimeout('modal.close(); hideSwirly(\'swirly_overlay\')', 5000);$('paginationOverlay').show();showMessageToUser(); "
 							styleclass="overlaySaveBtn" value="Send"
 							rerender="membersListContainer, saveMembersSync" /> 
-							<apex:commandButton action="{!saveMembersNew}"
-							oncomplete="statusSending(this);$('{!$Component.newMemberForm}').reset(); statusNormal(this);hideSwirly('swirly_overlay'); showSwirly('swirly_members'); chargeMatrix(myMembersIds);"
-							styleclass="overlaySaveBtn" value="Send & add more members"
-							rerender="membersListContainer, saveMembersSync" />
 							<input class="btn overlayCancelBtn" type="button" value="Cancel" onclick="modal.close();" />
 					</div>
 				</apex:form>

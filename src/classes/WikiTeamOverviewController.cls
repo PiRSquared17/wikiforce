@@ -1,6 +1,7 @@
 /**
 *@author Gabriel Rilo @ 01/06/2009
 */
+//public with sharing class WikiTeamOverviewController {
 public with sharing class WikiTeamOverviewController {
 	
 	// Wiki__c given in the url
@@ -179,7 +180,11 @@ public with sharing class WikiTeamOverviewController {
     	List<User> teamAdmin = [Select Id, Profile.PermissionsModifyAllData From User where id =: UserInfo.getUserId() limit 1];
     	List<WikiMember__c> wiki = [select WikiProfile__r.Name from WikiMember__c where Wiki__c =: TEAMID and User__c =: UserInfo.getUserId() limit 1];
     	String nameProfileAdmin = 'Wiki Administrator';
-    	this.setIsAdmin(teamAdmin[0].Profile.PermissionsModifyAllData || nameProfileAdmin.equals(wiki[0].WikiProfile__r.Name));
+    	if(teamAdmin[0].Profile.PermissionsModifyAllData) {
+    	   this.setIsAdmin(teamAdmin[0].Profile.PermissionsModifyAllData || nameProfileAdmin.equals(wiki[0].WikiProfile__r.Name));
+    	} else {
+    	   this.setIsAdmin(false);
+    	}
     }
     
 	/**

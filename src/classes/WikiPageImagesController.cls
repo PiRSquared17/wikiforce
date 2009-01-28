@@ -59,6 +59,8 @@ public class WikiPageImagesController {
 	*@return PageReference
 	*/
 	public PageReference saveNewImage () {
+		
+		System.debug( '###: ' + this.idWikiPage );
 		newAttach.ParentId = this.idWikiPage;
 		PageReference pageRef = ApexPages.currentPage();
 		if(newAttach.BodyLength <= MAX_SIZE || (newAttach.name != null || newAttach.name != '') || (this.idWikiPage != null || this.idWikiPage != '')){
