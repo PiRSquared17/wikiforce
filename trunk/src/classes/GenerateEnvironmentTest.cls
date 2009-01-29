@@ -22,8 +22,6 @@ public class GenerateEnvironmentTest {
     
     public static testMethod void gen(){
 
-			
-        
         TeamUtil.isTest = true;
         
         if (!TeamUtil.alreadyGenEnv) {
@@ -46,6 +44,17 @@ public class GenerateEnvironmentTest {
             profile.ManageWikis__c = true; 
             profile.PostWikiComments__c = true; 
             upsert profile;
+            
+			//Create Others profiles
+			WikiProfile__c newWikiProfilePublic = new WikiProfile__c(); 
+            newWikiProfilePublic.Name = 'Public Profile';
+            newWikiProfilePublic.PostWikiComments__c = true; 
+            upsert newWikiProfilePublic;            
+            
+			WikiProfile__c newWikiProfileMember = new WikiProfile__c(); 
+            newWikiProfileMember.Name = 'Member Profile';
+            newWikiProfileMember.CreateWikiPages__c = true;
+            newWikiProfileMember.PostWikiComments__c = true; 
 			
 			// Create a attachment
             attach.Name = 'Test';

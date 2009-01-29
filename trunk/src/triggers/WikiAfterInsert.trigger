@@ -20,7 +20,7 @@ trigger WikiAfterInsert on Wiki__c bulk(after insert) {
 				g.Name = 'wikiSharing' + team.Id;
 				insert g;
 				
-				if(team.PublicProfile__c != null){
+				if(team.PublicProfile__c != null || team.NewMemberProfile__c != null){
 					GroupMember gm = new GroupMember();
 					gm.GroupId = g.Id;
 					gm.UserOrGroupId = go[0].Id;
