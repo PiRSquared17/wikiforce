@@ -105,7 +105,7 @@
 												</apex:commandLink>
 											</li>		
 											<li id="CreateNewWikiContainer">
-												<a href="/apex/WikiCreateWiki" class="CreateNewDiscussionForum"><img id="createNewForumButton" src="{!URLFOR($Resource.WikiResource, '/images/WikiButtons/newwikiaction.png')}" ></a>
+												<a href="/apex/WikiCreateWiki"><img src="{!URLFOR($Resource.WikiResource, '/images/WikiButtons/leftSide.png')}"/><span>Create New Wiki</span></a>
 											</li>		
 										</ul>
 									</apex:form>
@@ -167,7 +167,7 @@
 												</div>
 												<hr class="filterHR">
 												<apex:outputpanel styleclass="noWikisYet" layout="block" rendered="{!IF(cntPagination == 0, true, false)}">
-													No {!$ObjectType.Wiki__c.label} Wikis Yet.
+													No {!$ObjectType.Wiki__c.label} Yet.
 												</apex:outputpanel>
 												<apex:outputpanel id="wikiSitesPanel" rendered="{!IF(cntPagination == 0, false, true)}">
 													

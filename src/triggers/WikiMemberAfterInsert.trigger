@@ -58,7 +58,7 @@ trigger WikiMemberAfterInsert on WikiMember__c bulk (after insert) {
                     GroupMember gm = new GroupMember();
                     gm.GroupId = g.Id;
                     gm.UserOrGroupId = tm.User__c;
-                    insert gm;          
+                    insert gm;
                 }
                 
                 // Determine Different Queue Additions

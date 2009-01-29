@@ -6,7 +6,6 @@
     	{
             GenerateEnvironmentTest.gen();
             Test.startTest();
-             //dfsdfs
             
             WikiMemberController wm = new WikiMemberController();
             wm.setUserId( GenerateEnvironmentTest.newUser.Id );
@@ -20,11 +19,7 @@
             wm.joinWiki();
             wm.unjoinWiki();
             
-            
-            
-            
             Test.stopTest();
- 
 		}
         catch(Exception e)
         {

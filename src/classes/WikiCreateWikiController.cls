@@ -210,10 +210,9 @@ public class WikiCreateWikiController {
 	    			theWiki.PublicProfile__c = wp[0].Id;
 	    			theWiki.NewMemberProfile__c = newProfile.newProfileOpen;	    			
 	    		}else if (theWiki.Type__c == 'close') {
-                    //theWiki.PublicProfile__c = newProfile.publicProfileClosed;
-                    //theWiki.NewMemberProfile__c = null;
+                    List<WikiProfile__c> wp = [Select Name, Id From WikiProfile__c Where Name = 'Member Profile' limit 1];
                     theWiki.PublicProfile__c = null;
-                    theWiki.NewMemberProfile__c = newProfile.publicProfileClosed;
+                    theWiki.NewMemberProfile__c = wp[0].Id;
 	    		}else if (theWiki.Type__c == 'private'){
 	    			theWiki.PublicProfile__c = null;
 	    			theWiki.NewMemberProfile__c = null;
@@ -1071,6 +1070,9 @@ public class WikiCreateWikiController {
 		
 		List<WikiMember__c> memberResultList = new List<WikiMember__c>();
 
+		System.debug( '###:' + sortByDesc );
+		System.debug( 'LLL:' + letter );
+		System.debug( 'sss:' + sortBy );
 		if (sortByDesc) {
 			if (letter == null || letter == '' || letter== 'ALL') {
 				if (sortBy == 'User__r.Name') {

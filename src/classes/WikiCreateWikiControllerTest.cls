@@ -121,72 +121,94 @@
 
             df.getSortByDesc();
 
-            df.sortByDesc = false;
-	            df.setLetter( 'A' );
-		            df.setSortBy('User__r.Name');
+		            df.sortByDesc = false;
+	    	        df.letter =  'A';
+	            	df.setSortBy( 'User__r.Name' );
+		            System.currentPageReference().getParameters().put('sb','User__r.Name');
 	        	    df.getSortBy();
 	    	        df.sortList(); // 1 SOQL
 	
-		            df.setSortBy('User__r.CompanyName');
-		            df.getSortBy();
+		            df.sortByDesc = false;
+	    	        df.letter =  'A';
+	            	df.setSortBy( 'User__r.CompanyName' );
+		            System.currentPageReference().getParameters().put('sb','User__r.CompanyName');
 		            df.sortList(); // 1 SOQL
 		                        
-		            df.setSortBy('User__r.Title');
-		            df.getSortBy();
+		            df.sortByDesc = false;
+	    	        df.letter =  'A';
+	            	df.setSortBy( 'User__r.Title' );
+		            System.currentPageReference().getParameters().put('sb','User__r.Title');
 		            df.sortList(); // 1 SOQL
 		            
-		            df.setSortBy('WikiProfile__r.Name');
-		            df.getSortBy();
+		            df.sortByDesc = false;
+	    	        df.letter =  'A';
+	            	df.setSortBy( 'WikiProfile__r.Name' );
+		            System.currentPageReference().getParameters().put('sb','WikiProfile__r.Name');
 		            df.sortList(); // 1 SOQL		            
-				df.letter = null;
-		            df.setSortBy('User__r.Name');
-	        	    df.getSortBy();
+	
+		            df.sortByDesc = false;
+					df.letter = null;
+	            	df.setSortBy( 'User__r.Name' );
+		            System.currentPageReference().getParameters().put('sb','User__r.Name');
 	    	        df.sortList(); // 1 SOQL
 	
-		            df.setSortBy('User__r.CompanyName');
-		            df.getSortBy();
+		            df.sortByDesc = false;
+					df.letter = null;
+	            	df.setSortBy( 'User__r.CompanyName' );
+		            System.currentPageReference().getParameters().put('sb','User__r.CompanyName');
 		            df.sortList(); // 1 SOQL
 		                        
-		            df.setSortBy('User__r.Title');
-		            df.getSortBy();
+		            df.sortByDesc = false;
+					df.letter = null;
+	            	df.setSortBy( 'User__r.Title' );
+		            System.currentPageReference().getParameters().put('sb','User__r.Title');
 		            df.sortList(); // 1 SOQL
 		            
-		            df.setSortBy('WikiProfile__r.Name');
-		            df.getSortBy();
+		            df.sortByDesc = false;
+					df.letter = null;
+	            	df.setSortBy( 'WikiProfile__r.Name' );
+		            System.currentPageReference().getParameters().put('sb','WikiProfile__r.Name');
 		            df.sortList(); // 1 SOQL		            
 
-            df.sortByDesc = false;
-	            df.letter = 'G';
-		            df.setSortBy('User__r.Name');
-	        	    df.getSortBy();
+
+	            	df.letter = 'G';
+	            	df.setSortBy( '' );
+		            System.currentPageReference().getParameters().put('sb','User__r.Name');
 	    	        df.sortList(); // 1 SOQL
 	
-		            df.setSortBy('User__r.CompanyName');
-		            df.getSortBy();
+	            	df.letter = 'G';
+	            	df.setSortBy( '' );
+		            System.currentPageReference().getParameters().put('sb','User__r.CompanyName');
 		            df.sortList(); // 1 SOQL
 		                        
-		            df.setSortBy('User__r.Title');
-		            df.getSortBy();
+	            	df.letter = 'G';
+	            	df.setSortBy( '' );
+		            System.currentPageReference().getParameters().put('sb','User__r.Title');
 		            df.sortList(); // 1 SOQL
 		            
-		            df.setSortBy('WikiProfile__r.Name');
-		            df.getSortBy();
+	            	df.letter = 'G';
+	            	df.setSortBy( '' );
+		            System.currentPageReference().getParameters().put('sb','WikiProfile__r.Name');
 		            df.sortList(); // 1 SOQL		            
-				df.letter = null;
-		            df.setSortBy('User__r.Name');
-	        	    df.getSortBy();
+	
+					df.letter = null;
+	            	df.setSortBy( '' );
+		            System.currentPageReference().getParameters().put('sb','User__r.Name');
 	    	        df.sortList(); // 1 SOQL
 	
-		            df.setSortBy('User__r.CompanyName');
-		            df.getSortBy();
+					df.letter = null;
+	            	df.setSortBy( '' );
+		            System.currentPageReference().getParameters().put('sb','User__r.CompanyName');
 		            df.sortList(); // 1 SOQL
 		                        
-		            df.setSortBy('User__r.Title');
-		            df.getSortBy();
+					df.letter = null;
+	            	df.setSortBy( '' );
+		            System.currentPageReference().getParameters().put('sb','User__r.Title');
 		            df.sortList(); // 1 SOQL
 		            
-		            df.setSortBy('WikiProfile__r.Name');
-		            df.getSortBy();
+					df.letter = null;
+	            	df.setSortBy( '' );
+		            System.currentPageReference().getParameters().put('sb','WikiProfile__r.Name');
 		            df.sortList(); // 1 SOQL		            
 
 			// Others setters and getters
