@@ -1,5 +1,5 @@
 /**
-*@author German Barrios @ 12-1-2008
+*@author German Barrios @ 05-01-2009
 */ 
 public class SearchController {
 	// Parameter with action

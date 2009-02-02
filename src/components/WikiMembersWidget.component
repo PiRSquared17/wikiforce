@@ -134,11 +134,7 @@
 					</div>
 					<div class="informationPanel clear" id="infoToUser"
 						style="display: none;"></div>
-					<div id="paginationOverlay" style="display: none;">
-					<div class="loader"><img
-						src="{!URLFOR($Resource.discussionResourceFiles, 'images/common/layout/big-loader.gif')}"
-						alt="Loading..." title="Loading..." /></div>
-					</div>
+					
 					<div class="overlaySeparateLine"></div>
 					
 					<!-- Save and Cancel Buttons -->

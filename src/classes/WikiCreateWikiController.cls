@@ -194,10 +194,16 @@ public class WikiCreateWikiController {
     
     wikiProfile newProfile = new wikiProfile();
     
+    /**
+    *@return new wiki profile
+    */
     public wikiProfile getnewProfile(){
     	return newProfile;
     }
     
+    /**
+    * Save Wiki
+    */
     public void save(){
     	System.debug('\n\n############## Profile #############\n' + newProfile.openOrClosed);
 		try{
@@ -264,6 +270,9 @@ public class WikiCreateWikiController {
     	}  
     }
     
+  	/**
+  	*@return reload the page and open add members overlay
+  	*/
   	public PageReference saveWikiAndAddMembers(){
 		try{
 			save();
@@ -672,41 +681,6 @@ public class WikiCreateWikiController {
 		public void setName (String name) {
 			this.name = name;
 		}
-		
-		/**
-		*@param String idMember
-		*/
-	/**	public void setMemberImg (String memberId) {
-			
-			List<PeopleProfile__c> imgs = new List<PeopleProfile__c>();
-			try {
-				imgs = [SELECT Id, YahooIM__c, Skype__c, Picture__c from PeopleProfile__c WHERE User__c =: memberId LIMIT 1];
-			} catch(Exception e){
-				throw e;
-			}
-			PeopleProfile__c img = new PeopleProfile__c();
-			if(imgs.size() > 0){
-				img = imgs[0];
-			} 
-			
-			if (img == null) {
-				this.memberImg = '';
-				this.yahoo = '';
-				this.skype = '';
-			}else {
-				this.memberImg = img.Picture__c;
-				if(img.YahooIM__c != null){
-	            	this.yahoo = img.YahooIM__c;
-	            }else {
-	            	this.yahoo = '';
-	            }
-	            if(img.Skype__c != null){
-	            	this.skype = img.Skype__c;
-	            }else {
-	            	this.skype = '';
-	            }
-			}
-		}**/
 		
 		/**
 		*@param String

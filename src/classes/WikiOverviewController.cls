@@ -542,9 +542,9 @@ public with sharing class WikiOverviewController {
 		if (letter == 'ALL' || letter == null || letter == '') {
 			Integer allTeamCount;
 			if (allTeams == 'true') {
-				sites = [select Id, Name, Description__c, PictureId__c, Type__c from Wiki__c order by Name];
+				sites = [select Id, Name, Description__c, PictureId__c, PublicProfile__c, Type__c from Wiki__c order by Name];
 			}else {
-				sites = [select Id, Name, Description__c, PictureId__c, Type__c from Wiki__c where id in:myTeamsList order by Name];
+				sites = [select Id, Name, Description__c, PictureId__c, PublicProfile__c, Type__c from Wiki__c where id in:myTeamsList order by Name];
 			}
 			allTeamCount = sites.size();
 			cntPagination = (allTeamCount - (Math.mod(allTeamCount, numSitesRows)))/ numSitesRows;
@@ -809,10 +809,5 @@ public with sharing class WikiOverviewController {
    	public Integer getCntMyRecentChanges () {
    		return [ SELECT count() FROM WikiPage__c WHERE LastModifiedById =:UserInfo.getUserId()];
    	}
-   	
-   	
-   	/**
-   	* Add member to wiki
-   	*/
 
 }

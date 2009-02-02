@@ -76,7 +76,6 @@ trigger WikiMemberAfterInsert on WikiMember__c bulk (after insert) {
                 }
                 
                 if (findProfile) {
-        
                     if(tp.ManageWikis__c){
                         String queueName = 'Wiki' + tm.Wiki__c;
                         Boolean findGroup = false;
