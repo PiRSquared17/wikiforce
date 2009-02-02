@@ -39,10 +39,6 @@
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
-        <apexClass>StartHereControllerTest</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
         <apexClass>SuggestController</apexClass>
         <enabled>true</enabled>
     </classAccesses>
@@ -212,14 +208,6 @@
     </classAccesses>
     <classAccesses>
         <apexClass>WikiWidgetMyRecentChangesControllerTest</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
-        <apexClass>XMLDom</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
-        <apexClass>startHereController</apexClass>
         <enabled>true</enabled>
     </classAccesses>
     <fieldLevelSecurities>
@@ -1414,10 +1402,6 @@
     </objectPermissions>
     <pageAccesses>
         <apexPage>HeaderTemplate</apexPage>
-        <enabled>true</enabled>
-    </pageAccesses>
-    <pageAccesses>
-        <apexPage>Start_Here</apexPage>
         <enabled>true</enabled>
     </pageAccesses>
     <pageAccesses>

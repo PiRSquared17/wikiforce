@@ -128,7 +128,7 @@ public with sharing class WikiPageController {
 	public UserPermissions getUserPermissions () {
 		return userPermissions;
 	}
-	/* ---------------------------- */		
+
 		
 	/**
 	*@param String
@@ -166,9 +166,7 @@ public with sharing class WikiPageController {
 		return idWikiPage;
 	}
 	
-	
-	
-   	/* ---------------------------- */
+  	/* ---------------------------- */
    	/*   	 SHOW WIKI PAGES		*/
    	/* ---------------------------- */	
 
@@ -221,12 +219,10 @@ public with sharing class WikiPageController {
     	
     }
 	
-	
    	/* ---------------------------- */
    	/*   	  PARSE WIKI PAGE		*/
    	/* ---------------------------- */	 
  	public String html = null;
- 	
  	
  	/**
 	* Parses the wikipage and stores its HTML code in the html attribute
@@ -247,7 +243,6 @@ public with sharing class WikiPageController {
 			html = html.replaceAll('&nbsp;',' ');
 			html = html.replaceAll('&gt;','>');
 			html = html.replaceAll('&lt;','<');
-			
 			
 			/* ------------------------ */
 	 		/* 		Code (No parsed) 	*/
@@ -276,10 +271,8 @@ public with sharing class WikiPageController {
 	 			noparsedText.add(code);
 	 		}
 	 		
-	 		
 	 		/* ------------------------ */
 	 		/* 			Tables 		 	*/
-			
 			String tableStart = '{|';
 	 		String tableStartExp = '\\{\\|';
 	 		
@@ -1271,7 +1264,6 @@ public with sharing class WikiPageController {
 		newWV.Body__c = '=== Congratulations! === \n You created a new wiki page for your team. Begin by clicking the "Edit" button above to modify this page.';
 		insert newWV;
 		
-		
 		newPage = false;	
 	}   	
 
@@ -1456,7 +1448,6 @@ public with sharing class WikiPageController {
 		infoWP.setLastModifiedBy(wiki.LastModifiedById);
 		infoWP.setLastModifiedDate(wiki.LastModifiedDate);
 		infoWP.setShortDescription(wiki.ShortDescription__c);  
-			
 		
 	}    		
    		

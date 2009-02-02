@@ -167,7 +167,7 @@
 												</div>
 												<hr class="filterHR">
 												<apex:outputpanel styleclass="noWikisYet" layout="block" rendered="{!IF(cntPagination == 0, true, false)}">
-													No {!$ObjectType.Wiki__c.label} Yet.
+													No {!$ObjectType.Wiki__c.LabelPlural} Yet.
 												</apex:outputpanel>
 												<apex:outputpanel id="wikiSitesPanel" rendered="{!IF(cntPagination == 0, false, true)}">
 													
@@ -234,7 +234,6 @@
 																	<table border="0" style="width:100%;">
 																		<tr>
 																			<td width="110px">
-                                                                                <div> {!item.stateWiki}</div>
 																				<apex:commandLink value="Join" action="{!joinWiki}" rendered="{!IF(AND(NOT(item.isMember),item.isPublic),true,false)}" onclick="changeJoinStatus(this)" oncomplete="joinComplete();" >
 																					<apex:param name="wid" value="{!item.Id}" />
 																					<apex:param name="allTeams" value="false" />

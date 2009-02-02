@@ -1,4 +1,8 @@
+/**
+*@author German Barrios @ 16/01/2009
+*/
 public class DeleteWikiController {
+	
 	/**
 	* Construct
 	*/

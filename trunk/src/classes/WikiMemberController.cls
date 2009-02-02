@@ -69,6 +69,10 @@ public class WikiMemberController {
 		return this.wikiId;
 	}
 	
+	
+	/**
+	*@return public profile id
+	*/
 	public String getWikiProfileId(){
 		List<WikiProfile__c> wikiProfile = [select Id from WikiProfile__c where Name = 'Public Profile' ];
 		return wikiProfile[0].Id;
