@@ -16,7 +16,7 @@
     </classAccesses>
     <classAccesses>
         <apexClass>CustomExceptionTest</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>DeleteWikiController</apexClass>
@@ -24,11 +24,11 @@
     </classAccesses>
     <classAccesses>
         <apexClass>DeleteWikiControllerTest</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>GenerateEnvironmentTest</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>SearchController</apexClass>
@@ -36,15 +36,15 @@
     </classAccesses>
     <classAccesses>
         <apexClass>SearchControllerTest</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>SuggestController</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>SuggestControllerTest</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>TeamUtil</apexClass>
@@ -52,7 +52,7 @@
     </classAccesses>
     <classAccesses>
         <apexClass>TeamUtilTest</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>TeamsWidgetWikiDirectoryController</apexClass>
@@ -60,11 +60,11 @@
     </classAccesses>
     <classAccesses>
         <apexClass>TeamsWidgetWikiDirectoryControllerTest</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>TriggersTest</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>UploadAttachmentController</apexClass>
@@ -72,11 +72,11 @@
     </classAccesses>
     <classAccesses>
         <apexClass>UploadAttachmentControllerTest</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>UserPermissionTest</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>UserPermissions</apexClass>
@@ -88,7 +88,7 @@
     </classAccesses>
     <classAccesses>
         <apexClass>WikiCreateWikiControllerTest</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>WikiDetailsController</apexClass>
@@ -96,7 +96,7 @@
     </classAccesses>
     <classAccesses>
         <apexClass>WikiDetailsControllerTest</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>WikiDetailsWidgetController</apexClass>
@@ -104,23 +104,23 @@
     </classAccesses>
     <classAccesses>
         <apexClass>WikiDetailsWidgetControllerTest</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>WikiMemberController</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>WikiMemberControllerTest</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>WikiMembersRemoveController</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>WikiMembersRemoveControllerTest</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>WikiMembersWidgetController</apexClass>
@@ -128,7 +128,7 @@
     </classAccesses>
     <classAccesses>
         <apexClass>WikiMembersWidgetControllerTest</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>WikiNewPageWidgetController</apexClass>
@@ -136,7 +136,7 @@
     </classAccesses>
     <classAccesses>
         <apexClass>WikiNewPageWidgetControllerTest</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>WikiOverviewController</apexClass>
@@ -144,7 +144,7 @@
     </classAccesses>
     <classAccesses>
         <apexClass>WikiOverviewControllerTest</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>WikiPageController</apexClass>
@@ -152,7 +152,7 @@
     </classAccesses>
     <classAccesses>
         <apexClass>WikiPageControllerTest</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>WikiPageEditController</apexClass>
@@ -160,7 +160,7 @@
     </classAccesses>
     <classAccesses>
         <apexClass>WikiPageEditTest</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>WikiPageImagesController</apexClass>
@@ -168,7 +168,7 @@
     </classAccesses>
     <classAccesses>
         <apexClass>WikiPageImagesControllerTest</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>WikiPageLinksController</apexClass>
@@ -176,7 +176,7 @@
     </classAccesses>
     <classAccesses>
         <apexClass>WikiPageLinksControllerTest</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>WikiSearchResultController</apexClass>
@@ -184,7 +184,7 @@
     </classAccesses>
     <classAccesses>
         <apexClass>WikiSearchResultControllerTest</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>WikiTeamOverviewController</apexClass>
@@ -192,7 +192,7 @@
     </classAccesses>
     <classAccesses>
         <apexClass>WikiTeamOverviewControllerTest</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>WikiWidgetMyFavoritesController</apexClass>
@@ -200,7 +200,7 @@
     </classAccesses>
     <classAccesses>
         <apexClass>WikiWidgetMyFavoritesControllerTest</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>WikiWidgetMyRecentChangesController</apexClass>
@@ -208,7 +208,7 @@
     </classAccesses>
     <classAccesses>
         <apexClass>WikiWidgetMyRecentChangesControllerTest</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <fieldLevelSecurities>
         <editable>true</editable>
@@ -1395,7 +1395,7 @@
     </pageAccesses>
     <pageAccesses>
         <apexPage>SuggestDispatcher</apexPage>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </pageAccesses>
     <pageAccesses>
         <apexPage>UploadAttachment</apexPage>
@@ -1407,11 +1407,11 @@
     </pageAccesses>
     <pageAccesses>
         <apexPage>WikiMembersMassiveRemove</apexPage>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </pageAccesses>
     <pageAccesses>
         <apexPage>WikiMembersRemove</apexPage>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </pageAccesses>
     <pageAccesses>
         <apexPage>WikiOverview</apexPage>

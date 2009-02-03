@@ -1,4 +1,4 @@
-<apex:component controller="WikiMembersWidgetController" allowDml="true">
+<apex:component controller="WikiMembersWidgetController" allowDml="true" id="WikiMW"> 
 
 	<!-- Attribute Definitions -->
 	<apex:attribute name="wikiId" description="The team ID" type="String" required="true" assignTo="{!Wiki}" />

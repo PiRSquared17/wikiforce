@@ -26,6 +26,9 @@
 	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/WikiOverview.css')}" /> 
 	<apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/fonts.css')}" />
 	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamsOverlaysTemplate.css')}" />
+
+
+
 	
 	<a href="#modal_container" id="initializeModal" style="display: none;"></a>
 	<div id="modal_container"></div>
@@ -34,16 +37,18 @@
 	<!-- Delete Forum -->
 	<c:WikiOverlayDeleteWiki />
 	
+	
 	<div class="BodyPage">
 		
 		<!-- Overlay -->
-		<div class="UPF__overlay__" id="UPF__overlay__" style="display:none;">
-		</div>
-		
+		<div class="UPF__overlay__" id="UPF__overlay__" style="display:none;" ></div>
+	
 		<!-- Loader	-->
 		<div class="loader__" id="loader__" style="display:none;"><center><img src="{!URLFOR($Resource.commonResources, 'images/loaders/bigLoader.gif')}" /></center><br />Loading...</div>
-		
+	
 		<script>
+			var staticURLFORWiki = '{!$Resource.WikiResource}';
+			
 			function fixHeader () {
 				var inputWidth = 390 - $('labelDisc').getWidth();
 				var inputDisc = $('inputDisc');
@@ -115,7 +120,7 @@
 								<apex:outputpanel id="myTeamsAllTeamsPanel">
 									<table border="0" cellspacing="8" style="width:100%;">
 										<tr>
-											<td width="50%" valign="top">
+											<td width="55%" valign="top">
 												<div class="teamBlockTitle">
 													<h4>{!$ObjectType.Wiki__c.label}</h4>
 												</div>
@@ -336,7 +341,7 @@
 												</apex:outputpanel>											
 											</td>
 											<td style="width:3px;"></td>
-											<td width="50%" valign="top">
+											<td width="45%" valign="top">
 
 												<!-- Recently Updated -->
 												<div class="teamBlockTitle">
@@ -388,28 +393,5 @@
 		</div>
 	</div>
 	<apex:outputpanel id="auxPanel" style="display:none;">
-	</apex:outputpanel>	
-	<script>
-		readPortalCSSRules();
-		
-		function joinComplete(){
-    		refreshJoinList();
-			refreshDeleteList(); 
-			switchTab('myTeamTab');
-		}
-		
-		function changeJoinStatus(obj){
-			var txt = obj.innerHTML;
-			if(txt == 'Join' || txt == 'Unjoin'){
-				obj.innerHTML = 'Loading...';
-			}
-		}
-		
-        function showWarningIsLastAdmin(){
-            var isLastAdmin = $$('.isLastMemberAdmin')[0].innerHTML;
-            if(isLastAdmin == 'true'){
-                alert('Cannot unjoin Wiki because you are the last member admin.');
-            }
-        }
-	</script>	
+	</apex:outputpanel>
 </apex:page>
