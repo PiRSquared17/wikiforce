@@ -29,6 +29,7 @@ public class SuggestController {
 			} 
 			
 			for(User c : [select Name, Id from User where Name like :paramInput order by Name]){
+				System.debug('Estoy recorriendo los resultados');
 				if (teamMemberMap.get(c.Id) == null) {
 					Suggestions suggest = new Suggestions();
 					suggest.setName(c.Name);

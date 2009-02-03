@@ -17,11 +17,6 @@
 			<!-- Widget Container -->   		
 			<div class="box_content">
 				<div class="thinBody">
-					<apex:outputpanel rendered="{!IF(cntFav == 0 , false, true)}">
-						<div class="linkAction">
-							+ <a href="javascript:;">Expand to show all</a>
-						</div>
-					</apex:outputpanel>
 					<apex:outputpanel id="formFavorite">
 						<table width="100%" style="margin-top:7px;" border="0">
 							<apex:repeat value="{!favorite}" var="item">

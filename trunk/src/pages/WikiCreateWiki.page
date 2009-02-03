@@ -102,7 +102,6 @@
 		var membersBackUp = '';
 		var isAdd = getURLParam('add');
 		var insideSettingsTab = true;
-		
 		if(inEdition == false){
 			var globalSaveButton = 'Create';
 			var globalMembersButton = 'Create And Add Members';
@@ -481,7 +480,7 @@
 					<tr>
 						<td>
 							<div>
-								<apex:outputpanel rendered="true" > 
+								<apex:outputpanel rendered="true"> 
 									<a onclick="createOverlay('','inviteTeam','240','showSelects()');relocateOverlay()" href="javascript:;" class="blackbutton">New</a>
 									<a href="javascript:;" class="blackbutton" onclick="massiveRemoveOverlay();">Remove</a>
 								</apex:outputpanel>
@@ -544,7 +543,7 @@
 					</ul>
 				</apex:form></div>
 			</apex:outputpanel>
-			<apex:form >
+			<apex:form id="membersListForm">
 				<table border="0" cellspacing="0" cellpadding="2px" class="pageList">
 					<thead>
 						<tr>
@@ -664,9 +663,9 @@
 					<table width="270">
 						<tr>
 							<td>
-							<div><!-- BUTTONS --> <apex:outputpanel > <!-- rendered="{!userPermissions.canManage}" -->
+							<div><!-- BUTTONS --> <apex:outputpanel id="thisIs"> <!-- rendered="{!userPermissions.canManage}" -->
 								<a
-									onclick="createOverlay('','inviteTeam','240','showSelects()');"
+									onclick="createOverlay('','inviteTeam','240','showSelects()'); setTimeout( 'focusToWikiMW()', 1200 );"
 									href="javascript:;" class="blackbutton">New</a>
 								<a href="javascript:;" class="blackbutton"
 									onclick="massiveRemoveOverlay();">Remove</a>
@@ -698,7 +697,7 @@
 	</div>
 
     <!-- Wiki Member Widget -->
-	<c:WikiMembersWidget wikiId="{!Wiki.Id}" showWidget="false" /> 
+	<c:WikiMembersWidget wikiId="{!Wiki.Id}" showWidget="false" id="wikiMW" /> 
 
 	<apex:outputpanel id="overlaysPanel">
     	<apex:include pageName="WikiMembersRemove" />
@@ -709,5 +708,13 @@
 		document.observe('dom:loaded',startupFunc);
 		setTimeout('showAddMembersSection()', 1000);
 		readPortalCSSRules();
+		
+		function focusToWikiMW()
+		{
+			$( 'WikiCreateWiki:wikiMW:WikiMW:newMemberForm:colleaguesNames' ).focus();
+		}
+		
+		if( isAdd = true ) 
+		setTimeout( 'focusToWikiMW()', 1200 );
 	</script>
 </apex:page>
