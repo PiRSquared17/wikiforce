@@ -128,7 +128,7 @@
 						<apex:outputpanel rendered="{!IF(AND(idTeamOverview == null, idWikiPage == null), true, false)}">
 							<apex:commandButton id="saveBtnNewPageTeam" action="{!saveWiki}" styleclass="overlaySaveBtn" oncomplete="modal.close();reloadWikiList();" value="Save" rerender="theFeeds" />
 						</apex:outputpanel>
-						<apex:commandButton action="{!saveWikiAndEdit}" id="saveBtnNewPageEdit" styleclass="overlaySaveBtn" value="Save and Edit" />
+						<apex:commandButton action="{!saveWikiAndEdit}" id="saveBtnNewPageEdit" styleclass="saveBtn overlaySaveBtn" value="Save and Edit" />
 						<apex:commandButton styleclass="overlayCancelBtn" onclick="modal.close(); return false;" value="Cancel" />
 					</div>
 				</div>

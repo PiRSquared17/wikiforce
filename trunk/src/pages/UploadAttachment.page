@@ -1,7 +1,8 @@
 <apex:page sidebar="false" showHeader="false" controller="UploadAttachmentController">
 	
 	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/uploadAttachment.css')}" />
-
+    <apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/WikiPage.css')}" />
+    
 	<apex:includeScript value="{!URLFOR($Resource.WikiResource, 'inc/js/uploadAttachment.js')}" />
 	
 	<apex:stylesheet value="{!URLFOR($Resource.portalStyles, 'portal.css')}" />
@@ -28,7 +29,8 @@
 					<div class="overlaySeparateLine"></div>
 					<!-- Saven and Cancel Buttons -->
 					<div class="overlayFromButtons" align="center">
-						<apex:commandButton styleclass="overlaySaveBtn" action="{!saveNewAttach}" value="Done"/>
+						<!-- <apex:commandButton styleclass="overlaySaveBtn" action="{!saveNewAttach}" value="Done"/> -->
+						<apex:commandButton styleClass="saveBtn" action="{!saveNewAttach}" value="Done"/>
 						<apex:commandButton styleClass="overlayCancelBtn" value="Cancel" onclick="cancelAction(); return false;"  />
 					</div>
 				</div>

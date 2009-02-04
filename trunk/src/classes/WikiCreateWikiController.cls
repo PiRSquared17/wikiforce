@@ -60,7 +60,12 @@ public class WikiCreateWikiController {
     
     Wiki__c theWiki = new Wiki__c();
     String wikiPicture = '';
-    Boolean validSizePicture = true;
+    
+	//Valid size picture
+	public Boolean validSizePicture = true; 
+	
+	//Valid Type Image (.jpe?g | .gif | .png)
+	public Boolean validTypePicture = true;
    
    
     public Attachment document = new Attachment();
@@ -79,8 +84,18 @@ public class WikiCreateWikiController {
 		return document;
 	}
     
-    public Boolean getValidSizePicture(){
+    /**
+	*@ Return Valid size picture
+	*/
+     public Boolean getValidSizePicture(){
     	return validSizePicture;
+    }	
+    
+    /**
+	*@ Return Valid type picture
+	*/
+     public Boolean getValidTypePicture(){
+    	return validTypePicture;
     }
     
     /**
@@ -203,7 +218,7 @@ public class WikiCreateWikiController {
     
     /**
     * Save Wiki
-    */
+    
     public void save(){
     	System.debug('\n\n############## Profile #############\n' + newProfile.openOrClosed);
 		try{
@@ -254,6 +269,8 @@ public class WikiCreateWikiController {
     	}
     }
     
+    */
+    
     /**
     * Save Wiki
     *@return wiki detail page reference
@@ -261,7 +278,57 @@ public class WikiCreateWikiController {
     */    
     public PageReference saveWiki(){
     	try{
-	    	save();
+	    	validSizePicture = true;
+			validTypePicture = true; 
+			
+			if (document.name == null || document.name == '' || document.BodyLength > MAX_SIZE || 
+					!(document.ContentType == 'image/jpeg' || document.ContentType == 'image/gif' 
+					|| document.ContentType == 'image/png')) {
+				if (document.BodyLength > MAX_SIZE) {
+					validSizePicture = false;
+				}
+				if (!(document.name == null || document.name == '') && !(document.ContentType == 'image/jpeg' || 
+						document.ContentType == 'image/gif' || document.ContentType == 'image/png')) {
+					validTypePicture = false;
+				} 
+				document = new Attachment();
+				if (!validSizePicture || !validTypePicture) {
+					return null;
+				}	
+			} 
+			
+			if(theWiki.Type__c == 'open'){
+    			List<WikiProfile__c> wp = [SELECT Name, Id 
+    										FROM WikiProfile__c 
+    										WHERE Name = 'Public Profile' 
+    										LIMIT 1];
+    			theWiki.PublicProfile__c = wp[0].Id;
+    			theWiki.NewMemberProfile__c = newProfile.newProfileOpen;	    			
+    		}else if (theWiki.Type__c == 'close') {
+                List<WikiProfile__c> wp = [SELECT Name, Id 
+                							FROM WikiProfile__c 
+                							WHERE Name = 'Member Profile' 
+                							LIMIT 1];
+                theWiki.PublicProfile__c = null;
+                theWiki.NewMemberProfile__c = wp[0].Id;
+    		}else if (theWiki.Type__c == 'private'){
+    			theWiki.PublicProfile__c = null;
+    			theWiki.NewMemberProfile__c = null;
+    		}
+			
+			if(theWiki.Id == null){
+	    		insert theWiki;	
+			}else {
+	    		update theWiki;
+	    	}
+			
+			if(document.name != null && document.name != ''){
+	    		document.ParentId = theWiki.Id;
+		    	insert document;
+	    		theWiki.PictureId__c = document.Id;	
+	    		update theWiki;
+			}	
+	    	
 			PageReference pageRef = new PageReference('/apex/WikiTeamOverview?tid=' + theWiki.Id);
 			pageRef.setRedirect(true);
 			return pageRef;
@@ -275,15 +342,40 @@ public class WikiCreateWikiController {
   	*/
   	public PageReference saveWikiAndAddMembers(){
 		try{
-			save();
+			PageReference nextAction = saveWiki();
 			PageReference pageRef = new PageReference('/apex/WikiCreateWiki?id=' + theWiki.Id + '&add=true');
 			pageRef.setRedirect(true);
-			return pageRef;
+			if (nextAction == null) {
+				return null;
+			}
+			else {
+				return pageRef;
+			}
 		}catch(Exception e){
 			throw e;
 		}
 		
   	}
+  	
+  	
+  	/**
+	*@return page reference to wiki topics view
+	*/
+	public pageReference saveAndRedirect(){
+		pageReference nextAction = saveWiki();
+        if(nextAction != null) {
+        	nextAction.setRedirect(true);
+        }
+        return nextAction;
+	}
+	
+	/**
+	*@return page reference to wiki overview
+	*/
+	public pageReference cancel(){
+		return Page.WikiOverview;
+	}
+  	
   	
   	/********************************
   	***** WikiMembersList logic
@@ -573,8 +665,8 @@ public class WikiCreateWikiController {
 	*/
 	public class Member {
 		String memberImg;
-		String company;
-		String title;
+		String alias;
+		String username;
 		String profile;
 		String role; 
 		String name;
@@ -636,15 +728,15 @@ public class WikiCreateWikiController {
 		/**
 		*@return String
 		*/
-		public String getCompany () {
-			return company;
+		public String getAlias () {
+			return alias;
 		}
 		
 		/**
 		*@return String
 		*/
-		public String getTitle () {
-			return title;
+		public String getUsername () {
+			return username;
 		}
 		
 		/**
@@ -669,10 +761,10 @@ public class WikiCreateWikiController {
 		}
 		
 		/**
-		*@param String company
+		*@param String alias
 		*/
-		public void setCompany (String company) {
-			this.company = company;
+		public void setAlias (String alias) {
+			this.alias = alias;
 		}
 		
 		/**
@@ -699,8 +791,8 @@ public class WikiCreateWikiController {
 		/**
 		*@param String
 		*/
-		public void setTitle (String title) {
-			this.title = title;
+		public void setUsername (String username) {
+			this.username = username;
 		}
 		
 		/**
@@ -744,31 +836,31 @@ public class WikiCreateWikiController {
 			letter = 'ALL';
 				
 		if (letter == null || letter == '' || letter== 'ALL') {
-			for (WikiMember__c item: [select id, Name, WikiProfile__r.Name, WikiProfile__r.ManageWikis__c, User__r.Name, User__r.Title, User__r.Id, User__r.CompanyName from WikiMember__c where Wiki__c =:idWiki and User__r.IsActive != false order by User__r.Name]) {
+			for (WikiMember__c item: [select id, Name, WikiProfile__r.Name, WikiProfile__r.ManageWikis__c, User__r.Name, User__r.Username, User__r.Id, User__r.Alias from WikiMember__c where Wiki__c =:idWiki and User__r.IsActive != false order by User__r.Name]) {
 				Member memberItem = new Member();
 				memberItem.setName(item.User__r.Name);
 				//memberItem.setRole(item.WikiRole__c);
 				memberItem.setProfile(item.WikiProfile__r.Name);
-				memberItem.setTitle(item.User__r.Title);
+				memberItem.setUsername(item.User__r.Username);
 				memberItem.setUserId(item.User__r.Id);
 				memberItem.setWikiMemberId(item.id);
 				//memberItem.setMemberImg(item.User__r.Id);
 				memberItem.setAdmin(item.WikiProfile__r.ManageWikis__c);
-				memberItem.setCompany(item.User__r.CompanyName);
+				memberItem.setAlias(item.User__r.Alias);
 				membersList.add(memberItem);
 			}
 		}else {
-			for (WikiMember__c item: [select id, Name, WikiProfile__r.Name, WikiProfile__r.ManageWikis__c, User__r.Name, User__r.Title, User__r.Id, User__r.CompanyName from WikiMember__c where User__r.Name like :(letter + '%') and User__r.IsActive != false and Wiki__c =:idWiki order by User__r.Name]) {
+			for (WikiMember__c item: [select id, Name, WikiProfile__r.Name, WikiProfile__r.ManageWikis__c, User__r.Name, User__r.Username, User__r.Id, User__r.Alias from WikiMember__c where User__r.Name like :(letter + '%') and User__r.IsActive != false and Wiki__c =:idWiki order by User__r.Name]) {
 				Member memberItem = new Member();
 				memberItem.setName(item.User__r.Name);
 				//memberItem.setRole(item.WikiRole__c);
 				memberItem.setProfile(item.WikiProfile__r.Name);
-				memberItem.setTitle(item.User__r.Title);
+				memberItem.setUsername(item.User__r.Username);
 				memberItem.setUserId(item.User__r.Id);
 				memberItem.setWikiMemberId(item.id);	
 				//memberItem.setMemberImg(item.User__r.Id);
 				memberItem.setAdmin(item.WikiProfile__r.ManageWikis__c);
-				memberItem.setCompany(item.User__r.CompanyName);
+				memberItem.setAlias(item.User__r.Alias);
 				membersList.add(memberItem);
 			}
 		}	
@@ -1015,10 +1107,10 @@ public class WikiCreateWikiController {
 		String sbCol = '';
 		if (sortBy == null || sortBy == 'User__r.Name') 
 			sbCol = 'name';	
-		if (sortBy == 'User__r.CompanyName') 
-			sbCol = 'company';	
-		if (sortBy == 'User__r.Title') 
-			sbCol = 'title';	
+		if (sortBy == 'User__r.Alias') 
+			sbCol = 'alias';	
+		if (sortBy == 'User__r.Username') 
+			sbCol = 'username';	
 		if (sortBy == 'WikiProfile__r.Name') 
 			sbCol = 'profile';	
 		//if (sortBy == 'WikiRole__c') 
@@ -1054,37 +1146,37 @@ public class WikiCreateWikiController {
 											   Name, 
 											   WikiProfile__r.Name, 
 											   User__r.Name, 
-											   User__r.Title, 
+											   User__r.Username, 
 											   User__r.Id, 
-											   User__r.CompanyName 
+											   User__r.Alias 
 										from WikiMember__c 
 										where Wiki__c =: idWiki and User__r.IsActive != false
 										order by User__r.Name desc];
 				}
-				if (sortBy == 'User__r.CompanyName') {
+				if (sortBy == 'User__r.Alias') {
 					memberResultList = [select id, 
 											   Name, 
 											   WikiProfile__r.Name,											    
 											   User__r.Name, 
-											   User__r.Title, 
+											   User__r.Username, 
 											   User__r.Id, 
-											   User__r.CompanyName 
+											   User__r.Alias 
 										from WikiMember__c 
 										where Wiki__c =: idWiki and User__r.IsActive != false
-										order by User__r.CompanyName desc];						
+										order by User__r.Alias desc];						
 				}	
-				if (sortBy == 'User__r.Title') {
+				if (sortBy == 'User__r.Username') {
 					memberResultList = [select id, 
 											   Name, 
 											   //WikiRole__c, 
 											   WikiProfile__r.Name, 
 											   User__r.Name, 
-											   User__r.Title, 
+											   User__r.Username, 
 											   User__r.Id, 
-											   User__r.CompanyName 
+											   User__r.Alias 
 										from WikiMember__c 
 										where Wiki__c =: idWiki and User__r.IsActive != false
-										order by User__r.Title desc];							
+										order by User__r.Username desc];							
 				}
 				if (sortBy == 'WikiProfile__r.Name') {
 					memberResultList = [select id, 
@@ -1092,9 +1184,9 @@ public class WikiCreateWikiController {
 											   //WikiRole__c, 
 											   WikiProfile__r.Name,  
 											   User__r.Name, 
-											   User__r.Title, 
+											   User__r.Username, 
 											   User__r.Id, 
-											   User__r.CompanyName 
+											   User__r.Alias 
 										from WikiMember__c 
 										where Wiki__c =: idWiki and User__r.IsActive != false
 										order by WikiProfile__r.Name desc];						
@@ -1105,9 +1197,9 @@ public class WikiCreateWikiController {
 											   WikiRole__c, 
 											   WikiProfile__r.Name,  
 											   User__r.Name, 
-											   User__r.Title, 
+											   User__r.Username, 
 											   User__r.Id, 
-											   User__r.CompanyName 
+											   User__r.Alias 
 										from WikiMember__c 
 										where Wiki__c =: idWiki and User__r.IsActive != false
 										order by WikiRole__c desc];						
@@ -1119,41 +1211,41 @@ public class WikiCreateWikiController {
 											   //WikiRole__c, 
 											   WikiProfile__r.Name,  
 											   User__r.Name, 
-											   User__r.Title, 
+											   User__r.Username, 
 											   User__r.Id, 
-											   User__r.CompanyName 
+											   User__r.Alias 
 										from WikiMember__c 
 										where User__r.Name like: (letter + '%') 
 										and Wiki__c =: idWiki and User__r.IsActive != false
 										order by User__r.Name desc];					
 				}
-				if (sortBy == 'User__r.CompanyName') {
+				if (sortBy == 'User__r.Alias') {
 					memberResultList = [select id, 
 											   Name, 
 											   //WikiRole__c, 
 											   WikiProfile__r.Name,  
 											   User__r.Name, 
-											   User__r.Title, 
+											   User__r.Username, 
 											   User__r.Id, 
-											   User__r.CompanyName 
+											   User__r.Alias 
 										from WikiMember__c 
 										where User__r.Name like: (letter + '%') 
 										and Wiki__c =: idWiki and User__r.IsActive != false
-										order by User__r.CompanyName desc];							
+										order by User__r.Alias desc];							
 				}	
-				if (sortBy == 'User__r.Title') {
+				if (sortBy == 'User__r.Username') {
 					memberResultList = [select id, 
 											   Name, 
 											   //WikiRole__c, 
 											   WikiProfile__r.Name,  
 											   User__r.Name, 
-											   User__r.Title, 
+											   User__r.Username, 
 											   User__r.Id, 
-											   User__r.CompanyName 
+											   User__r.Alias 
 										from WikiMember__c 
 										where User__r.Name like: (letter + '%') 
 										and Wiki__c =: idWiki and User__r.IsActive != false
-										order by User__r.Title desc];							
+										order by User__r.Username desc];							
 				}
 				if (sortBy == 'WikiProfile__r.Name') {
 					memberResultList = [select id, 
@@ -1161,9 +1253,9 @@ public class WikiCreateWikiController {
 											   //WikiRole__c, 
 											   WikiProfile__r.Name, 
 											   User__r.Name, 
-											   User__r.Title, 
+											   User__r.Username, 
 											   User__r.Id, 
-											   User__r.CompanyName 
+											   User__r.Alias 
 										from WikiMember__c 
 										where User__r.Name like: (letter + '%') 
 										and Wiki__c =: idWiki and User__r.IsActive != false
@@ -1175,9 +1267,9 @@ public class WikiCreateWikiController {
 											   WikiRole__c, 
 											   WikiProfile__r.Name,  
 											   User__r.Name, 
-											   User__r.Title, 
+											   User__r.Username, 
 											   User__r.Id, 
-											   User__r.CompanyName 
+											   User__r.Alias 
 										from WikiMember__c 
 										where User__r.Name like: (letter + '%') 
 										and Wiki__c =: idWiki and User__r.IsActive != false
@@ -1192,38 +1284,38 @@ public class WikiCreateWikiController {
 											   //WikiRole__c, 
 											   WikiProfile__r.Name,  
 											   User__r.Name, 
-											   User__r.Title, 
+											   User__r.Username, 
 											   User__r.Id, 
-											   User__r.CompanyName 
+											   User__r.Alias 
 										from WikiMember__c 
 										where Wiki__c =: idWiki and User__r.IsActive != false
 										order by User__r.Name];
 				}
-				if (sortBy == 'User__r.CompanyName') {
+				if (sortBy == 'User__r.Alias') {
 					memberResultList = [select id, 
 											   Name, 
 											   //WikiRole__c, 
 											   WikiProfile__r.Name, 
 											   User__r.Name, 
-											   User__r.Title, 
+											   User__r.Username, 
 											   User__r.Id, 
-											   User__r.CompanyName 
+											   User__r.Alias 
 										from WikiMember__c 
 										where Wiki__c =: idWiki and User__r.IsActive != false
-										order by User__r.CompanyName asc];						
+										order by User__r.Alias asc];						
 				}	
-				if (sortBy == 'User__r.Title') {
+				if (sortBy == 'User__r.Username') {
 					memberResultList = [select id, 
 											   Name, 
 											   //WikiRole__c, 
 											   WikiProfile__r.Name,  
 											   User__r.Name, 
-											   User__r.Title, 
+											   User__r.Username, 
 											   User__r.Id, 
-											   User__r.CompanyName 
+											   User__r.Alias 
 										from WikiMember__c 
 										where Wiki__c =: idWiki and User__r.IsActive != false
-										order by User__r.Title];							
+										order by User__r.Username];							
 				}
 				if (sortBy == 'WikiProfile__r.Name') {
 					memberResultList = [select id, 
@@ -1231,9 +1323,9 @@ public class WikiCreateWikiController {
 											   //WikiRole__c, 
 											   WikiProfile__r.Name,  
 											   User__r.Name, 
-											   User__r.Title, 
+											   User__r.Username, 
 											   User__r.Id, 
-											   User__r.CompanyName 
+											   User__r.Alias 
 										from WikiMember__c 
 										where Wiki__c =: idWiki and User__r.IsActive != false
 										order by WikiProfile__r.Name];						
@@ -1244,9 +1336,9 @@ public class WikiCreateWikiController {
 											   WikiRole__c, 
 											   WikiProfile__r.Name,  
 											   User__r.Name, 
-											   User__r.Title, 
+											   User__r.Username, 
 											   User__r.Id, 
-											   User__r.CompanyName 
+											   User__r.Alias 
 										from WikiMember__c 
 										where Wiki__c =: idWiki and User__r.IsActive != false
 										order by WikiRole__c];						
@@ -1258,41 +1350,41 @@ public class WikiCreateWikiController {
 											   //WikiRole__c, 
 											   WikiProfile__r.Name,  
 											   User__r.Name, 
-											   User__r.Title, 
+											   User__r.Username, 
 											   User__r.Id, 
-											   User__r.CompanyName 
+											   User__r.Alias 
 										from WikiMember__c 
 										where User__r.Name like: (letter + '%') 
 										and Wiki__c =: idWiki and User__r.IsActive != false
 										order by User__r.Name];					
 				}
-				if (sortBy == 'User__r.CompanyName') {
+				if (sortBy == 'User__r.Alias') {
 					memberResultList = [select id, 
 											   Name, 
 											   //WikiRole__c, 
 											   WikiProfile__r.Name,  
 											   User__r.Name, 
-											   User__r.Title, 
+											   User__r.Username, 
 											   User__r.Id, 
-											   User__r.CompanyName 
+											   User__r.Alias 
 										from WikiMember__c 
 										where User__r.Name like: (letter + '%') 
 										and Wiki__c =: idWiki and User__r.IsActive != false
-										order by User__r.CompanyName];							
+										order by User__r.Alias];							
 				}	
-				if (sortBy == 'User__r.Title') {
+				if (sortBy == 'User__r.Username') {
 					memberResultList = [select id, 
 											   Name, 
 											   //WikiRole__c, 
 											   WikiProfile__r.Name,  
 											   User__r.Name, 
-											   User__r.Title, 
+											   User__r.Username, 
 											   User__r.Id, 
-											   User__r.CompanyName 
+											   User__r.Alias 
 										from WikiMember__c 
 										where User__r.Name like: (letter + '%') 
 										and Wiki__c =: idWiki and User__r.IsActive != false
-										order by User__r.Title];							
+										order by User__r.Username];							
 				}
 				if (sortBy == 'WikiProfile__r.Name') {
 					memberResultList = [select id, 
@@ -1300,9 +1392,9 @@ public class WikiCreateWikiController {
 											   //WikiRole__c, 
 											   WikiProfile__r.Name,  
 											   User__r.Name, 
-											   User__r.Title, 
+											   User__r.Username, 
 											   User__r.Id, 
-											   User__r.CompanyName 
+											   User__r.Alias 
 										from WikiMember__c 
 										where User__r.Name like: (letter + '%') 
 										and Wiki__c =: idWiki and User__r.IsActive != false
@@ -1314,9 +1406,9 @@ public class WikiCreateWikiController {
 											   WikiRole__c, 
 											   WikiProfile__r.Name,  
 											   User__r.Name, 
-											   User__r.Title, 
+											   User__r.Username, 
 											   User__r.Id, 
-											   User__r.CompanyName 
+											   User__r.Alias 
 										from WikiMember__c 
 										where User__r.Name like: (letter + '%') 
 										and Wiki__c =: idWiki and User__r.IsActive != false
@@ -1330,10 +1422,10 @@ public class WikiCreateWikiController {
 			memberItem.setName(item.User__r.Name);
 			//memberItem.setRole(item.WikiRole__c);
 			memberItem.setProfile(item.WikiProfile__r.Name);
-			memberItem.setTitle(item.User__r.Title);
+			memberItem.setUsername(item.User__r.Username);
 			memberItem.setUserId(item.User__r.Id);	
 			//memberItem.setMemberImg(item.User__r.Id);
-			memberItem.setCompany(item.User__r.CompanyName);
+			memberItem.setAlias(item.User__r.Alias);
 			membersList.add(memberItem);
 		}
 			

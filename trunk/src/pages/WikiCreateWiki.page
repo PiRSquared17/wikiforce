@@ -111,10 +111,15 @@
 
 		
 		document.observe('dom:loaded',startupFunc);
+		var canceledAction = false;
 		
 		
 	</script>
 	<!-- End of scripts to show the new members overlay and the members list -->
+
+    <!-- Wiki Member Widget -->
+	<c:WikiMembersWidget wikiId="{!Wiki.Id}" showWidget="false" id="wikiMW" /> 
+
 
 	<div class="BodyPage">
 		
@@ -236,7 +241,7 @@
 														<td></td>
 														<td colspan="2">&nbsp;
 															<span class="explain">(32k character limit) - Characters remaining:</span>
-															<span class="explain" id="stringSizeCounter">32700</span>
+															<span class="explain" id="stringSizeCounter">32000</span>
 															<br />
 														</td>
 													</tr>
@@ -286,9 +291,11 @@
 																	<td class="paddingLeft" id="imageTeamContainer" >
 																		<apex:inputFile value="{!document.body}" id="teamImage" filename="{!document.name}" contentType="{!document.contentType}" fileSize="{!document.BodyLength}"/> 
 																		<br />
-																		<span id="fileExtensionError" class="errorText" style="display:none;">
+																		<apex:outputpanel rendered="{!NOT validTypePicture}">
+																		<span id="fileExtensionError" class="errorText">
 																			<b>Error:</b> You must enter a jpg, gif or png files only
 																		</span>
+																		</apex:outputpanel>
 																		<apex:outputpanel rendered="{!NOT validSizePicture}">
 																		<span id="fileSizeError" class="errorText">
 																			<b>Error:</b> The images size must be less than 512 kb
@@ -440,12 +447,12 @@
 													<div class="title_line_btn"></div>										
 													<div align="center">
 														<span id="currentEventAction"></span><br />
-														<apex:commandButton styleClass="SaveBtn" action="{!saveWiki}"  value="{!IF(inEdition == false, 'Create', 'Update')}" id="saveButton"  />
+														<apex:commandButton styleClass="SaveBtn" action="{!saveAndRedirect}"  value="{!IF(inEdition == false, 'Create', 'Update')}" id="saveButton"  />
 														<apex:outputpanel rendered="{!NOT inEdition}">
 															<apex:commandButton styleClass="SaveBtn" action="{!saveWikiAndAddMembers}"  value="Create And Add Members" id="saveAndAddMembersButton" />
 														</apex:Outputpanel>
 														<apex:inputHidden value="{!Wiki.Type__c}" id="openOrClosed" />
-														<apex:commandButton styleClass="cancelBtn" onclick="history.go(-1);" value="Cancel" id="cancelButton"/> 
+														<apex:commandButton styleClass="cancelBtn" action="{!cancel}" onclick="canceledAction = true;"value="Cancel" id="cancelButton"/> 
 													</div>
 												</div>
 											</div>
@@ -567,7 +574,7 @@
 								</apex:outputpanel>
 							</apex:outputpanel></td>
 							<td width="16%"><apex:commandLink styleclass="member_title_description" action="{!sortList}"
-								value="Company" rerender="membersList">
+								value="Alias" rerender="membersList">
 								<apex:param name="sb" value="User__r.CompanyName" />
 							</apex:commandLink>&nbsp; <apex:outputpanel rendered="{!IF(sortBy == 'company',true,false)}">
 								<apex:outputpanel rendered="{!sortByDesc}">
@@ -580,7 +587,7 @@
 								</apex:outputpanel>
 							</apex:outputpanel></td>
 							<td width="15%"><apex:commandLink styleclass="member_title_description" action="{!sortList}"
-								value="Title" rerender="membersList">
+								value="Username" rerender="membersList">
 								<apex:param name="sb" value="User__r.Title" />
 							</apex:commandLink>&nbsp; <apex:outputpanel rendered="{!IF(sortBy == 'title',true,false)}">
 								<apex:outputpanel rendered="{!sortByDesc}">
@@ -628,12 +635,12 @@
 								</td>
 								<td class="member_detail_description"><a href="javascript:;"
 									onclick="location.href='https://na1.salesforce.com/apex/PeopleProfileDisplay?id={!item.userId}'"
-									class="member_detail_description_underline">{!item.Name}</a>
+									class="member_detail_description_underline">{!item.name}</a>
 								</td>
-								<td class="member_detail_description">{!item.company}</td>
-								<td class="member_detail_description">{!item.title}</td>
+								<td class="member_detail_description"></td>
+								<td class="member_detail_description">{!item.alias}</td>
+								<td class="member_detail_description">{!item.username}</td>
 								<td class="member_detail_description">{!item.profile}</td>
-								<td class="member_detail_description">{!item.role}</td>
 							</tr>
 						</apex:repeat>
 					</tbody>
@@ -696,8 +703,6 @@
 		</apex:outputpanel>
 	</div>
 
-    <!-- Wiki Member Widget -->
-	<c:WikiMembersWidget wikiId="{!Wiki.Id}" showWidget="false" id="wikiMW" /> 
 
 	<apex:outputpanel id="overlaysPanel">
     	<apex:include pageName="WikiMembersRemove" />
@@ -708,13 +713,8 @@
 		document.observe('dom:loaded',startupFunc);
 		setTimeout('showAddMembersSection()', 1000);
 		readPortalCSSRules();
+		countStringLimit($('WikiCreateWiki:createNewTeamForm:TeamDescription'),'stringSizeCounter');
 		
-		function focusToWikiMW()
-		{
-			$( 'WikiCreateWiki:wikiMW:WikiMW:newMemberForm:colleaguesNames' ).focus();
-		}
-		
-		if( isAdd = true ) 
-		setTimeout( 'focusToWikiMW()', 1200 );
+
 	</script>
 </apex:page>
