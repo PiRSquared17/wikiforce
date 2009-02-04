@@ -28,6 +28,8 @@ public with sharing class WikiOverviewController {
 		genWikiSites();
 		setSiteCount();
 		genCntPagination();
+		
+		system.debug( 'debuging ...' );
 	}
 	
 	/**

@@ -115,29 +115,37 @@
 			<div class="AddChildFormDiv">
 			<div id="savingEditInfo" class="saving" style="display: none;">
 			Saving...</div>
-			<form action=""><br>
-			<span class="requiredInfoRight">= Required Information</span>
-			<table>
-				<tr>
-					<td align="right" style="width: 85px;"><span
-						class="inputLabel">Page Name</span></td>
-					<td class="requiredTD"><span class="requiredInput"></span></td>
-					<td><input type="text" value="{!infoWiki.Name}"
-						style="width: 98%" /></td>
-				</tr>
-				<tr>
-					<td align="right" valign="top"><span class="inputLabel">Description</span></td>
-					<td></td>
-					<td class="descriptionInput"><textarea>{!infoWiki.ShortDescription}</textarea>
-					<span class="infoText">250 character limit</span></td>
-				</tr>
-			</table>
-			<br>
-			<div class="separateLine"></div>
-			<div align="center"><input class="saveBtn" type="button"
-				value="Save" onclick="modal.close();" /> <input class="cancelBtn"
-				type="button" value="Cancel" onclick="modal.close();" /></div>
-			</form>
+			<div id="formContainer">
+				<apex:form onsubmit="return validateWikiInfo();" id="editInfoWiki"><br>
+				<span class="requiredInfoRight">= Required Information</span>
+				<table>
+					<tr>
+						<td align="right" style="width: 85px;">
+							<span class="inputLabel">Page Name</span>
+						</td>
+						<td class="requiredTD"><span class="requiredInput"></span></td>
+						<td>
+							<!-- <input type="text" value="{!infoWiki.Name}"	style="width: 98%" /> -->
+							<apex:inputText value="{!infoWiki.Name}" id="nameNewWP" style="width:98%" maxlength="79"/>
+						</td>
+					</tr>
+					<tr>
+						<td align="right" valign="top"><span class="inputLabel">Description</span></td>
+						<td></td>
+						<td class="descriptionInput">
+						<apex:inputTextarea id="descNewWP" value="{!infoWiki.ShortDescription}" style="width: 98%; height: 110px;" />
+							<span class="infoText">250 character limit</span>
+						</td>
+					</tr>
+				</table>
+				<br>
+				<div class="separateLine"></div>
+				<div align="center">
+					<apex:commandButton styleClass="saveBtn" action="{!updateWikiInfo}" id="saveWikiInformation" value="Save" oncomplete="modal.close();reloadPageInfo();"/>
+					<!-- <input class="saveBtn" type="button" value="Save" onclick="modal.close();" /> -->
+					<input class="cancelBtn" type="button" value="Cancel" onclick="modal.close();" /></div>
+				</apex:form>
+			</div>
 			</div>
 			</div>
 		</apex:outputpanel>
@@ -232,7 +240,11 @@
 		<div class="bodyPageHeader">
 		<table>
 			<tr>
-				<td><span class="bodyPageHeaderName">{!infoWiki.Name}</span></td>
+				<td>
+					<apex:outputPanel id="bodyPageHeaderName" rendered="true">
+						<span class="bodyPageHeaderName">{!infoWiki.Name}</span>
+					</apex:outputPanel>
+				</td>
 				<td class="buttons" align="rigth">
 				<form action="" class="btnActionForm"><apex:outputpanel rendered="{!userPermissions.canManage}">
 					<input type="button" value="Edit"
@@ -244,7 +256,7 @@
 						class="btnAdd" />
 				</apex:outputpanel> <apex:outputpanel rendered="{!userPermissions.canManage}">
 					<input type="button"
-						onclick="createOverlay('','WikiPage:deletePageOverlay','180','');"
+						onclick="createOverlay('','WikiPage:deletePageOverlay','180',''); relocateOverlay()"
 						value="Delete" class="btnDelete" />
 				</apex:outputpanel> <!-- <input type="button" value="SiteMap" class="btnSiteMap" /> -->
 				</form>
@@ -315,18 +327,18 @@
 					rendered="{!IF(cntFav == 0 , true, false)}">
 														No Favorites Yet 
 													</apex:outputPanel> <br>
-				<div
-					style="font-weight: bold; margin-bottom: 8px; border-bottom: 1px solid #989999;">Recent
-				Changes</div>
-
-				<apex:form id="formRecentlyUpdate">
-					<ul class="sideBarList">
-						<apex:repeat value="{!recentlyUpdated}" var="item">
-							<li><a href="/apex/WikiPage?idWP={!item.id}"
-								class="WikiLink">{!item.name}</a></li>
-						</apex:repeat>
-					</ul>
-				</apex:form> <br>
+				<div style="font-weight: bold; margin-bottom: 8px; border-bottom: 1px solid #989999;">Recent Changes</div>
+				<apex:outputPanel rendered="true" id="RecentChanges">
+					<apex:form id="formRecentlyUpdate">
+						<ul class="sideBarList">
+							<apex:repeat value="{!recentlyUpdated}" var="item">
+								<li><a href="/apex/WikiPage?idWP={!item.id}"
+									class="WikiLink">{!item.name}</a></li>
+							</apex:repeat>
+						</ul>
+					</apex:form> 
+					<br>
+				</apex:outputPanel>
 				<div
 					style="font-weight: bold; margin-bottom: 8px; border-bottom: 1px solid #989999;">What's
 				Popular</div>
@@ -373,7 +385,7 @@
 					onclick="createOverlay('','AddChildForm','305',''); relocateOverlay();" class="btnAdd" />
 			</apex:outputpanel> <apex:outputpanel rendered="{!userPermissions.canManage}">
 				<input type="button"
-					onclick="createOverlay('','WikiPage:deletePageOverlay','180','');"
+					onclick="createOverlay('','WikiPage:deletePageOverlay','180','');relocateOverlay()"
 					value="Delete" class="btnDelete" />
 			</apex:outputpanel> <!-- <input type="button" value="SiteMap" class="btnSiteMap" /> -->
 			</form>
@@ -382,7 +394,7 @@
 	</table>
 	</div>
 	<!-- - - - - - - -  PAGE INFORMATION - - - - -->
-	<apex:outputpanel id="informationPanel">
+	<apex:outputpanel id="informationPanel" rendered="true">
 		<div class="pageInformation">
 		<table class="infoTable" border="0" style="width: 100%">
 			<tr>
@@ -391,7 +403,7 @@
 				<apex:outputpanel id="infoPanel">
 					<div class="infoSection"><a href="Javascript:;" class="infoTitle" onclick="hideSection(this,'informationDiv')">Page
 					Information</a>&nbsp;<apex:outputpanel rendered="{!userPermissions.canManage}">
-						<a href="javascript:;" onclick="createOverlay('','WikiPage:editPageInfoOverlay','302','');"	class="WikiLink">Edit information</a>
+						<a href="javascript:;" onclick="createOverlay('','WikiPage:editPageInfoOverlay','302','');relocateOverlay()"	class="WikiLink">Edit information</a>
 					</apex:outputpanel>&nbsp;<span class="infoText">| Outgoing links
 					({!cntOutgoing}) | Incoming links ({!cntIncoming})</span></div>
 					<div id="informationDiv" class="infoExpanded"
@@ -451,7 +463,7 @@
 					({!childsCount})</a>&nbsp;<apex:outputpanel rendered="{!userPermissions.canCreate}">
 						<span style="font-weight: bold; color: #000000;">+</span>&nbsp;<a
 							href="javascript:;"
-							onclick="createOverlay('','AddChildForm','305','');"
+							onclick="createOverlay('','AddChildForm','305','');relocateOverlay()"
 							class="WikiLink">New Child</a>
 					</apex:outputpanel></div>
 					<div id="childrenDiv" class="infoExpanded" style="display: none;">
@@ -480,7 +492,7 @@
 					({!attachCount})</a>&nbsp;<apex:outputpanel rendered="{!userPermissions.canManage}">
 						<span style="font-weight: bold; color: #000000;">+</span>&nbsp;<a
 							href="javascript:;"
-							onclick="createOverlay('','WikiPage:newAttachmentOverlay','180','refreshAttachObserver();reloadIframeAttach();');"
+							onclick="createOverlay('','WikiPage:newAttachmentOverlay','180','refreshAttachObserver();reloadIframeAttach();');relocateOverlay()"
 							class="WikiLink">New Attachment</a>
 					</apex:outputpanel></div>
 					<div id="attachDiv" class="infoExpanded" style="display: none;">
@@ -544,7 +556,7 @@
 					({!cntComments})</a>&nbsp;<apex:outputpanel rendered="{!userPermissions.canComment}">
 						<span style="font-weight: bold; color: #000000;">+</span>&nbsp;<a
 							href="javascript:;"
-							onclick="createOverlay('','WikiPage:newCommentOverlay','330','');"
+							onclick="createOverlay('','WikiPage:newCommentOverlay','330',''); relocateOverlay();"
 							class="WikiLink">New Comment</a>
 					</apex:outputpanel></div>
 					<div id="commentDiv" class="infoExpanded" style="display: none;">
@@ -614,7 +626,9 @@
 			action="{!refreshAttachs}" rendered="attachmentsPanel" />
 	</apex:form>
 
-
+	<apex:form >  
+		<apex:actionFunction name="reloadPageInfo" rerender="bodyPageHeaderName, informationPanel, RecentChanges, editPageInfoOverlay" />					
+	</apex:form>	
 	<apex:outputpanel id="auxPanel" />
 	<!-- <img src="{!URLFOR($Resource.FCKeditor ,'fckeditor/editor/images/smiley/msn/teeth_smile.gif')}" /> -->
 
@@ -629,7 +643,21 @@
 				fabLoading = false;
 			}
 		}
-	
+		function validateWikiInfo()
+		{
+			
+			if( $( 'WikiPage:editInfoWiki:nameNewWP' ).value.blank())
+			{
+				alert( 'Paga Name is required' );
+				return false;
+			}
+			else
+			{
+				$('formContainer').hide();
+				$('savingEditInfo').show();
+				return true
+			}
+		}
 		cargarimagenes();
 		auxFunction();
 		readPortalCSSRules();

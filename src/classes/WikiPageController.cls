@@ -6,6 +6,8 @@ public with sharing class WikiPageController {
 	public String idWikiSite = '';
 	
 	public String idWikiPage = '';
+	public String wikiPageName = '';
+	public String wikiPageShortDescription = '';
 	WikiPage__c	wikiPageBody;
 	public List<WikiPage__c> results;
 	public String theParent = '';
@@ -41,7 +43,6 @@ public with sharing class WikiPageController {
 		this.idWikiPage = idWikiPage;
 	}
 	
-	public String wikiPageName = '';
 	
 	/**
 	*@param String
@@ -63,7 +64,24 @@ public with sharing class WikiPageController {
 		}
 		return '<strong>' + trunkName + '</strong>';	
 	}
+
+	/**
+	*@param String Wiki Page short description property
+	*/
+	public void setWikiPageshortDescription( String shortDescription )
+	{
+		wikiPageShortDescription = shortDescription;
+	}
 	
+	/**
+	*@return String Wiki Page short description property
+	*/
+	public String getWikiPageshortDescription()
+	{
+		return wikiPageShortDescription;
+	}
+	
+			
 	public List<WikiPage__c> wikiPageBodyList = new List<WikiPage__c>();
 	
 	/**
@@ -1266,7 +1284,36 @@ public with sharing class WikiPageController {
 		
 		newPage = false;	
 	}   	
+	
+	/**
+	* Update Name and shortDescription__c fields for cuurrent Wiki Page
+	*/
+	public void updateWikiInfo(){
+	
+		WikiPage__c currentWP = new WikiPage__c();
+		Info currentInfo = new Info();
+		
+		currentInfo = getInfoWiki();
+				
+		currentWP = [ SELECT Name, ShortDescription__c FROM wikiPage__c WHERE Id =: paramIdWP ];
+		currentWP.Name = currentInfo.Name;
+		currentWP.ShortDescription__c = currentInfo.ShortDescription; 
+		
+		update currentWP;
+		
+		redirectToThis();
+				
+	}
 
+	public PageReference redirectToThis()
+	{
+		PageReference pg = new PageReference('/apex/WikiPage?idWP=' + paramIdWP);
+		pg.setRedirect(true);
+		
+		return pg; 
+		
+	}
+	
 	/**
 	*@return WikiPage__c
 	*/
