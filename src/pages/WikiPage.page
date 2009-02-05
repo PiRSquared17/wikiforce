@@ -141,7 +141,7 @@
 				<br>
 				<div class="separateLine"></div>
 				<div align="center">
-					<apex:commandButton styleClass="saveBtn" action="{!updateWikiInfo}" id="saveWikiInformation" value="Save" oncomplete="modal.close();reloadPageInfo();"/>
+					<apex:commandButton styleClass="saveBtn" action="{!updateWikiInfo}" id="saveWikiInformation" value="Save" oncomplete="modal.close();reloadPageInfo();" />
 					<!-- <input class="saveBtn" type="button" value="Save" onclick="modal.close();" /> -->
 					<input class="cancelBtn" type="button" value="Cancel" onclick="modal.close();" /></div>
 				</apex:form>
@@ -403,7 +403,7 @@
 				<apex:outputpanel id="infoPanel">
 					<div class="infoSection"><a href="Javascript:;" class="infoTitle" onclick="hideSection(this,'informationDiv')">Page
 					Information</a>&nbsp;<apex:outputpanel rendered="{!userPermissions.canManage}">
-						<a href="javascript:;" onclick="createOverlay('','WikiPage:editPageInfoOverlay','302','');relocateOverlay()"	class="WikiLink">Edit information</a>
+						<a href="javascript:;" onclick="createOverlay('','WikiPage:editPageInfoOverlay','302','');relocateOverlay()" class="WikiLink">Edit information</a>
 					</apex:outputpanel>&nbsp;<span class="infoText">| Outgoing links
 					({!cntOutgoing}) | Incoming links ({!cntIncoming})</span></div>
 					<div id="informationDiv" class="infoExpanded"
@@ -584,7 +584,7 @@
 											</tr>
 										</table>
 										</td>
-										<td style="margin-right: 0px; padding-right: 0px"><apex:image styleclass="commentImg"
+										<td style="margin-right: 0px; padding-right: 0px; text-align: right"><apex:image styleclass="commentImg"
 											value="{!URLFOR($Resource.WikiResource, 'images/WikiImages/arrow_comment.gif')}" />
 										</td>
 										<td style="margin-left: 0px; padding-left: 0px">
