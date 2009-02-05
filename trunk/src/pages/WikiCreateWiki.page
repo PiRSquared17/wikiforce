@@ -111,7 +111,6 @@
 
 		
 		document.observe('dom:loaded',startupFunc);
-		var canceledAction = false;
 		
 		
 	</script>
@@ -452,7 +451,7 @@
 															<apex:commandButton styleClass="SaveBtn" action="{!saveWikiAndAddMembers}"  value="Create And Add Members" id="saveAndAddMembersButton" />
 														</apex:Outputpanel>
 														<apex:inputHidden value="{!Wiki.Type__c}" id="openOrClosed" />
-														<apex:commandButton styleClass="cancelBtn" action="{!cancel}" onclick="canceledAction = true;"value="Cancel" id="cancelButton"/> 
+														<apex:commandButton styleClass="cancelBtn" onclick="location.href = '/apex/WikiOverview';return false;" value="Cancel" id="cancelButton"/> 
 													</div>
 												</div>
 											</div>
@@ -575,8 +574,8 @@
 							</apex:outputpanel></td>
 							<td width="16%"><apex:commandLink styleclass="member_title_description" action="{!sortList}"
 								value="Alias" rerender="membersList">
-								<apex:param name="sb" value="User__r.CompanyName" />
-							</apex:commandLink>&nbsp; <apex:outputpanel rendered="{!IF(sortBy == 'company',true,false)}">
+								<apex:param name="sb" value="User__r.Alias" />
+							</apex:commandLink>&nbsp; <apex:outputpanel rendered="{!IF(sortBy == 'alias',true,false)}">
 								<apex:outputpanel rendered="{!sortByDesc}">
 									<img
 										src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_down.gif')}" />
@@ -588,8 +587,8 @@
 							</apex:outputpanel></td>
 							<td width="15%"><apex:commandLink styleclass="member_title_description" action="{!sortList}"
 								value="Username" rerender="membersList">
-								<apex:param name="sb" value="User__r.Title" />
-							</apex:commandLink>&nbsp; <apex:outputpanel rendered="{!IF(sortBy == 'title',true,false)}">
+								<apex:param name="sb" value="User__r.Username" />
+							</apex:commandLink>&nbsp; <apex:outputpanel rendered="{!IF(sortBy == 'username',true,false)}">
 								<apex:outputpanel rendered="{!sortByDesc}">
 									<img
 										src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_down.gif')}" />
@@ -601,7 +600,7 @@
 							</apex:outputpanel></td>
 							<td width="16%">
 								<apex:commandLink styleclass="member_title_description" action="{!sortList}" value="{!$ObjectType.Wiki__c.label} Profile" rerender="membersList">
-									<apex:param name="sb" value="TeamProfile__r.Name" />
+									<apex:param name="sb" value="WikiProfile__r.Name" />
 								</apex:commandLink>&nbsp; 
 								<apex:outputpanel rendered="{!IF(sortBy == 'profile',true,false)}">
 									<apex:outputpanel rendered="{!sortByDesc}">

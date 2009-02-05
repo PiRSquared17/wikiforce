@@ -14,7 +14,7 @@ public with sharing class WikiOverviewController {
     public Boolean isLastMemberAdmin = false;
 	
     /**
-    *@retrun bool is last member admin
+    *@return bool is last member admin
     */
     public Boolean getIsLastMemberAdmin (){
         return isLastMemberAdmin;

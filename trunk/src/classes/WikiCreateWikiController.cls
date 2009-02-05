@@ -368,13 +368,6 @@ public class WikiCreateWikiController {
         }
         return nextAction;
 	}
-	
-	/**
-	*@return page reference to wiki overview
-	*/
-	public pageReference cancel(){
-		return Page.WikiOverview;
-	}
   	
   	
   	/********************************
