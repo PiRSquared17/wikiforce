@@ -119,7 +119,7 @@
 											<div align="center" class="addWikiPageBtn">
 												<apex:outputpanel id="buttonsDiv" layout="block" > 
 													<apex:form >
-														<apex:outputPanel rendered="{!IF(IsAdmin,true,false)}" >
+														<apex:outputPanel rendered="{!IF((IsAdmin || userPermissions.canManage),true,false)}" >
 															<apex:commandButton styleclass="btn" onclick="location.href = 'WikiCreateWiki?id={!currentTeam.Id}'; return false;" value="Edit Wiki" />
 															<apex:commandButton styleclass="btn" onclick="deleteWikiOverlay('{!currentTeam.Id}'); relocateOverlay(); return false;" value="Delete Wiki" />
 														</apex:outputPanel>
@@ -234,8 +234,8 @@
 										<div align="center" class="addWikiPageBtn">
 											<apex:outputpanel id="buttonsDiv2" layout="block" > 
 												<apex:form >
-													<apex:commandButton rendered="{!IF(IsAdmin,true,false)}" value="Edit Wiki" onclick="location.href = 'WikiCreateWiki?id={!currentTeam.Id}'" />
-													<apex:commandButton rendered="{!IF(IsAdmin,true,false)}" value="Delete Wiki" onclick="deleteWikiOverlay('{!currentTeam.Id}'); relocateOverlay();" />
+													<apex:commandButton rendered="{!IF((IsAdmin || userPermissions.canManage),true,false)}" value="Edit Wiki" onclick="location.href = 'WikiCreateWiki?id={!currentTeam.Id}'" />
+													<apex:commandButton rendered="{!IF((IsAdmin || userPermissions.canManage),true,false)}" value="Delete Wiki" onclick="deleteWikiOverlay('{!currentTeam.Id}'); relocateOverlay();" />
 													<apex:outputpanel rendered="{!userPermissions.canCreate}">
 														<input type="button" value="Add Wiki Page" onclick="createOverlay('','AddChildForm','305',''); relocateOverlay();" class="btn" />
 													</apex:outputpanel>

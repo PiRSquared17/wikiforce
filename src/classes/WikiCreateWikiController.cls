@@ -216,60 +216,6 @@ public class WikiCreateWikiController {
     	return newProfile;
     }
     
-    /**
-    * Save Wiki
-    
-    public void save(){
-    	System.debug('\n\n############## Profile #############\n' + newProfile.openOrClosed);
-		try{
-    		System.debug('LEN:' + document.BodyLength);
-    		if(document.BodyLength <= MAX_SIZE || (document.name == null || document.name == '')){
-    			validSizePicture = true;
-    			System.debug('\n\n############## Profile #############\n' + newProfile.openOrClosed);
-	    		if(theWiki.Type__c == 'open'){
-	    			List<WikiProfile__c> wp = [Select Name, Id From WikiProfile__c Where Name = 'Public Profile' limit 1];
-	    			theWiki.PublicProfile__c = wp[0].Id;
-	    			theWiki.NewMemberProfile__c = newProfile.newProfileOpen;	    			
-	    		}else if (theWiki.Type__c == 'close') {
-                    List<WikiProfile__c> wp = [Select Name, Id From WikiProfile__c Where Name = 'Member Profile' limit 1];
-                    theWiki.PublicProfile__c = null;
-                    theWiki.NewMemberProfile__c = wp[0].Id;
-	    		}else if (theWiki.Type__c == 'private'){
-	    			theWiki.PublicProfile__c = null;
-	    			theWiki.NewMemberProfile__c = null;
-	    		}
-	    		
-	    		
-	    		if(theWiki.Id == null){
-		    		insert theWiki;
-		    		if(document.name != null && document.name != ''){
-			    			document.ParentId = theWiki.Id;
-				    		insert document;
-			    			theWiki.PictureId__c = document.Id;
-				    		update theWiki;	
-		    		}	
-	    		}else {
-	       			if(document.name != null && document.name != ''){
-		    			document.ParentId = theWiki.Id;
-		    			insert document;
-		    			theWiki.PictureId__c = document.Id;
-		    		}
-		    		if(theWiki.Type__c == null){
-		    			theWiki.Type__c = WikiType; 
-		    		}
-		    		update theWiki;
-		    	}
-    		}
-    		else{
-    			validSizePicture=false;
-    			document = new Attachment();
-    		}
-		}catch(Exception e){
-    		throw e;
-    	}
-    }
-    
-    */
     
     /**
     * Save Wiki
