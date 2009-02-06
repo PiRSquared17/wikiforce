@@ -396,12 +396,18 @@ public with sharing class WikiMembersWidgetController {
 		for (WikiMember__c iterMember : [select id, User__c  from WikiMember__c where Wiki__c =:idWiki]) {
 			WikiMemberMap.put(iterMember.User__c,iterMember);
 		}
+		
+		//Read Member Profile
+		List<WikiProfile__c> wikiMemberProfile = new List<WikiProfile__c>();
 			
 		//Read Admin Profile
 		List<WikiProfile__c> wikiAdminProfile = new List<WikiProfile__c>();
+		
 		if(makeMembersAdmins){	
 			wikiAdminProfile = [Select Name, Id From WikiProfile__c Where Name = 'Wiki Administrator'];
-		}	
+		} else {
+            wikiMemberProfile = [Select Name, Id From WikiProfile__c Where Name = 'Member Profile'];	
+		}
 		
 		for (User user : userList) {
 			if (WikiMemberMap.get(user.Id) == null && usersMap.get(user.Name).IsActive != false) {
@@ -414,7 +420,8 @@ public with sharing class WikiMembersWidgetController {
 				if(makeMembersAdmins && wikiAdminProfile.size() > 0){
 					newMember.WikiProfile__c = wikiAdminProfile[0].Id;
 				}else{
-					newMember.WikiProfile__c = newMemberVars.profileId;						
+					//newMember.WikiProfile__c = newMemberVars.profileId;						
+					newMember.WikiProfile__c = WikiMemberProfile[0].Id;
 				}
 				
 				//Add user to list

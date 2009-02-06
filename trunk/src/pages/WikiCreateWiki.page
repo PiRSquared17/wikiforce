@@ -55,7 +55,7 @@
      	var globalTeamId = "{!WikiId}";
      	var globalArrowDown = "{!URLFOR($Resource.commonResources, 'images/arrows/arrow_down.gif')}";
      	var globalArrowUp = "{!URLFOR($Resource.commonResources, 'images/arrows/arrow_up.gif')}";;
-     	
+     	var wikiTypeAccess = "{!WikiType}"
      	/**
 
 		*Set e2 height with e1 height + 15px
@@ -159,14 +159,14 @@
 										<ul class="tabs">
 											<li class="selected" id="myTeamTab">
 												<apex:commandLink id="My_teams" action="{!switchTabsController}" value="Settings" 
-																	onclick="switchTabs('myTeamTab');" 
+																	onclick="switchTabs('myTeamTab');setAccessTypeChecked()" 
 																	rerender="holder">
 													<apex:param name="allTeams" value="false" />
 												</apex:commandLink>
 											</li>
 											<li id="allTeamTab" >
 												<apex:commandLink id="allTeamsLink" action="{!switchTabsController}" value="Members" onclick="switchTabs('allTeamTab');"
-																	 rerender="holder" styleClass="{!IF((hasMembers == false),'disable','')}">
+																	 rerender="holder" styleClass="{!IF((hasMembers == false),'disable','')}" >
 													<apex:param name="allTeams" value="true" />
 												</apex:commandLink>
 											</li>					
@@ -379,7 +379,7 @@
 						                                <td class="alignTop"><span class="inputInfoTitle">Access</span></td>
 														<td></td>
 						                                <td colspan="2">
-						                                	&nbsp;<input type="radio" id="openTeam" checked="checked" name="access" onclick="setAccess(this);"/>
+						                                	&nbsp;<input type="radio" id="openTeam" name="access" onclick="setAccess(this);"/>
 						                                	<span class="inputInfoDescription">Open</span>
 						                                </td>
 													</tr>  	
@@ -671,7 +671,7 @@
 							<td>
 							<div><!-- BUTTONS --> <apex:outputpanel id="thisIs"> <!-- rendered="{!userPermissions.canManage}" -->
 								<a
-									onclick="createOverlay('','inviteTeam','240','showSelects()'); setTimeout( 'focusToWikiMW()', 1200 );"
+									onclick="createOverlay('','inviteTeam','240','showSelects()'); relocateOverlay(); setTimeout( 'focusToWikiMW()', 1200 );"
 									href="javascript:;" class="blackbutton">New</a>
 								<a href="javascript:;" class="blackbutton"
 									onclick="massiveRemoveOverlay();">Remove</a>
@@ -713,7 +713,6 @@
 		setTimeout('showAddMembersSection()', 1000);
 		readPortalCSSRules();
 		countStringLimit($('WikiCreateWiki:createNewTeamForm:TeamDescription'),'stringSizeCounter');
-		
-
+		window.onload = function() { setAccessTypeChecked(); }
 	</script>
 </apex:page>
