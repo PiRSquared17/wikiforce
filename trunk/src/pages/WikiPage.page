@@ -32,11 +32,19 @@
 	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/WikiPage.css')}" />
 	<apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/fonts.css')}" />
 
+	<style>
+	.errorMessageInOverlay
+	{
+		color: #F13F52 !important;
+	}	
+	</style>
+	
+
 	<!-- 		  Overlay		-->
 	<div class="UPF__overlay__" id="UPF__overlay__" style="display: none;">
 	</div>
 	<!--     	  Overlay		-->
-
+	
 	<apex:outputpanel rendered="{!userPermissions.canCreate}">
 		<c:WikiNewPageWidget />
 	</apex:outputpanel>
@@ -68,12 +76,9 @@
 				<br>
 				</div>
 				<div class="separateLine"></div>
-				<div align="center"><apex:commandButton styleclass="deleteBtn"
-					action="{!deletePage}" value="Continue and delete page"
-					onclick="savingShowWP('{!$Component.deleteOvlyForm}','deleting');"
-					oncomplete="modal.close();" rerender="auxPanel" /> <input
-					type="button" class="cancelBtn" value="Cancel"
-					onclick="modal.close();" /></div>
+				<div align="center">
+				    <apex:commandButton styleclass="deleteBtn" action="{!deletePage}" value="Continue and delete page" onclick="savingShowWP('{!$Component.deleteOvlyForm}','deleting');" oncomplete="modal.close();" rerender="auxPanel" />
+                    <input type="button" class="cancelBtn" value="Cancel" onclick="modal.close();" /></div>
 			</apex:form></div>
 		</apex:outputpanel>
 		<!-- 		 New Attachment Form 		-->
@@ -127,6 +132,13 @@
 						<td>
 							<!-- <input type="text" value="{!infoWiki.Name}"	style="width: 98%" /> -->
 							<apex:inputText value="{!infoWiki.Name}" id="nameNewWP" style="width:98%" maxlength="79"/>
+x						</td>
+					</tr>
+					<tr>
+						<td align="right" style="width: 85px;"></td>
+						<td class="requiredTD"></td>
+						<td>
+							<span class="" id="nameEmptyError">Page Name is required</span>							
 						</td>
 					</tr>
 					<tr>
@@ -248,7 +260,7 @@
 				<td class="buttons" align="rigth">
 				<form action="" class="btnActionForm"><apex:outputpanel rendered="{!userPermissions.canManage}">
 					<input type="button" value="Edit"
-						onclick="location.href='https://na1.salesforce.com/apex/WikiPageEdit?id={!wikiBody.Id}';"
+						onclick="location.href='/apex/WikiPageEdit?id={!wikiBody.Id}';"
 						class="btnEdit" />
 				</apex:outputpanel> <apex:outputpanel rendered="{!userPermissions.canCreate}">
 					<input type="button" value="Add"
@@ -378,7 +390,7 @@
 			<td class="buttons" align="rigth">
 			<form action="" class="btnActionForm"><apex:outputpanel rendered="{!userPermissions.canManage}">
 				<input type="button" value="Edit"
-					onclick="location.href='https://na1.salesforce.com/apex/WikiPageEdit?id={!wikiBody.Id}';"
+					onclick="location.href='/apex/WikiPageEdit?id={!wikiBody.Id}';"
 					class="btnEdit" />
 			</apex:outputpanel> <apex:outputpanel rendered="{!userPermissions.canCreate}">
 				<input type="button" value="Add"
@@ -530,7 +542,7 @@
 										<td class="name"><img style="vertical-align: bottom;"
 											src="https://na1.salesforce.com{!URLFOR($Resource.FileTypeIcons, item5.attachImage)}" />
 										&nbsp; <a href="#"
-											onclick="window.open('https://na1.salesforce.com/servlet/servlet.FileDownload?file={!item5.Id}')">
+											onclick="window.open('/servlet/servlet.FileDownload?file={!item5.Id}')">
 										{!item5.Name} </a></td>
 										<td class="date"><apex:outputtext value="{!item5.createdDate}" /></td>
 										<td class="user"><a

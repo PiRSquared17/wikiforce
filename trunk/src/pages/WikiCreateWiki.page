@@ -5,6 +5,7 @@
 	<apex:includeScript value="{!URLFOR($Resource.Script_aculo_us, 'scriptaculous.js')}"/>
 	<apex:includeScript value="{!URLFOR($Resource.Script_aculo_us, 'effects.js')}"/>
 	<apex:includeScript value="{!URLFOR($Resource.TeamsResources, 'inc/js/autocomplete.js')}" />
+
 	
 	<!-- Portal Support -->
 	<apex:includeScript value="{!$Resource.portalSupport}"/>
@@ -119,7 +120,6 @@
     <!-- Wiki Member Widget -->
 	<c:WikiMembersWidget wikiId="{!Wiki.Id}" showWidget="false" id="wikiMW" /> 
 
-
 	<div class="BodyPage">
 		
 		<!-- OVERLAY -->
@@ -165,6 +165,7 @@
 												</apex:commandLink>
 											</li>
 											<li id="allTeamTab" >
+												<div id="overTabMembers" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
 												<apex:commandLink id="allTeamsLink" action="{!switchTabsController}" value="Members" onclick="switchTabs('allTeamTab');"
 																	 rerender="holder" styleClass="{!IF((hasMembers == false),'disable','')}" >
 													<apex:param name="allTeams" value="true" />
@@ -710,9 +711,12 @@
 	
 	<script>
 		document.observe('dom:loaded',startupFunc);
+		document.observe('dom:loaded', hideDiv);
 		setTimeout('showAddMembersSection()', 1000);
 		readPortalCSSRules();
 		countStringLimit($('WikiCreateWiki:createNewTeamForm:TeamDescription'),'stringSizeCounter');
 		window.onload = function() { setAccessTypeChecked(); }
+		
+		
 	</script>
 </apex:page>
