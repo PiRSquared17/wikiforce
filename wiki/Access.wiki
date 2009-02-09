@@ -1,0 +1,28 @@
+In Discussion there are three types of forums: Open, Closed and Private.
+In each type of forum there are three profiles: Public, Member and Admin.
+Member users can do anything Public users can.
+Admin users can do anything Member or Public users can.
+In every forum anyone can delete or edit the forums, topics and replies he creates.
+
+_The rules for the different type of forums are the following:_
+
+*Open forums:*
+
+Anyone can join the forum.
+Anyone can view the topics with its replies.
+Anyone can add replies in the different topics.
+Members can create topics.
+Admins can create forums.
+
+*Closed forums:*
+
+To join the forum an admin must invite you
+Anyone can view the topics with its replies.
+Members can create topics and add replies.
+Admins can create forums.
+
+*Private forums:*
+
+To join the forum an admin must invite you
+Members can create and view topics and add replies.
+Admins can create forums.

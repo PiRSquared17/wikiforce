@@ -1,0 +1,85 @@
+*_1. Click on "Force.com App Exchange"_*
+
+http://discussionforce.googlecode.com/svn/wiki/images/installation/install1.jpg
+
+*_2. Select category_*
+
+http://discussionforce.googlecode.com/svn/wiki/images/installation/install2.jpg
+
+*_3. Select the application_*
+
+http://discussionforce.googlecode.com/svn/wiki/images/installation/install3.jpg
+
+*_4. Click on "Get It Now"_*
+
+http://discussionforce.googlecode.com/svn/wiki/images/installation/install4.jpg
+
+*_5. Write your User Name, Password, select "I am a Salesforce Administrator" and click on Continue_*
+
+http://discussionforce.googlecode.com/svn/wiki/images/installation/install5.jpg
+
+*_6. Select "Production", check "I have read and agree..." and click on Continue._*
+
+http://discussionforce.googlecode.com/svn/wiki/images/installation/install6.jpg
+
+*_7. Click on "Continue"_*
+
+http://discussionforce.googlecode.com/svn/wiki/images/installation/step1.jpg
+
+*_8. Click "Next"_*
+
+http://discussionforce.googlecode.com/svn/wiki/images/installation/step2.jpg
+
+*_9. Select "Grant access to all users"_*
+
+*_10. Click "Next"_*
+
+http://discussionforce.googlecode.com/svn/wiki/images/installation/step3.jpg
+
+*_11. Check "Ignore Apex... "_*
+
+*_12. Click on "Install"_*
+
+http://discussionforce.googlecode.com/svn/wiki/images/installation/step4.jpg
+
+*_13. Click on "Deploy now"_*
+
+http://discussionforce.googlecode.com/svn/wiki/images/installation/step5.jpg
+
+*_14. Click on "Deploy"_*
+
+http://discussionforce.googlecode.com/svn/wiki/images/installation/step6.jpg
+
+*_15. Click on "Create"_*
+
+http://discussionforce.googlecode.com/svn/wiki/images/installation/step7.jpg
+
+*_16. Click on "Objects"_*
+
+http://discussionforce.googlecode.com/svn/wiki/images/installation/step8.jpg
+
+*_17. Click on "Discussion"_*
+
+http://discussionforce.googlecode.com/svn/wiki/images/installation/step9.jpg
+
+*_18. Scroll down the page_*
+
+*_19. Click on the "Override" link which is next to "Discussions Tab"_*
+
+http://discussionforce.googlecode.com/svn/wiki/images/installation/step10.jpg
+
+*_20. Click on "Visualforce Page"_*
+
+*_21. Select "Discussion Overview'['discussionforce _ Discussion Overview']'_*
+
+*_22. Click on "Save"_*
+
+http://discussionforce.googlecode.com/svn/wiki/images/installation/step11.jpg
+
+*_23. Select "Discussion"_*
+
+http://discussionforce.googlecode.com/svn/wiki/images/installation/step12.jpg
+
+*_24. This is the main page, enjoy!_*
+
+http://discussionforce.googlecode.com/svn/wiki/images/installation/step13.jpg
