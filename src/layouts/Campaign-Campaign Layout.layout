@@ -151,6 +151,18 @@
     </layoutSections>
     <relatedLists>
         <fields>CAMPAIGN.NAME</fields>
+        <fields>CAMPAIGN.TOTAL_NUM_LEADS</fields>
+        <fields>CAMPAIGN.TOT_CONVERTED_LEADS</fields>
+        <fields>CAMPAIGN.TOT_CONTACTS</fields>
+        <fields>CAMPAIGN.TOT_OPPORTUNITIES</fields>
+        <fields>CAMPAIGN.TOT_WON_OPPORTUNITIES</fields>
+        <fields>TOT_AMOUNT_WON</fields>
+        <fields>TOT_AMOUNT_ALL</fields>
+        <fields>CAMPAIGN.TOT_NUM_RESPONSES</fields>
+        <fields>TOT_NUM_SENT</fields>
+        <fields>TOT_EXP_REVENUE</fields>
+        <fields>TOT_BUDGETED_COST</fields>
+        <fields>TOT_ACTUAL_COST</fields>
         <relatedList>RelatedCampaignHierarchyList</relatedList>
     </relatedLists>
     <relatedLists>

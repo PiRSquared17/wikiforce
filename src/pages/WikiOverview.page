@@ -239,7 +239,7 @@
 																	<table border="0" style="width:100%;">
 																		<tr>
 																			<td width="110px">
-																				<apex:commandLink value="Join" action="{!joinWiki}" rendered="{!IF(AND(NOT(item.isMember),item.isPublic),true,false)}" onclick="changeJoinStatus(this)" oncomplete="joinComplete();" >
+																				<apex:commandLink value="Join" action="{!joinWiki}" rendered="{!IF( AND( NOT( item.isMember ), OR( item.isPublic, item.isAdmin )), true,false)}" onclick="changeJoinStatus(this)" oncomplete="joinComplete();" >
 																					<apex:param name="wid" value="{!item.Id}" />
 																					<apex:param name="allTeams" value="false" />
 																				</apex:commandLink>

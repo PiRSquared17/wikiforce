@@ -12,6 +12,7 @@ public with sharing class WikiOverviewController {
    	String USERID = UserInfo.getUserId();
    	public WikiMemberController wmc = new WikiMemberController();
     public Boolean isLastMemberAdmin = false;
+
 	
     /**
     *@return bool is last member admin
@@ -71,7 +72,6 @@ public with sharing class WikiOverviewController {
 	* Load my teams
 	*/
 	public void genMyTeams() {
-		tmp = new List<Id>();
 		for(WikiMember__c tm : [Select Wiki__c From WikiMember__c WHERE User__c =: USERID ] ) { 
 			tmp.add(tm.Wiki__c);
 		}
@@ -131,12 +131,14 @@ public with sharing class WikiOverviewController {
         if(allTeams == 'true'){
             sites = [select Id, Name, Description__c, PictureId__c, PublicProfile__c, Type__c from Wiki__c order by Name];
         }else{
+        	System.debug('my teams : ' + myTeams());
             sites = [select Id, Name, Description__c, PictureId__c, PublicProfile__c, Type__c from Wiki__c where Id in: myTeams() order by Name];
         }
-        
+        System.debug('Lcosta test for private wiki listing : ');
     	List<String> wikiIds = new List<String>();
     	for(Wiki__c s : sites){
     		wikiIds.add(s.Id);
+    		System.debug(' DB ' + s.Name + ' ' + s.Type__c);
     	}
     	
     	listMembers = [select Id, Wiki__c from WikiMember__c where Wiki__c in: wikiIds and User__c =: USERID];

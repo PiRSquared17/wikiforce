@@ -22,12 +22,12 @@ trigger WikiBeforeDelete on Wiki__c bulk (before delete) {
             for(WikiMember__c m: membersList){
                 System.debug('\n Member to delete' + m.Name);
             }
-            
+
+			TeamUtil.currentlyExeTrigger = false;
             delete pagesList;
-            delete membersList;
-        
-        } finally {
-            TeamUtil.currentlyExeTrigger = false;
+            delete membersList;            
+        } catch(Exception e){
+        	throw e;
         }
     }
 }

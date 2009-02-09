@@ -66,7 +66,7 @@
 								This page hasn't been updated
 							</apex:outputpanel>
 							<apex:outputpanel rendered="{!IF(infoWiki.LastModifiedDate == infoWiki.CreatedDate,false,true)}">
-								Updated {!infoWiki.LastModifiedDate} by <a href="javascript:;" onclick="location.href ='https://na1.salesforce.com/{!infoWiki.LastModifiedById}';">{!infoWiki.LastModifiedBy}</a> (<a href="javascript:;" class="WikiLink">more...</a>)
+								Updated {!infoWiki.LastModifiedDate} by <a href="javascript:;" onclick="location.href ='/{!infoWiki.LastModifiedById}';">{!infoWiki.LastModifiedBy}</a> (<a href="javascript:;" class="WikiLink">more...</a>)
 							</apex:outputpanel>
 						</div>
 					</apex:outputpanel>
