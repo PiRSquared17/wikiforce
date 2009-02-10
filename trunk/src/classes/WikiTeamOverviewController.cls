@@ -65,6 +65,8 @@ public with sharing class WikiTeamOverviewController {
 	* Read user permissions for wiki obj
 	*/
 	public void genPermissions () {
+		
+		System.debug( '###' + UserInfo.getUserId() + ':' + TEAMID );		
 		userPermissions.setId(UserInfo.getUserId());
 		userPermissions.setTeam(TEAMID);
 		userPermissions.setObjectType('Wiki');
@@ -75,6 +77,7 @@ public with sharing class WikiTeamOverviewController {
 	*@return UserPermissions
 	*/
 	public UserPermissions getUserPermissions () {
+		genPermissions();
 		return userPermissions;
 	}
 	
@@ -211,6 +214,8 @@ public with sharing class WikiTeamOverviewController {
 			else 
 				this.setIsMember(false);
 		}
+
+		
 	}
 	
 	/** FIX

@@ -1,6 +1,20 @@
 <apex:page controller="WikiPageEditController" tabStyle="Wiki__c" id="WikiPageEdit" sidebar="false" >
 	<script src="{!URLFOR($Resource.FCKeditorV263, 'fckeditor/fckeditor.js')}"/>
 
+    <script>
+    function disableSourceView() {
+        try {
+            
+        } catch(error) {
+            if(error.description)
+                alert('Error en la pagina: ' + error.description);
+            else
+                alert('Error en la pagina: ' + error);
+        }
+    }
+    window.onload = disableSourceView();
+    </script>
+
 	<!-- Scripts -->
 	<script src="{!URLFOR($Resource.WikiResource, 'inc/js/common.js')}"/>
 	<script src="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}"/>

@@ -4,6 +4,7 @@
     {
     	try
     	{
+    		//fsafsd
             GenerateEnvironmentTest.gen();
             Test.startTest();
             System.currentPageReference().getParameters().put('id', GenerateEnvironmentTest.wiki.Id);
@@ -19,28 +20,28 @@
 			df.setRemoveMemberId( GenerateEnvironmentTest.newUser.id ); 			             
 			df.setEditMemberId( GenerateEnvironmentTest.newUser.id ); 			             
 			df.setLetter( 'X' ); 			             
-			df.save();
+
 			df.saveWiki();             
 	        df.saveWikiAndAddMembers();     
 	             
 	        // Team Inner Class
             WikiCreateWikiController.Member member = new WikiCreateWikiController.Member();
             
-            member.setTitle('');
+            //member.setTitle('');
             member.setProfile('');
             member.setName('');
             member.setUserId(GenerateEnvironmentTest.newUser.id );
             member.setAdmin(true);
-			member.setCompany( 'company' );
+			//member.setCompany( 'company' );
 			member.setRole( 'role');
 			member.setWikiMemberId( GenerateEnvironmentTest.newUser.Id );
 			
-            member.getTitle();
+            //member.getTitle();
             member.getProfile();
             member.getName();
 			member.getUserId();
             member.getAdmin();
-			member.getCompany();
+			//member.getCompany();
 			member.getRole();
 			member.getYahoo();
 			member.getSkype();

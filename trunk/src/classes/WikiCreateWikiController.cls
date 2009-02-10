@@ -228,16 +228,19 @@ public class WikiCreateWikiController {
 			validTypePicture = true; 
 			
 			if (document.name == null || document.name == '' || document.BodyLength > MAX_SIZE || 
-					!(document.ContentType == 'image/jpeg' || document.ContentType == 'image/gif' 
+					!(document.ContentType == 'image/jpeg' || document.ContentType == 'image/pjpeg' || document.ContentType == 'image/gif' 
 					|| document.ContentType == 'image/png')) {
+
 				if (document.BodyLength > MAX_SIZE) {
 					validSizePicture = false;
 				}
-				if (!(document.name == null || document.name == '') && !(document.ContentType == 'image/jpeg' || 
+
+				if (!(document.name == null || document.name == '') && !(document.ContentType == 'image/jpeg' || document.ContentType == 'image/pjpeg' ||  
 						document.ContentType == 'image/gif' || document.ContentType == 'image/png')) {
 					validTypePicture = false;
 				} 
 				document = new Attachment();
+
 				if (!validSizePicture || !validTypePicture) {
 					return null;
 				}	

@@ -79,7 +79,7 @@
 			<div class="PageBlock">	
 				
 				<!-- Left Sidebar -->
-				<table border="0" class="bodyTable">
+				<table border="0" class="bodyTable" cellpadding="0" cellspacing="0">
 					<tr>
 						<td valign="top" class="sideBarTD">
 							<!-- My Favorites Widget -->
@@ -245,9 +245,9 @@
 																				</apex:commandLink>
 																				<apex:commandLink value="Unjoin" action="{!unjoinWiki}" rendered="{!IF(item.isMember,true,false)}" onclick="changeJoinStatus(this);" oncomplete="refreshDeleteList();joinComplete()" >
 																					<apex:param name="wid" value="{!item.Id}" />
-																				</apex:commandLink> | 
+																				</apex:commandLink>  
 																				<apex:outputpanel rendered="{!IF(item.IsAdmin,true,false)}" >
-																					<a href="WikiCreateWiki?id={!item.Id}" >Edit</a> | <a href="Javascript:;" onclick="deleteWikiOverlay('{!item.Id}');relocateOverlay();">Del</a>
+																					|&nbsp;<a href="WikiCreateWiki?id={!item.Id}" >Edit</a> | <a href="Javascript:;" onclick="deleteWikiOverlay('{!item.Id}');relocateOverlay();">Del</a>
 																				</apex:outputpanel>
 																			</td>
 																			<td width="70px" valign="top">

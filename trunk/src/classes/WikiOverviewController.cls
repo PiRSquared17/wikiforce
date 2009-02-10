@@ -43,7 +43,7 @@ public with sharing class WikiOverviewController {
 			WikiProfile__c wikiProfile = new WikiProfile__c();
 			wikiProfile.Name = 'Member Profile';
 			wikiProfile.PostWikiComments__c = true;
-			wikiProfile.ManageWikis__c = true;
+			wikiProfile.ManageWikis__c = false;
 			wikiProfile.CreateWikiPages__c = true;
 			insert wikiProfile;
 		}
