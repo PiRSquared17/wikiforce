@@ -82,7 +82,7 @@ public without sharing class WikiMemberController {
 	*@return public profile id
 	*/
 	public String getWikiProfileId(){
-		List<WikiProfile__c> wikiProfile = [select Id from WikiProfile__c where Name = 'Public Profile' ];
+		List<WikiProfile__c> wikiProfile = [select Id from WikiProfile__c where Name = 'Member Profile' ];
 		return wikiProfile[0].Id;
 	}
 }

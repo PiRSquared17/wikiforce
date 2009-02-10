@@ -140,7 +140,7 @@
 					<!-- Save and Cancel Buttons -->
 					<div class="overlayFromButtons" align="center">
 						<apex:commandButton action="{!saveMembers}"
-							oncomplete="setTimeout('modal.close();hideSwirly(\'swirly_overlay\');showSwirly(\'paginationOverlay\');setHeight(\'membersListDiv\', \'paginationOverlay\');', 5000);showMessageToUser(); "
+							oncomplete="setTimeout('modal.close();hideSwirly(\'swirly_overlay\');showSwirly(\'paginationOverlay\');setHeight(\'memberListContainer\', \'paginationOverlay\');', 5000);showMessageToUser(); "
 							styleclass="overlaySaveBtn" value="Send"
 							rerender="membersListContainer, saveMembersSync" /> 
 							<input class="btn overlayCancelBtn" type="button" value="Cancel" onclick="modal.close();" />

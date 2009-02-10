@@ -6,7 +6,7 @@
 		}
 	</style>
 		
-	<!-- <div class="sidebar"> -->
+	 <div class="sidebar">
 		
 		<!-- Widget -->
 		<div class="teamWidget mySmallWidget" >
@@ -21,7 +21,9 @@
 						<table width="100%" style="margin-top:7px;" border="0">
 							<apex:repeat value="{!favorite}" var="item">
 								<tr>
-									<td width="17px" valign="top"><apex:image style="vertical-align:bottom;" value="{!URLFOR($Resource.commonResources, 'images/icons/favOn.gif')}"/></td>
+									<td width="17px" valign="top">
+										<apex:image style="vertical-align:bottom;" value="{!URLFOR($Resource.commonResources, 'images/icons/favOn.gif')}"/>
+									</td>
 									<td>
 										<a href="/apex/WikiPage?idWP={!item.WikiPage__r.Id}" class="WikiLink">{!item.WikiPage__r.Name}</a>
 										<br>
@@ -44,5 +46,5 @@
 			</div>
 		</div>
 		<div class="clear"></div>
-	<!-- </div> -->	
+	 </div>
 </apex:component>
