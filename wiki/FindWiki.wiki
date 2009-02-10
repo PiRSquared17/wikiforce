@@ -1,0 +1,5 @@
+From all the pages of Wiki you can search for wikis, pages and comments. 
+
+In order to find a wiki there must be at least one page in that wiki.
+
+<img src="http://wikiforce.googlecode.com/svn/wiki/images/FindWikiReal.png" align="left" />
