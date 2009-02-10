@@ -4,4 +4,4 @@ In this page you can add new members. The application will automatically suggest
 
 You can add members as administrators and send notifications by mail if you want.
 
-<img src="http://discussionforce.googlecode.com/svn/wiki/images/AddMemberReal.png" align="left" />
+<img src="http://wikiforce.googlecode.com/svn/wiki/images/AddMemberReal.png" align="left" />
