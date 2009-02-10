@@ -1,7 +1,0 @@
-= Create Discussion =
-
-In the Create New Discussion Forum page you will be able to choose the name, description, logo and access type of the new forum.
-
-After that you click on Create to finish creating the forum or you click on Create And Add Members to create the forum and edit its members.
-
-<img src="http://discussionforce.googlecode.com/svn/wiki/images/CreateDiscussionReal.png" align="left" />

@@ -1,5 +1,0 @@
-= Topic Details =
-
-From here you can post, edit and delete replies.
-
-<img src="http://discussionforce.googlecode.com/svn/wiki/images/TopicDetailsReal.png" align="left" />

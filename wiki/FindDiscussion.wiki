@@ -1,7 +1,0 @@
-= Find Discussion =
-
-From all the pages of Discussion you can search for forums, topics and messages. 
-
-In order to find a forum there must be at least one topic posted in that forum.
-
-<img src="http://discussionforce.googlecode.com/svn/wiki/images/FindDiscussionReal.png" align="left" />
