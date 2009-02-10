@@ -1,5 +1,3 @@
-= Wiki Overview =
-
 ==In this page you have two tabs: ==
 
 In My Wikis you can see all the wikis in which you are a member.
