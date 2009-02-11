@@ -12,3 +12,7 @@
 6* Page Details [PageDetails]
 
 7* Create a wiki [CreateWiki]
+
+WikiWordLink
+[http://domain/page label]
+http://domain/page
