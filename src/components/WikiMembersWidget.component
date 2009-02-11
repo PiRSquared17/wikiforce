@@ -10,7 +10,7 @@
 	<apex:includeScript value="{!URLFOR($Resource.commonResources, 'inc/js/teamMembersWidget.js')}" />
 	<apex:includeScript value="{!URLFOR($Resource.TeamsResources, 'inc/js/TeamsWidgetCommon.js')}" />	
 
-	<apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/teamMembersWidget.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamMembersWidget.css')}" />
 
 	<script>
 		/**

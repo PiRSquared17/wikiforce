@@ -127,7 +127,6 @@ public class UserPermissions {
 				isAdmin = true;
 			}
 			if(!isAdmin){
-				if(members == null){
 					members = new List<WikiMember__c>();
 					members = [select WikiProfile__r.PostWikiComments__c, 
 	 								  WikiProfile__r.ManageWikis__c,
@@ -137,7 +136,6 @@ public class UserPermissions {
 							  where User__c =:id 
 							  and Wiki__c=:Team 
 							  limit 1];
-				}
 				
 				List<Wiki__c> myWiki = new List<Wiki__c>();
 				myWiki = [select Type__c from Wiki__c where id=:Team limit 1];
@@ -149,11 +147,11 @@ public class UserPermissions {
 				}else{
 					if(currentTeam == null){
 						currentTeam = new List<Wiki__c>();
-						List<Wiki__c> currentTeam = [select PublicProfile__c, 
+						List<Wiki__c> currentTeam = [select PublicProfile__c, Type__c,
 													 	Id,
 													 	PublicProfile__r.PostWikiComments__c, 
 													 	PublicProfile__r.ManageWikis__c,
-													 	PublicProfile__r.CreateWikiPages__c 
+													 	PublicProfile__r.CreateWikiPages__c
 											  		 from Wiki__c
 											  		 where Id =: Team];
 										
@@ -173,6 +171,7 @@ public class UserPermissions {
 							canCreate = true; 
 							canComment = true; 
 						}
+
 					}
 				}
 			}

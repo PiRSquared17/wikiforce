@@ -107,58 +107,60 @@
 		<apex:outputpanel id="editPageInfoOverlay"
 			rendered="{!userPermissions.canManage}" style="display:none;">
 			<div class="forms__Overlay" id="EditInfoForm">
-			<div class="formsHeader">
-			<table>
-				<tr>
-					<td>Edit page information</td>
-					<td align="right"><img
-						src="{!URLFOR($Resource.WikiResource, 'images/layout/closeWindow.gif')}"
-						onclick="modal.close();" /></td>
-				</tr>
-			</table>
-			</div>
-			<div class="AddChildFormDiv">
-			<div id="savingEditInfo" class="saving" style="display: none;">
-			Saving...</div>
-			<div id="formContainer">
-				<apex:form onsubmit="return validateWikiInfo();" id="editInfoWiki"><br>
-				<span class="requiredInfoRight">= Required Information</span>
-				<table>
-					<tr>
-						<td align="right" style="width: 85px;">
-							<span class="inputLabel">Page Name</span>
-						</td>
-						<td class="requiredTD"><span class="requiredInput"></span></td>
-						<td>
-							<!-- <input type="text" value="{!infoWiki.Name}"	style="width: 98%" /> -->
-							<apex:inputText value="{!infoWiki.Name}" id="nameNewWP" style="width:98%" maxlength="79"/>
-x						</td>
-					</tr>
-					<tr>
-						<td align="right" style="width: 85px;"></td>
-						<td class="requiredTD"></td>
-						<td>
-							<span class="" id="nameEmptyError">Page Name is required</span>							
-						</td>
-					</tr>
-					<tr>
-						<td align="right" valign="top"><span class="inputLabel">Description</span></td>
-						<td></td>
-						<td class="descriptionInput">
-						<apex:inputTextarea id="descNewWP" value="{!infoWiki.ShortDescription}" style="width: 98%; height: 110px;" />
-							<span class="infoText">250 character limit</span>
-						</td>
-					</tr>
-				</table>
-				<br>
-				<div class="separateLine"></div>
-				<div align="center">
-					<apex:commandButton styleClass="saveBtn" action="{!updateWikiInfo}" id="saveWikiInformation" value="Save" oncomplete="modal.close();reloadPageInfo();" />
-					<!-- <input class="saveBtn" type="button" value="Save" onclick="modal.close();" /> -->
-					<input class="cancelBtn" type="button" value="Cancel" onclick="modal.close();" /></div>
-				</apex:form>
-			</div>
-			</div>
+				<div class="formsHeader">
+					<table>
+						<tr>
+							<td>Edit page information</td>
+							<td align="right"><img
+								src="{!URLFOR($Resource.WikiResource, 'images/layout/closeWindow.gif')}"
+								onclick="modal.close();" /></td>
+						</tr>
+					</table>
+				</div>
+				<div class="AddChildFormDiv">
+					<div id="savingEditInfo" class="saving" style="display: none;">
+						Saving...
+					</div>
+					<div id="formContainer">
+						<apex:form onsubmit="return validateWikiInfo();" id="editInfoWiki"><br>
+							<span class="requiredInfoRight">= Required Information</span>
+							<table>
+								<tr>
+									<td align="right" style="width: 85px;">
+										<span class="inputLabel">Page Name</span>
+									</td>
+									<td class="requiredTD"><span class="requiredInput"></span></td>
+									<td>
+										<!-- <input type="text" value="{!infoWiki.Name}"	style="width: 98%" /> -->
+										<apex:inputText value="{!infoWiki.Name}" id="nameNewWP" style="width:98%" maxlength="79"/>
+									</td>
+								</tr>
+								<tr>
+									<td align="right" style="width: 85px;"></td>
+									<td class="requiredTD"></td>
+									<td>
+										<span class="errorMsj" id="nameEmptyError">Page Name is required</span>						
+									</td>
+								</tr>
+								<tr>
+									<td align="right" valign="top"><span class="inputLabel">Description</span></td>
+									<td></td>
+									<td class="descriptionInput">
+									<apex:inputTextarea id="descNewWP" value="{!infoWiki.ShortDescription}" style="width: 98%; height: 110px;" />
+										<span class="infoText">250 character limit</span>
+									</td>
+								</tr>
+							</table>
+							<br>
+							<div class="separateLine"></div>
+							<div align="center">
+								<apex:commandButton styleClass="saveBtn" action="{!updateWikiInfo}" id="saveWikiInformation" value="Save" oncomplete="modal.close();reloadPageInfo();" />
+								<!-- <input class="saveBtn" type="button" value="Save" onclick="modal.close();" /> -->
+								<input class="cancelBtn" type="button" value="Cancel" onclick="modal.close();" />
+							</div>
+						</apex:form>
+					</div>
+				</div>
 			</div>
 		</apex:outputpanel>
 
@@ -415,7 +417,7 @@ x						</td>
 				<apex:outputpanel id="infoPanel">
 					<div class="infoSection"><a href="Javascript:;" class="infoTitle" onclick="hideSection(this,'informationDiv')">Page
 					Information</a>&nbsp;<apex:outputpanel rendered="{!userPermissions.canManage}">
-						<a href="javascript:;" onclick="createOverlay('','WikiPage:editPageInfoOverlay','302','');relocateOverlay()" class="WikiLink">Edit information</a>
+						<a href="javascript:;" onclick="createOverlay('','WikiPage:editPageInfoOverlay','320','');relocateOverlay()" class="WikiLink">Edit information</a>
 					</apex:outputpanel>&nbsp;<span class="infoText">| Outgoing links
 					({!cntOutgoing}) | Incoming links ({!cntIncoming})</span></div>
 					<div id="informationDiv" class="infoExpanded"
@@ -657,10 +659,10 @@ x						</td>
 		}
 		function validateWikiInfo()
 		{
-			
+			$('nameEmptyError').style.display="block";
 			if( $( 'WikiPage:editInfoWiki:nameNewWP' ).value.blank())
 			{
-				alert( 'Paga Name is required' );
+				$('nameEmptyError').style.display="block";
 				return false;
 			}
 			else
