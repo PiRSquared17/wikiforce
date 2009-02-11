@@ -1,11 +1,14 @@
 #labels Featured
-#sidebar UserManualNav
+* Find a wiki [FindWiki]
 
-=User Guide=
+* Control access [Access]
 
-== Overview ==
+* Add a member to the wiki [AddMember]
 
-== Sections ==
+* Wiki Overview [WikiOverview]
 
- * [WikiAdmin]
- * [WikiManual Wiki]
+* Wiki Tree [WikiTree]
+
+* Page Details [PageDetails]
+
+* Create a wiki [CreateWiki]
