@@ -13,6 +13,5 @@
 
 7* Create a wiki [CreateWiki]
 
-WikiWordLink
-[http://domain/page label]
-http://domain/page
+
+[FindWiki Find a wiki]
