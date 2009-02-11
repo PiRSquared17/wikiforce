@@ -13,6 +13,12 @@ http://wikiforce.googlecode.com/svn/wiki/images/CreateWikiReal.png
 
 === Find Wiki ===
 
+*Searching*
+
+http://wikiforce.googlecode.com/svn/wiki/images/FindWikiReal.png
+
+*Search results*
+
 http://wikiforce.googlecode.com/svn/wiki/images/FindResultsWikiReal.png
 
 === Wiki Tree ===
