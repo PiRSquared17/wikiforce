@@ -1,41 +1,29 @@
 #labels Featured
 === Overview ===
 
-
-<img src="http://wikiforce.googlecode.com/svn/wiki/images/WikiOverviewReal.png" align="left" />
-
+http://wikiforce.googlecode.com/svn/wiki/images/WikiOverviewReal.png
 
 === Access ===
 
-
-<img src="http://wikiforce.googlecode.com/svn/wiki/images/AccessWikiReal.png" align="left" />
-
+http://wikiforce.googlecode.com/svn/wiki/images/AccessWikiReal.png
 
 === Create Wiki ===
 
-
-<img src="http://wikiforce.googlecode.com/svn/wiki/images/CreateWikiReal.png" align="left" />
-
+http://wikiforce.googlecode.com/svn/wiki/images/CreateWikiReal.png
 
 === Find Wiki ===
 
-
-<img src="http://wikiforce.googlecode.com/svn/wiki/images/FindResultsWikiReal.png" align="left" />
-
+http://wikiforce.googlecode.com/svn/wiki/images/FindResultsWikiReal.png
 
 === Wiki Tree ===
 
-
-<img src="http://wikiforce.googlecode.com/svn/wiki/images/PageListReal.png" align="left" />
-
+http://wikiforce.googlecode.com/svn/wiki/images/PageListReal.png
 
 === Page Details ===
 
 
-<img src="http://wikiforce.googlecode.com/svn/wiki/images/PageDetailsReal.png" align="left" />
-
+http://wikiforce.googlecode.com/svn/wiki/images/PageDetailsReal.png
 
 === Add Members ===
 
-
-<img src="http://wikiforce.googlecode.com/svn/wiki/images/AddMemberWikiReal.png" align="left" />
+http://wikiforce.googlecode.com/svn/wiki/images/AddMemberWikiReal.png
