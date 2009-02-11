@@ -1,5 +1,5 @@
 #labels Featured
-1* Find a wiki [FindWiki]
+1* [FindWiki Find a wiki]
 
 2* Control access [Access]
 
@@ -13,5 +13,3 @@
 
 7* Create a wiki [CreateWiki]
 
-
-[FindWiki Find a wiki]
