@@ -7,12 +7,28 @@ public with sharing class WikiTeamOverviewController {
 	// Wiki__c given in the url
 	public String TEAMID = System.currentPageReference().getParameters().get('tid');
    	public WikiMemberController wmc = new WikiMemberController();
-
+	public Boolean isLastMemberAdmin = wmc.isLastMemberAdmin();
+	//Lcosta added feb 10
+	public Boolean isPrivate;
 	/**
 	* Costructor
 	*/
 	public WikiTeamOverviewController () {
 		genContructor();
+	}
+	
+	/**
+	*@retrun bool is last member admin
+	*/
+	public Boolean getIsLastMemberAdmin (){
+		return isLastMemberAdmin;
+	}
+	
+	/**
+	*@param b is lasta member admin
+	*/
+	public void setIsLastMemberAdmin(Boolean b){
+		isLastMemberAdmin = b;
 	}	
 	
 	/**
@@ -55,10 +71,37 @@ public with sharing class WikiTeamOverviewController {
 			genPermissionsTeam();
 			genIsAdmin();
 			if(!userPermissionsTeam.getCanView()) 
-				throw new CustomException('Insufficient Privileges');	
+				throw new CustomException('Insufficient Privileges');
+			//lcosta added feb 10
+			genIsPrivate();
 		}
 	}
 
+
+	public Boolean getIsPrivate(){
+		return isPrivate;
+	}
+	
+	public void setIsPrivate(Boolean b){
+		isPrivate = b;
+	}
+	
+	/**
+	* Set the attribute isPrivate
+	* true if the wiki is private
+	*/
+	//lcosta added feb 10
+	public void genIsPrivate(){
+		 Wiki__c currentWiki = [select PublicProfile__c, NewMemberProfile__c from Wiki__c where Id =: TEAMID];
+		 if (currentWiki.PublicProfile__c == null && currentWiki.NewMemberProfile__c == null) {
+		 	this.setIsPrivate(true);
+		 }
+		 else {
+		 	this.setIsPrivate(false);
+		 }
+	}	
+	
+	
 	public UserPermissions userPermissions = new UserPermissions();
 		
 	/**
@@ -66,11 +109,12 @@ public with sharing class WikiTeamOverviewController {
 	*/
 	public void genPermissions () {
 		
-		System.debug( '###' + UserInfo.getUserId() + ':' + TEAMID );		
 		userPermissions.setId(UserInfo.getUserId());
 		userPermissions.setTeam(TEAMID);
 		userPermissions.setObjectType('Wiki');
 		userPermissions.setPermissions();		
+		
+		System.debug( '###' + UserInfo.getUserId() + ':' + TEAMID + ':' + userPermissions.getCanCreate() );		
 	}
 	
 	/**  
@@ -129,7 +173,13 @@ public with sharing class WikiTeamOverviewController {
 	
 	public void unjoinWiki(){
 		wmc.setWikiId(System.currentPageReference().getParameters().get('wid'));
-		wmc.unjoinWiki();
+		if(!wmc.isLastMemberAdmin()){
+			wmc.unjoinWiki();
+			isMember = false;
+			isLastMemberAdmin = false;
+		}else{
+			isLastMemberAdmin = true;
+		}
 	}
 	
 	/**

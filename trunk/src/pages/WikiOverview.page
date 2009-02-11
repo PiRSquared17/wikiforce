@@ -350,14 +350,18 @@
 				
 												<apex:outputpanel id="updatedPanel">
 													<apex:outputpanel id="formRecentlyUpdate">
+												
+																<table border="0" cellpadding="0" cellspacing="0">
 														<apex:repeat value="{!recentlyUpdated}" var="item">
-															<div class="recentlyUpdated">
-																<table border="0">
 																	<tr>
-																		<td valign="top">
+																		<td valign="top" class="recentlyUpdated">
+																			
 																			<apex:image value="{!URLFOR($Resource.commonResources, 'images/placeholders/unknownperson32x32.jpg')}" />
+																		</td>
+																		<td class="recentlyUpdated">
+																			&nbsp;
 																		</td> 
-																		<td valign="top">
+																		<td valign="top" class="recentlyUpdated">
 																			<a href="/apex/WikiPage?idWP={!item.Id}" class="WikiLink">{!item.Name}</a>
 																			<br>
 																			<div class="description">{!item.shortDescription}</div>
@@ -370,9 +374,8 @@
 																			</span>
 																		</td>
 																	</tr>
-																</table>
-															</div>
 														</apex:repeat>
+																</table>
 													</apex:outputpanel>
 												</apex:outputpanel>
 											</td>

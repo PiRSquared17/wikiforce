@@ -10,7 +10,7 @@
             DeleteWikiController t = new DeleteWikiController();
             t.setWikiId( GenerateEnvironmentTest.wiki.Id );
             t.getWikiId();
-            t.deleteWiki();
+            //t.deleteWiki();
             
             Test.stopTest();
         }

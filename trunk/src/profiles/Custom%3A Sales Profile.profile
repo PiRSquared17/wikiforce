@@ -1396,6 +1396,10 @@
         <enabled>false</enabled>
     </pageAccesses>
     <pageAccesses>
+        <apexPage>HomeTest</apexPage>
+        <enabled>false</enabled>
+    </pageAccesses>
+    <pageAccesses>
         <apexPage>SuggestDispatcher</apexPage>
         <enabled>false</enabled>
     </pageAccesses>
