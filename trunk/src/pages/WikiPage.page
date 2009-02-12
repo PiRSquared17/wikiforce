@@ -566,54 +566,62 @@
 			<tr>
 				<td><!-- 				COMMENTS	 			 -->
 				<apex:outputpanel id="commentsPanel">
-					<div class="infoSection"><a href="Javascript:;" class="infoTitle" onclick="hideSection(this,'commentDiv')">Comments
-					({!cntComments})</a>&nbsp;<apex:outputpanel rendered="{!userPermissions.canComment}">
-						<span style="font-weight: bold; color: #000000;">+</span>&nbsp;<a
-							href="javascript:;"
-							onclick="createOverlay('','WikiPage:newCommentOverlay','330',''); relocateOverlay();"
-							class="WikiLink">New Comment</a>
-					</apex:outputpanel></div>
+					<div class="infoSection">
+						<a href="Javascript:;" class="infoTitle" onclick="hideSection(this,'commentDiv')">
+							Comments({!cntComments})
+						</a>&nbsp;
+						<apex:outputpanel rendered="{!userPermissions.canComment}">
+							<span style="font-weight: bold; color: #000000;">+</span>&nbsp;
+							<a href="javascript:;" 
+								onclick="createOverlay('','WikiPage:newCommentOverlay','330',''); relocateOverlay();"
+								class="WikiLink">
+								New Comment
+							</a>
+						</apex:outputpanel>
+					</div>
 					<div id="commentDiv" class="infoExpanded" style="display: none;">
-					<br>
-					<apex:outputpanel id="noCommentPanel"
-						rendered="{!IF(cntComments = 0,true,false)}">
-						<span class="infoText" style="padding-left: 10px;">No
-						Comment yet </span>
-					</apex:outputpanel> <apex:outputpanel id="showCommentPanel"
-						rendered="{!IF(cntComments = 0,false,true)}">
-						<apex:form id="formComments">
-							<apex:repeat value="{!comments}" var="item">
-								<table cellspacing="0" border="0" style="width: 85%">
-									<tr>
-										<td valign="top" style="padding-top: 15px; width: 180px;">
-										<table border="0" align="right">
-											<tr>
-												<td valign="top">
-												<div align="right"><b>{!item.showShortCommentBy}</b><br>
-												<span class="infoText">{!item.commentDate}</span></div>
-												</td>
-												<td valign="top">
-													<img alt="" src="{!URLFOR($Resource.commonResources, 'images/placeholders/unknownperson32x32.jpg')}" width="32">
-												</td>
-											</tr>
-										</table>
-										</td>
-										<td style="margin-right: 0px; padding-right: 0px; text-align: right"><apex:image styleclass="commentImg"
-											value="{!URLFOR($Resource.WikiResource, 'images/WikiImages/arrow_comment.gif')}" />
-										</td>
-										<td style="margin-left: 0px; padding-left: 0px">
-										<div
-											style="width: 553px; padding: 20px; background-color: #E1E2E1;">
-										{!item.comment}</div>
-										</td>
-									</tr>
-								</table>
-								<br>
-							</apex:repeat>
-						</apex:form>
 						<br>
-						<br>
-					</apex:outputpanel></div>
+						<apex:outputpanel id="noCommentPanel"
+							rendered="{!IF(cntComments = 0,true,false)}">
+							<span class="infoText" style="padding-left: 10px;">
+								No Comments yet 
+							</span>
+						</apex:outputpanel> <apex:outputpanel id="showCommentPanel"
+							rendered="{!IF(cntComments = 0,false,true)}">
+							<apex:form id="formComments">
+								<apex:repeat value="{!comments}" var="item">
+									<table cellspacing="0" border="0" style="width: 85%">
+										<tr>
+											<td valign="top" style="padding-top: 15px; width: 180px;">
+											<table border="0" align="right">
+												<tr>
+													<td valign="top">
+													<div align="right"><b>{!item.showShortCommentBy}</b><br>
+													<span class="infoText">{!item.commentDate}</span></div>
+													</td>
+													<td valign="top">
+														<img alt="" src="{!URLFOR($Resource.commonResources, 'images/placeholders/unknownperson32x32.jpg')}" width="32">
+													</td>
+												</tr>
+											</table>
+											</td>
+											<td style="margin-right: 0px; padding-right: 0px; text-align: right"><apex:image styleclass="commentImg"
+												value="{!URLFOR($Resource.WikiResource, 'images/WikiImages/arrow_comment.gif')}" />
+											</td>
+											<td style="margin-left: 0px; padding-left: 0px">
+											<div
+												style="width: 553px; padding: 20px; background-color: #E1E2E1;">
+											{!item.comment}</div>
+											</td>
+										</tr>
+									</table>
+									<br>
+								</apex:repeat>
+							</apex:form>
+							<br>
+							<br>
+						</apex:outputpanel>
+					</div>
 				</apex:outputpanel></td>
 			</tr>
 		</table>

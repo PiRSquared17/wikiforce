@@ -72,6 +72,7 @@ public with sharing class WikiOverviewController {
 	* Load my teams
 	*/
 	public void genMyTeams() {
+		tmp = new List<Id>();
 		for(WikiMember__c tm : [Select Wiki__c From WikiMember__c WHERE User__c =: USERID ] ) { 
 			tmp.add(tm.Wiki__c);
 		}
@@ -174,6 +175,7 @@ public with sharing class WikiOverviewController {
 	* Join to wiki
 	*/
 	public void joinWiki(){
+		isLastMemberAdmin = false;
 		wmc.setWikiId(System.currentPageReference().getParameters().get('wid'));
 		wmc.joinWiki();
 	}
