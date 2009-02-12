@@ -1,15 +1,14 @@
 #labels Featured
 1* [FindWiki Find a wiki]
 
-2* Control access [Access]
+2* [Access Control access]
 
-3* Add a member to the wiki [AddMember]
+3* [AddMember Add a member to the wiki]
 
-4* Wiki Overview [WikiOverview]
+4* [WikiOverview Wiki Overview]
 
-5* Wiki Tree [WikiTree]
+5* [WikiTree Wiki Tree]
 
-6* Page Details [PageDetails]
+6* [PageDetails Page Details]
 
-7* Create a wiki [CreateWiki]
-
+7* [CreateWiki Create a wiki]
