@@ -712,7 +712,7 @@
 
 	<apex:outputpanel id="overlaysPanel">
     	<apex:include pageName="WikiMembersRemove" />
-    	<apex:include pageName="WikiMembersMassiveRemove" />
+    	<apex:include pageName="WikiMembersMassiveRemove" id="incWMMROverlay"/>
     </apex:outputpanel>
 	
 	<script>

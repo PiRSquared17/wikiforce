@@ -1,7 +1,7 @@
 /**
 *@author Yuri Alvarez @ 05/02/2008
 */
-public with sharing class WikiPageController {
+public class WikiPageController {
 
 	public String idWikiSite = '';
 	
@@ -22,11 +22,23 @@ public with sharing class WikiPageController {
 
 	public String paramIdWP = System.currentPageReference().getParameters().get('idWP');
 	
+	public Boolean currentUsCanManage = false;
+	public Boolean currentUsIsOwner = false;
 	/**
 	* Costructor
 	*/
 	public WikiPageController () {
+		
 		contructMethods();
+		
+		// Evaluatin "can manage" and "owner"
+		/**
+		currentUsIsOwner = infoWP.getCreatedById() == UserInfo.getUserId() ;
+		
+		[ SELECT WikiProfile__r.canManage__c FROM WikiMember__c WHERE User__c := UserInfo.getUserId()]
+		
+		currentUsCanManage = ;
+		*/
 	}
 		
 	/**

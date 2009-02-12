@@ -1,4 +1,4 @@
-<apex:page sidebar="false" tabStyle="Wiki__c" controller="WikiMembersRemoveController">
+<apex:page sidebar="false" tabStyle="Wiki__c" controller="WikiMembersRemoveController" id="WMROverlay">
 	
 	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamsMembersMassiveDelete.css')}" />
 	
@@ -29,7 +29,9 @@
 				<div class="overlaySeparateLine" />
 				<!-- Saven and Cancel Buttons -->
 				<div class="overlayFromButtons" align="center">
-					<input type="button" class="overlaySaveBtn" id="massiveRemoveAction" onclick="$('paginationOverlay').show();setHeight('membersListDiv', 'paginationOverlay');massiveMemberRemove();" value="Continue"/> 
+				
+					<!-- <input type="button" class="overlaySaveBtn" id="massiveRemoveAction" onclick="$('paginationOverlay').show();setHeight('membersListDiv', 'paginationOverlay');massiveMemberRemove();" value="Continue"/> -->
+					<apex:commandButton styleClass="overlaySaveBtn" id="massiveRemoveAction" onclick="$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay');massiveMemberRemove();" value="Continue" oncomplete="$('paginationOverlay').hide()"/>
 					<input class="overlayCancelBtn" type="button" value="Cancel" onclick="modal.close();"/>
 					<!-- <input class="InviteBtn" type="button" value="Send"/> <input class="InviteAndAddBtn" type="button" value="Send & add more members"/><input class="cancelBtn" type="button" value="Cancel" onclick="modal.close();"/> -->
 				</div>

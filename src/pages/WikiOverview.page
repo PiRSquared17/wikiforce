@@ -27,9 +27,6 @@
 	<apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/fonts.css')}" />
 	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamsOverlaysTemplate.css')}" />
 
-
-
-	
 	<a href="#modal_container" id="initializeModal" style="display: none;"></a>
 	<div id="modal_container"></div>
 	<script>createOverlay('initializeModal')</script>
@@ -69,8 +66,8 @@
 		<!-- Header -->
 		<apex:composition template="HeaderTemplate">
 			<apex:define name="moduleId"><apex:variable var="moduleId" value="headerWiki"/></apex:define>
-		    <apex:define name="module">Wiki pages</apex:define>
-		    <apex:define name="title">OverView</apex:define>
+		    <apex:define name="module">Wiki</apex:define>
+		    <apex:define name="title">Overview</apex:define>
 		    <apex:define name="search">
 		    	<c:Search module="wiki" />
 		    </apex:define>
@@ -239,11 +236,10 @@
 																	<table border="0" style="width:100%;">
 																		<tr>
 																			<td width="110px">
-																				<apex:commandLink value="Join" action="{!joinWiki}" rendered="{!IF( AND( NOT( item.isMember ), OR( item.isPublic, item.isAdmin )), true,false)}" onclick="changeJoinStatus(this)" oncomplete="joinComplete();" >
+																				<apex:commandLink value="Join" action="{!joinWiki}" rendered="{!IF( AND( NOT( item.isMember ), OR( item.isPublic, item.isAdmin )), true,false)}" onclick="changeJoinStatus(this)" oncomplete="refreshJoinList();" >
 																					<apex:param name="wid" value="{!item.Id}" />
-																					<apex:param name="allTeams" value="false" />
 																				</apex:commandLink>
-																				<apex:commandLink value="Unjoin" action="{!unjoinWiki}" rendered="{!IF(item.isMember,true,false)}" onclick="changeJoinStatus(this);" oncomplete="refreshDeleteList();joinComplete()" >
+																				<apex:commandLink value="Unjoin" action="{!unjoinWiki}" rendered="{!IF(item.isMember,true,false)}" onclick="changeJoinStatus(this);" oncomplete="refreshJoinList();" >
 																					<apex:param name="wid" value="{!item.Id}" />
 																				</apex:commandLink>  
 																				<apex:outputpanel rendered="{!IF(item.IsAdmin,true,false)}" >
@@ -386,7 +382,7 @@
 									<apex:actionFunction name="refreshDeleteList" action="{!refreshTab}"
 										rerender="myTeamsAllTeamsPanel"
 										oncomplete="showHideOverlay(); showMessageToUser('The wiki has been deleted.', 'success');" />
-									<apex:actionFunction name="refreshJoinList" action="{!genWikiSites}" rerender="wikiSitesForm" onComplete="showWarningIsLastAdmin();" />
+									<apex:actionFunction name="refreshJoinList" action="{!refreshTab}" rerender="wikiSitesForm, myTeamsAllTeamsPanel" oncomplete="showWarningIsLastAdmin();"/>
 								</apex:form> 
 							</div>
 						</td>

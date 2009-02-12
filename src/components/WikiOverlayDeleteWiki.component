@@ -2,7 +2,7 @@
 	<!-- WikiOverlayDeleteWiki JS -->
  	<apex:includeScript value="{!URLFOR($Resource.WikiResource, 'inc/js/wikiOverlayDeleteWiki.js')}" />
 	<apex:form >
-		<apex:actionFunction name="removeWikiDef" action="{!deleteWiki}" rerender="dummy" oncomplete="refreshDeleteList(); afterWikiDelete(); refreshActivePeople(); rerenderPaginators(); "/>
+		<apex:actionFunction name="removeWikiDef" action="{!deleteWiki}" rerender="dummy, formFavorite" oncomplete="refreshDeleteList(); afterWikiDelete(); refreshActivePeople(); rerenderPaginators(); "/>
 		<apex:inputHidden value="{!wikiId}" id="wikiId"/>
 		<div id="auxWikiInputHiddenId" style="display:none;">{!$Component.wikiId}</div>
 	</apex:form>
