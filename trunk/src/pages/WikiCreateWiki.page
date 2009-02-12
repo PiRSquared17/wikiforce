@@ -114,7 +114,6 @@
 		
 		document.observe('dom:loaded',startupFunc);
 		
-		
 	</script>
 	<!-- End of scripts to show the new members overlay and the members list -->
 
