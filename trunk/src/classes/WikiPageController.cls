@@ -32,13 +32,9 @@ public class WikiPageController {
 		contructMethods();
 		
 		// Evaluatin "can manage" and "owner"
-		/**
 		currentUsIsOwner = infoWP.getCreatedById() == UserInfo.getUserId() ;
+		currentUsCanManage = userPermissions.getCanManage();
 		
-		[ SELECT WikiProfile__r.canManage__c FROM WikiMember__c WHERE User__c := UserInfo.getUserId()]
-		
-		currentUsCanManage = ;
-		*/
 	}
 		
 	/**
@@ -1302,18 +1298,24 @@ public class WikiPageController {
 	*/
 	public void updateWikiInfo(){
 	
-		WikiPage__c currentWP = new WikiPage__c();
-		Info currentInfo = new Info();
-		
-		currentInfo = getInfoWiki();
 				
-		currentWP = [ SELECT Name, ShortDescription__c FROM wikiPage__c WHERE Id =: paramIdWP ];
-		currentWP.Name = currentInfo.Name;
-		currentWP.ShortDescription__c = currentInfo.ShortDescription; 
-		
-		update currentWP;
-		
-		redirectToThis();
+		if( currentUsCanManage || currentUsIsOwner )
+		{
+			WikiPage__c currentWP = new WikiPage__c();
+			Info currentInfo = new Info();
+			
+			currentInfo = getInfoWiki();
+					
+			currentWP = [ SELECT Name, ShortDescription__c FROM wikiPage__c WHERE Id =: paramIdWP ];
+			currentWP.Name = currentInfo.Name;
+			currentWP.ShortDescription__c = currentInfo.ShortDescription; 
+			
+			update currentWP;
+			
+			redirectToThis();
+		}
+		else
+			throw new CustomException( 'Insufient privilegies' );
 				
 	}
 
@@ -1758,10 +1760,16 @@ public class WikiPageController {
    	/* ---------------------------- */  
    	
    	public void DeleteAttach () { 
-   		String idAttach = System.currentPageReference().getParameters().get('idAttach');
-   		Attachment delAttach;
-   		delAttach = [select Id, Name from Attachment where id =:idAttach ];
-   		delete delAttach; 
+
+		if( currentUsCanManage || currentUsIsOwner )
+		{
+	   		String idAttach = System.currentPageReference().getParameters().get('idAttach');
+	   		Attachment delAttach;
+	   		delAttach = [select Id, Name from Attachment where id =:idAttach ];
+	   		delete delAttach; 
+		}
+		else
+			throw new CustomException( 'Insufient privilegies' );
    	}
  
    	/* ---------------------------- */
