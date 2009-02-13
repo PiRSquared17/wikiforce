@@ -14,6 +14,10 @@
 			<div class="thinHeader">
 				<div><div><h4>My Favorites</h4></div></div>
 			</div>
+			<apex:form >
+				<apex:actionFunction action="{!readFavorites}" name="reloadFavoritesWikis" rerender="formFavorite" />
+			</apex:form>
+			
 			<!-- Widget Container -->   		
 			<div class="box_content">
 				<div class="thinBody">
