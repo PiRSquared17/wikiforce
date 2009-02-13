@@ -2026,7 +2026,7 @@ public without sharing class WikiPageEditController {
  				tableContent = htmlTailParts[0];
  				tableContent = tableContent.replaceAll('(?i)<br>','');
  				tableContent = tableContent.replaceAll('(?i)<br/>','');
- 				tableContent = tableContent.replaceAll('(?i)\r\n','');
+ 				//tableContent = tableContent.replaceAll('(?i)\r\n','');
  				
  				//Fix Copy and paste problems 
  				tableContent = tableContent.replaceAll('(?i)\n','');
@@ -2041,9 +2041,9 @@ public without sharing class WikiPageEditController {
  				tableContent = tableContent.replaceAll('(?i)</tbody>[ ]*','');
  				tableContent = tableContent.replaceAll('(?i)</td>[ ]*','\n');
  				tableContent = tableContent.replaceAll('(?i)</th>[ ]*','\n');
- 				tableContent = tableContent.replaceAll('(?i)</tr>[ ]*','');
- 				tableContent = tableContent.replaceAll('(?i)[ ]*<tr>','|-\n');
- 				tableContent = tableContent.replaceAll('(?i)[ ]*<td>','|');
+ 				tableContent = tableContent.replaceAll('(?i)</tr>[ ]*','\n');
+ 				tableContent = tableContent.replaceAll('(?i)[ ]*<tr>','<br>|-\n');
+ 				tableContent = tableContent.replaceAll('(?i)[ ]*<td>','<br>|');
  				tableContent = tableContent.replaceAll('(?i)[ ]*<th>','!');
  				
  				if (tableContent.toLowerCase().indexOf('<caption') != -1) {
@@ -2080,7 +2080,7 @@ public without sharing class WikiPageEditController {
  				while (tableContent.toLowerCase().indexOf('<td') != -1) {
 	 				List<String> tdParts = new List<String>();
 	 				tdParts = tableContent.split('(?i)[ ]*<td',2);
-	 				tdParts[1] = tdParts[1].replaceFirst('>[ ]*','|');	
+	 				tdParts[1] = tdParts[1].replaceFirst('>[ ]*','lc2|');	
 	 				tableContent = tdParts[0] + '<td' + tdParts[1];
 	 					
 	 				tableContent = tableContent.replaceFirst('(?i)[ ]*<td','|');	
@@ -2092,7 +2092,7 @@ public without sharing class WikiPageEditController {
 	 				tableContent = thParts[0] + '<th' + thParts[1];
 	 				tableContent = tableContent.replaceFirst('(?i)[ ]*<th','!');
 	 			}
- 				tableContent = tableContent.replaceAll('\n','');
+ 				//tableContent = tableContent.replaceAll('\n','');
  			}else {
  				htmlTail = htmlParts[1];
  			}

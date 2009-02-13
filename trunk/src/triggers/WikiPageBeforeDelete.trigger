@@ -22,6 +22,8 @@ trigger WikiPageBeforeDelete on WikiPage__c bulk (before delete) {
 											(Select Id From FavoriteWikis__r),
 											(Select Id From Comments__r) 
 										From WikiPage__c w where Parent__c in: Trigger.old];
+			
+			TeamUtil.currentlyExeTrigger = false;
 			delete wikiChilds;
 			
 			List<WikiVersions__c> wikiVersions = new List<WikiVersions__c>();

@@ -49,6 +49,17 @@
 		<c:WikiNewPageWidget />
 	</apex:outputpanel>
 
+	
+	<!-- LCosta feb 12 : Provide modal overlay for standard users that are not members of an open wiki. -->
+	<apex:outputpanel rendered="{!IF(AND(NOT(userPermissions.canCreate),userPermissions.canComment), true, false)}">
+		<!-- Initialize the overlay box for modal.js -->
+		<a href="#modal_container" id="initializeModalOverlay" style="display:none;"></a>
+		<div id="modal_container" style="display:none;"></div>
+		<script>
+			createOverlay('initializeModalOverlay');
+		</script>
+	</apex:outputpanel>
+	
 	<apex:outputpanel id="formsOverlays">
 		<!-- 		 Delete Page Form 		-->
 		<apex:outputpanel id="deletePageOverlay"

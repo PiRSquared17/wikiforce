@@ -50,6 +50,7 @@
 	<apex:includeScript value="{!URLFOR($Resource.TeamsResources, 'inc/js/TeamsWidgetCommon.js')}" />	
 	
 	<script>
+
      	/**
         * Namespace Prefix Getter
         */
@@ -57,23 +58,18 @@
      	var globalArrowDown = "{!URLFOR($Resource.commonResources, 'images/arrows/arrow_down.gif')}";
      	var globalArrowUp = "{!URLFOR($Resource.commonResources, 'images/arrows/arrow_up.gif')}";;
      	var wikiTypeAccess = "{!WikiType}"
-     	/**
 
+     	/**
 		*Set e2 height with e1 height + 15px
 		*For paginationOverlay to cover membersList
 		*@Param ids for element one and two 
-		
 		*/
-		
 		function setHeight( idElement1, idElement2 ){
-		
 			o1Dims = $( idElement1 ).getDimensions();
-		
 			$( idElement2 ).style.height = (o1Dims.height * 0.98 ).round() + 'px';
 			$( idElement2 ).style.width = (o1Dims.width * 0.98 ).round() + 'px';
-			
-		
 		}
+		
      </script>
 
 	<!-- Modal JS -->
@@ -97,9 +93,12 @@
 	<!-- TeamsMemebersList JS  -->
 <!--	<apex:includeScript value="{!URLFOR($Resource.TeamsResources, 'inc/js/teamsMembersList.js')}" /> -->
 	<script>
+
 		var inEdition = {!inEdition};
 		var wikiType = "{!Wiki.Type__c}";
+
 	<!-- Scripts to show the new members overlay and the members list -->
+
 		var settingsBackUp = '';
 		var membersBackUp = '';
 		var isAdd = getURLParam('add');
@@ -111,7 +110,6 @@
 			var globalSaveButton = 'Update';
 		}
 
-		
 		document.observe('dom:loaded',startupFunc);
 		
 	</script>
