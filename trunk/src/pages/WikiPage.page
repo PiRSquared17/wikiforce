@@ -88,8 +88,8 @@
 				</div>
 				<div class="separateLine"></div>
 				<div align="center">
-				    <apex:commandButton styleclass="deleteBtn" action="{!deletePage}" value="Continue and delete page" onclick="savingShowWP('{!$Component.deleteOvlyForm}','deleting');" oncomplete="modal.close();" rerender="auxPanel" />
-                    <input type="button" class="cancelBtn" value="Cancel" onclick="modal.close();" /></div>
+				    <apex:commandButton styleclass="allButtons actionButtons" action="{!deletePage}" value="Continue and delete page" onclick="savingShowWP('{!$Component.deleteOvlyForm}','deleting');" oncomplete="modal.close();" rerender="auxPanel" />
+                    <input type="button" class="allButtons cancelButtons" value="Cancel" onclick="modal.close();" /></div>
 			</apex:form></div>
 		</apex:outputpanel>
 		<!-- 		 New Attachment Form 		-->
@@ -165,9 +165,9 @@
 							<br>
 							<div class="separateLine"></div>
 							<div align="center">
-								<apex:commandButton styleClass="saveBtn" action="{!updateWikiInfo}" id="saveWikiInformation" value="Save" oncomplete="modal.close();reloadPageInfo();" />
+								<apex:commandButton styleClass="allButtons actionButtons" action="{!updateWikiInfo}" id="saveWikiInformation" value="Save" oncomplete="modal.close();reloadPageInfo();" />
 								<!-- <input class="saveBtn" type="button" value="Save" onclick="modal.close();" /> -->
-								<input class="cancelBtn" type="button" value="Cancel" onclick="modal.close();" />
+								<input class="allButtons cancelButtons" type="button" value="Cancel" onclick="modal.close();" />
 							</div>
 						</apex:form>
 					</div>
@@ -223,10 +223,10 @@
 					</tr>
 				</table>
 				<div class="separateLine"></div>
-				<div align="center"><apex:commandButton styleclass="saveBtn"
+				<div align="center"><apex:commandButton styleclass="allButtons actionButtons"
 					onclick="validateCommentForm();" value="Save"
 					rerender="commentsPanel,NewCommentForm" /> <input
-					class="cancelBtn" type="button" value="Cancel"
+					class="allButtons cancelButtons" type="button" value="Cancel"
 					onclick="modal.close();" /></div>
 				<apex:actionFunction name="saveCommentFunction"
 					action="{!saveComment}" oncomplete="modal.close();"

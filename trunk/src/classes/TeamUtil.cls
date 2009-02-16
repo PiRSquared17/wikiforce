@@ -6,6 +6,7 @@ public class TeamUtil {
 	public static Boolean currentlyExeTrigger = false;
 	public static Boolean isTest = false;
 	public static Boolean alreadyGenEnv = false;
+	public static Boolean DeletingWiki = false;
 	
 	
 	public static Integer MAX_SIZE = 4194304;

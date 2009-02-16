@@ -1,7 +1,8 @@
-trigger WikiBeforeDelete on Wiki__c bulk (before delete) {
+trigger WikiBeforeDelete on Wiki__c bulk (before delete) { 
 	if (!TeamUtil.currentlyExeTrigger) {
         try{
             TeamUtil.currentlyExeTrigger = true;
+            TeamUtil.DeletingWiki = true;
             
             List<String> idsWiki = new List<String>();
             for (Wiki__c iterWiki : Trigger.old) {
