@@ -118,18 +118,18 @@
 					<div align="center">
 						<!-- Wiki Page --> 
 						<apex:outputpanel rendered="{!IF(idWikiPage == null, false, true)}">
-							<apex:commandButton id="saveBtnNewPageWiki" action="{!saveWiki}" styleclass="overlaySaveBtn" oncomplete="modal.close();" value="Save"  rerender="rightSidebarPanel, childrenPanel, bodyPagePanel, infoPanel" />
+							<apex:commandButton id="saveBtnNewPageWiki" action="{!saveWiki}" styleclass="allButtons actionButtons" oncomplete="modal.close();" value="Save"  rerender="rightSidebarPanel, childrenPanel, bodyPagePanel, infoPanel" />
 						</apex:outputpanel> 
 						<!-- Wiki Team Overview -->
 						<apex:outputpanel rendered="{!IF(idTeamOverview == null, false, true)}">
-							<apex:commandButton id="saveBtnNewPageOverview" action="{!saveWiki}" styleclass="overlaySaveBtn" oncomplete="refreshTeamOverview();modal.close();" value="Save" rerender="wikiTreePanel, updatedPanel" />
+							<apex:commandButton id="saveBtnNewPageOverview" action="{!saveWiki}" styleclass="allButtons actionButtons" oncomplete="refreshTeamOverview();modal.close();refreshRecentChanges()" value="Save" rerender="wikiTreePanel, updatedPanel" />
 						</apex:outputpanel>    
 						<!-- Wiki Directory -->
 						<apex:outputpanel rendered="{!IF(AND(idTeamOverview == null, idWikiPage == null), true, false)}">
-							<apex:commandButton id="saveBtnNewPageTeam" action="{!saveWiki}" styleclass="overlaySaveBtn" oncomplete="modal.close();reloadWikiList();" value="Save" rerender="theFeeds" />
+							<apex:commandButton id="saveBtnNewPageTeam" action="{!saveWiki}" styleclass="allButtons actionButtons" oncomplete="modal.close();reloadWikiList();" value="Save" rerender="theFeeds" />
 						</apex:outputpanel>
-						<apex:commandButton action="{!saveWikiAndEdit}" id="saveBtnNewPageEdit" styleclass="saveBtn overlaySaveBtn" value="Save and Edit" />
-						<apex:commandButton styleclass="overlayCancelBtn" onclick="modal.close(); return false;" value="Cancel" />
+						<apex:commandButton action="{!saveWikiAndEdit}" id="saveBtnNewPageEdit" styleclass="allButtons actionButtons" value="Save and Edit" oncomplete="refreshRecentChanges()"/>
+						<apex:commandButton styleclass="allButtons cancelButtons" onclick="modal.close(); return false;" value="Cancel" />
 					</div>
 				</div>
 			</apex:form>

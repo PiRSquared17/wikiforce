@@ -30,8 +30,8 @@
 					<!-- Saven and Cancel Buttons -->
 					<div class="overlayFromButtons" align="center">
 						<!-- <apex:commandButton styleclass="overlaySaveBtn" action="{!saveNewAttach}" value="Done"/> -->
-						<apex:commandButton styleClass="saveBtn" action="{!saveNewAttach}" value="Done"/>
-						<apex:commandButton styleClass="overlayCancelBtn" value="Cancel" onclick="cancelAction(); return false;"  />
+						<apex:commandButton styleClass="allButtons actionButtons" action="{!saveNewAttach}" value="Done"/>
+						<apex:commandButton styleClass="allButtons cancelButtons" value="Cancel" onclick="cancelAction(); return false;"  />
 					</div>
 				</div>
 			</apex:form>

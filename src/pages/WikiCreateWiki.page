@@ -490,7 +490,7 @@
 							<td>
 								<div>
 									<apex:outputpanel rendered="true"> 
-										<a onclick="createOverlay('','inviteTeam','240','showSelects()');relocateOverlay()" href="javascript:;" class="blackbutton">New</a>
+										<a onclick="createOverlay('','inviteTeam','240','showSelects()'); relocateOverlay()" href="javascript:;" class="blackbutton">New</a>
 										<a href="javascript:;" class="blackbutton" onclick="massiveRemoveOverlay();">Remove</a>
 									</apex:outputpanel>
 								</div>
@@ -677,7 +677,7 @@
 										onclick="createOverlay('','inviteTeam','240','showSelects()'); relocateOverlay(); setTimeout( 'focusToWikiMW()', 1200 );"
 										href="javascript:;" class="blackbutton">New</a>
 									<a href="javascript:;" class="blackbutton"
-										onclick="massiveRemoveOverlay();">Remove</a>
+										onclick="massiveRemoveOverlay(); relocateOverlay()">Remove</a>
 									<!--  <div class="editProfile"><a href="javascript:;"
 										class="blackbutton" onclick="showHideOptionsBottom();">Edit
 									{!$ObjectType.Wiki__c.label} Profile | v</a>

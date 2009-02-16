@@ -27,9 +27,9 @@
 			<div class="overlaySeparateLine"></div>
 			<div class="overlayFromButtons" align="center">
 				<span id="deleteButton">
-					<input type="button" class="overlaySaveBtn" value="Continue and delete wiki" onclick="statusDeleteWiki(this); removeWiki('id');" />
+					<input type="button" class="allButtons actionButtons" value="Continue and delete wiki" onclick="statusDeleteWiki(this); removeWiki('id');" />
 				</span>
-				<input type="button" class="overlayCancelBtn" value="Cancel" onclick="modal.close(); "/>
+				<input type="button" class="allButtons cancelButtons" value="Cancel" onclick="modal.close(); "/>
 			</div>	
 		</div>
 	</div>
