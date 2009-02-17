@@ -166,9 +166,9 @@
 												</apex:commandLink>
 											</li>
 											<li id="allTeamTab" >
-												<div id="overTabMembers" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+												<div id="overTabMembers" style="cursor:auto">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
 												<apex:commandLink id="allTeamsLink" action="{!switchTabsController}" value="Members" onclick="switchTabs('allTeamTab');"
-																	 rerender="holder" styleClass="{!IF((hasMembers == false),'disable','')}" >
+																	 rerender="holder" styleClass="{!IF((hasMembers == false || inEdition),'disable','')}" >
 													<apex:param name="allTeams" value="true" />
 												</apex:commandLink>
 											</li>					
@@ -513,29 +513,30 @@
 				onclick="showHideElement(document.getElementById('filterDiv'),document.getElementById('twistImage'));"
 				class="filterLink">Filter</a></div>
 			<div class="filter" id="filterDiv">
-		
-			<div align="center">
-				<apex:form id="filterForm">
-					<ul class="letterFilter">
-						<li><apex:commandLink action="{!genMembers}" value="ALL"
-							styleclass="AllBtn" rerender="membersList" onclick="$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay')" oncomplete="$('paginationOverlay').hide()">
-							<apex:param name="ltr" value="ALL" />
-						</apex:commandLink></li>
-						<apex:repeat id="letterFilterRepeat" value="{!letterFilter}"
-							var="item">
-							<li><apex:outputpanel rendered="{!NOT(item.containMembers)}">
-								<apex:commandLink styleclass="contains" action="{!genMembers}" 
-									value="{!item.letter}" rerender="membersList" onclick="$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay')" oncomplete="$('paginationOverlay').hide()">
-									<apex:param name="ltr" value="{!item.letter}" />
-								</apex:commandLink>
-							</apex:outputpanel> <apex:outputpanel rendered="{!(item.containMembers)}">
-																{!item.letter}
-															</apex:outputpanel></li>
-						</apex:repeat>
-					</ul>
-					<br style="clear: both; font-size: 3px;" />
-				</apex:form>
-			</div>
+			<apex:outputpanel id="letterFilterContainer">
+				<div align="center">
+					<apex:form id="filterForm">
+						<ul class="letterFilter">
+							<li><apex:commandLink action="{!genMembers}" value="ALL"
+								styleclass="AllBtn" rerender="membersList" onclick="$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay')" oncomplete="$('paginationOverlay').hide()">
+								<apex:param name="ltr" value="ALL" />
+							</apex:commandLink></li>
+							<apex:repeat id="letterFilterRepeat" value="{!letterFilter}"
+								var="item">
+								<li><apex:outputpanel rendered="{!NOT(item.containMembers)}">
+									<apex:commandLink styleclass="contains" action="{!genMembers}" 
+										value="{!item.letter}" rerender="membersList" onclick="$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay')" oncomplete="$('paginationOverlay').hide()">
+										<apex:param name="ltr" value="{!item.letter}" />
+									</apex:commandLink>
+								</apex:outputpanel> <apex:outputpanel rendered="{!(item.containMembers)}">
+																	{!item.letter}
+																</apex:outputpanel></li>
+							</apex:repeat>
+						</ul>
+						<br style="clear: both; font-size: 3px;" />
+					</apex:form>
+				</div>
+			</apex:outputpanel>
 		</div>
 		<apex:outputpanel rendered="{!IF(AND(prevPageShow,nextPageShow),false,true)}">
 			<hr class="filterHR">
@@ -714,7 +715,7 @@
 	
 	<script>
 		document.observe('dom:loaded',startupFunc);
-		document.observe('dom:loaded', hideDiv);
+		document.observe('dom:loaded', setTimeout('hideOverMemberTab()', 1000));
 		setTimeout('showAddMembersSection()', 1000);
 		readPortalCSSRules();
 		countStringLimit($('WikiCreateWiki:createNewTeamForm:TeamDescription'),'stringSizeCounter');
