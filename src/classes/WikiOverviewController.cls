@@ -12,16 +12,9 @@ public with sharing class WikiOverviewController {
    	String USERID = UserInfo.getUserId();
    	public WikiMemberController wmc = new WikiMemberController();
     public Boolean isLastMemberAdmin = false;
-
+	public Boolean isTeamAdmin = false;
 	
     /**
-    *@return bool is last member admin
-    */
-    public Boolean getIsLastMemberAdmin (){
-        return isLastMemberAdmin;
-    }
-	
-	/**
 	* Costructor
 	*/
 	public WikiOverviewController () {
@@ -29,9 +22,40 @@ public with sharing class WikiOverviewController {
 		genWikiSites();
 		setSiteCount();
 		genCntPagination();
-		
+		genIsTeamAdmin();
 		system.debug( 'debuging ...' );
 	}
+	
+	/**
+    *@return bool is last member admin
+    */
+    public Boolean getIsLastMemberAdmin (){
+        return isLastMemberAdmin;
+    }
+	
+	/**
+    *@return bool is team admin
+    */
+    public Boolean getIsTeamAdmin (){
+        return isTeamAdmin;
+    }
+	
+	/**
+    * sets the value of isTeamAdmin
+    */
+	public void setIsTeamAdmin (Boolean b){
+		this.isTeamAdmin = b;
+	}
+	
+	/**
+    * generates the value of isTeamAdmin
+    */
+    public void genIsTeamAdmin (){
+        List<User> teamAdmin = [Select Id, Profile.PermissionsModifyAllData From User where id =:USERID limit 1];
+        setIsTeamAdmin(teamAdmin[0].Profile.PermissionsModifyAllData);
+    }
+	
+	
 	
 	/**
 	* Verify if profiles exist if not create them
@@ -130,10 +154,14 @@ public with sharing class WikiOverviewController {
     	} */
     	
         if(allTeams == 'true'){
-            sites = [select Id, Name, Description__c, PictureId__c, PublicProfile__c, Type__c from Wiki__c order by Name];
+        	if(getIsTeamAdmin()) {
+            	sites = [select Id, Name, Description__c, PictureId__c, PublicProfile__c, Type__c from Wiki__c order by Name];
+        	}
+        	else {
+        		sites = [select Id, Name, Description__c, PictureId__c, PublicProfile__c, Type__c from Wiki__c where Id in: myTeams() or Type__c !='private' order by Name];
+        	}
         }else{
-        	System.debug('my teams : ' + myTeams());
-            sites = [select Id, Name, Description__c, PictureId__c, PublicProfile__c, Type__c from Wiki__c where Id in: myTeams() order by Name];
+        	sites = [select Id, Name, Description__c, PictureId__c, PublicProfile__c, Type__c from Wiki__c where Id in: myTeams() order by Name];
         }
         System.debug('Lcosta test for private wiki listing : ');
     	List<String> wikiIds = new List<String>();
@@ -155,17 +183,21 @@ public with sharing class WikiOverviewController {
 		Map<Id, String> wAdmin = this.getWikisAdmin();
 		List<TeamWikis> teamWikiList = new List<TeamWikis>();
 		for (Wiki__c item : sites) {
-			TeamWikis teamWikiItem = new TeamWikis();
-			teamWikiItem.setIsPublic(item.PublicProfile__c != null);
-			teamWikiItem.setIsMember(mapMembers.containsKey(item.Id));
-			teamWikiItem.setId(item.Id);
-			teamWikiItem.setName(item.Name);
-			String nameProfileAdmin = 'Wiki Administrator';
-			teamWikiItem.setIsAdmin(teamAdmin[0].Profile.PermissionsModifyAllData || nameProfileAdmin.equals(wAdmin.get(item.Id)));
-			teamWikiItem.setDescription(item.Description__c);
-			teamWikiItem.setPicture(item.PictureId__c);
-			teamWikiItem.setStateWiki(item.Type__c);
-			teamWikiList.add(teamWikiItem);
+			if (item.Type__c !='private' || mapMembers.containsKey(item.Id)) {
+				System.debug('wikiName : ' + item.Name);
+				System.debug('is member? ' + mapMembers.containsKey(item.Id));
+				TeamWikis teamWikiItem = new TeamWikis();
+				teamWikiItem.setIsPublic(item.PublicProfile__c != null);
+				teamWikiItem.setIsMember(mapMembers.containsKey(item.Id));
+				teamWikiItem.setId(item.Id);
+				teamWikiItem.setName(item.Name);
+				String nameProfileAdmin = 'Wiki Administrator';
+				teamWikiItem.setIsAdmin(teamAdmin[0].Profile.PermissionsModifyAllData || nameProfileAdmin.equals(wAdmin.get(item.Id)));
+				teamWikiItem.setDescription(item.Description__c);
+				teamWikiItem.setPicture(item.PictureId__c);
+				teamWikiItem.setStateWiki(item.Type__c);
+				teamWikiList.add(teamWikiItem);
+			}
 		}
 		wikiSites.clear();
 		wikiSites = teamWikiList;
@@ -361,7 +393,12 @@ public with sharing class WikiOverviewController {
     		allTeams = 'false';
     	
     	if(allTeams == 'true'){
-	   		teamList = [select Name from Wiki__c];
+    		if (getIsTeamAdmin()) {
+    			teamList = [select Name from Wiki__c];
+    		}
+    		else {
+    			teamList = [select Name from Wiki__c where Type__c != 'private' or Id in:myTeams()];
+    		}
     	}else{
 			teamList = [select Name from Wiki__c where Id in:  myTeams() ];
     	}
@@ -548,7 +585,12 @@ public with sharing class WikiOverviewController {
 		if (letter == 'ALL' || letter == null || letter == '') {
 			Integer allTeamCount;
 			if (allTeams == 'true') {
-				sites = [select Id, Name, Description__c, PictureId__c, PublicProfile__c, Type__c from Wiki__c order by Name];
+				if(getIsTeamAdmin()) {
+						sites = [select Id, Name, Description__c, PictureId__c, PublicProfile__c, Type__c from Wiki__c];
+				}
+				else {
+					sites = [select Id, Name, Description__c, PictureId__c, PublicProfile__c, Type__c from Wiki__c where Type__c != 'private' or Id in:myTeamsList order by Name];
+				}
 			}else {
 				sites = [select Id, Name, Description__c, PictureId__c, PublicProfile__c, Type__c from Wiki__c where id in:myTeamsList order by Name];
 			}
@@ -560,7 +602,12 @@ public with sharing class WikiOverviewController {
 		}else {
 			Integer lrtTeamCount;
 			if (allTeams == 'true') {
-				sites = [select Id, Name, Description__c, PictureId__c, PublicProfile__c, Type__c from Wiki__c where Name like :(letter + '%') order by Name];
+				if (getIsTeamAdmin()) {
+					sites = [select Id, Name, Description__c, PictureId__c, PublicProfile__c, Type__c from Wiki__c where Name like :(letter + '%') order by Name];
+				}
+				else {
+					sites = [select Id, Name, Description__c, PictureId__c, PublicProfile__c, Type__c from Wiki__c where Name like :(letter + '%') and (Type__c != 'private' or Id in:myTeamsList) order by Name];
+				}
 			}else {
 				sites = [select Id, Name, Description__c, PictureId__c, PublicProfile__c, Type__c from Wiki__c where Name like :(letter + '%') and id in:myTeamsList order by Name];
 			}
@@ -586,8 +633,6 @@ public with sharing class WikiOverviewController {
     		mapMembers.put(m.Wiki__c, m.Id);
     	}
     	
-    	List<User> teamAdmin = [Select Id, Profile.PermissionsModifyAllData From User where id =:USERID limit 1];
-		
 		Map<Id, String> wAdmin = this.getWikisAdmin();
 		List<TeamWikis> teamWikiList = new List<TeamWikis>();
 		for (Wiki__c item : sites) {
@@ -597,7 +642,7 @@ public with sharing class WikiOverviewController {
 			teamWikiItem.setId(item.Id);
 			teamWikiItem.setName(item.Name);
 			String nameProfileAdmin = 'Wiki Administrator';
-			teamWikiItem.setIsAdmin(teamAdmin[0].Profile.PermissionsModifyAllData || nameProfileAdmin.equals(wAdmin.get(item.Id)));
+			teamWikiItem.setIsAdmin(getIsTeamAdmin() || nameProfileAdmin.equals(wAdmin.get(item.Id)));
 			teamWikiItem.setDescription(item.Description__c);
 			teamWikiItem.setPicture(item.PictureId__c);
 			teamWikiItem.setStateWiki(item.Type__c);

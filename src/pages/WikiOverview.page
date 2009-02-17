@@ -101,7 +101,7 @@
 											<li id="allTeamTab">
 												<apex:commandLink action="{!refreshTab}" value="All {!$ObjectType.Wiki__c.labelPlural}" 
 																	onclick="switchTab('allTeamTab'); switchOverlay(true);" 
-																	rerender="myTeamsAllTeamsPanel" 
+																	rerender="myTeamsAllTeamsPanel, wikiSitesForm" 
 																	oncomplete="switchOverlay(false);">
 													<apex:param name="allTeams" value="true" />
 												</apex:commandLink>
