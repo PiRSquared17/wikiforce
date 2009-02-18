@@ -187,6 +187,18 @@
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>WikiSubscribeController</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>WikiSubscribersEmailServices</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>WikiSubscriptionController</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>WikiTeamOverviewController</apexClass>
         <enabled>false</enabled>
     </classAccesses>
@@ -1155,6 +1167,34 @@
     </fieldLevelSecurities>
     <fieldLevelSecurities>
         <editable>true</editable>
+        <field>WikiSubscription__c.TeamMemberJoinLeave__c</field>
+    </fieldLevelSecurities>
+    <fieldLevelSecurities>
+        <editable>true</editable>
+        <field>WikiSubscription__c.TeamMemberStatusUpdated__c</field>
+    </fieldLevelSecurities>
+    <fieldLevelSecurities>
+        <editable>true</editable>
+        <field>WikiSubscription__c.Team__c</field>
+    </fieldLevelSecurities>
+    <fieldLevelSecurities>
+        <editable>true</editable>
+        <field>WikiSubscription__c.User__c</field>
+    </fieldLevelSecurities>
+    <fieldLevelSecurities>
+        <editable>true</editable>
+        <field>WikiSubscription__c.WikiCreatedByMeUpdated__c</field>
+    </fieldLevelSecurities>
+    <fieldLevelSecurities>
+        <editable>true</editable>
+        <field>WikiSubscription__c.WikiNewPage__c</field>
+    </fieldLevelSecurities>
+    <fieldLevelSecurities>
+        <editable>true</editable>
+        <field>WikiSubscription__c.WikiPageUpdated__c</field>
+    </fieldLevelSecurities>
+    <fieldLevelSecurities>
+        <editable>true</editable>
         <field>WikiVersions__c.Body__c</field>
     </fieldLevelSecurities>
     <fieldLevelSecurities>
@@ -1253,6 +1293,9 @@
     </layoutAssignments>
     <layoutAssignments>
         <layout>WikiRecentlyViewed__c-Wiki Recently Viewed Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>WikiSubscription__c-WikiSubscription Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
         <layout>WikiVersions__c-Wiki Version Layout</layout>
@@ -1383,6 +1426,13 @@
         <allowDelete>true</allowDelete>
         <allowEdit>true</allowEdit>
         <allowRead>true</allowRead>
+        <object>WikiSubscription__c</object>
+    </objectPermissions>
+    <objectPermissions>
+        <allowCreate>true</allowCreate>
+        <allowDelete>true</allowDelete>
+        <allowEdit>true</allowEdit>
+        <allowRead>true</allowRead>
         <object>WikiVersions__c</object>
     </objectPermissions>
     <objectPermissions>
@@ -1442,6 +1492,10 @@
     </pageAccesses>
     <pageAccesses>
         <apexPage>WikiSearchResult</apexPage>
+        <enabled>false</enabled>
+    </pageAccesses>
+    <pageAccesses>
+        <apexPage>WikiSubscription</apexPage>
         <enabled>false</enabled>
     </pageAccesses>
     <pageAccesses>

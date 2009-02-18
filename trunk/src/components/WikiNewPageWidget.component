@@ -106,8 +106,9 @@
 							<td align="right" valign="top"><span class="inputLabel">Description</span></td>
 							<td></td>
 							<td style="height: 130px;">
-								<apex:inputTextarea id="descNewWP" value="{!newWikiPage.ShortDescription__c}" style="width: 98%; height: 110px;" />
-								<span class="infoText">250 character limit</span>
+								<apex:inputTextarea id="descNewWP" value="{!newWikiPage.ShortDescription__c}" 
+									style="width: 98%; height: 110px;" onkeyup="countLimit(this, 'textCounter3', 250)" />
+								<span class="infoText"><span id="textCounter3">250</span> character limit</span>
 							</td>
 						</tr>
 					</table>

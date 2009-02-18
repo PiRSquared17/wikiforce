@@ -982,7 +982,7 @@ public class WikiCreateWikiController {
 		*@param Integer
 		*/
 		public void setContainMembers (Integer cntMembers) {
-			this.containMembers = cntMembers == 0;
+			this.containMembers = cntMembers != 0;
 		}
 		
 		/**
@@ -992,6 +992,7 @@ public class WikiCreateWikiController {
 			return containMembers;
 		}
 	}
+	
 	
 	/**
 	* Return list with letters and if contain Wiki Members

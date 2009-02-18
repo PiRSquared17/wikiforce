@@ -36,6 +36,13 @@ public class WikiPageController {
 		currentUsCanManage = userPermissions.getCanManage();
 		
 	}
+	
+	/**
+	*@return bool is instance owner
+	*/
+	public Boolean getCurrentUsIsOwner(){
+		return currentUsIsOwner;
+	}
 		
 	/**
 	*@param String
