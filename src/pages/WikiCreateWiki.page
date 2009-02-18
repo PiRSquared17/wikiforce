@@ -1,4 +1,4 @@
-<apex:page id="WikiCreateWiki" controller="WikiCreateWikiController" tabStyle="Wiki__c" sidebar="false" >
+<apex:page id="WikiCreateWiki" controller="WikiCreateWikiController" tabStyle="Wiki__c" sidebar="false">
 	<!-- Scripts --> 
 	<apex:includeScript value="{!URLFOR($Resource.WikiResource, 'inc/js/common.js')}"/>
 	<apex:includeScript value="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}"/>
@@ -83,7 +83,7 @@
 	</script>	
 	
 	<apex:form >
-		<apex:actionFunction name="reloadMemberList" action="{!refresh}" rerender="membersList" oncomplete="$('paginationOverlay').hide();" />
+		<apex:actionFunction name="reloadMemberList" action="{!refresh}" rerender="letterFilterContainer, membersList" oncomplete="$('paginationOverlay').hide();" />
 	</apex:form>
 
 	<!-- TeamsMemebersList CSS 	-->
@@ -302,7 +302,7 @@
 																			<b>Error:</b> The images size must be less than 512 kb
 																		</span>
 																		</apex:outputpanel>
-																	<td>
+																	</td>
 																</tr>
 																<tr>
 																	<td></td>
@@ -451,7 +451,7 @@
 														<apex:commandButton styleClass="SaveBtn" action="{!saveAndRedirect}"  value="{!IF(inEdition == false, 'Create', 'Update')}" id="saveButton"  />
 														<apex:outputpanel rendered="{!NOT inEdition}">
 															<apex:commandButton styleClass="SaveBtn" action="{!saveWikiAndAddMembers}"  value="Create And Add Members" id="saveAndAddMembersButton" />
-														</apex:Outputpanel>
+														</apex:outputpanel>
 														<apex:inputHidden value="{!Wiki.Type__c}" id="openOrClosed" />
 														<apex:commandButton styleClass="cancelBtn" onclick="location.href = '/apex/WikiOverview';return false;" value="Cancel" id="cancelButton"/> 
 													</div>
@@ -461,7 +461,6 @@
 									</div>
 								</div>
 							</div>
-						</div>
 						</td>
 					</tr>
 					<!--<tr>
@@ -503,7 +502,7 @@
 				</tr>
 			</table>
 			<div class="border_body_top"></div>
-			<br>
+			<br />
 			<div style="position: relative; overflow: hidden"><img
 				id="twistImage" style="vertical-align: middle;" class="twistImg"
 				onclick="showHideElement(document.getElementById('filterDiv'),this);"
@@ -513,34 +512,35 @@
 				onclick="showHideElement(document.getElementById('filterDiv'),document.getElementById('twistImage'));"
 				class="filterLink">Filter</a></div>
 			<div class="filter" id="filterDiv">
-			<apex:outputpanel id="letterFilterContainer">
-				<div align="center">
-					<apex:form id="filterForm">
-						<ul class="letterFilter">
-							<li><apex:commandLink action="{!genMembers}" value="ALL"
-								styleclass="AllBtn" rerender="membersList" onclick="$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay')" oncomplete="$('paginationOverlay').hide()">
-								<apex:param name="ltr" value="ALL" />
-							</apex:commandLink></li>
-							<apex:repeat id="letterFilterRepeat" value="{!letterFilter}"
-								var="item">
-								<li><apex:outputpanel rendered="{!NOT(item.containMembers)}">
-									<apex:commandLink styleclass="contains" action="{!genMembers}" 
-										value="{!item.letter}" rerender="membersList" onclick="$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay')" oncomplete="$('paginationOverlay').hide()">
-										<apex:param name="ltr" value="{!item.letter}" />
-									</apex:commandLink>
-								</apex:outputpanel> <apex:outputpanel rendered="{!(item.containMembers)}">
-																	{!item.letter}
-																</apex:outputpanel></li>
-							</apex:repeat>
-						</ul>
-						<br style="clear: both; font-size: 3px;" />
-					</apex:form>
-				</div>
-			</apex:outputpanel>
-		</div>
-		<apex:outputpanel rendered="{!IF(AND(prevPageShow,nextPageShow),false,true)}">
-			<hr class="filterHR">
-			</apex:outputpanel> <apex:outputpanel id="membersList">
+				<apex:outputPanel id="letterFilterContainer">
+					<div align="center">
+						<apex:form id="filterForm">
+							<ul class="letterFilter">
+								<li><apex:commandLink action="{!genMembers}" value="ALL"
+									styleclass="AllBtn" rerender="membersList" onclick="$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay')" oncomplete="$('paginationOverlay').hide()">
+									<apex:param name="ltr" value="ALL" />
+								</apex:commandLink></li>
+									<apex:repeat id="letterFilterRepeat" value="{!letterFilter}"
+										var="item">
+										<li><apex:outputpanel rendered="{!(item.containMembers)}">
+											<apex:commandLink styleclass="contains" action="{!genMembers}" 
+												value="{!item.letter}" rerender="membersList" onclick="$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay')" oncomplete="$('paginationOverlay').hide()">
+												<apex:param name="ltr" value="{!item.letter}" />
+											</apex:commandLink>
+										</apex:outputpanel> <apex:outputpanel rendered="{!NOT(item.containMembers)}">
+																			{!item.letter}
+																		</apex:outputpanel></li>
+									</apex:repeat>
+							</ul>
+							<br style="clear: both; font-size: 3px;" />
+						</apex:form>
+					</div>
+				</apex:outputPanel>
+			</div>
+			<apex:outputpanel rendered="{!IF(AND(prevPageShow,nextPageShow),false,true)}">
+				<hr class="filterHR" />
+			</apex:outputpanel> 
+			<apex:outputpanel id="membersList">
 				<apex:outputpanel styleClass="pagination" layout="block"
 					rendered="{!IF(AND(prevPageShow,nextPageShow),false,true)}">
 					<div class="pages"><apex:form >
@@ -649,7 +649,7 @@
 						</tbody>
 					</table>
 				</apex:form>
-				<hr class="filterHR">
+				<hr class="filterHR" />
 				<apex:outputpanel styleClass="pagination" layout="block"
 					rendered="{!IF(AND(prevPageShow,nextPageShow),false,true)}">
 					<div class="pages"><apex:form >
@@ -663,7 +663,7 @@
 					</apex:form></div>
 				</apex:outputpanel>
 				<apex:outputpanel rendered="{!IF(AND(prevPageShow,nextPageShow),false,true)}">
-					<hr class="filterHR">
+					<hr class="filterHR" />
 				</apex:outputpanel>
 				<table width="100%">
 					<tr>
@@ -702,7 +702,7 @@
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 					</tr>
 				</table>
-				<br>
+				<br />
 			</apex:outputpanel>
 		</div>
 	</div>

@@ -142,7 +142,7 @@
 						<apex:commandButton action="{!saveMembers}"
 							oncomplete="setTimeout('modal.close();hideSwirly(\'swirly_overlay\');showSwirly(\'paginationOverlay\');setHeight(\'memberListContainer\', \'paginationOverlay\');', 5000);showMessageToUser(); "
 							styleclass="allButtons actionButtons" value="Send"
-							rerender="membersListContainer, saveMembersSync, letterFilterContainer" /> 
+							rerender="membersListContainer, saveMembersSync" /> 
 							<input class="allButtons cancelButtons" type="button" value="Cancel" onclick="modal.close();" />
 					</div>
 				</apex:form>
@@ -201,7 +201,7 @@
 								<apex:outputpanel >
 									<a onclick="showNewMembersOverlay();" href="javascript:;">New</a> |
 								</apex:outputpanel>
-								<a href="#" onclick="location.href='/apex/TeamsMembersList?id={!Wiki}'"class="topRightLinks">See More&#187;</a>
+								<a href="#" onclick="location.href='/apex/TeamsMembersList?id={!Wiki}'" class="topRightLinks">See More&#187;</a>
 							</div>
 						</div>
 						<apex:outputPanel layout="block" id="membersListContainer">

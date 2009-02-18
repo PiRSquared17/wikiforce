@@ -22,10 +22,12 @@
 	<apex:includeScript value="{!URLFOR($Resource.OverlayFunctionsFixed, 'js/overlayFunction.js')}" />
 	<apex:includeScript value="{!URLFOR($Resource.WikiResource, 'inc/js/WikiPage.js')}" />
 	<apex:includeScript value="{!URLFOR($Resource.commonResources, 'inc/js/modal.js')}" />
+	
 
 	<!-- CSS styles for Portal Integration -->
 	<apex:stylesheet value="{!URLFOR($Resource.portalStyles, 'portal.css')}" />
 	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/headerTeams.css')}" />
+	
 
 	<!-- Styles -->
 	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/commonLayout.css')}" />
@@ -92,10 +94,9 @@
                     <input type="button" class="allButtons cancelButtons" value="Cancel" onclick="modal.close();" /></div>
 			</apex:form></div>
 		</apex:outputpanel>
+
 		<!-- 		 New Attachment Form 		-->
-		<!-- <apex:outputpanel style="display:none;" id="newAttachmentOverlay" rendered="{!userPermissions.canManage}"> -->
-		<apex:outputpanel id="newAttachmentOverlay" style="display:none;"
-			rendered="{!userPermissions.canManage}">
+		<apex:outputpanel id="newAttachmentOverlay" style="display:none;" rendered="{!AND(userPermissions.canManage, userPermissions.canCreate)}">
 			<div class="attach__Overlay" id="UFP__contentForm__">
 			<div class="formsHeader">
 			<table>
@@ -157,8 +158,8 @@
 									<td align="right" valign="top"><span class="inputLabel">Description</span></td>
 									<td></td>
 									<td class="descriptionInput">
-									<apex:inputTextarea id="descNewWP" value="{!infoWiki.ShortDescription}" style="width: 98%; height: 110px;" />
-										<span class="infoText">250 character limit</span>
+									<apex:inputTextarea id="descNewWP" value="{!infoWiki.ShortDescription}" onkeyup="countLimit(this, 'textCounter2', 250)" style="width: 98%; height: 110px;" />
+										<span class="infoText"><span id="textCounter2">250</span> character limit</span>
 									</td>
 								</tr>
 							</table>
@@ -215,8 +216,8 @@
 						<td align="right" valign="top"><span class="inputLabel">Comment</span></td>
 						<td valign="top" class="requiredTD"><span
 							class="requiredTextArea"></span></td>
-						<td class="descriptionInput"><apex:inputtextarea id="commentTextArea" value="{!commentBody}" /> <span
-							class="infoText">250 character limit
+						<td class="descriptionInput"><apex:inputtextarea id="commentTextArea" value="{!commentBody}" onkeyup="countLimit(this, 'textCounter', 250)" /> <span
+							class="infoText"><span id="textCounter">250</span> character limit
 						<div id="errorComment" style="color: red; display: none;">The
 						comment is empty or already exist!</div>
 						</span></td>
@@ -666,6 +667,28 @@
 	<!-- <img src="{!URLFOR($Resource.FCKeditor ,'fckeditor/editor/images/smiley/msn/teeth_smile.gif')}" /> -->
 
 	<script>
+		function countLimit(area, indicator, max){
+			var text = area.value;
+			var reLF= new RegExp("[^\n]", "g");
+			var lfs = text.replace(reLF,'');
+		
+			if (Prototype.Browser.Gecko || Prototype.Browser.WebKit) {
+				remaining = max - area.value.length - lfs.length;
+			}
+			else {
+				remaining = max - area.value.length;
+			}
+		    if (remaining <= 0){
+		    	alert("Maximum length for this text (" + max + ") reached!");
+		    	var temp = text.substring(0,max);
+		    	area.value = temp;
+		    	$(indicator).innerHTML = 0;
+		    	return false;
+		    }
+			$(indicator).innerHTML = remaining;
+		
+		}
+		
 		var fabLoading = false;
 		function loadFavorite(){
 			if(!fabLoading){

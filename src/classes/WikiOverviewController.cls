@@ -147,14 +147,10 @@ public with sharing class WikiOverviewController {
     	if(allTeams == '') 
     		allTeams = 'false';
     	
-    	/* if(allTeams == 'true'){
-	   		sites = [select Id, Name, Description__c, PictureId__c, PublicProfile__c from Wiki__c order by Name];
-    	}else{
-			sites = [select Id, Name, Description__c, PictureId__c, PublicProfile__c from Wiki__c where Id in: myTeams() order by Name];
-    	} */
-    	
-        if(allTeams == 'true'){
+    	if(allTeams == 'true'){
+    		System.debug('Lcosta is all teams selected : ');
         	if(getIsTeamAdmin()) {
+        		System.debug('Lcosta is team admin : ');
             	sites = [select Id, Name, Description__c, PictureId__c, PublicProfile__c, Type__c from Wiki__c order by Name];
         	}
         	else {
@@ -163,8 +159,7 @@ public with sharing class WikiOverviewController {
         }else{
         	sites = [select Id, Name, Description__c, PictureId__c, PublicProfile__c, Type__c from Wiki__c where Id in: myTeams() order by Name];
         }
-        System.debug('Lcosta test for private wiki listing : ');
-    	List<String> wikiIds = new List<String>();
+        List<String> wikiIds = new List<String>();
     	for(Wiki__c s : sites){
     		wikiIds.add(s.Id);
     		System.debug(' DB ' + s.Name + ' ' + s.Type__c);
@@ -183,21 +178,19 @@ public with sharing class WikiOverviewController {
 		Map<Id, String> wAdmin = this.getWikisAdmin();
 		List<TeamWikis> teamWikiList = new List<TeamWikis>();
 		for (Wiki__c item : sites) {
-			if (item.Type__c !='private' || mapMembers.containsKey(item.Id)) {
-				System.debug('wikiName : ' + item.Name);
-				System.debug('is member? ' + mapMembers.containsKey(item.Id));
-				TeamWikis teamWikiItem = new TeamWikis();
-				teamWikiItem.setIsPublic(item.PublicProfile__c != null);
-				teamWikiItem.setIsMember(mapMembers.containsKey(item.Id));
-				teamWikiItem.setId(item.Id);
-				teamWikiItem.setName(item.Name);
-				String nameProfileAdmin = 'Wiki Administrator';
-				teamWikiItem.setIsAdmin(teamAdmin[0].Profile.PermissionsModifyAllData || nameProfileAdmin.equals(wAdmin.get(item.Id)));
-				teamWikiItem.setDescription(item.Description__c);
-				teamWikiItem.setPicture(item.PictureId__c);
-				teamWikiItem.setStateWiki(item.Type__c);
-				teamWikiList.add(teamWikiItem);
-			}
+			System.debug('wikiName : ' + item.Name);
+			System.debug('is member? ' + mapMembers.containsKey(item.Id));
+			TeamWikis teamWikiItem = new TeamWikis();
+			teamWikiItem.setIsPublic(item.PublicProfile__c != null);
+			teamWikiItem.setIsMember(mapMembers.containsKey(item.Id));
+			teamWikiItem.setId(item.Id);
+			teamWikiItem.setName(item.Name);
+			String nameProfileAdmin = 'Wiki Administrator';
+			teamWikiItem.setIsAdmin(teamAdmin[0].Profile.PermissionsModifyAllData || nameProfileAdmin.equals(wAdmin.get(item.Id)));
+			teamWikiItem.setDescription(item.Description__c);
+			teamWikiItem.setPicture(item.PictureId__c);
+			teamWikiItem.setStateWiki(item.Type__c);
+			teamWikiList.add(teamWikiItem);
 		}
 		wikiSites.clear();
 		wikiSites = teamWikiList;

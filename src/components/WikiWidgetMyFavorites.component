@@ -30,7 +30,7 @@
 									</td>
 									<td>
 										<a href="/apex/WikiPage?idWP={!item.WikiPage__r.Id}" class="WikiLink">{!item.WikiPage__r.Name}</a>
-										<br>
+										<br />
 										<a href="/apex/WikiTeamOverview?tid={!item.WikiPage__r.Wiki__r.Id}" class="WikiSite">{!item.WikiPage__r.Wiki__r.Name}</a>
 									</td>
 								</tr> 
