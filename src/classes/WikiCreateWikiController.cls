@@ -51,7 +51,6 @@ public class WikiCreateWikiController {
     	return inEdition;
     }
 
-    
     //Get id from team item
     String param = System.currentPageReference().getParameters().get('id');
     

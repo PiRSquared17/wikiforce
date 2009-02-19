@@ -115,29 +115,27 @@
 						<td valign="top" class="mainContentTD">
 							<!-- Main Content DIV-->
 							<div class="MainContent">
-								<apex:outputpanel rendered="{!userPermissions.canCreate}">
 									<div align="center" class="addWikiPageBtn">
 										<div align="center" class="addWikiPageBtn">
 											<apex:form >
 												<apex:outputpanel id="buttonsDiv" layout="block" > 
-															<apex:outputPanel rendered="{!IF((IsAdmin || userPermissions.canManage),true,false)}" >
-																<apex:commandButton styleclass="btn" onclick="location.href = 'WikiCreateWiki?id={!currentTeam.Id}'; return false;" value="Edit Wiki" />
-																<apex:commandButton styleclass="btn" onclick="deleteWikiOverlay('{!currentTeam.Id}'); relocateOverlay(); return false;" value="Delete Wiki" />
-															</apex:outputPanel>
-															<apex:outputPanel rendered="{!userPermissions.canCreate}">
-																<input type="button" value="Add Wiki Page" onclick="createOverlay('','AddChildForm','305',''); relocateOverlay();" class="btn" />
-															</apex:outputPanel>
-															<apex:commandButton value="Join" action="{!joinWiki}" rendered="{!IF(AND(NOT(isMember),isPublic),true,false)}" styleclass="btn" onclick="changeJoinStatus(this);" oncomplete="joinComplete();" rerender="buttonsDiv, buttonsDiv2">
-																<apex:param name="wid" value="{!currentTeam.Id}" />
-															</apex:commandButton>
-															<apex:commandButton value="Unjoin" action="{!unjoinWiki}" rendered="{!IF(isMember,true,false)}" styleclass="btn" onclick="changeJoinStatus(this);" oncomplete="joinComplete();" > <!-- rerender="buttonsDiv, buttonsDiv2" -->
-																<apex:param name="wid" value="{!currentTeam.Id}" />
-															</apex:commandButton>
-													</apex:outputpanel>					
+													<apex:outputPanel rendered="{!IF( AND( userPermissions.canCreate, (IsAdmin || userPermissions.canManage )),true,false)}" >
+														<apex:commandButton styleclass="btn" onclick="location.href = 'WikiCreateWiki?id={!currentTeam.Id}'; return false;" value="Edit Wiki" />
+														<apex:commandButton styleclass="btn" onclick="deleteWikiOverlay('{!currentTeam.Id}'); relocateOverlay(); return false;" value="Delete Wiki" />
+													</apex:outputPanel>
+													<apex:outputPanel rendered="{!userPermissions.canCreate}">
+														<input type="button" value="Add Wiki Page" onclick="createOverlay('','AddChildForm','305',''); relocateOverlay();" class="btn" />
+													</apex:outputPanel>
+													<apex:commandButton value="Join" action="{!joinWiki}" rendered="{!IF(AND(NOT(isMember),isPublic),true,false)}" styleclass="btn" onclick="changeJoinStatus(this);" oncomplete="joinComplete();" rerender="buttonsDiv, buttonsDiv2">
+														<apex:param name="wid" value="{!currentTeam.Id}" />
+													</apex:commandButton>
+													<apex:commandButton value="Unjoin" action="{!unjoinWiki}" rendered="{!IF(isMember,true,false)}" styleclass="btn" onclick="changeJoinStatus(this);" oncomplete="joinComplete();" > <!-- rerender="buttonsDiv, buttonsDiv2" -->
+														<apex:param name="wid" value="{!currentTeam.Id}" />
+													</apex:commandButton>
+												</apex:outputpanel>					
 											</apex:form>																						
 										</div>
 									</div>
-								</apex:outputpanel>
 								
 								<table border="0" cellspacing="8" style="width:100%;">
 									<tr>
@@ -230,14 +228,14 @@
 										</td>
 									</tr>
 								</table>
-								<apex:outputpanel rendered="{!userPermissions.canCreate}">
+								<!-- < apex:outputpanel rendered="{!userPermissions.canCreate}"> -->
 									<div align="center" class="addWikiPageBtn">
 										<div align="center" class="addWikiPageBtn">
 											<apex:form >
 												<apex:outputpanel id="buttonsDiv2" layout="block" > 
 													<apex:outputPanel styleClass="isLastMemberAdmin" style="display: none;" >{!isLastMemberAdmin}</apex:outputPanel>
 													<apex:outputPanel styleClass="isPrivate" style="display: none;" >{!isPrivate}</apex:outputPanel>
-														<apex:outputPanel rendered="{!IF((IsAdmin || userPermissions.canManage),true,false)}" >
+														<apex:outputPanel rendered="{!IF(AND( userPermissions.canCreate,( IsAdmin || userPermissions.canManage )),true,false)}" >
 															<apex:commandButton styleclass="btn" onclick="location.href = 'WikiCreateWiki?id={!currentTeam.Id}'; return false;" value="Edit Wiki" />
 															<apex:commandButton styleclass="btn" onclick="deleteWikiOverlay('{!currentTeam.Id}'); relocateOverlay(); return false;" value="Delete Wiki" />
 														</apex:outputPanel>
@@ -254,7 +252,7 @@
 											</apex:form>
 										</div>
 									</div>
-								</apex:outputpanel>
+								<!--  < /apex:outputpanel> -->
 								<apex:form >
 									<apex:actionFunction name="joinComplete" action="{!genTeamData}" rerender="buttonsDiv, buttonsDiv2" oncomplete="showWarningIsLastAdmin();redirectIfPrivate()"/>
 								</apex:form>

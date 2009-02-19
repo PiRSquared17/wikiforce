@@ -167,10 +167,13 @@
 											</li>
 											<li id="allTeamTab" >
 												<div id="overTabMembers" style="cursor:auto">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-												<apex:commandLink id="allTeamsLink" action="{!switchTabsController}" value="Members" onclick="switchTabs('allTeamTab');"
+												<apex:commandLink rendered="{!inEdition}" id="allTeamsLink" action="{!switchTabsController}" value="Members" onclick="switchTabs('allTeamTab');"
 																	 rerender="holder" styleClass="{!IF((hasMembers == false || inEdition),'disable','')}" >
 													<apex:param name="allTeams" value="true" />
 												</apex:commandLink>
+												<apex:outputpanel rendered="{!NOT(inEdition)}" styleClass="disable">
+													Members
+												</apex:outputpanel>
 											</li>					
 										</ul>
 									</apex:form>
@@ -489,7 +492,7 @@
 							<td>
 								<div>
 									<apex:outputpanel rendered="true"> 
-										<a onclick="createOverlay('','inviteTeam','240','showSelects()'); relocateOverlay()" href="javascript:;" class="blackbutton">New</a>
+										<a onclick="createOverlay('','inviteTeam','','showSelects()'); relocateOverlay()" href="javascript:;" class="blackbutton">New</a>
 										<a href="javascript:;" class="blackbutton" onclick="massiveRemoveOverlay();">Remove</a>
 									</apex:outputpanel>
 								</div>
@@ -630,7 +633,7 @@
 										<apex:outputpanel > <!-- rendered="{!userPermissions.canManage}" --> 
 											<apex:commandLink styleclass="member_detail_description_underline" value="Del"
 												action="{!assignRemoveId}" rerender="overlaysPanel"
-												oncomplete="createOverlay('','removeMemberOverlay','155','');">
+												oncomplete="createOverlay('','removeMemberOverlay','','');">
 												<apex:param name="delId" value="{!item.userId}" />
 											</apex:commandLink>
 											<!-- <a href="javascript:;" class="member_detail_description_underline">Delete</a> -->
@@ -675,7 +678,7 @@
 								<td>
 								<div><!-- BUTTONS --> <apex:outputpanel id="thisIs"> <!-- rendered="{!userPermissions.canManage}" -->
 									<a
-										onclick="createOverlay('','inviteTeam','240','showSelects()'); relocateOverlay(); setTimeout( 'focusToWikiMW()', 1200 );"
+										onclick="createOverlay('','inviteTeam','','showSelects()'); relocateOverlay(); setTimeout( 'focusToWikiMW()', 1200 );"
 										href="javascript:;" class="blackbutton">New</a>
 									<a href="javascript:;" class="blackbutton"
 										onclick="massiveRemoveOverlay(); relocateOverlay()">Remove</a>
@@ -715,8 +718,10 @@
 	
 	<script>
 		document.observe('dom:loaded',startupFunc);
-		document.observe('dom:loaded', setTimeout('hideOverMemberTab()', 1000));
-		setTimeout('showAddMembersSection()', 1000);
+		if(inEdition) {
+			document.observe('dom:loaded', setTimeout('hideOverMemberTab()', 1000));
+			setTimeout('showAddMembersSection()', 1000);
+		}
 		readPortalCSSRules();
 		countStringLimit($('WikiCreateWiki:createNewTeamForm:TeamDescription'),'stringSizeCounter');
 		window.onload = function() { setAccessTypeChecked(); }

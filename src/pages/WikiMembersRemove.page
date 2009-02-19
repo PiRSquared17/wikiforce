@@ -38,11 +38,11 @@
 				<!-- Saven and Cancel Buttons -->
 				<div class="overlayFromButtons" align="center">
 					<apex:outputPanel rendered="{!IF(isLastMemberAdmin, false, true)}">
-						<apex:commandButton styleclass="overlaySaveBtn" action="{!removeMember}" oncomplete="modal.close();$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay');reloadMemberList();" value="Continue" rerender="auxPanel"/> 
-						<input class="overlayCancelBtn" type="button" value="Cancel" onclick="modal.close();"/>
+						<apex:commandButton style="background-color: #526921!important" styleclass="overlaySaveBtn allButtons actionButtons" action="{!removeMember}" oncomplete="modal.close();$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay');reloadMemberList();" value="Continue" rerender="auxPanel"/> 
+						<input class="overlayCancelBtn allButtons cancelButtons" type="button" value="Cancel" onclick="modal.close();"/>
 					</apex:outputPanel>
 					<apex:outputPanel rendered="{!IF(isLastMemberAdmin, true, false)}">
-						<input class="overlayCancelBtn" type="button" value="Cancel" onclick="modal.close();"/>
+						<input class="overlayCancelBtn allButtons cancelButtons" type="button" value="Cancel" onclick="modal.close();"/>
 					</apex:outputPanel>
 				</div>
 			</apex:form>

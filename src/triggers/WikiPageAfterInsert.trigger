@@ -27,7 +27,6 @@ trigger WikiPageAfterInsert on WikiPage__c bulk (after insert) {
         	WikiSubscribersEmailServices wEmail = new WikiSubscribersEmailServices();
             for ( WikiPage__c wp : Trigger.new) 
             {
-            	System.debug( '###: ' + wp.Id );
             	wEmail.sendNewPageMessage( 'newPage', wp.Id );  
             }			
 	          

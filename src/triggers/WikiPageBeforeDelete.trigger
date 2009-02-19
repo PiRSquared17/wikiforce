@@ -2,6 +2,13 @@ trigger WikiPageBeforeDelete on WikiPage__c bulk (before delete) {
 	if (!TeamUtil.currentlyExeTrigger) {
 		try {	
 			TeamUtil.currentlyExeTrigger = true;
+
+        	WikiSubscribersEmailServices wEmail = new WikiSubscribersEmailServices();
+            for ( WikiPage__c wp : Trigger.old ) 
+            {
+            	wEmail.sendNewPageMessage( 'updatePage',  wp.Id );  
+            	wEmail.sendModifiedPageMessage( wp.Id, 'update' );
+            }			
 			
 			List<WikiPage__c> wikiObj = [Select 
 											id,
