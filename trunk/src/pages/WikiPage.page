@@ -667,28 +667,7 @@
 	<!-- <img src="{!URLFOR($Resource.FCKeditor ,'fckeditor/editor/images/smiley/msn/teeth_smile.gif')}" /> -->
 
 	<script>
-		function countLimit(area, indicator, max){
-			var text = area.value;
-			var reLF= new RegExp("[^\n]", "g");
-			var lfs = text.replace(reLF,'');
-		
-			if (Prototype.Browser.Gecko || Prototype.Browser.WebKit) {
-				remaining = max - area.value.length - lfs.length;
-			}
-			else {
-				remaining = max - area.value.length;
-			}
-		    if (remaining <= 0){
-		    	alert("Maximum length for this text (" + max + ") reached!");
-		    	var temp = text.substring(0,max);
-		    	area.value = temp;
-		    	$(indicator).innerHTML = 0;
-		    	return false;
-		    }
-			$(indicator).innerHTML = remaining;
-		
-		}
-		
+			
 		var fabLoading = false;
 		function loadFavorite(){
 			if(!fabLoading){
