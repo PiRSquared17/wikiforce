@@ -346,8 +346,12 @@ public class WikiCreateWikiController {
 	* Set memberId to remove
 	*@param String memberId
 	*/
-	public void setRemoveMemberId (String mamberId){
-		removeMemberId = mamberId; 
+	public void setRemoveMemberId (String memberId){
+		removeMemberId = memberId; 
+	}
+	
+	public String getRemoveMemberId() {
+	   return removeMemberId;	
 	}
 	
 	/**

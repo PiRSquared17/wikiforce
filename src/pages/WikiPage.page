@@ -335,7 +335,7 @@
 				<div class="contentHolder">
 				<div
 					style="font-weight: bold; margin-bottom: 8px; border-bottom: 1px solid #989999;">My
-				Favorites Pages</div>
+				Favorite Pages</div>
 
 				<apex:form id="formFavorite">
 					<table border="0">
