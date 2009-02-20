@@ -27,6 +27,19 @@
 	<apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/fonts.css')}" />
 	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamsOverlaysTemplate.css')}" />
 
+	<style>
+		ul.tabs li#CreateNewWikiContainer a {
+			background: transparent no-repeat scroll top right;
+			color: white;
+			display: block;
+			float: left;
+			font: bold 13px arial, sans-serif;
+			height: 30px;
+			padding-right: 15px;  /* sliding doors padding */
+			padding-bottom: 4px;
+			text-decoration: none;
+		}
+	</style>
 	<a href="#modal_container" id="initializeModal" style="display: none;"></a>
 	<div id="modal_container"></div>
 	<script>createOverlay('initializeModal')</script>
@@ -107,7 +120,7 @@
 												</apex:commandLink>
 											</li>		
 											<li id="CreateNewWikiContainer">
-												<a href="/apex/WikiCreateWiki"><img src="{!URLFOR($Resource.WikiResource, '/images/WikiButtons/leftSide.png')}"/><span>Create New Wiki</span></a>
+												<a href="/apex/WikiCreateWiki" ><div style="float:left;background:url({!URLFOR($Resource.WikiResource, '/images/WikiButtons/leftSide.png')});height:30px;width:15px;margin-bottom:5px;"></div><div style="float:left;background:url({!URLFOR($Resource.WikiResource, '/images/WikiButtons/middle.png')});height:30px">Create New Wiki</div><div style="float:left;background:url({!URLFOR($Resource.WikiResource, '/images/WikiButtons/rightSide.png')});height:30px;width:15px;"></div></a>
 											</li>		
 										</ul>
 									</apex:form>

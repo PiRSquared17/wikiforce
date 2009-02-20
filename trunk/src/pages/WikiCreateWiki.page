@@ -42,7 +42,7 @@
 	<apex:includeScript value="{!URLFOR($Resource.commonResources, 'inc/js/validator.js')}"/>    
 	<apex:includeScript value="/soap/ajax/12.0/connection.js" />
 	<script>
-		var API_SESSION_ID = '{!$Api.Session_ID}'; 
+		var API_SESSION_ID = '{!$Api.Session_ID}';
 	</script>
 	<apex:includeScript value="{!URLFOR($Resource.TeamsResources, 'inc/js/teamsCreateNewTeam.js')}" />
 	<apex:includeScript value="{!URLFOR($Resource.commonResources, 'inc/js/common.js')}" />
@@ -69,9 +69,10 @@
 			$( idElement2 ).style.height = (o1Dims.height * 0.98 ).round() + 'px';
 			$( idElement2 ).style.width = (o1Dims.width * 0.98 ).round() + 'px';
 		}
-		
+	    window.onload = function() {
+	        setAccessTypeChecked();
+	    }		
      </script>
-
 	<!-- Modal JS -->
 	<script	src="{!URLFOR($Resource.commonResources, 'inc/js/modal.js')}" />
 	
@@ -548,10 +549,11 @@
 					rendered="{!IF(AND(prevPageShow,nextPageShow),false,true)}">
 					<div class="pages"><apex:form >
 						<ul>
-							<li class="prev {!IF(prevPageShow,'prev_disabled','')}"><apex:commandLink action="{!prevPage}" value="Previous Page" rerender="membersList"
+							<li class="prev {!IF(prevPageShow,'prev_disabled','')}"><apex:commandLink onclick="switchOverlay(true)" oncomplete="switchOverlay(false)" action="{!prevPage}" value="Previous Page" rerender="membersList"
 								rendered="{!prevPageLinkShow}" /> <apex:outputText value="Previous Page" rendered="{!prevPageShow}" /></li>
 							<li>({!currentPagination} - {!cntPagination})</li>
-							<li class="next {!IF(nextPageShow,'next_disabled','')}"><apex:commandLink action="{!nextPage}" value="Next Page" rerender="membersList"
+							<li class="next {!IF(nextPageShow,'next_disabled','')}">
+							 <apex:commandLink onclick="switchOverlay(true)" oncomplete="switchOverlay(false)" action="{!nextPage}" value="Next Page" rerender="membersList"
 								rendered="{!nextPageLinkShow}" /> <apex:outputText value="Next Page" rendered="{!nextPageShow}" /></li>
 						</ul>
 					</apex:form></div>
@@ -633,7 +635,7 @@
 										<apex:outputpanel > <!-- rendered="{!userPermissions.canManage}" --> 
 											<apex:commandLink styleclass="member_detail_description_underline" value="Del"
 												action="{!assignRemoveId}" rerender="overlaysPanel"
-												oncomplete="createOverlay('','removeMemberOverlay','','');">
+												oncomplete="createOverlay('','removeMemberOverlay','','');relocateOverlay();">
 												<apex:param name="delId" value="{!item.userId}" />
 											</apex:commandLink>
 											<!-- <a href="javascript:;" class="member_detail_description_underline">Delete</a> -->
@@ -657,10 +659,10 @@
 					rendered="{!IF(AND(prevPageShow,nextPageShow),false,true)}">
 					<div class="pages"><apex:form >
 						<ul>
-							<li class="prev {!IF(prevPageShow,'prev_disabled','')}"><apex:commandLink action="{!prevPage}" value="Previous Page" rerender="membersList"
+							<li class="prev {!IF(prevPageShow,'prev_disabled','')}"><apex:commandLink onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" action="{!prevPage}" value="Previous Page" rerender="membersList"
 								rendered="{!prevPageLinkShow}" /> <apex:outputText value="Previous Page" rendered="{!prevPageShow}" /></li>
 							<li>({!currentPagination} - {!cntPagination})</li>
-							<li class="next {!IF(nextPageShow,'next_disabled','')}"><apex:commandLink action="{!nextPage}" value="Next Page" rerender="membersList"
+							<li class="next {!IF(nextPageShow,'next_disabled','')}"><apex:commandLink onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" action="{!nextPage}" value="Next Page" rerender="membersList"
 								rendered="{!nextPageLinkShow}" /> <apex:outputText value="Next Page" rendered="{!nextPageShow}" /></li>
 						</ul>
 					</apex:form></div>

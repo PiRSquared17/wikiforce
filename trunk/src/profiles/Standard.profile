@@ -188,15 +188,15 @@
     </classAccesses>
     <classAccesses>
         <apexClass>WikiSubscribeController</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>WikiSubscribersEmailServices</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>WikiSubscriptionController</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>WikiTeamOverviewController</apexClass>
@@ -1445,7 +1445,7 @@
     </pageAccesses>
     <pageAccesses>
         <apexPage>HomeTest</apexPage>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </pageAccesses>
     <pageAccesses>
         <apexPage>SuggestDispatcher</apexPage>
@@ -1493,7 +1493,7 @@
     </pageAccesses>
     <pageAccesses>
         <apexPage>WikiSubscription</apexPage>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </pageAccesses>
     <pageAccesses>
         <apexPage>WikiTeamOverview</apexPage>

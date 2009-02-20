@@ -13,6 +13,14 @@ public class WikiMembersRemoveController {
 	*/
 	public WikiMembersRemoveController() {}
 	
+	public void setRemoveMemberId(String memberId) {
+	   removeMemberId = memberId;
+	}
+	
+	public String getRemoveMemberId() {
+	   return removeMemberId;	
+	}
+	
 	/**
 	* @return wikiName
 	*/
@@ -29,9 +37,11 @@ public class WikiMembersRemoveController {
 	* @return delName
 	*/
 	public String getDelName() {
+		System.debug(removeMemberId);
 		String delName = '';
 		if (WikiCreateWikiController.removeMemberId != null 
 				&& WikiCreateWikiController.removeMemberId != '') {
+			
 			removeMemberId = WikiCreateWikiController.removeMemberId;
 			
 			delName = [select User__r.Name from WikiMember__c 
