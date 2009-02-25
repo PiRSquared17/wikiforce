@@ -515,7 +515,7 @@
 				<td><!-- 				ATTACHMENTS 			 -->
 				<apex:outputpanel id="attachmentsPanel">
 					<div class="infoSection"><a href="Javascript:;" class="infoTitle" onclick="hideSection(this,'attachDiv')">Attachments
-					({!attachCount})</a>&nbsp;<apex:outputpanel rendered="{!userPermissions.canManage}">
+					({!attachCount})</a>&nbsp;<apex:outputpanel rendered="{!userPermissions.canComment}">
 						<span style="font-weight: bold; color: #000000;">+</span>&nbsp;<a
 							href="javascript:;"
 							onclick="createOverlay('','WikiPage:newAttachmentOverlay','180','refreshAttachObserver();reloadIframeAttach();');relocateOverlay()"
