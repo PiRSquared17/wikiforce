@@ -264,8 +264,6 @@ public with sharing class WikiTeamOverviewController {
 			else 
 				this.setIsMember(false);
 		}
-
-		
 	}
 	
 	/** FIX

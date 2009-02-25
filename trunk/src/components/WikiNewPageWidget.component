@@ -108,7 +108,7 @@
 							<td style="height: 130px;">
 								<apex:inputTextarea id="descNewWP" value="{!newWikiPage.ShortDescription__c}" 
 									style="width: 98%; height: 110px;" onkeyup="countLimit(this, 'textCounter3', 250)" />
-								<span class="infoText"><span id="textCounter3">250</span> character limit</span>
+								<span class="infoText"><span id="textCounter3">250</span> characters left</span>
 							</td>
 						</tr>
 					</table>
