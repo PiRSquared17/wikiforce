@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <deploymentStatus>Deployed</deploymentStatus>
+    <fields>
+        <fullName>Message__c</fullName>
+        <label>Message</label>
+        <length>32000</length>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>ParentComment__c</fullName>
+        <label>Comment</label>
+        <referenceTo>Comment__c</referenceTo>
+        <relationshipLabel>Coments</relationshipLabel>
+        <relationshipName>Coments</relationshipName>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>ParentWikiPage__c</fullName>
+        <label>Wiki Page</label>
+        <referenceTo>WikiPage__c</referenceTo>
+        <relationshipLabel>Coments</relationshipLabel>
+        <relationshipName>Comments1</relationshipName>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>PostedBy__c</fullName>
+        <label>User</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Coments</relationshipName>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>PostedDate__c</fullName>
+        <label>Posted Date</label>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>WikiPage__c</fullName>
+        <label>Wiki Page</label>
+        <referenceTo>WikiPage__c</referenceTo>
+        <relationshipLabel>Coments (Wiki Page)</relationshipLabel>
+        <relationshipName>Comments</relationshipName>
+        <type>Lookup</type>
+    </fields>
+    <label>Comment</label>
+    <nameField>
+        <displayFormat>{0}</displayFormat>
+        <label>Comment Name</label>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Coments</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>Private</sharingModel>
+</CustomObject>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <value>Wiki Profile</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Wiki Profiles</value>
+    </caseValues>
+    <fields>
+        <label><!-- CreateWikiPages --></label>
+        <name>CreateWikiPages__c</name>
+    </fields>
+    <fields>
+        <label><!-- ManageWikis --></label>
+        <name>ManageWikis__c</name>
+    </fields>
+    <fields>
+        <label><!-- PostWikiComments --></label>
+        <name>PostWikiComments__c</name>
+    </fields>
+    <startsWith>Consonant</startsWith>
+</CustomObjectTranslation>
