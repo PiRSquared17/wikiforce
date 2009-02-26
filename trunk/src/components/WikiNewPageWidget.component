@@ -1,0 +1,139 @@
+<apex:component allowDML="true" id="WikiNewPageWidget" controller="WikiNewPageWidgetController">
+	<!-- Modal JS -->
+	<script src="{!URLFOR($Resource.commonResources, 'inc/js/modal.js')}"/>
+	<!-- Overlay Styles -->
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamsOverlaysTemplate.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/NewWikiPageOverlay.css')}" />
+	
+	<!-- 
+	<apex:includeScript value="{!URLFOR($Resource.commonResources, 'inc/js/wikiNewPageWidget.js')}" />
+	 -->
+
+	<script>
+		var idTeam = '{!idTeam}';
+		var API_SESSION_ID = '{!$Api.Session_ID}';
+		
+		/**
+        * Namespace Prefix Getter
+        */
+        var namespace = "{!namespace}";		
+	
+	
+		function validateName (elementId,name, formDiv) {
+		var records;
+		Name = document.getElementById(name).value;
+		sforce.connection.sessionId = API_SESSION_ID;
+		sforce.connection.defaultNamespace = namespace;
+		result = sforce.connection.query("Select Name from WikiPage__c where Name = '" + Name + "' and Wiki__c = '" + idTeam + "'");
+		records = result.getArray("records");
+		if (records.length != 0 || Name.replace(/[ ]*/gi ,'') == '') {
+			document.getElementById(elementId).style.display = 'block';
+			$('modal_container').style.height = '320px';
+			$$(".overlaySaveBtn")[0].style.color = '#DDDEB8';
+			return false;
+		}
+		else {
+			document.getElementById(elementId).style.display = 'none';
+			$('modal_container').style.height = '305px';
+			$$(".overlaySaveBtn")[0].style.color = '#FFFFFF';
+			$('saving').style.display='';	
+			$(formDiv).style.display='none';
+			return true;
+		}
+	}
+	
+	function reinicializeScrollBar () {
+		if($("Scroller-1")){
+			scroller  = new jsScroller(document.getElementById("Scroller-1"), 400, 200);
+			scrollbar = new jsScrollbar (document.getElementById("Scrollbar-Container"), scroller, false);
+			}
+		if($("Scroller-2")){
+				scroller2  = new jsScroller2(document.getElementById("Scroller-2"), 500, 240);
+				scrollbar2 = new jsScrollbar2 (document.getElementById("Scrollbar-Container2"), scroller2, false);
+		}
+	}
+	
+	function showOverlayStatus ( formId ) {
+		var statusDiv = $('overlayFormStatus');
+		var mainForm = $(formId);
+		statusDiv.style.display= '';
+		mainForm.style.display= 'none';
+	}
+	
+	
+	
+	
+	
+	
+	
+	</script>
+	
+	<!-- Initialize the overlay box for modal.js -->
+	<a href="#modal_container" id="initializeModalOverlay" style="display:none;"></a>
+	<div id="modal_container" style="display:none;"></div>
+	<script>
+		createOverlay('initializeModalOverlay');
+	</script>
+
+	<div id="AddChildForm" style="display:none;" class="overlayForm">	
+		<!-- Overlay Title -->
+		<div class="overlayTitleContent">
+			<div class="overlayTitle">Add Child Page</div>
+			<div class="overlayCloseEvent">
+				<a href="Javascript:;" onclick="modal.close();">
+					<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/genericClose.gif')}" alt="Close Window" title="Close Window" />
+				</a>
+			</div>
+		</div>
+		<!-- Overlay Content -->
+		<div class="overlayMainContent">
+			<!-- Required Information -->
+			<span class="overlayRequiredInfo">= Required Information</span>
+			<div id="saving" class="overlayFormStatus" style="display:none;">Saving...</div>
+			<apex:form id="formNew" onsubmit="return validateName('errorName','{!$Component.nameNewWP}', '{!$Component.formNew}');">
+				<div class="overlayFormContent">
+					<span class="newChild" style="display:none;">Your new page will be a child-page of <a href="Javascript:;"></a></span>
+					<table width="95%">
+						<tr>
+							<td align="right" valign="top" style="width:85px;"><span class="inputLabel">Page Name</span></td>
+							<td valign="top" style="width: 4px;"><span class="overlayRequiredInfo" style="height: 21px; margin: 0; padding: 0;"></span></td>
+							<td valign="top">
+								<apex:inputText value="{!newWikiPage.Name}" id="nameNewWP" style="width:98%" maxlength="79"/>
+								<div id="errorName" style="color: red; display: none;">The name is empty or already exist!</div>
+							</td>
+						</tr>
+						<tr>
+							<td align="right" valign="top"><span class="inputLabel">Description</span></td>
+							<td></td>
+							<td style="height: 130px;">
+								<apex:inputTextarea id="descNewWP" value="{!newWikiPage.ShortDescription__c}" 
+									style="width: 98%; height: 110px;" onkeyup="countLimit(this, 'textCounter3', 250)" />
+								<span class="infoText"><span id="textCounter3">250</span> characters left</span>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="overlaySeparateLine"></div>
+				<!-- Saven and Cancel Buttons -->
+				<div class="overlayFromButtons" align="center">
+					<div align="center">
+						<!-- Wiki Page --> 
+						<apex:outputpanel rendered="{!IF(idWikiPage == null, false, true)}">
+							<apex:commandButton id="saveBtnNewPageWiki" onclick="this.disabled=true;" action="{!saveWiki}" style="background-color: #526921!important" styleclass="overlaySaveBtn allButtons actionButtons" oncomplete="modal.close();" value="Save"  rerender="rightSidebarPanel, childrenPanel, bodyPagePanel, infoPanel" />
+						</apex:outputpanel> 
+						<!-- Wiki Team Overview -->
+						<apex:outputpanel rendered="{!IF(idTeamOverview == null, false, true)}">
+							<apex:commandButton id="saveBtnNewPageOverview" action="{!saveWiki}" style="background-color: #526921!important" styleclass="overlaySaveBtn allButtons actionButtons" oncomplete="refreshTeamOverview();modal.close();refreshRecentChanges()" value="Save" rerender="wikiTreePanel, updatedPanel" />
+						</apex:outputpanel>    
+						<!-- Wiki Directory -->
+						<apex:outputpanel rendered="{!IF(AND(idTeamOverview == null, idWikiPage == null), true, false)}">
+							<apex:commandButton id="saveBtnNewPageTeam" action="{!saveWiki}" style="background-color: #526921!important" styleclass="overlaySaveBtn allButtons actionButtons" oncomplete="modal.close();reloadWikiList();" value="Save" rerender="theFeeds" />
+						</apex:outputpanel>
+						<apex:commandButton action="{!saveWikiAndEdit}" id="saveBtnNewPageEdit" style="background-color: #526921!important" styleclass="overlaySaveBtn allButtons actionButtons" value="Save and Edit" oncomplete="refreshRecentChanges()"/>
+						<apex:commandButton styleclass="allButtons cancelButtons" onclick="modal.close(); return false;" value="Cancel" />
+					</div>
+				</div>
+			</apex:form>
+		</div>
+	</div>
+</apex:component>
