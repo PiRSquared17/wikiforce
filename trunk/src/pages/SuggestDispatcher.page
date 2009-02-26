@@ -1,3 +1,0 @@
-<apex:page showHeader="false" sidebar="false" controller="SuggestController">
-	<results><apex:repeat value="{!suggestion}" var="sug">{!sug.Id}|{!sug.Name}|{!sug.Name}/rs/</apex:repeat></results>
-</apex:page>
