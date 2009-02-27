@@ -291,6 +291,26 @@ public with sharing class WikiOverviewController {
    	}
    	
    	/**
+   	* Move to last page
+   	*/
+   	public void lastPage () {
+   		currentPagination = cntPagination;
+   		Integer lastPageElementsCnt = Math.mod(cntLetterSites, numSitesRows);
+   		if (lastPageElementsCnt == 0){
+   			lastPageElementsCnt = numSitesRows;
+   		}
+   		firstRow = cntLetterSites - lastPageElementsCnt;   		
+   	}
+   	
+   	/**
+   	* Move to first page
+   	*/
+   	public void firstPage () {
+   		currentPagination = 1;
+   		firstRow = 0;   		
+   	}
+   	
+   	/**
    	*@return current page num
    	*/
    	public Integer getCurrentPagination () {

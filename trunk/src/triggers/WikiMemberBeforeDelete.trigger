@@ -1,6 +1,5 @@
 trigger WikiMemberBeforeDelete on WikiMember__c (before delete) 
 {
-
 	if (!TeamUtil.currentlyExeTrigger) 
 	{
 		try 
@@ -9,7 +8,7 @@ trigger WikiMemberBeforeDelete on WikiMember__c (before delete)
 
         	WikiSubscribersEmailServices wEmail = new WikiSubscribersEmailServices();
             for ( WikiMember__c wm : Trigger.old) 
-            {
+            { 
             	wEmail.sendMemberLeaveAdd( 'TeamMemberLeave', wm.Id );  
             }
 		} 

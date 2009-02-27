@@ -78,7 +78,8 @@
 	<div id="AddChildForm" style="display:none;" class="overlayForm">	
 		<!-- Overlay Title -->
 		<div class="overlayTitleContent">
-			<div class="overlayTitle">Add Child Page</div>
+			<apex:outputPanel layout="block" rendered="{!(idTeamOverview == null)}" styleClass="overlayTitle">Add Child Page</apex:outputPanel>
+			<apex:outputPanel layout="block" rendered="{!NOT(idTeamOverview == null)}" styleClass="overlayTitle">Add Wiki Page</apex:outputPanel>
 			<div class="overlayCloseEvent">
 				<a href="Javascript:;" onclick="modal.close();">
 					<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/genericClose.gif')}" alt="Close Window" title="Close Window" />
@@ -123,13 +124,13 @@
 						</apex:outputpanel> 
 						<!-- Wiki Team Overview -->
 						<apex:outputpanel rendered="{!IF(idTeamOverview == null, false, true)}">
-							<apex:commandButton id="saveBtnNewPageOverview" action="{!saveWiki}" style="background-color: #526921!important" styleclass="overlaySaveBtn allButtons actionButtons" oncomplete="refreshTeamOverview();modal.close();refreshRecentChanges()" value="Save" rerender="wikiTreePanel, updatedPanel" />
+							<apex:commandButton id="saveBtnNewPageOverview" onclick="this.disabled=true;" action="{!saveWiki}" style="background-color: #526921!important" styleclass="overlaySaveBtn allButtons actionButtons" oncomplete="refreshTeamOverview();modal.close();refreshRecentChanges()" value="Save" rerender="wikiTreePanel, updatedPanel" />
 						</apex:outputpanel>    
 						<!-- Wiki Directory -->
 						<apex:outputpanel rendered="{!IF(AND(idTeamOverview == null, idWikiPage == null), true, false)}">
-							<apex:commandButton id="saveBtnNewPageTeam" action="{!saveWiki}" style="background-color: #526921!important" styleclass="overlaySaveBtn allButtons actionButtons" oncomplete="modal.close();reloadWikiList();" value="Save" rerender="theFeeds" />
+							<apex:commandButton onclick="this.disabled=true" id="saveBtnNewPageTeam" action="{!saveWiki}" style="background-color: #526921!important" styleclass="overlaySaveBtn allButtons actionButtons" oncomplete="modal.close();reloadWikiList();" value="Save" rerender="theFeeds" />
 						</apex:outputpanel>
-						<apex:commandButton action="{!saveWikiAndEdit}" id="saveBtnNewPageEdit" style="background-color: #526921!important" styleclass="overlaySaveBtn allButtons actionButtons" value="Save and Edit" oncomplete="refreshRecentChanges()"/>
+						<apex:commandButton onclick="this.disabled=true" action="{!saveWikiAndEdit}" id="saveBtnNewPageEdit" style="background-color: #526921!important" styleclass="overlaySaveBtn allButtons actionButtons" value="Save and Edit" oncomplete="refreshRecentChanges()"/>
 						<apex:commandButton styleclass="allButtons cancelButtons" onclick="modal.close(); return false;" value="Cancel" />
 					</div>
 				</div>

@@ -7,6 +7,7 @@ public class TeamUtil {
 	public static Boolean isTest = false;
 	public static Boolean alreadyGenEnv = false;
 	public static Boolean DeletingWiki = false;
+	public static PageReference pR = null;
 	
 	
 	public static Integer MAX_SIZE = 4194304;

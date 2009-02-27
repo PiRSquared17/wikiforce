@@ -11,6 +11,7 @@ public class WikiCreateWikiController {
         		throw new CustomException('Insufficient Privileges');
         	genMembers();
         }
+        
     }
     
    //Flag to determine if the Members tab will be available.
@@ -33,7 +34,7 @@ public class WikiCreateWikiController {
     	}
     	return hasMembers;
     }
-    
+
 	//Flag to determine if is in edition.
     Boolean inEdition = false; 
     

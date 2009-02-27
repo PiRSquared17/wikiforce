@@ -108,7 +108,8 @@
 								<td></td>
 								<td></td>
 								<td>
-									&nbsp;<span class="explain">(comma separated)</span><br />
+									&nbsp;<span class="explain">(comma separated)</span>
+									<span id="errorUsers" class="explain" style="color: #ee5555; display: none">Please search or add a user in Add colleagues field.</span><br />
 								</td>
 							</tr>
 						
@@ -210,8 +211,7 @@
 								<div id="memberRow-{!tm.Id}" style="clear: both;"><apex:outputPanel layout="block"
 									onmouseover="showBubbleMatrixPreload('member',this,'{!tm.Id}');"
 									style="clear:both;position:relative;display:block;">
-									<apex:outputPanel layout="block" styleClass="membersImageHolder"
-										>
+									<apex:outputPanel layout="block" styleClass="membersImageHolder">
 										<a href="/{!tm.Id}"> <apex:image width="25" height="25"
 											url="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/no_image_small.gif')}"
 											style="vertical-align:middle;" /> </a>
