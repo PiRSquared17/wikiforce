@@ -178,50 +178,35 @@
 														<apex:outputpanel id="paginationPanelTop">
 															<apex:form id="paginationFormTop">
 																<div class="pages">
-																	<apex:outputpanel rendered="{!IF(AND(currentPagination == 1,NOT(cntPagination == currentPagination)), true, false)}">
-																			<ul>
-																				<li class="prev disabled">Previous Page</li>
-																				<li>({!currentPagination}</li>
-																				<li class="center">-</li>
-																				<li>{!cntPagination})</li>
-																				<li class="next">
-																					<apex:commandLink onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" action="{!nextPage}" value="Next Page" rerender="wikiSitesPanel" />
-																				</li>
-																			</ul>
-																	</apex:outputpanel>
-																	<apex:outputpanel rendered="{!IF(AND(currentPagination == 1, cntPagination == currentPagination), true, false)}">
-																		<ul>
-																			<li class="prev disabled">Previous Page</li>
-																			<li>({!currentPagination}</li>
-																			<li class="center">-</li>
-																			<li>{!cntPagination})</li>
-																			<li class="next disabled">Next Page</li>
-																		</ul>
-																	</apex:outputpanel>
-																	<apex:outputpanel rendered="{!IF(AND(NOT(currentPagination == 1),NOT(cntPagination == currentPagination)), true, false)}">
-																		<ul>
-																			<li class="prev">
-																				<apex:commandLink onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" action="{!prevPage}" value="Previous Page" rerender="wikiSitesPanel" />
-																			</li>
-																			<li>({!currentPagination}</li>
-																			<li class="center">-</li>
-																			<li>{!cntPagination})</li>
-																			<li class="next">
-																				<apex:commandLink onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" action="{!nextPage}" value="Next Page" rerender="wikiSitesPanel" />
-																			</li>
-																		</ul>
-																	</apex:outputpanel>
-																	<apex:outputpanel rendered="{!IF(AND(NOT(currentPagination == 1),cntPagination == currentPagination), true, false)}">
-																		<ul>
-																			<li class="prev">
-																				<apex:commandLink onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" action="{!prevPage}" value="Previous Page" rerender="wikiSitesPanel" />
-																			</li>
-																			<li>({!currentPagination}</li>
-																			<li class="center">-</li>
-																			<li>{!cntPagination})</li>
-																			<li class="next disabled">Next Page</li>
-																		</ul>
-																	</apex:outputpanel>
+																	<ul>
+																		<li>
+																			<apex:commandLink action="{!firstPage}" rerender="wikiSitesPanel" rendered="{!NOT(currentPagination == 1)}" onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" >
+																				<img src="{!URLFOR($Resource.WikiResource, 'images/layout/pagination_arrow_first.gif')}" alt="<<" title="<<first"/>
+																			</apex:commandLink>
+																			<apex:outputPanel rendered="{!(currentPagination == 1)}">
+																				<img src="{!URLFOR($Resource.WikiResource, 'images/layout/pagination_arrow_first_disabled.gif')}" alt="<<"/>
+																			</apex:outputPanel>	
+																		</li>
+																		<li class="prev {!IF(currentPagination == 1,'disabled','')}">
+																			<apex:outputText value="Previous Page" rendered="{!(currentPagination == 1)}" />
+																			<apex:commandLink rendered="{!NOT(currentPagination == 1)}" onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" action="{!prevPage}" value="Previous Page" rerender="wikiSitesPanel" />
+																		</li>
+																		<li>({!currentPagination}</li>
+																		<li class="center">-</li>
+																		<li>{!cntPagination})</li>
+																		<li class="next {!IF(currentPagination == cntPagination,'disabled','')}">
+																			<apex:outputText value="Next Page" rendered="{!(currentPagination == cntPagination)}" />
+																			<apex:commandLink rendered="{!(currentPagination < cntPagination)}" onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" action="{!nextPage}" value="Next Page" rerender="wikiSitesPanel" />
+																		</li>
+																		<li>
+																			<apex:commandLink action="{!lastPage}" rerender="wikiSitesPanel" rendered="{!(currentPagination < cntPagination)}" onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" >
+																				<img src="{!URLFOR($Resource.WikiResource, 'images/layout/pagination_arrow_last.gif')}" alt=">>" title="last>>"/>
+																			</apex:commandLink>
+																			<apex:outputPanel rendered="{!(currentPagination == cntPagination)}">
+																				<img src="{!URLFOR($Resource.WikiResource, 'images/layout/pagination_arrow_last_disabled.gif')}" alt=">>"/>
+																			</apex:outputPanel>	
+																		</li>
+																	</ul>
 																</div>
 															</apex:form>
 														</apex:outputpanel>
@@ -285,50 +270,35 @@
 														<apex:outputpanel id="paginationPanelBottom">
 															<apex:form id="paginationFormBottom">
 																<div class="pages">
-																	<apex:outputpanel rendered="{!IF(AND(currentPagination == 1,NOT(cntPagination == currentPagination)), true, false)}">
-																		<ul>
-																			<li class="prev disabled">Previous Page</li>
-																			<li>({!currentPagination}</li>
-																			<li class="center">-</li>
-																			<li>{!cntPagination})</li>
-																			<li class="next">
-																				<apex:commandLink onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" action="{!nextPage}" value="Next Page" rerender="wikiSitesPanel" />
-																			</li>
-																		</ul>
-																	</apex:outputpanel>
-																	<apex:outputpanel rendered="{!IF(AND(currentPagination == 1, cntPagination == currentPagination), true, false)}">
-																		<ul>
-																			<li class="prev disabled">Previous Page</li>
-																			<li>({!currentPagination}</li>
-																			<li class="center">-</li>
-																			<li>{!cntPagination})</li>
-																			<li class="next disabled">Next Page</li>
-																		</ul>
-																	</apex:outputpanel>
-																	<apex:outputpanel rendered="{!IF(AND(NOT(currentPagination == 1),NOT(cntPagination == currentPagination)), true, false)}">
-																		<ul>
-																			<li class="prev">
-																				<apex:commandLink onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" action="{!prevPage}" value="Previous Page" rerender="wikiSitesPanel" />
-																			</li>
-																			<li>({!currentPagination}</li>
-																			<li class="center">-</li>
-																			<li>{!cntPagination})</li>
-																			<li class="next">
-																				<apex:commandLink onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" action="{!nextPage}" value="Next Page" rerender="wikiSitesPanel" />
-																			</li>
-																		</ul>
-																	</apex:outputpanel>
-																	<apex:outputpanel rendered="{!IF(AND(NOT(currentPagination == 1),cntPagination == currentPagination), true, false)}">
-																		<ul>
-																			<li class="prev">
-																				<apex:commandLink onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" action="{!prevPage}" value="Previous Page" rerender="wikiSitesPanel" />
-																			</li>
-																			<li>({!currentPagination}</li>
-																			<li class="center">-</li>
-																			<li>{!cntPagination})</li>
-																			<li class="next disabled">Next Page</li>
-																		</ul>
-																	</apex:outputpanel>
+																	<ul>
+																		<li>
+																			<apex:commandLink action="{!firstPage}" rerender="wikiSitesPanel" rendered="{!NOT(currentPagination == 1)}" onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" >
+																				<img src="{!URLFOR($Resource.WikiResource, 'images/layout/pagination_arrow_first.gif')}" alt="<<" title="<<first"/>
+																			</apex:commandLink>
+																			<apex:outputPanel rendered="{!(currentPagination == 1)}">
+																				<img src="{!URLFOR($Resource.WikiResource, 'images/layout/pagination_arrow_first_disabled.gif')}" alt="<<"/>
+																			</apex:outputPanel>	
+																		</li>
+																		<li class="prev {!IF(currentPagination == 1,'disabled','')}">
+																			<apex:outputText value="Previous Page" rendered="{!(currentPagination == 1)}" />
+																			<apex:commandLink rendered="{!NOT(currentPagination == 1)}" onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" action="{!prevPage}" value="Previous Page" rerender="wikiSitesPanel" />
+																		</li>
+																		<li>({!currentPagination}</li>
+																		<li class="center">-</li>
+																		<li>{!cntPagination})</li>
+																		<li class="next {!IF(currentPagination == cntPagination,'disabled','')}">
+																			<apex:outputText value="Next Page" rendered="{!(currentPagination == cntPagination)}" />
+																			<apex:commandLink rendered="{!(currentPagination < cntPagination)}" onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" action="{!nextPage}" value="Next Page" rerender="wikiSitesPanel" />
+																		</li>
+																		<li>
+																			<apex:commandLink action="{!lastPage}" rerender="wikiSitesPanel" rendered="{!(currentPagination < cntPagination)}" onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" >
+																				<img src="{!URLFOR($Resource.WikiResource, 'images/layout/pagination_arrow_last.gif')}" alt=">>" title="last>>"/>
+																			</apex:commandLink>
+																			<apex:outputPanel rendered="{!(currentPagination == cntPagination)}">
+																				<img src="{!URLFOR($Resource.WikiResource, 'images/layout/pagination_arrow_last_disabled.gif')}" alt=">>"/>
+																			</apex:outputPanel>	
+																		</li>
+																	</ul>
 																</div>
 															</apex:form>
 														</apex:outputpanel>

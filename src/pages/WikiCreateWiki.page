@@ -70,9 +70,7 @@
 			$( idElement2 ).style.height = (o1Dims.height * 0.98 ).round() + 'px';
 			$( idElement2 ).style.width = (o1Dims.width * 0.98 ).round() + 'px';
 		}
-	    window.onload = function() {
-	        setAccessTypeChecked();
-	    }		
+
      </script>
 	<!-- Modal JS -->
 	<script	src="{!URLFOR($Resource.commonResources, 'inc/js/modal.js')}" />
@@ -494,13 +492,13 @@
 				<tr>
 					<td class="teamTitleButton titleTd">Members</td>
 					<td align='center'>
-					<table width="21%">
+					<table width="123px;">
 						<tr>
 							<td>
 								<div>
 									<apex:outputpanel rendered="true"> 
 										<a onclick="createOverlay('','inviteTeam','','showSelects()'); relocateOverlay()" href="javascript:;" class="blackbutton">New</a>
-										<a href="javascript:;" class="blackbutton" onclick="massiveRemoveOverlay();">Remove</a>
+										<a href="javascript:;" class="blackbutton" onclick="massiveRemoveOverlay(); relocateOverlay()">Remove</a>
 									</apex:outputpanel>
 								</div>
 							</td>
@@ -647,9 +645,8 @@
 											<!-- <a href="javascript:;" class="member_detail_description_underline">Delete</a> -->
 										</apex:outputpanel>
 									</td>
-									<td class="member_detail_description"><a href="javascript:;"
-										onclick="location.href='https://na1.salesforce.com/apex/PeopleProfileDisplay?id={!item.userId}'"
-										class="member_detail_description_underline">{!item.name}</a>
+									<td class="member_detail_description">
+									   <a href="https://na1.salesforce.com/{!item.userId}" class="member_detail_description_underline">{!item.name}</a>
 									</td>
 									<td class="member_detail_description"></td>
 									<td class="member_detail_description">{!item.alias}</td>
@@ -688,15 +685,14 @@
 						<td class="teamTitleButton titleTd">
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 						<td align='center'>
-						<table width="21%">
+						<table width="123px">
 							<tr>
 								<td>
 								<div><!-- BUTTONS --> <apex:outputpanel id="thisIs"> <!-- rendered="{!userPermissions.canManage}" -->
 									<a
 										onclick="createOverlay('','inviteTeam','','showSelects()'); relocateOverlay(); setTimeout( 'focusToWikiMW()', 1200 );"
 										href="javascript:;" class="blackbutton">New</a>
-									<a href="javascript:;" class="blackbutton"
-										onclick="massiveRemoveOverlay(); relocateOverlay()">Remove</a>
+									<a href="javascript:;" class="blackbutton" onclick="massiveRemoveOverlay(); relocateOverlay()">Remove</a>
 									<!--  <div class="editProfile"><a href="javascript:;"
 										class="blackbutton" onclick="showHideOptionsBottom();">Edit
 									{!$ObjectType.Wiki__c.label} Profile | v</a>
@@ -739,8 +735,8 @@
 		}
 		readPortalCSSRules();
 		countStringLimit($('WikiCreateWiki:createNewTeamForm:TeamDescription'),'stringSizeCounter');
-		window.onload = function() { setAccessTypeChecked(); }
-		
-		
+        window.onload = function() {
+            setAccessTypeChecked();
+        }
 	</script>
 </apex:page>

@@ -7,11 +7,37 @@ public class WikiSubscribersEmailServices {
 	public Boolean isTest = false;
     WikiMember__c dm = new  WikiMember__c();
 	List<WikiSubscription__c> TeamMemberSubscription = new List<WikiSubscription__c>();
+	private String url = '';
 	
 	/**
 	* Constructor (def)
 	*/
-	public WikiSubscribersEmailServices(){}
+	public WikiSubscribersEmailServices()
+	{
+ 		PageReference PR = ApexPages.currentPage(); 
+		String newPath ='';
+		//In Gannt Page Reference is null
+		if(PR !=  null){
+			String props = '';
+			if(PR.getHeaders() != null){
+				props = (PR.getHeaders()).get('Host');
+			}
+			//Remove HTML tag of Path
+			if(props == '' || props == null){
+				newPath = '';	
+			}else{
+				String [] path = props.split('</?[a-z][a-z0-9]*[^<>]*>');
+				if(path.size() == 0){
+					newPath = path[0];
+				}else{
+					for(Integer i = 0; i < path.size(); i++){	
+						newPath += path[i];
+					}
+				}
+			}
+		}
+		url = newPath;
+	}
 
 	/**
 	*@param Boolean isTest
@@ -34,7 +60,6 @@ public class WikiSubscribersEmailServices {
 	*/
 	public void sendMemberLeaveAdd( String acction, String idWikiMember )
 	{
-		
 		String emailMsj = '';
 		String emailSub = '';
 		
@@ -45,21 +70,24 @@ public class WikiSubscribersEmailServices {
 			dm = [ SELECT Id, User__r.Name, Wiki__c, Wiki__r.Name FROM WikiMember__c WHERE Id =: idWikiMember ];
 			
 			
+			System.debug( 'ooo:1: ' + url );
 			if ( acction == 'TeamMemberLeave') 
 			{
+				System.debug( 'ooo:2: ' + url );
 				//Sub:Team Member has Left the team
 				//Body: {Name} has left team {team name} 
 				
 				String oldMemberName = dm.User__r.Name;
 			
-				emailMsj = oldMemberName + ' has left wiki  <a href="' + '/apex/WikiTeamOverview?id=' + dm.Wiki__c + '">' +  dm.Wiki__r.Name+ '</a>.';
-				emailSub = 'Team Member has Left the discussion forum ';
+				emailMsj = oldMemberName + ' [][][][][]has left wiki  <a href="//' + url +'/apex/WikiTeamOverview?tid=' + dm.Wiki__c + '">' +  dm.Wiki__r.Name+ '</a>.';
+				emailSub = 'Wiki Member has Left the Wiki ';
+				System.debug( 'ooo:3: ' + url );
 			}
 			else 
 			{
 				//Sub:New Team Member
 				//Body: A new team member has joined team {}. Please welcome {name} to the team. 
-				emailMsj = 'A new wiki member has joined wiki <a href="' + '/apex/DiscussionTopic?id=' + dm.Wiki__r.Name + '">' +  dm.Wiki__r.Name + '</a>. Please welcome ' + dm.User__r.Name + ' to the discussion forum.';
+				emailMsj = 'A new wiki member has joined wiki <a href="//' + url + '/apex/WikiTeamOverview?tid=' + dm.Wiki__c + '">' +  dm.Wiki__r.Name + '</a>. Please welcome ' + dm.User__r.Name + ' to the Wiki.';
 				emailSub = 'New Wiki Member';
 			}
 
@@ -115,12 +143,12 @@ public class WikiSubscribersEmailServices {
 		String emailSub = '';
 		String emailMsj = '';
 		WikiPage__c wp = new WikiPage__c();
-		wp = [ SELECT Id, Wiki__c, Wiki__r.Name FROM WikiPage__c WHERE Id =: IdNewPage ];
+		wp = [ SELECT Id, Wiki__c, Wiki__r.Name, LastModifiedById, LastModifiedBy.Name FROM WikiPage__c WHERE Id =: IdNewPage ];
 
 		if( acction == 'newPage' )
 		{			
-			emailSub = 'Wiki page ' + wikiName + ' has been added to the Team ' + wp.Wiki__r.Name + '\'s wiki';
-			emailMsj = 'Wiki page ' + wikiName + ' has been added to the Team <a href="">' + wp.Wiki__r.Name + '\'s</a> wiki<br><a href="' + '/apex/WikiTeamOverview?idWP=' + wp.Id + '">Click here to see the page</a>.';
+			emailSub = 'Wiki page ' + wikiName + ' has been added to the Wiki ' + wp.Wiki__r.Name + '\'s wiki';
+			emailMsj = 'Wiki page ' + wikiName + ' has been added to the Wiki <a href="//' + url + '/apex/WikiPage?idWP=' + IdNewPage + '">' + wp.Wiki__r.Name + '\'s</a> wiki<br><a href="' + '/apex/WikiTeamOverview?idWP=' + wp.Id + '">Click here to see the page</a>.';
 			if (!isTest) {
 			TeamMemberSubscription = [Select 
 				t.WikiPageUpdated__c, 
@@ -151,8 +179,8 @@ public class WikiSubscribersEmailServices {
 			//wikiName = mf.Message__c.replaceFirst('.*<a href="/apex/WikiPage\\?idWP=[^>]*">', '');
 			//wikiName = wikiName.replaceFirst('</a>.*', '');
 			
-			emailSub = 'Wiki page ' + wikiName + ' with in Teamspace ' + wp.Wiki__r.Name + ' has been edited';
-			//emailMsj = 'Wiki page ' + wikiName + ' has been edited by <a href="https://' + newPath + '/apex/PeopleProfileDisplay?id=' + editedById + '">' +  editedByName + '</a><br><a href="https://' + newPath + '/apex/WikiPage?idWP=' + wikiId + '">Click here to see the page</a>.';
+			emailSub = 'Wiki page ' + wikiName + ' with in Wiki ' + wp.Wiki__r.Name + ' has been edited';
+			emailMsj = 'Wiki page ' + wikiName + ' has been edited by <a href="https://' + url + '/?id=' + wp.LastModifiedById + '">' +  wp.LastModifiedBy.Name + '</a><br><a href="https://' + url + '/apex/WikiPage?idWP=' + wp.Id + '">Click here to see the page</a>.';
 			
 			if (!isTest) 
 			{
@@ -214,8 +242,10 @@ public class WikiSubscribersEmailServices {
 		wp = [ SELECT Id, Wiki__c, Wiki__r.Name, LastModifiedById, LastModifiedBy.Name, CreatedById FROM WikiPage__c WHERE Id =: IdPage ];
 		if( wp.LastModifiedById != wp.CreatedById )
 		{
-			emailSub = 'Wiki page ' + wikiName + ' with in Teamspace ' + wp.Wiki__r.Name + ' has been ' + acction;
-			emailMsj = 'Wiki page ' + wikiName + ' has been '+ acction +' by <a href="/id=' + wp.LastModifiedById + '">' +  wp.LastModifiedBy.Name + '</a>'; //<br><a href="https://' + newPath + '/apex/WikiPage?idWP=' + wikiId + '">Click here to see the page</a>.';
+			emailSub = 'Wiki page ' + wikiName + ' with in Discussion Forum ' + wp.Wiki__r.Name + ' has been ' + (( acction == 'update' ) ? 'updated' : 'deleted');
+			emailMsj = 'Wiki page ' + wikiName + ' has been '+ acction +' by <a href="// '+ url +'/?id=' + wp.LastModifiedById + '">' +  wp.LastModifiedBy.Name + '</a>'; 
+			if( acction == 'update' )
+			emailMsj += '<br><a href="https://' + url + '/apex/WikiPage?idWP=' + wp.Id + '">Click here to see the page</a>.';
 
 
 			if (!isTest) 
