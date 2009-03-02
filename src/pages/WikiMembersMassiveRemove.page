@@ -16,6 +16,7 @@
 		<!-- Overlay Content -->
 		<div class="overlayMainContent">
 			<apex:form id="newMemberForm">
+				<apex:inputHidden id="idsToDelete" value="{!RemoveMemberIds}" />
 				<div class="overlayFormContent" style="padding-bottom: 10px;">
 					<table style="width:95%;"> 
 						<tr>
@@ -31,7 +32,8 @@
 				<div class="overlayFromButtons" align="center">
 				
 					<!-- <input type="button" class="overlaySaveBtn" id="massiveRemoveAction" onclick="$('paginationOverlay').show();setHeight('membersListDiv', 'paginationOverlay');massiveMemberRemove();" value="Continue"/> -->
-					<apex:commandButton styleClass="allButtons actionButtons" id="massiveRemoveAction" onclick="$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay');massiveMemberRemove();" value="Continue" oncomplete="$('paginationOverlay').hide()"/>
+					<!-- apex:commandButton styleClass="allButtons actionButtons" id="massiveRemoveAction" onclick="$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay');massiveMemberRemove();" value="Continue" oncomplete="$('paginationOverlay').hide()"/ -->
+					<apex:commandButton styleClass="allButtons actionButtons" action="{!massiveRemoveMember}" id="massiveRemoveAction" onclick="$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay');" value="Continue" oncomplete="modal.close();reloadMemberList();"/>
 					<input class="allButtons cancelButtons" type="button" value="Cancel" onclick="modal.close();"/>
 					<!-- <input class="InviteBtn" type="button" value="Send"/> <input class="InviteAndAddBtn" type="button" value="Send & add more members"/><input class="cancelBtn" type="button" value="Cancel" onclick="modal.close();"/> -->
 				</div>

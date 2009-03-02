@@ -7,12 +7,23 @@ public class WikiMembersRemoveController {
 	public String idWiki = System.currentPageReference().getParameters().get('id');
 	public String removeMemberId = WikiCreateWikiController.removeMemberId;
 	public WikiMemberController wmc = new WikiMemberController();
-
+ 	public String removeMemberIds = '';
+	
+ 
 	/**
 	* Constructor
 	*/
-	public WikiMembersRemoveController() {}
+	public WikiMembersRemoveController(){}
 	
+	public void setRemoveMemberIds( String memberListToremove )
+	{
+		removeMemberIds = memberListToremove;
+	}
+
+	public String getRemoveMemberIds()
+	{
+		return removeMemberIds;
+	}
 	public void setRemoveMemberId(String memberId) {
 	   removeMemberId = memberId;
 	}
@@ -67,11 +78,38 @@ public class WikiMembersRemoveController {
 	/**
 	* Delete selected member
 	*/
-	public void removeMember () {
-		if (!getIsLastMemberAdmin()) {
+	public void removeMember () 
+	{
+		TeamUtil.hostName = TeamUtil.getHost(ApexPages.currentPage());
+		if (!getIsLastMemberAdmin()) 
+		{
 			wmc.setUserId(removeMemberId);
 			wmc.setWikiId(idWiki);
 			wmc.unjoinWiki();	
 		}
 	}
+	
+	public void massiveRemoveMember()
+	{
+		System.debug( ']]]: ' + removeMemberIds );
+		if( removeMemberIds != '' )
+		{
+			List<String> idsList = new List<String>();
+			
+			idsList = removeMemberIds.split( ',' );
+			
+			List<WikiMember__c> memberListToDelete = new List<WikiMember__c>();
+			memberListToDelete = [ select Id, Name from WikiMember__c where Id in: idsList ];
+			
+			List<WikiMember__c> adminList = new List<WikiMember__c>();
+			adminList = [ select Id from WikiMember__c where WikiProfile__r.ManageWikis__c = true and ( Id not in: idsList )];
+			
+			if( adminList.size() > 0 )
+				delete memberListToDelete;
+			else
+				wmc.isLastMemberAdmin();
+			
+		}
+	}
+	
 }
