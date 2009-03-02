@@ -461,7 +461,7 @@
 															<apex:commandButton styleClass="SaveBtn" action="{!saveWikiAndAddMembers}"  value="Create And Add Members" id="saveAndAddMembersButton" />
 														</apex:outputpanel>
 														<apex:inputHidden value="{!Wiki.Type__c}" id="openOrClosed" />
-														<apex:commandButton styleClass="cancelBtn" onclick="location.href = '/apex/WikiOverview';return false;" value="Cancel" id="cancelButton"/> 
+														<apex:commandButton styleClass="cancelBtn"  onclick="location.href = '/apex/WikiOverview';return false;" value="Cancel" id="cancelButton"/> 
 													</div>
 												</div>
 											</div>
@@ -628,13 +628,26 @@
 						</thead>
 						<!-- Description  -->
 						<tbody>
-							<apex:repeat var="item" value="{!members}"
+ 							<apex:repeat var="item" value="{!members}"
 								rows="{!numberOfItemsToShow}" first="{!firstRow}">
 								<tr>
-									<td><apex:outputpanel >  <!-- rendered="{!userPermissions.canManage}" -->
-										<input value="{!item.wikiMemberId}" class="actionCheck"
-											type="checkbox" />
-									</apex:outputpanel></td>
+									<td>
+										<apex:outputpanel >  <!-- rendered="{!userPermissions.canManage}" -->
+											<input value="{!item.wikiMemberId}" class="actionCheck"	type="checkbox" onclick="toDelete()" />
+											<script>
+												function toDelete()
+												{
+													$( 'WikiCreateWiki:incWMMROverlay:WMROverlay:newMemberForm:idsToDelete' ).value = '';
+													arr = $$( 'input.actionCheck' );
+													for( var box in arr )
+													{
+														if( arr[ box ].checked )
+														$( 'WikiCreateWiki:incWMMROverlay:WMROverlay:newMemberForm:idsToDelete' ).value += arr[ box ].value + ',';
+													}
+												}
+											</script>
+										</apex:outputpanel>
+									</td>
 									<td> 
 										<apex:outputpanel > <!-- rendered="{!userPermissions.canManage}" --> 
 											<apex:commandLink styleclass="member_detail_description_underline" value="Del"
@@ -659,8 +672,8 @@
 				</apex:form>
 				<hr class="filterHR" />
 				<apex:outputpanel styleClass="pagination" layout="block" rendered="{!IF(AND(prevPageShow,nextPageShow),false,true)}">
-					<div class="pages">
-						<apex:form >
+					<apex:form >
+						<div class="pages">
 							<ul>
 								<li class="prev {!IF(prevPageShow,'prev_disabled','')}">
 									<apex:commandLink onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" action="{!prevPage}" value="Previous Page" rerender="membersList" rendered="{!prevPageLinkShow}" /> 
@@ -674,8 +687,8 @@
 									<apex:outputText value="Next Page" rendered="{!nextPageShow}" />
 								</li>
 							</ul>
-						</apex:form>
-					</div>
+						</div>
+					</apex:form>
 				</apex:outputpanel>
 				<apex:outputpanel rendered="{!IF(AND(prevPageShow,nextPageShow),false,true)}">
 					<hr class="filterHR" />
@@ -688,26 +701,11 @@
 						<table width="123px">
 							<tr>
 								<td>
-								<div><!-- BUTTONS --> <apex:outputpanel id="thisIs"> <!-- rendered="{!userPermissions.canManage}" -->
-									<a
-										onclick="createOverlay('','inviteTeam','','showSelects()'); relocateOverlay(); setTimeout( 'focusToWikiMW()', 1200 );"
-										href="javascript:;" class="blackbutton">New</a>
-									<a href="javascript:;" class="blackbutton" onclick="massiveRemoveOverlay(); relocateOverlay()">Remove</a>
-									<!--  <div class="editProfile"><a href="javascript:;"
-										class="blackbutton" onclick="showHideOptionsBottom();">Edit
-									{!$ObjectType.Wiki__c.label} Profile | v</a>
-									<div id="profileOptionsBottom" class="profileOptions"
-										style="display: none;">
-									<ul>
-										<apex:repeat value="{!teamEditProfiles}" var="item">
-											<li onclick="massiveMemberUpdate(this);"
-												onmouseover="bckColor(this)" onmouseout="bckColor(this)"
-												id="{!item.Id}">{!item.Name}</li>
-										</apex:repeat>
-									</ul>
-									</div>
-									</div> -->
-								</apex:outputpanel> <!-- BUTTONS --></div>
+								<div><!-- BUTTONS --> 
+									<apex:outputpanel id="thisIs"> <!-- rendered="{!userPermissions.canManage}" -->
+										<a onclick="createOverlay('','inviteTeam','','showSelects()'); relocateOverlay(); setTimeout( 'focusToWikiMW()', 1200 );" href="javascript:;" class="blackbutton">New</a>
+										<a href="javascript:;" class="blackbutton" onclick="massiveRemoveOverlay(); relocateOverlay()">Remove</a>
+									</apex:outputpanel> <!-- BUTTONS --></div>
 								</td>
 							</tr>
 						</table>
