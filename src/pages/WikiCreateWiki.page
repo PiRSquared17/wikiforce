@@ -51,14 +51,13 @@
 	
 	
 	<script>
-
      	/**
         * Namespace Prefix Getter
         */
      	var globalTeamId = "{!WikiId}";
      	var globalArrowDown = "{!URLFOR($Resource.commonResources, 'images/arrows/arrow_down.gif')}";
-     	var globalArrowUp = "{!URLFOR($Resource.commonResources, 'images/arrows/arrow_up.gif')}";;
-     	var wikiTypeAccess = "{!WikiType}"
+     	var globalArrowUp = "{!URLFOR($Resource.commonResources, 'images/arrows/arrow_up.gif')}";
+     	var wikiTypeAccess = "{!WikiType}";
 
      	/**
 		*Set e2 height with e1 height + 15px
@@ -70,7 +69,32 @@
 			$( idElement2 ).style.height = (o1Dims.height * 0.98 ).round() + 'px';
 			$( idElement2 ).style.width = (o1Dims.width * 0.98 ).round() + 'px';
 		}
-
+        function setPaginatorToCenter(){
+            var divPages = $$('.pages');
+            var formPages, ulPages;
+            // Recorro todos los divPages que haya (debe haber dos)
+            for(var i = 0; i < divPages.length; i++) {
+                divPages[i].style.position = 'relative';
+                // Recorro todos los elementos dentro del divPages buscando el Form
+                for(var j = 0; j < divPages[i].childNodes.length; j++) {
+                    //alert(divPages[i].childNodes[j].tagName);
+                    if(divPages[i].childNodes[j].tagName == 'ul' || divPages[i].childNodes[j].tagName == 'UL') {
+                        alert(i + ' / ' + j);
+                        divPages[i].childNodes[j].style.position = 'absolute';
+                        divPages[i].childNodes[j].style.marginLeft = '50%';
+                        //alert('-' + (divPages[i].childNodes[j].getWidth() /2) + 'px');
+                        divPages[i].childNodes[j].style.left = ('-' + (divPages[i].childNodes[j].getWidth() /2) + 'px');
+                        //alert(divPages[i].childNodes[j].style);
+                    }
+                }
+                //$$('.pages')[i].style.position = 'absolute';
+                //$$('.pages')[i].style.marginLeft = '50%';
+                //$$('.pages')[i].style.left = ('-' + ($$('.pages')[i].getWidth() / 2) + 'px');
+            }
+        }
+        window.onload = function() {
+            setPaginatorToCenter();
+        }
      </script>
 	<!-- Modal JS -->
 	<script	src="{!URLFOR($Resource.commonResources, 'inc/js/modal.js')}" />
@@ -461,7 +485,7 @@
 															<apex:commandButton styleClass="SaveBtn" action="{!saveWikiAndAddMembers}"  value="Create And Add Members" id="saveAndAddMembersButton" />
 														</apex:outputpanel>
 														<apex:inputHidden value="{!Wiki.Type__c}" id="openOrClosed" />
-														<apex:commandButton styleClass="cancelBtn"  onclick="location.href = '/apex/WikiOverview';return false;" value="Cancel" id="cancelButton"/> 
+														<apex:commandButton styleClass="CancelBtnWik"  onclick="location.href = '/apex/WikiOverview';return false;" value="Cancel" id="cancelButton"/> 
 													</div>
 												</div>
 											</div>
@@ -551,23 +575,25 @@
 			<apex:outputpanel id="membersList">
 				<apex:outputpanel styleClass="pagination" layout="block"
 					rendered="{!IF(AND(prevPageShow,nextPageShow),false,true)}">
-					<div class="pages"><apex:form >
-						<ul>
-							<li class="prev {!IF(prevPageShow,'prev_disabled','')}"><apex:commandLink onclick="switchOverlay(true)" oncomplete="switchOverlay(false)" action="{!prevPage}" value="Previous Page" rerender="membersList"
-								rendered="{!prevPageLinkShow}" /> <apex:outputText value="Previous Page" rendered="{!prevPageShow}" /></li>
-							<li>({!currentPagination} - {!cntPagination})</li>
-							<li class="next {!IF(nextPageShow,'next_disabled','')}">
-							 <apex:commandLink onclick="switchOverlay(true)" oncomplete="switchOverlay(false)" action="{!nextPage}" value="Next Page" rerender="membersList"
-								rendered="{!nextPageLinkShow}" /> <apex:outputText value="Next Page" rendered="{!nextPageShow}" /></li>
-						</ul>
-					</apex:form></div>
+					<apex:form >
+						<div class="pages">
+							<ul>
+								<li class="prev {!IF(prevPageShow,'prev_disabled','')}"><apex:commandLink onclick="switchOverlay(true)" oncomplete="switchOverlay(false)" action="{!prevPage}" value="Previous Page" rerender="membersList"
+									rendered="{!prevPageLinkShow}" /> <apex:outputText value="Previous Page" rendered="{!prevPageShow}" /></li>
+								<li>({!currentPagination} - {!cntPagination})</li>
+								<li class="next {!IF(nextPageShow,'next_disabled','')}">
+								 <apex:commandLink onclick="switchOverlay(true)" oncomplete="switchOverlay(false)" action="{!nextPage}" value="Next Page" rerender="membersList"
+									rendered="{!nextPageLinkShow}" /> <apex:outputText value="Next Page" rendered="{!nextPageShow}" /></li>
+							</ul>
+						</div>
+					</apex:form>
 				</apex:outputpanel>
 				<apex:form id="membersListForm">
 					<table border="0" cellspacing="0" cellpadding="2px" class="pageList">
 						<thead>
 							<tr>
 								<td width="3%"><apex:outputpanel > <!-- rendered="{!userPermissions.canManage}" -->
-									<input class="actionCheckAll" onclick="checkUnCheck(this);"
+									<input class="actionCheckAll" onclick="checkUnCheck(this); setTimeout( 'toDelete()', 100 );"
 										type="checkbox" />
 								</apex:outputpanel></td>
 								<td width="9%"><apex:outputpanel style="font-weight:bold;">Action</apex:outputpanel> <!-- rendered="{!userPermissions.canManage}" --> 
@@ -634,18 +660,6 @@
 									<td>
 										<apex:outputpanel >  <!-- rendered="{!userPermissions.canManage}" -->
 											<input value="{!item.wikiMemberId}" class="actionCheck"	type="checkbox" onclick="toDelete()" />
-											<script>
-												function toDelete()
-												{
-													$( 'WikiCreateWiki:incWMMROverlay:WMROverlay:newMemberForm:idsToDelete' ).value = '';
-													arr = $$( 'input.actionCheck' );
-													for( var box in arr )
-													{
-														if( arr[ box ].checked )
-														$( 'WikiCreateWiki:incWMMROverlay:WMROverlay:newMemberForm:idsToDelete' ).value += arr[ box ].value + ',';
-													}
-												}
-											</script>
 										</apex:outputpanel>
 									</td>
 									<td> 
@@ -736,5 +750,25 @@
         window.onload = function() {
             setAccessTypeChecked();
         }
+		function toDelete()
+		{
+			var str = '';
+			arr = $$( 'input.actionCheck' );
+			for( var box in arr )
+			{
+				if( arr[ box ].checked )
+				str += arr[ box ].value + ',';
+			}
+			str = str.substring( 0, str.length -1 );
+			
+			$( 'WikiCreateWiki:incWMMROverlay:WMROverlay:newMemberForm:idsToDelete' ).value = str;
+			//alert( 'L:' + arr.length + ':::' + $( 'WikiCreateWiki:incWMMROverlay:WMROverlay:newMemberForm:idsToDelete' ).value );
+		}
+
+		function backUpDivsForFirstTime(){
+			settingsBackUp = $('body_center').innerHTML;
+			membersBackUp = $('membersListDiv').innerHTML;
+			$('membersListDiv').innerHTML = '';
+		}
 	</script>
 </apex:page>

@@ -100,6 +100,7 @@ public with sharing class WikiOverviewController {
 		for(WikiMember__c tm : [Select Wiki__c From WikiMember__c WHERE User__c =: USERID ] ) { 
 			tmp.add(tm.Wiki__c);
 		}
+		System.debug('\n\n\tMy teams... ==> ' + tmp.size() + '\n\n');
 	}
 	
 	/**
@@ -116,9 +117,9 @@ public with sharing class WikiOverviewController {
 	*@return List<TeamWikis>
 	*/
 	public List<TeamWikis> getWikiSites () {
+		System.debug('\n\n\tThe wikiSites = ' + wikiSites.size() + '\n\n');
 		return wikiSites;
 	}
-	
 	/**
 	* For rerender use
 	*/
@@ -242,8 +243,10 @@ public with sharing class WikiOverviewController {
 	   	if(allTeams == '' || allTeams == 'false' || allTeams == null ){
 	   		cntLetterSites = [select count() from Wiki__c where Id in: myTeams() ];	   		
 	   	}else{
-	   		cntLetterSites = [select count() from Wiki__c];
-	   	}   			
+	   		cntLetterSites = [select count() from Wiki__c where Id in: myTeams() or Type__c !='private'];
+	   		//cntLetterSites = [select count() from Wiki__c];
+	   	}
+	   	System.debug('\n\n\tThe tcntLetterSites = ' + cntLetterSites + '\n\n');
    	}
    	
    	public Integer numSitesRows = 7;
@@ -835,6 +838,12 @@ public with sharing class WikiOverviewController {
    			wikis.add(wiki);
    		}
    	}
+   	
+   	public Boolean getrecentlyUpdatedIsEmpty(){
+   		return wikis.size()<=0;
+   	}
+   	
+
 
 	/**
 	*@return List<FavoriteWikis__c> 

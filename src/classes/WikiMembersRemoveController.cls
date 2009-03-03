@@ -8,12 +8,25 @@ public class WikiMembersRemoveController {
 	public String removeMemberId = WikiCreateWikiController.removeMemberId;
 	public WikiMemberController wmc = new WikiMemberController();
  	public String removeMemberIds = '';
+ 	public Boolean error = false;
+ 	public Boolean finish = false;
+
 	
  
 	/**
 	* Constructor
 	*/
 	public WikiMembersRemoveController(){}
+	
+	public Boolean getError()
+	{
+		return this.error;
+	}
+	
+	public Boolean getFinish()
+	{
+		return this.finish;
+	}
 	
 	public void setRemoveMemberIds( String memberListToremove )
 	{
@@ -24,6 +37,9 @@ public class WikiMembersRemoveController {
 	{
 		return removeMemberIds;
 	}
+
+
+
 	public void setRemoveMemberId(String memberId) {
 	   removeMemberId = memberId;
 	}
@@ -31,6 +47,8 @@ public class WikiMembersRemoveController {
 	public String getRemoveMemberId() {
 	   return removeMemberId;	
 	}
+	
+
 	
 	/**
 	* @return wikiName
@@ -102,13 +120,20 @@ public class WikiMembersRemoveController {
 			memberListToDelete = [ select Id, Name from WikiMember__c where Id in: idsList ];
 			
 			List<WikiMember__c> adminList = new List<WikiMember__c>();
-			adminList = [ select Id from WikiMember__c where WikiProfile__r.ManageWikis__c = true and ( Id not in: idsList )];
-			
+			adminList = [ select Id from WikiMember__c where WikiProfile__r.ManageWikis__c = true and Wiki__c =: idWiki and Id not in: memberListToDelete ];
+						
 			if( adminList.size() > 0 )
+			{
+				this.finish = true;
 				delete memberListToDelete;
+			}
 			else
+			{
+				this.error = true;
 				wmc.isLastMemberAdmin();
+			}
 			
+
 		}
 	}
 	
