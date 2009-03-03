@@ -43,13 +43,13 @@ trigger WikiAfterUpdate on Wiki__c (after update) {
 						while (!findGM && countGM < groupMemberList.size()) {
 							if (groupMemberList[countGM].UserOrGroupId == go[0].id && groupMemberList[countGM].GroupId == teamGroup.Id) {
 								findGM = true;
-								gm = groupMemberList[countGM]; 
+								gm = groupMemberList[countGM];
+								TeamUtil.deleteGroupMember(gm.id); 
 							}
 							else {
 								countGM++;	
 							}	
 						}
-						delete gm;
 						
 						//Create GroupMember for all Team Members
 						List<GroupMember> groupMembers = new List<GroupMember>();
