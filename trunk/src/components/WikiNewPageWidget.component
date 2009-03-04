@@ -30,6 +30,8 @@
 			document.getElementById(elementId).style.display = 'block';
 			$('modal_container').style.height = '320px';
 			$$(".overlaySaveBtn")[0].style.color = '#DDDEB8';
+			//document.getElementById("saveBtnNewPageWiki").disabled='false';
+			//document.getElementById("saveBtnNewPageOverview").disabled='false';
 			return false;
 		}
 		else {
@@ -89,7 +91,7 @@
 		<!-- Overlay Content -->
 		<div class="overlayMainContent">
 			<!-- Required Information -->
-			<span class="overlayRequiredInfo">= Required Information</span>
+			<span class="overlayRequiredInfo">= Required Information |||</span>
 			<div id="saving" class="overlayFormStatus" style="display:none;">Saving...</div>
 			<apex:form id="formNew" onsubmit="return validateName('errorName','{!$Component.nameNewWP}', '{!$Component.formNew}');">
 				<div class="overlayFormContent">

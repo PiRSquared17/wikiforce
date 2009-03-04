@@ -110,8 +110,8 @@ public class TeamUtil {
 	* MIXED_DML_OPERATION, DML operation on setup object is not permitted after you have updated a non-setup object
 	*/
 	@future
-	public static void deleteGroupMember(String gmToDelete){
-	    GroupMember gm = [select UserOrGroupId, GroupId, id from GroupMember where id =: gmToDelete];
+	public static void deleteGroupMembers(List<String> gmToDelete){
+	    List<GroupMember> gm = [select UserOrGroupId, GroupId, id from GroupMember where id in : gmToDelete];
 		delete gm;
 	}
 	

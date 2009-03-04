@@ -53,7 +53,7 @@ public class WikiSubscribersEmailServices {
 				//Body: {Name} has left team {team name} 
 				
 				String oldMemberName = dm.User__r.Name;
-				emailMsj = oldMemberName + ' [][][][][]has left wiki  <a href="//' + TeamUtil.hostName +'/apex/WikiTeamOverview?tid=' + dm.Wiki__c + '">' +  dm.Wiki__r.Name+ '</a>.';
+				emailMsj = oldMemberName + 'has left wiki  <a href="//' + TeamUtil.hostName +'/apex/WikiTeamOverview?tid=' + dm.Wiki__c + '">' +  dm.Wiki__r.Name+ '</a>.';
 				emailSub = 'Wiki Member has Left the Wiki ';
 			}
 			else 
@@ -118,10 +118,13 @@ public class WikiSubscribersEmailServices {
 		WikiPage__c wp = new WikiPage__c();
 		wp = [ SELECT Id, Wiki__c, Wiki__r.Name, LastModifiedById, LastModifiedBy.Name FROM WikiPage__c WHERE Id =: IdNewPage ];
 
+
+
 		if( acction == 'newPage' )
 		{			
+
 			emailSub = 'Wiki page ' + wikiName + ' has been added to the Wiki ' + wp.Wiki__r.Name + '\'s wiki';
-			emailMsj = 'Wiki page ' + wikiName + ' has been added to the Wiki <a href="//' + TeamUtil.hostName + '/apex/WikiPage?idWP=' + IdNewPage + '">' + wp.Wiki__r.Name + '\'s</a> wiki<br><a href="' + '/apex/WikiTeamOverview?idWP=' + wp.Id + '">Click here to see the page</a>.';
+			emailMsj = 'Wiki page ' + wikiName + ' has been added to the Wiki <a href="//' + TeamUtil.hostName + '/apex/WikiPage?idWP=' + IdNewPage + '">' + wp.Wiki__r.Name + '\'s</a> wiki<br><a href="//' + TeamUtil.hostName + '/apex/WikiPage?idWP=' + wp.Id + '">Click here to see the page</a>.';
 			if (!isTest) {
 			TeamMemberSubscription = [Select 
 				t.WikiPageUpdated__c, 
@@ -140,7 +143,6 @@ public class WikiSubscribersEmailServices {
 				From WikiSubscription__c t
 				where Team__c =: wp.Wiki__c and WikiNewPage__c = true];
 			}
-					
 		}
 		else if( acction == 'updatePage' )
 		{
@@ -151,7 +153,6 @@ public class WikiSubscribersEmailServices {
 			
 			//wikiName = mf.Message__c.replaceFirst('.*<a href="/apex/WikiPage\\?idWP=[^>]*">', '');
 			//wikiName = wikiName.replaceFirst('</a>.*', '');
-			
 			emailSub = 'Wiki page ' + wikiName + ' with in Wiki ' + wp.Wiki__r.Name + ' has been edited';
 			emailMsj = 'Wiki page ' + wikiName + ' has been edited by <a href="https://' + TeamUtil.hostName + '/?id=' + wp.LastModifiedById + '">' +  wp.LastModifiedBy.Name + '</a><br><a href="https://' + TeamUtil.hostName + '/apex/WikiPage?idWP=' + wp.Id + '">Click here to see the page</a>.';
 			
@@ -210,6 +211,7 @@ public class WikiSubscribersEmailServices {
 		String wikiId = ''; 
 		String emailSub = '';
 		String emailMsj = '';
+		TeamUtil.hostName = TeamUtil.getHost(ApexPages.currentPage());
 
 		WikiPage__c wp = new WikiPage__c();
 		wp = [ SELECT Id, Wiki__c, Wiki__r.Name, LastModifiedById, LastModifiedBy.Name, CreatedById FROM WikiPage__c WHERE Id =: IdPage ];

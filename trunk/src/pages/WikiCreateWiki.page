@@ -69,32 +69,7 @@
 			$( idElement2 ).style.height = (o1Dims.height * 0.98 ).round() + 'px';
 			$( idElement2 ).style.width = (o1Dims.width * 0.98 ).round() + 'px';
 		}
-        function setPaginatorToCenter(){
-            var divPages = $$('.pages');
-            var formPages, ulPages;
-            // Recorro todos los divPages que haya (debe haber dos)
-            for(var i = 0; i < divPages.length; i++) {
-                divPages[i].style.position = 'relative';
-                // Recorro todos los elementos dentro del divPages buscando el Form
-                for(var j = 0; j < divPages[i].childNodes.length; j++) {
-                    //alert(divPages[i].childNodes[j].tagName);
-                    if(divPages[i].childNodes[j].tagName == 'ul' || divPages[i].childNodes[j].tagName == 'UL') {
-                        alert(i + ' / ' + j);
-                        divPages[i].childNodes[j].style.position = 'absolute';
-                        divPages[i].childNodes[j].style.marginLeft = '50%';
-                        //alert('-' + (divPages[i].childNodes[j].getWidth() /2) + 'px');
-                        divPages[i].childNodes[j].style.left = ('-' + (divPages[i].childNodes[j].getWidth() /2) + 'px');
-                        //alert(divPages[i].childNodes[j].style);
-                    }
-                }
-                //$$('.pages')[i].style.position = 'absolute';
-                //$$('.pages')[i].style.marginLeft = '50%';
-                //$$('.pages')[i].style.left = ('-' + ($$('.pages')[i].getWidth() / 2) + 'px');
-            }
-        }
-        window.onload = function() {
-            setPaginatorToCenter();
-        }
+
      </script>
 	<!-- Modal JS -->
 	<script	src="{!URLFOR($Resource.commonResources, 'inc/js/modal.js')}" />
@@ -104,8 +79,8 @@
 	<div id="modal_container" style="display:none;"></div>
 	<script>
 		createOverlay('initializeModalOverlay');
-	</script>	
-	
+	</script>
+
 	<apex:form >
 		<apex:actionFunction name="reloadMemberList" action="{!refresh}" rerender="letterFilterContainer, membersList" oncomplete="$('paginationOverlay').hide();" />
 	</apex:form>
@@ -191,7 +166,7 @@
 											</li>
 											<li id="allTeamTab" >
 												<div id="overTabMembers" style="cursor:auto">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-												<apex:commandLink rendered="{!inEdition}" id="allTeamsLink" action="{!switchTabsController}" value="Members" onclick="switchTabs('allTeamTab');"
+												<apex:commandLink rendered="{!inEdition}" id="allTeamsLink" action="{!switchTabsController}" value="Members" onclick="switchTabs('allTeamTab');setPaginatorToCenter()"
 																	 rerender="holder" styleClass="{!IF((hasMembers == false || inEdition),'disable','')}" >
 													<apex:param name="allTeams" value="true" />
 												</apex:commandLink>
@@ -245,8 +220,10 @@
 															<span class="requiredLegend"></span>
 														</td>
 														<td colspan="2">&nbsp;
-															<apex:inputText value="{!Wiki.Name}" id="TeamName" styleClass="RQ_String" ></apex:inputText>
+															<apex:inputText value="{!Wiki.Name}" id="TeamName" styleClass="RQ_String" maxlength="80" onkeyup="showWikiNameMaxLen()"></apex:inputText>
+
 															<br />
+															<span id="wikiNameMaxLen" class="errorText" style="display: none;">Max length reached (80)</span>
 															<span id="TeamNameErrorMessage" class="errorText" style="display:none;">
 																<b>Error:</b> You must enter a name for this {!$ObjectType.Wiki__c.label}
 															</span>
@@ -663,24 +640,44 @@
 										</apex:outputpanel>
 									</td>
 									<td> 
-										<apex:outputpanel > <!-- rendered="{!userPermissions.canManage}" --> 
-											<apex:commandLink styleclass="member_detail_description_underline" value="Del"
-												action="{!assignRemoveId}" rerender="overlaysPanel"
-												oncomplete="createOverlay('','removeMemberOverlay','','');relocateOverlay();">
-												<apex:param name="delId" value="{!item.userId}" />
-											</apex:commandLink>
-											<!-- <a href="javascript:;" class="member_detail_description_underline">Delete</a> -->
-										</apex:outputpanel>
-									</td>
-									<td class="member_detail_description">
-									   <a href="https://na1.salesforce.com/{!item.userId}" class="member_detail_description_underline">{!item.name}</a>
-									</td>
-									<td class="member_detail_description"></td>
-									<td class="member_detail_description">{!item.alias}</td>
-									<td class="member_detail_description">{!item.username}</td>
-									<td class="member_detail_description">{!item.profile}</td>
-								</tr>
-							</apex:repeat>
+										<apex:outputpanel > <!-- rendered="{!userPermissions.canManage}" -->
+                                            <!-- <apex:commandLink styleclass="member_detail_description_underline" value="Delete" action="{!assignRemoveId}" rerender="overlaysPanel"
+                                                              oncomplete="createOverlay('','removeMemberOverlay','','');relocateOverlay();">
+                                                <apex:param name="delId" value="{!item.userId}" />
+                                            </apex:commandLink>
+                                            <a href="javascript:;" class="member_detail_description_underline">Delete</a> -->
+                                            {!item.userId}
+                                            <apex:actionFunction name="setMemberRemoveId_{!item.userId}" action="{!assignRemoveId}" rerender="overlaysPanel" oncomplete="rerenderOverlay()">
+								                <apex:param name="delId" value="{!item.userId}" />
+								            </apex:actionFunction>
+                                            <a href="javascript:;" id="memberRemoveLink" class="member_detail_description_underline" onclick="removeMemberOverlay('{!item.userId}')">Delete</a>
+                                        </apex:outputpanel>
+                                    </td>
+                                    <td class="member_detail_description">
+                                       <a href="https://na1.salesforce.com/{!item.userId}" class="member_detail_description_underline">{!item.name}</a>
+                                    </td>
+                                    <td class="member_detail_description"></td>
+                                    <td class="member_detail_description">{!item.alias}</td>
+                                    <td class="member_detail_description">{!item.username}</td>
+                                    <td class="member_detail_description">{!item.profile}</td>
+                                </tr>
+                            </apex:repeat>
+                            <script>
+                            // SCRIPT FOR MEMBER REMOVE LINK
+                            function removeMemberOverlay(memberRemoveId) {
+                                //alert(memberRemoveId);
+                                //alert('setMemberRemoveId_' + memberRemoveId + '()');
+                                eval('setMemberRemoveId_' + memberRemoveId + '()');
+                                showSwirly('swirlyOverlayMemberRemove');
+                                createOverlay('','removeMemberOverlay','','');
+                                relocateOverlay();
+                                /* var theRemoveLink;
+                                if($('memberRemoveLink')) {
+                                    theRemoveLink = $('memberRemoveLink');
+                                    //alert(theRemoveLink.innerHTML);
+                                } */
+                            }
+                            </script>
 						</tbody>
 					</table>
 				</apex:form>

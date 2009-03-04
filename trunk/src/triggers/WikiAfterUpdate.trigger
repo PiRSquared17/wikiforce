@@ -44,7 +44,9 @@ trigger WikiAfterUpdate on Wiki__c (after update) {
 							if (groupMemberList[countGM].UserOrGroupId == go[0].id && groupMemberList[countGM].GroupId == teamGroup.Id) {
 								findGM = true;
 								gm = groupMemberList[countGM];
-								TeamUtil.deleteGroupMember(gm.id); 
+								List<String> gmToDelete = new List<String>();
+								gmToDelete.add(gm.id);
+								TeamUtil.deleteGroupMembers(gmToDelete); 
 							}
 							else {
 								countGM++;	
@@ -82,13 +84,13 @@ trigger WikiAfterUpdate on Wiki__c (after update) {
 						//Delete all GroupMembers
 						Boolean findGM = false;
 						Integer countGM = 0;
-						List<GroupMember> groupMembers = new List<GroupMember>();
+						List<String> gmToDelete = new List<String>();
 						for (GroupMember groupMemberIter : groupMemberList) {
 							if (groupMemberIter.GroupId == teamGroup.Id) {
-								groupMembers.add(groupMemberIter);
+								gmToDelete.add(groupMemberIter.id);
 							}	
 						}
-						delete groupMembers;
+						TeamUtil.deleteGroupMembers(gmToDelete); 
 						
 						//Create Everyone Member
 						GroupMember newGroupMember = new GroupMember();

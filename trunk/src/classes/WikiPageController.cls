@@ -1286,6 +1286,8 @@ public class WikiPageController {
 	* Saves the new wiki page and sets ints newPage status to false.
 	*/ 
 	public void SaveNew () {
+		TeamUtil.hostName = TeamUtil.getHost(ApexPages.currentPage());
+		System.debug( ')))>' + TeamUtil.hostName );
 		newWP.Parent__c = idWikiPage;
 		newWP.Wiki__c = idWikiSite; 
 		newWP.Body__c = '=== Congratulations! === \n You created a new wiki page for your team. Begin by clicking the "Edit" button above to modify this page.';

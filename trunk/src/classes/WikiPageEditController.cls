@@ -1936,7 +1936,7 @@ public without sharing class WikiPageEditController {
 					
 					WikiPage__c wiki = wikiPageLinksMap.get(idWikilink);
 					if (linkContent.trim().replaceAll('(?i)<br>', '') != '') {
-						html =  htmlLinkParts[0] + '[['+ wiki.Wiki__r.name + ':' + wiki.name + ']]' + htmlTail;
+						html =  htmlLinkParts[0] + '[[' + wiki.Wiki__r.Name + ':New test wikipage' + ']]' + htmlTail;
 					}
 					else {
 						html =  htmlLinkParts[0] + htmlTail;
@@ -1948,7 +1948,6 @@ public without sharing class WikiPageEditController {
 						List<String> idParts = new List<String>();
 						idParts = hrefParts[1].split('"',2);
 						idAttach = idParts[0].trim().replaceAll('(?i)&quot[^>]', '');
-						
 						if (linkContent.trim().replaceAll('(?i)<br>', '') != '' && attachmentsMap.get(idAttach) != null) {
 							Attachment attch = attachmentsMap.get(idAttach);
 							html =  htmlLinkParts[0] + '[File:'+ attch.name + ']' + htmlTail;
@@ -2112,6 +2111,7 @@ public without sharing class WikiPageEditController {
 	*@return PageReference
 	*/
 	public PageReference SaveEdit () {
+
 		parseWiki();
 		html = html.replaceAll('&nbsp;',' ');
 		
@@ -2122,6 +2122,7 @@ public without sharing class WikiPageEditController {
 		editWV.Name = editWP.Name;
 		editWV.Body__c = html;
 		editWV.WikiPageId__c = editWP.Id;
+		TeamUtil.hostName = TeamUtil.getHost(ApexPages.currentPage());
 		
 		List<WikiVersions__c> oldCountLst = [select revisionCount__c from WikiVersions__c where WikiPageId__c =: editWP.id order by LastModifiedDate desc limit 1];
 		
@@ -2142,7 +2143,7 @@ public without sharing class WikiPageEditController {
  		List<Id> wikiPagesLinks = new List<Id>();
  		
  		for(WikiLink__c delLinks : wikiLinksDel){
- 			wikiPagesLinks.add(delLinks.ToLink__c);
+ 			//wikiPagesLinks.add(delLinks.ToLink__c);
  		}
  		
  		List<WikiPage__c> wikisToUpdate = [select Id, Name, linkCount__c from WikiPage__c where Id in:wikiPagesLinks];
@@ -2320,7 +2321,8 @@ public without sharing class WikiPageEditController {
 		PageReference pageRef = Page.WikiPage;
 		pageRef.getParameters().put('idWP', editWP.Id);
 		pageRef.setRedirect(true);
-		return pageRef;
+		//return pageRef;
+		return null;
 	} 
 	
 	public PageReference CancelEdit () {
@@ -2518,7 +2520,6 @@ public without sharing class WikiPageEditController {
         public void setLastModifiedDate(Datetime lastModifiedDate) {
             this.lastModifiedDate = lastModifiedDate.format();
         }                
-                                        
 	} 
    	
    	/**
@@ -2539,16 +2540,13 @@ public without sharing class WikiPageEditController {
 	* Generate wiki's info and set 'info' to true
 	*/
    	public void infoGen () {
-   		
    		WikiPage__c wiki;
 		String idInfo = idWikiPage;
-			
     	if (idInfo == '0' || idInfo == null) {
     		wiki = [SELECT Name, ShortDescription__c, CreatedById, CreatedDate, LastModifiedById, LastModifiedDate  From WikiPage__c WHERE Name = 'Home' AND Wiki__c =: idWikiSite  ];	
     	}else {
     		wiki = [SELECT Name, ShortDescription__c, CreatedById, CreatedDate, LastModifiedById, LastModifiedDate From WikiPage__c WHERE id = : idInfo ];
     	}
-			
 		infoWP.setName(wiki.Name);
 		infoWP.setCreatedBy(wiki.CreatedById);
 		infoWP.setCreatedById(wiki.CreatedById);
@@ -2557,7 +2555,6 @@ public without sharing class WikiPageEditController {
 		infoWP.setLastModifiedBy(wiki.LastModifiedById);
 		infoWP.setLastModifiedDate(wiki.LastModifiedDate);
 		infoWP.setShortDescription(wiki.ShortDescription__c); 
-			
 		info = true;
 	}    		
    	

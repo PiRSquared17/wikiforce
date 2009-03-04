@@ -1,9 +1,31 @@
 <apex:page sidebar="false" tabStyle="Wiki__c" controller="WikiMembersRemoveController">
-	
+	<apex:form >
+	   <apex:actionFunction name="rerenderOverlay" rerender="removeMemberOverlay2" oncomplete="hideSwirly('swirlyOverlayMemberRemove');"/>
+	</apex:form>
 	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamsMembersRemove.css')}" />
-
+    <style>
+    .swirlyOverlayMemberRemove {
+       display: block;
+       position: absolute;
+       top: 0;
+       left: 0;
+       padding: 50px;
+       width: 100%;
+       height: 100%;
+       background: white;
+       font-size: 14px;
+       font-weight: bold;
+       filter: alpha(opacity=80);
+       opacity: 0.8;
+       z-index: 99999999999999;
+    }
+    </style>
 	<!-- Content  -->
 	<div id="removeMemberOverlay" style="display:none;" class="overlayForm">	
+    <div class="swirlyOverlayMemberRemove">
+       Loading...
+    </div>
+	<apex:outputpanel id="removeMemberOverlay2">
 		<!-- Overlay Title -->
 		<div class="overlayTitleContent">
 			<div class="overlayTitle">Confirmation</div>
@@ -48,5 +70,6 @@
 				</div>
 			</apex:form>
 		</div>
+	</apex:outputpanel>
 	</div>
 </apex:page>

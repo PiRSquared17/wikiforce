@@ -109,7 +109,6 @@ public class WikiMembersRemoveController {
 	
 	public void massiveRemoveMember()
 	{
-		System.debug( ']]]: ' + removeMemberIds );
 		if( removeMemberIds != '' )
 		{
 			List<String> idsList = new List<String>();
