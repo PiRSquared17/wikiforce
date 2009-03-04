@@ -77,8 +77,4 @@
         <fields>NAME</fields>
         <relatedList>WikiMember__c.Wiki__c</relatedList>
     </relatedLists>
-    <relatedLists>
-        <fields>NAME</fields>
-        <relatedList>WikiSubscription__c.Team__c</relatedList>
-    </relatedLists>
 </Layout>

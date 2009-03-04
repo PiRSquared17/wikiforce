@@ -7,48 +7,11 @@ public class WikiMembersRemoveController {
 	public String idWiki = System.currentPageReference().getParameters().get('id');
 	public String removeMemberId = WikiCreateWikiController.removeMemberId;
 	public WikiMemberController wmc = new WikiMemberController();
- 	public String removeMemberIds = '';
- 	public Boolean error = false;
- 	public Boolean finish = false;
 
-	
- 
 	/**
 	* Constructor
 	*/
-	public WikiMembersRemoveController(){}
-	
-	public Boolean getError()
-	{
-		return this.error;
-	}
-	
-	public Boolean getFinish()
-	{
-		return this.finish;
-	}
-	
-	public void setRemoveMemberIds( String memberListToremove )
-	{
-		removeMemberIds = memberListToremove;
-	}
-
-	public String getRemoveMemberIds()
-	{
-		return removeMemberIds;
-	}
-
-
-
-	public void setRemoveMemberId(String memberId) {
-	   removeMemberId = memberId;
-	}
-	
-	public String getRemoveMemberId() {
-	   return removeMemberId;	
-	}
-	
-
+	public WikiMembersRemoveController() {}
 	
 	/**
 	* @return wikiName
@@ -66,11 +29,9 @@ public class WikiMembersRemoveController {
 	* @return delName
 	*/
 	public String getDelName() {
-		System.debug(removeMemberId);
 		String delName = '';
 		if (WikiCreateWikiController.removeMemberId != null 
 				&& WikiCreateWikiController.removeMemberId != '') {
-			
 			removeMemberId = WikiCreateWikiController.removeMemberId;
 			
 			delName = [select User__r.Name from WikiMember__c 
@@ -96,44 +57,11 @@ public class WikiMembersRemoveController {
 	/**
 	* Delete selected member
 	*/
-	public void removeMember () 
-	{
-		TeamUtil.hostName = TeamUtil.getHost(ApexPages.currentPage());
-		if (!getIsLastMemberAdmin()) 
-		{
+	public void removeMember () {
+		if (!getIsLastMemberAdmin()) {
 			wmc.setUserId(removeMemberId);
 			wmc.setWikiId(idWiki);
 			wmc.unjoinWiki();	
 		}
 	}
-	
-	public void massiveRemoveMember()
-	{
-		if( removeMemberIds != '' )
-		{
-			List<String> idsList = new List<String>();
-			
-			idsList = removeMemberIds.split( ',' );
-			
-			List<WikiMember__c> memberListToDelete = new List<WikiMember__c>();
-			memberListToDelete = [ select Id, Name from WikiMember__c where Id in: idsList ];
-			
-			List<WikiMember__c> adminList = new List<WikiMember__c>();
-			adminList = [ select Id from WikiMember__c where WikiProfile__r.ManageWikis__c = true and Wiki__c =: idWiki and Id not in: memberListToDelete ];
-						
-			if( adminList.size() > 0 )
-			{
-				this.finish = true;
-				delete memberListToDelete;
-			}
-			else
-			{
-				this.error = true;
-				wmc.isLastMemberAdmin();
-			}
-			
-
-		}
-	}
-	
 }

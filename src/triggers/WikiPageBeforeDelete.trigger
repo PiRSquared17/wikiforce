@@ -2,13 +2,6 @@ trigger WikiPageBeforeDelete on WikiPage__c bulk (before delete) {
 	if (!TeamUtil.currentlyExeTrigger) {
 		try {	
 			TeamUtil.currentlyExeTrigger = true;
-
-        	WikiSubscribersEmailServices wEmail = new WikiSubscribersEmailServices();
-            for ( WikiPage__c wp : Trigger.old ) 
-            {
-            	wEmail.sendNewPageMessage( 'updatePage',  wp.Id );  
-            	wEmail.sendModifiedPageMessage( wp.Id, 'update' );
-            }			
 			
 			List<WikiPage__c> wikiObj = [Select 
 											id,
@@ -19,23 +12,17 @@ trigger WikiPageBeforeDelete on WikiPage__c bulk (before delete) {
 											(Select Id From FavoriteWikis__r),
 											(Select Id From Comments__r) 
 										From WikiPage__c w where id in: Trigger.old];
-		 
-			if( !TeamUtil.DeletingWiki )
-			{
-				List<WikiPage__c> wikiChilds = [Select 
-												id,
-												(Select Id From WikiVersions__r), 
-												(Select Id From RecentlyViewed__r), 
-												(Select Id From ToLink__r),
-												(Select Id From FromLink__r), 
-												(Select Id From FavoriteWikis__r),
-												(Select Id From Comments__r) 
-											From WikiPage__c w where Parent__c in: Trigger.old];
-				
-				delete wikiChilds;
-			}
-
-			TeamUtil.currentlyExeTrigger = false;
+			
+			List<WikiPage__c> wikiChilds = [Select 
+											id,
+											(Select Id From WikiVersions__r), 
+											(Select Id From RecentlyViewed__r), 
+											(Select Id From ToLink__r),
+											(Select Id From FromLink__r), 
+											(Select Id From FavoriteWikis__r),
+											(Select Id From Comments__r) 
+										From WikiPage__c w where Parent__c in: Trigger.old];
+			delete wikiChilds;
 			
 			List<WikiVersions__c> wikiVersions = new List<WikiVersions__c>();
 			List<WikiRecentlyViewed__c> wikiRecentlyViewed = new List<WikiRecentlyViewed__c>();

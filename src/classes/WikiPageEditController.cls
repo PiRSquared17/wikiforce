@@ -1936,7 +1936,7 @@ public without sharing class WikiPageEditController {
 					
 					WikiPage__c wiki = wikiPageLinksMap.get(idWikilink);
 					if (linkContent.trim().replaceAll('(?i)<br>', '') != '') {
-						html =  htmlLinkParts[0] + '[[' + wiki.Wiki__r.Name + ':New test wikipage' + ']]' + htmlTail;
+						html =  htmlLinkParts[0] + '[['+ wiki.Wiki__r.name + ':' + wiki.name + ']]' + htmlTail;
 					}
 					else {
 						html =  htmlLinkParts[0] + htmlTail;
@@ -1948,6 +1948,7 @@ public without sharing class WikiPageEditController {
 						List<String> idParts = new List<String>();
 						idParts = hrefParts[1].split('"',2);
 						idAttach = idParts[0].trim().replaceAll('(?i)&quot[^>]', '');
+						
 						if (linkContent.trim().replaceAll('(?i)<br>', '') != '' && attachmentsMap.get(idAttach) != null) {
 							Attachment attch = attachmentsMap.get(idAttach);
 							html =  htmlLinkParts[0] + '[File:'+ attch.name + ']' + htmlTail;
@@ -2025,7 +2026,7 @@ public without sharing class WikiPageEditController {
  				tableContent = htmlTailParts[0];
  				tableContent = tableContent.replaceAll('(?i)<br>','');
  				tableContent = tableContent.replaceAll('(?i)<br/>','');
- 				//tableContent = tableContent.replaceAll('(?i)\r\n','');
+ 				tableContent = tableContent.replaceAll('(?i)\r\n','');
  				
  				//Fix Copy and paste problems 
  				tableContent = tableContent.replaceAll('(?i)\n','');
@@ -2040,9 +2041,9 @@ public without sharing class WikiPageEditController {
  				tableContent = tableContent.replaceAll('(?i)</tbody>[ ]*','');
  				tableContent = tableContent.replaceAll('(?i)</td>[ ]*','\n');
  				tableContent = tableContent.replaceAll('(?i)</th>[ ]*','\n');
- 				tableContent = tableContent.replaceAll('(?i)</tr>[ ]*','\n');
- 				tableContent = tableContent.replaceAll('(?i)[ ]*<tr>','<br>|-\n');
- 				tableContent = tableContent.replaceAll('(?i)[ ]*<td>','<br>|');
+ 				tableContent = tableContent.replaceAll('(?i)</tr>[ ]*','');
+ 				tableContent = tableContent.replaceAll('(?i)[ ]*<tr>','|-\n');
+ 				tableContent = tableContent.replaceAll('(?i)[ ]*<td>','|');
  				tableContent = tableContent.replaceAll('(?i)[ ]*<th>','!');
  				
  				if (tableContent.toLowerCase().indexOf('<caption') != -1) {
@@ -2079,7 +2080,7 @@ public without sharing class WikiPageEditController {
  				while (tableContent.toLowerCase().indexOf('<td') != -1) {
 	 				List<String> tdParts = new List<String>();
 	 				tdParts = tableContent.split('(?i)[ ]*<td',2);
-	 				tdParts[1] = tdParts[1].replaceFirst('>[ ]*','lc2|');	
+	 				tdParts[1] = tdParts[1].replaceFirst('>[ ]*','|');	
 	 				tableContent = tdParts[0] + '<td' + tdParts[1];
 	 					
 	 				tableContent = tableContent.replaceFirst('(?i)[ ]*<td','|');	
@@ -2091,7 +2092,7 @@ public without sharing class WikiPageEditController {
 	 				tableContent = thParts[0] + '<th' + thParts[1];
 	 				tableContent = tableContent.replaceFirst('(?i)[ ]*<th','!');
 	 			}
- 				//tableContent = tableContent.replaceAll('\n','');
+ 				tableContent = tableContent.replaceAll('\n','');
  			}else {
  				htmlTail = htmlParts[1];
  			}
@@ -2111,7 +2112,6 @@ public without sharing class WikiPageEditController {
 	*@return PageReference
 	*/
 	public PageReference SaveEdit () {
-
 		parseWiki();
 		html = html.replaceAll('&nbsp;',' ');
 		
@@ -2122,7 +2122,6 @@ public without sharing class WikiPageEditController {
 		editWV.Name = editWP.Name;
 		editWV.Body__c = html;
 		editWV.WikiPageId__c = editWP.Id;
-		TeamUtil.hostName = TeamUtil.getHost(ApexPages.currentPage());
 		
 		List<WikiVersions__c> oldCountLst = [select revisionCount__c from WikiVersions__c where WikiPageId__c =: editWP.id order by LastModifiedDate desc limit 1];
 		
@@ -2143,7 +2142,7 @@ public without sharing class WikiPageEditController {
  		List<Id> wikiPagesLinks = new List<Id>();
  		
  		for(WikiLink__c delLinks : wikiLinksDel){
- 			//wikiPagesLinks.add(delLinks.ToLink__c);
+ 			wikiPagesLinks.add(delLinks.ToLink__c);
  		}
  		
  		List<WikiPage__c> wikisToUpdate = [select Id, Name, linkCount__c from WikiPage__c where Id in:wikiPagesLinks];
@@ -2321,8 +2320,7 @@ public without sharing class WikiPageEditController {
 		PageReference pageRef = Page.WikiPage;
 		pageRef.getParameters().put('idWP', editWP.Id);
 		pageRef.setRedirect(true);
-		//return pageRef;
-		return null;
+		return pageRef;
 	} 
 	
 	public PageReference CancelEdit () {
@@ -2520,6 +2518,7 @@ public without sharing class WikiPageEditController {
         public void setLastModifiedDate(Datetime lastModifiedDate) {
             this.lastModifiedDate = lastModifiedDate.format();
         }                
+                                        
 	} 
    	
    	/**
@@ -2540,13 +2539,16 @@ public without sharing class WikiPageEditController {
 	* Generate wiki's info and set 'info' to true
 	*/
    	public void infoGen () {
+   		
    		WikiPage__c wiki;
 		String idInfo = idWikiPage;
+			
     	if (idInfo == '0' || idInfo == null) {
     		wiki = [SELECT Name, ShortDescription__c, CreatedById, CreatedDate, LastModifiedById, LastModifiedDate  From WikiPage__c WHERE Name = 'Home' AND Wiki__c =: idWikiSite  ];	
     	}else {
     		wiki = [SELECT Name, ShortDescription__c, CreatedById, CreatedDate, LastModifiedById, LastModifiedDate From WikiPage__c WHERE id = : idInfo ];
     	}
+			
 		infoWP.setName(wiki.Name);
 		infoWP.setCreatedBy(wiki.CreatedById);
 		infoWP.setCreatedById(wiki.CreatedById);
@@ -2555,6 +2557,7 @@ public without sharing class WikiPageEditController {
 		infoWP.setLastModifiedBy(wiki.LastModifiedById);
 		infoWP.setLastModifiedDate(wiki.LastModifiedDate);
 		infoWP.setShortDescription(wiki.ShortDescription__c); 
+			
 		info = true;
 	}    		
    	

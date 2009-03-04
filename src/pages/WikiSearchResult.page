@@ -17,12 +17,7 @@
 	<apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/myTeamsAllTeamsTabs.css')}" />
 	<apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/fonts.css')}" />
 
-    <script>
-    window.onload = function() {
-       TrunkSearchKeyString();
-    }
-    </script>
-    
+	
 	<!-- WikiSearchResult CSS -->
 	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/wikiSearchResult.css')}" />
 	
@@ -80,7 +75,7 @@
 												<!-- Results Pag. Start -->									
 												<div class="searchResultsPagination"> 
 													<div class="data">
-														Results {!firstItem} - {!lastItem} of {!totalItemsNumber}
+														Results {!firstItem} - {!lastItem} of {!totalItemsNumber} 
 														<apex:outputpanel rendered="{!IF(criteria == '', false,true)}">
 															&nbsp;for <span class="seachTerm">'{!criteria}'</span>
 														</apex:outputpanel>

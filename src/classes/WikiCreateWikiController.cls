@@ -1,22 +1,5 @@
 public class WikiCreateWikiController {
   
-    //Get id from team item
-    String param = System.currentPageReference().getParameters().get('id');
-    
-    // max picture size bytes
-    public final Integer MAX_SIZE = 524288;
-    
-    Wiki__c theWiki = new Wiki__c();
-    String wikiPicture = '';
-    
-	//Valid size picture
-	public Boolean validSizePicture = true; 
-	
-	//Valid Type Image (.jpe?g | .gif | .png)
-	public Boolean validTypePicture = true;
-   
-    public Attachment document = new Attachment();  
-   
    /**
     * Constructor
     */
@@ -50,7 +33,7 @@ public class WikiCreateWikiController {
     	}
     	return hasMembers;
     }
-
+    
 	//Flag to determine if is in edition.
     Boolean inEdition = false; 
     
@@ -67,6 +50,25 @@ public class WikiCreateWikiController {
     	}
     	return inEdition;
     }
+
+    
+    //Get id from team item
+    String param = System.currentPageReference().getParameters().get('id');
+    
+    // max picture size bytes
+    public final Integer MAX_SIZE = 524288;
+    
+    Wiki__c theWiki = new Wiki__c();
+    String wikiPicture = '';
+    
+	//Valid size picture
+	public Boolean validSizePicture = true; 
+	
+	//Valid Type Image (.jpe?g | .gif | .png)
+	public Boolean validTypePicture = true;
+   
+   
+    public Attachment document = new Attachment();
 	
 	/**
 	*@param Attachment
@@ -194,34 +196,7 @@ public class WikiCreateWikiController {
         if(theWiki.PictureId__c != null) wikiPicture = '/servlet/servlet.FileDownload?file=' + theWiki.PictureId__c;
     }
     
-    
-    /**
-    *Remove wiki's avatar if exist
-    *@return PageReference
-    */
-	public PageReference removeAvatar()
-	{
-		if(theWiki.PictureId__c != null && getInEdition())
-		{
-			Attachment avatar = new Attachment();
-			Wiki__c wiki = new Wiki__c();
-			
-			avatar = [ SELECT Id             FROM Attachment WHERE Id =: theWiki.PictureId__c  ];
-			wiki   = [ SELECT id, PictureId__c FROM Wiki__c    WHERE Id =: theWiki.Id ];
-			
-			delete avatar;
-			
-			wiki.PictureId__c = null;
-			upsert wiki;
-			this.wikiPicture = '';
-			
-			
-		}
 
-		PageReference pageRef = new PageReference('/apex/WikiCreateWiki?id=' + theWiki.Id );
-		pageRef.setRedirect(true);
-		return pageRef;
-	}
     /**
     * Class teamProfile
     */
@@ -345,13 +320,12 @@ public class WikiCreateWikiController {
   	
   	
   	/********************************
-  	***** WikiMembersList logic 
+  	***** WikiMembersList logic
   	*********************************
   	*/
   	
   	public String idWiki = System.currentPageReference().getParameters().get('id');
 	public static String removeMemberId = System.currentPageReference().getParameters().get('delId');
-	
 	/** public String delName; */
 	
 	/**
@@ -373,12 +347,8 @@ public class WikiCreateWikiController {
 	* Set memberId to remove
 	*@param String memberId
 	*/
-	public void setRemoveMemberId (String memberId){
-		removeMemberId = memberId; 
-	}
-	
-	public String getRemoveMemberId() {
-	   return removeMemberId;	
+	public void setRemoveMemberId (String mamberId){
+		removeMemberId = mamberId; 
 	}
 	
 	/**
@@ -499,6 +469,31 @@ public class WikiCreateWikiController {
 		editMemberId = s;	
 	}
 	
+	/**
+	* Stuff before edit
+	*@void
+	*/
+/**	public void assignEditId () {
+		if (System.currentPageReference().getParameters().get('editId') != null) {
+			editMemberId = 	System.currentPageReference().getParameters().get('editId');
+		}
+		editMember = [select id, User__r.name, WikiRole__c, WikiProfile__c, User__r.companyName, User__r.Title  from WikiMember__c where User__c =: editMemberId and Wiki__c =: idWiki];
+		PeopleProfile__c img = [SELECT Picture__c from PeopleProfile__c WHERE User__c =: editMemberId LIMIT 1];
+		if (img == null) {
+			imgEditMember = '';
+		}else {
+			imgEditMember = img.Picture__c;
+		}
+		
+		Integer countAdmin = [select count() from WikiMember__c where Wiki__c = :idWiki];
+		Boolean isAdmin = [select WikiProfile__r.ManageWikis__c from WikiMember__c where Wiki__c =:idWiki and User__c=:editMemberId].WikiProfile__r.ManageWikis__c;
+		
+		itsLastAdmin = (editMemberId == UserInfo.getUserId()) && isAdmin;
+		
+		editMemberRole = editmember.WikiRole__c;
+		editMemberProfile = editmember.WikiProfile__c;
+	}
+	*/
 	public String editMemberRole;
 	
 	/**
@@ -550,6 +545,22 @@ public class WikiCreateWikiController {
 		return imgEditMember;
 	}
 	
+	
+	/**
+	* Redirect after edit a member
+	*@return PageReference
+	*/
+	/**
+			public PageReference editMemberAction () {	
+				editMember.WikiProfile__c = editMemberProfile;
+				//editMember.WikiRole__c = editMemberRole;
+				update editMember;
+				PageReference pageRef = Page.WikiMembersList;
+				pageRef.getParameters().put('id', idWiki);
+				pageRef.setRedirect(true);
+				return pageRef;
+			}
+	*/
 	/**
 	*@return profiles select option list
 	*/
@@ -971,7 +982,7 @@ public class WikiCreateWikiController {
 		*@param Integer
 		*/
 		public void setContainMembers (Integer cntMembers) {
-			this.containMembers = cntMembers != 0;
+			this.containMembers = cntMembers == 0;
 		}
 		
 		/**
@@ -981,7 +992,6 @@ public class WikiCreateWikiController {
 			return containMembers;
 		}
 	}
-	
 	
 	/**
 	* Return list with letters and if contain Wiki Members

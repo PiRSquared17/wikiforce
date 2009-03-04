@@ -11,6 +11,7 @@ trigger WikiPageAfterInsert on WikiPage__c bulk (after insert) {
 			for(Group g: [select id, name from Group where Name in: wikiSharingGroupNames]) {
 				teamMap.put(g.Name, g.Id);
 			}
+			
 			List<WikiPage__Share> wikis = new List<WikiPage__Share>();
 			for(WikiPage__c w : Trigger.new) {
 				
@@ -23,12 +24,6 @@ trigger WikiPageAfterInsert on WikiPage__c bulk (after insert) {
 			}
 			
 			insert wikis;
-
-        	WikiSubscribersEmailServices wEmail = new WikiSubscribersEmailServices();
-            for ( WikiPage__c wp : Trigger.new) 
-            {
-            	wEmail.sendNewPageMessage( 'newPage', wp.Id );  
-            }			
 	          
 		} finally {
         	TeamUtil.currentlyExeTrigger = false;

@@ -1,4 +1,4 @@
-<apex:page id="WikiCreateWiki" controller="WikiCreateWikiController" tabStyle="Wiki__c" sidebar="false">
+<apex:page id="WikiCreateWiki" controller="WikiCreateWikiController" tabStyle="Wiki__c" sidebar="false" >
 	<!-- Scripts --> 
 	<apex:includeScript value="{!URLFOR($Resource.WikiResource, 'inc/js/common.js')}"/>
 	<apex:includeScript value="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}"/>
@@ -42,13 +42,12 @@
 	<apex:includeScript value="{!URLFOR($Resource.commonResources, 'inc/js/validator.js')}"/>    
 	<apex:includeScript value="/soap/ajax/12.0/connection.js" />
 	<script>
-		var API_SESSION_ID = '{!$Api.Session_ID}';
+		var API_SESSION_ID = '{!$Api.Session_ID}'; 
 	</script>
 	<apex:includeScript value="{!URLFOR($Resource.TeamsResources, 'inc/js/teamsCreateNewTeam.js')}" />
 	<apex:includeScript value="{!URLFOR($Resource.commonResources, 'inc/js/common.js')}" />
 	<apex:includeScript value="{!URLFOR($Resource.TeamsResources, 'inc/js/TeamMemberList.js')}" />
 	<apex:includeScript value="{!URLFOR($Resource.TeamsResources, 'inc/js/TeamsWidgetCommon.js')}" />	
-	
 	
 	<script>
      	/**
@@ -56,21 +55,27 @@
         */
      	var globalTeamId = "{!WikiId}";
      	var globalArrowDown = "{!URLFOR($Resource.commonResources, 'images/arrows/arrow_down.gif')}";
-     	var globalArrowUp = "{!URLFOR($Resource.commonResources, 'images/arrows/arrow_up.gif')}";
-     	var wikiTypeAccess = "{!WikiType}";
-
+     	var globalArrowUp = "{!URLFOR($Resource.commonResources, 'images/arrows/arrow_up.gif')}";;
+     	var wikiTypeAccess = "{!WikiType}"
      	/**
+
 		*Set e2 height with e1 height + 15px
 		*For paginationOverlay to cover membersList
 		*@Param ids for element one and two 
+		
 		*/
+		
 		function setHeight( idElement1, idElement2 ){
+		
 			o1Dims = $( idElement1 ).getDimensions();
+		
 			$( idElement2 ).style.height = (o1Dims.height * 0.98 ).round() + 'px';
 			$( idElement2 ).style.width = (o1Dims.width * 0.98 ).round() + 'px';
+			
+		
 		}
-
      </script>
+
 	<!-- Modal JS -->
 	<script	src="{!URLFOR($Resource.commonResources, 'inc/js/modal.js')}" />
 	
@@ -79,10 +84,10 @@
 	<div id="modal_container" style="display:none;"></div>
 	<script>
 		createOverlay('initializeModalOverlay');
-	</script>
-
+	</script>	
+	
 	<apex:form >
-		<apex:actionFunction name="reloadMemberList" action="{!refresh}" rerender="letterFilterContainer, membersList" oncomplete="$('paginationOverlay').hide();" />
+		<apex:actionFunction name="reloadMemberList" action="{!refresh}" rerender="membersList" oncomplete="$('paginationOverlay').hide();" />
 	</apex:form>
 
 	<!-- TeamsMemebersList CSS 	-->
@@ -92,12 +97,9 @@
 	<!-- TeamsMemebersList JS  -->
 <!--	<apex:includeScript value="{!URLFOR($Resource.TeamsResources, 'inc/js/teamsMembersList.js')}" /> -->
 	<script>
-
 		var inEdition = {!inEdition};
 		var wikiType = "{!Wiki.Type__c}";
-
 	<!-- Scripts to show the new members overlay and the members list -->
-
 		var settingsBackUp = '';
 		var membersBackUp = '';
 		var isAdd = getURLParam('add');
@@ -109,6 +111,7 @@
 			var globalSaveButton = 'Update';
 		}
 
+		
 		document.observe('dom:loaded',startupFunc);
 		
 	</script>
@@ -165,14 +168,11 @@
 												</apex:commandLink>
 											</li>
 											<li id="allTeamTab" >
-												<div id="overTabMembers" style="cursor:auto">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-												<apex:commandLink rendered="{!inEdition}" id="allTeamsLink" action="{!switchTabsController}" value="Members" onclick="switchTabs('allTeamTab');setPaginatorToCenter()"
-																	 rerender="holder" styleClass="{!IF((hasMembers == false || inEdition),'disable','')}" >
+												<div id="overTabMembers" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+												<apex:commandLink id="allTeamsLink" action="{!switchTabsController}" value="Members" onclick="switchTabs('allTeamTab');"
+																	 rerender="holder" styleClass="{!IF((hasMembers == false),'disable','')}" >
 													<apex:param name="allTeams" value="true" />
 												</apex:commandLink>
-												<apex:outputpanel rendered="{!NOT(inEdition)}" styleClass="disable">
-													Members
-												</apex:outputpanel>
 											</li>					
 										</ul>
 									</apex:form>
@@ -220,10 +220,8 @@
 															<span class="requiredLegend"></span>
 														</td>
 														<td colspan="2">&nbsp;
-															<apex:inputText value="{!Wiki.Name}" id="TeamName" styleClass="RQ_String" maxlength="80" onkeyup="showWikiNameMaxLen()"></apex:inputText>
-
+															<apex:inputText value="{!Wiki.Name}" id="TeamName" styleClass="RQ_String" ></apex:inputText>
 															<br />
-															<span id="wikiNameMaxLen" class="errorText" style="display: none;">Max length reached (80)</span>
 															<span id="TeamNameErrorMessage" class="errorText" style="display:none;">
 																<b>Error:</b> You must enter a name for this {!$ObjectType.Wiki__c.label}
 															</span>
@@ -250,7 +248,7 @@
 															<br />
 														</td>
 													</tr>
-													<tr> 
+													<tr>
 														<td height="10px"></td>
 													</tr>
 													<tr>
@@ -271,15 +269,10 @@
 															<span class="inputInfoTitle">{!$ObjectType.Wiki__c.label} Avatar</span>
 														</td>
 														<td></td>
-														<td align="center">&nbsp;
+														<td>&nbsp;
 															<img width="99" src="{!IF(wikiPicture == '', URLFOR($Resource.TeamsResources, '/images/layout/pic_upload.gif'), wikiPicture)}" class="imgBorder" />
 															<br />
-															<span class="explain">
-																current picture 
-																<br>
-																<apex:commandLink styleClass="fontSize10" action="{!removeAvatar}" rendered="{!IF( wiki.PictureId__c != null, true, false)}" value="Remove" />
-																
-															</span>
+															<span class="explain">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;current picture</span>
 														</td>
 														<td valign="top">
 															<table cellpadding="0" cellspacing="0" width="400px">
@@ -311,7 +304,7 @@
 																			<b>Error:</b> The images size must be less than 512 kb
 																		</span>
 																		</apex:outputpanel>
-																	</td>
+																	<td>
 																</tr>
 																<tr>
 																	<td></td>
@@ -460,9 +453,9 @@
 														<apex:commandButton styleClass="SaveBtn" action="{!saveAndRedirect}"  value="{!IF(inEdition == false, 'Create', 'Update')}" id="saveButton"  />
 														<apex:outputpanel rendered="{!NOT inEdition}">
 															<apex:commandButton styleClass="SaveBtn" action="{!saveWikiAndAddMembers}"  value="Create And Add Members" id="saveAndAddMembersButton" />
-														</apex:outputpanel>
+														</apex:Outputpanel>
 														<apex:inputHidden value="{!Wiki.Type__c}" id="openOrClosed" />
-														<apex:commandButton styleClass="CancelBtnWik"  onclick="location.href = '/apex/WikiOverview';return false;" value="Cancel" id="cancelButton"/> 
+														<apex:commandButton styleClass="cancelBtn" onclick="location.href = '/apex/WikiOverview';return false;" value="Cancel" id="cancelButton"/> 
 													</div>
 												</div>
 											</div>
@@ -470,6 +463,7 @@
 									</div>
 								</div>
 							</div>
+						</div>
 						</td>
 					</tr>
 					<!--<tr>
@@ -493,13 +487,13 @@
 				<tr>
 					<td class="teamTitleButton titleTd">Members</td>
 					<td align='center'>
-					<table width="123px;">
+					<table width="270">
 						<tr>
 							<td>
 								<div>
 									<apex:outputpanel rendered="true"> 
-										<a onclick="createOverlay('','inviteTeam','','showSelects()'); relocateOverlay()" href="javascript:;" class="blackbutton">New</a>
-										<a href="javascript:;" class="blackbutton" onclick="massiveRemoveOverlay(); relocateOverlay()">Remove</a>
+										<a onclick="createOverlay('','inviteTeam','240','showSelects()');relocateOverlay()" href="javascript:;" class="blackbutton">New</a>
+										<a href="javascript:;" class="blackbutton" onclick="massiveRemoveOverlay();">Remove</a>
 									</apex:outputpanel>
 								</div>
 							</td>
@@ -511,7 +505,7 @@
 				</tr>
 			</table>
 			<div class="border_body_top"></div>
-			<br />
+			<br>
 			<div style="position: relative; overflow: hidden"><img
 				id="twistImage" style="vertical-align: middle;" class="twistImg"
 				onclick="showHideElement(document.getElementById('filterDiv'),this);"
@@ -521,56 +515,51 @@
 				onclick="showHideElement(document.getElementById('filterDiv'),document.getElementById('twistImage'));"
 				class="filterLink">Filter</a></div>
 			<div class="filter" id="filterDiv">
-				<apex:outputPanel id="letterFilterContainer">
-					<div align="center">
-						<apex:form id="filterForm">
-							<ul class="letterFilter">
-								<li><apex:commandLink action="{!genMembers}" value="ALL"
-									styleclass="AllBtn" rerender="membersList" onclick="$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay')" oncomplete="$('paginationOverlay').hide()">
-									<apex:param name="ltr" value="ALL" />
-								</apex:commandLink></li>
-									<apex:repeat id="letterFilterRepeat" value="{!letterFilter}"
-										var="item">
-										<li><apex:outputpanel rendered="{!(item.containMembers)}">
-											<apex:commandLink styleclass="contains" action="{!genMembers}" 
-												value="{!item.letter}" rerender="membersList" onclick="$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay')" oncomplete="$('paginationOverlay').hide()">
-												<apex:param name="ltr" value="{!item.letter}" />
-											</apex:commandLink>
-										</apex:outputpanel> <apex:outputpanel rendered="{!NOT(item.containMembers)}">
-																			{!item.letter}
-																		</apex:outputpanel></li>
-									</apex:repeat>
-							</ul>
-							<br style="clear: both; font-size: 3px;" />
-						</apex:form>
-					</div>
-				</apex:outputPanel>
+		
+			<div align="center">
+				<apex:form id="filterForm">
+					<ul class="letterFilter">
+						<li><apex:commandLink action="{!genMembers}" value="ALL"
+							styleclass="AllBtn" rerender="membersList" onclick="$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay')" oncomplete="$('paginationOverlay').hide()">
+							<apex:param name="ltr" value="ALL" />
+						</apex:commandLink></li>
+						<apex:repeat id="letterFilterRepeat" value="{!letterFilter}"
+							var="item">
+							<li><apex:outputpanel rendered="{!NOT(item.containMembers)}">
+								<apex:commandLink styleclass="contains" action="{!genMembers}" 
+									value="{!item.letter}" rerender="membersList" onclick="$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay')" oncomplete="$('paginationOverlay').hide()">
+									<apex:param name="ltr" value="{!item.letter}" />
+								</apex:commandLink>
+							</apex:outputpanel> <apex:outputpanel rendered="{!(item.containMembers)}">
+																{!item.letter}
+															</apex:outputpanel></li>
+						</apex:repeat>
+					</ul>
+					<br style="clear: both; font-size: 3px;" />
+				</apex:form>
 			</div>
-			<apex:outputpanel rendered="{!IF(AND(prevPageShow,nextPageShow),false,true)}">
-				<hr class="filterHR" />
-			</apex:outputpanel> 
-			<apex:outputpanel id="membersList">
+		</div>
+		<apex:outputpanel rendered="{!IF(AND(prevPageShow,nextPageShow),false,true)}">
+			<hr class="filterHR">
+			</apex:outputpanel> <apex:outputpanel id="membersList">
 				<apex:outputpanel styleClass="pagination" layout="block"
 					rendered="{!IF(AND(prevPageShow,nextPageShow),false,true)}">
-					<apex:form >
-						<div class="pages">
-							<ul>
-								<li class="prev {!IF(prevPageShow,'prev_disabled','')}"><apex:commandLink onclick="switchOverlay(true)" oncomplete="switchOverlay(false)" action="{!prevPage}" value="Previous Page" rerender="membersList"
-									rendered="{!prevPageLinkShow}" /> <apex:outputText value="Previous Page" rendered="{!prevPageShow}" /></li>
-								<li>({!currentPagination} - {!cntPagination})</li>
-								<li class="next {!IF(nextPageShow,'next_disabled','')}">
-								 <apex:commandLink onclick="switchOverlay(true)" oncomplete="switchOverlay(false)" action="{!nextPage}" value="Next Page" rerender="membersList"
-									rendered="{!nextPageLinkShow}" /> <apex:outputText value="Next Page" rendered="{!nextPageShow}" /></li>
-							</ul>
-						</div>
-					</apex:form>
+					<div class="pages"><apex:form >
+						<ul>
+							<li class="prev {!IF(prevPageShow,'prev_disabled','')}"><apex:commandLink action="{!prevPage}" value="Previous Page" rerender="membersList"
+								rendered="{!prevPageLinkShow}" /> <apex:outputText value="Previous Page" rendered="{!prevPageShow}" /></li>
+							<li>({!currentPagination} - {!cntPagination})</li>
+							<li class="next {!IF(nextPageShow,'next_disabled','')}"><apex:commandLink action="{!nextPage}" value="Next Page" rerender="membersList"
+								rendered="{!nextPageLinkShow}" /> <apex:outputText value="Next Page" rendered="{!nextPageShow}" /></li>
+						</ul>
+					</apex:form></div>
 				</apex:outputpanel>
 				<apex:form id="membersListForm">
 					<table border="0" cellspacing="0" cellpadding="2px" class="pageList">
 						<thead>
 							<tr>
 								<td width="3%"><apex:outputpanel > <!-- rendered="{!userPermissions.canManage}" -->
-									<input class="actionCheckAll" onclick="checkUnCheck(this); setTimeout( 'toDelete()', 100 );"
+									<input class="actionCheckAll" onclick="checkUnCheck(this);"
 										type="checkbox" />
 								</apex:outputpanel></td>
 								<td width="9%"><apex:outputpanel style="font-weight:bold;">Action</apex:outputpanel> <!-- rendered="{!userPermissions.canManage}" --> 
@@ -631,92 +620,81 @@
 						</thead>
 						<!-- Description  -->
 						<tbody>
- 							<apex:repeat var="item" value="{!members}"
+							<apex:repeat var="item" value="{!members}"
 								rows="{!numberOfItemsToShow}" first="{!firstRow}">
 								<tr>
-									<td>
-										<apex:outputpanel >  <!-- rendered="{!userPermissions.canManage}" -->
-											<input value="{!item.wikiMemberId}" class="actionCheck"	type="checkbox" onclick="toDelete()" />
+									<td><apex:outputpanel >  <!-- rendered="{!userPermissions.canManage}" -->
+										<input value="{!item.wikiMemberId}" class="actionCheck"
+											type="checkbox" />
+									</apex:outputpanel></td>
+									<td> 
+										<apex:outputpanel > <!-- rendered="{!userPermissions.canManage}" --> 
+											<apex:commandLink styleclass="member_detail_description_underline" value="Del"
+												action="{!assignRemoveId}" rerender="overlaysPanel"
+												oncomplete="createOverlay('','removeMemberOverlay','155','');">
+												<apex:param name="delId" value="{!item.userId}" />
+											</apex:commandLink>
+											<!-- <a href="javascript:;" class="member_detail_description_underline">Delete</a> -->
 										</apex:outputpanel>
 									</td>
-									<td> 
-										<apex:outputpanel > <!-- rendered="{!userPermissions.canManage}" -->
-                                            <!-- <apex:commandLink styleclass="member_detail_description_underline" value="Delete" action="{!assignRemoveId}" rerender="overlaysPanel"
-                                                              oncomplete="createOverlay('','removeMemberOverlay','','');relocateOverlay();">
-                                                <apex:param name="delId" value="{!item.userId}" />
-                                            </apex:commandLink>
-                                            <a href="javascript:;" class="member_detail_description_underline">Delete</a> -->
-                                            {!item.userId}
-                                            <apex:actionFunction name="setMemberRemoveId_{!item.userId}" action="{!assignRemoveId}" rerender="overlaysPanel" oncomplete="rerenderOverlay()">
-								                <apex:param name="delId" value="{!item.userId}" />
-								            </apex:actionFunction>
-                                            <a href="javascript:;" id="memberRemoveLink" class="member_detail_description_underline" onclick="removeMemberOverlay('{!item.userId}')">Delete</a>
-                                        </apex:outputpanel>
-                                    </td>
-                                    <td class="member_detail_description">
-                                       <a href="https://na1.salesforce.com/{!item.userId}" class="member_detail_description_underline">{!item.name}</a>
-                                    </td>
-                                    <td class="member_detail_description"></td>
-                                    <td class="member_detail_description">{!item.alias}</td>
-                                    <td class="member_detail_description">{!item.username}</td>
-                                    <td class="member_detail_description">{!item.profile}</td>
-                                </tr>
-                            </apex:repeat>
-                            <script>
-                            // SCRIPT FOR MEMBER REMOVE LINK
-                            function removeMemberOverlay(memberRemoveId) {
-                                //alert(memberRemoveId);
-                                //alert('setMemberRemoveId_' + memberRemoveId + '()');
-                                eval('setMemberRemoveId_' + memberRemoveId + '()');
-                                showSwirly('swirlyOverlayMemberRemove');
-                                createOverlay('','removeMemberOverlay','','');
-                                relocateOverlay();
-                                /* var theRemoveLink;
-                                if($('memberRemoveLink')) {
-                                    theRemoveLink = $('memberRemoveLink');
-                                    //alert(theRemoveLink.innerHTML);
-                                } */
-                            }
-                            </script>
+									<td class="member_detail_description"><a href="javascript:;"
+										onclick="location.href='https://na1.salesforce.com/apex/PeopleProfileDisplay?id={!item.userId}'"
+										class="member_detail_description_underline">{!item.name}</a>
+									</td>
+									<td class="member_detail_description"></td>
+									<td class="member_detail_description">{!item.alias}</td>
+									<td class="member_detail_description">{!item.username}</td>
+									<td class="member_detail_description">{!item.profile}</td>
+								</tr>
+							</apex:repeat>
 						</tbody>
 					</table>
 				</apex:form>
-				<hr class="filterHR" />
-				<apex:outputpanel styleClass="pagination" layout="block" rendered="{!IF(AND(prevPageShow,nextPageShow),false,true)}">
-					<apex:form >
-						<div class="pages">
-							<ul>
-								<li class="prev {!IF(prevPageShow,'prev_disabled','')}">
-									<apex:commandLink onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" action="{!prevPage}" value="Previous Page" rerender="membersList" rendered="{!prevPageLinkShow}" /> 
-									<apex:outputText value="Previous Page" rendered="{!prevPageShow}" />
-								</li>
-								<li>
-									({!currentPagination} - {!cntPagination})
-								</li>
-								<li class="next {!IF(nextPageShow,'next_disabled','')}">
-									<apex:commandLink onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" action="{!nextPage}" value="Next Page" rerender="membersList" rendered="{!nextPageLinkShow}" /> 
-									<apex:outputText value="Next Page" rendered="{!nextPageShow}" />
-								</li>
-							</ul>
-						</div>
-					</apex:form>
+				<hr class="filterHR">
+				<apex:outputpanel styleClass="pagination" layout="block"
+					rendered="{!IF(AND(prevPageShow,nextPageShow),false,true)}">
+					<div class="pages"><apex:form >
+						<ul>
+							<li class="prev {!IF(prevPageShow,'prev_disabled','')}"><apex:commandLink action="{!prevPage}" value="Previous Page" rerender="membersList"
+								rendered="{!prevPageLinkShow}" /> <apex:outputText value="Previous Page" rendered="{!prevPageShow}" /></li>
+							<li>({!currentPagination} - {!cntPagination})</li>
+							<li class="next {!IF(nextPageShow,'next_disabled','')}"><apex:commandLink action="{!nextPage}" value="Next Page" rerender="membersList"
+								rendered="{!nextPageLinkShow}" /> <apex:outputText value="Next Page" rendered="{!nextPageShow}" /></li>
+						</ul>
+					</apex:form></div>
 				</apex:outputpanel>
 				<apex:outputpanel rendered="{!IF(AND(prevPageShow,nextPageShow),false,true)}">
-					<hr class="filterHR" />
+					<hr class="filterHR">
 				</apex:outputpanel>
 				<table width="100%">
 					<tr>
 						<td class="teamTitleButton titleTd">
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 						<td align='center'>
-						<table width="123px">
+						<table width="270">
 							<tr>
 								<td>
-								<div><!-- BUTTONS --> 
-									<apex:outputpanel id="thisIs"> <!-- rendered="{!userPermissions.canManage}" -->
-										<a onclick="createOverlay('','inviteTeam','','showSelects()'); relocateOverlay(); setTimeout( 'focusToWikiMW()', 1200 );" href="javascript:;" class="blackbutton">New</a>
-										<a href="javascript:;" class="blackbutton" onclick="massiveRemoveOverlay(); relocateOverlay()">Remove</a>
-									</apex:outputpanel> <!-- BUTTONS --></div>
+								<div><!-- BUTTONS --> <apex:outputpanel id="thisIs"> <!-- rendered="{!userPermissions.canManage}" -->
+									<a
+										onclick="createOverlay('','inviteTeam','240','showSelects()'); relocateOverlay(); setTimeout( 'focusToWikiMW()', 1200 );"
+										href="javascript:;" class="blackbutton">New</a>
+									<a href="javascript:;" class="blackbutton"
+										onclick="massiveRemoveOverlay();">Remove</a>
+									<!--  <div class="editProfile"><a href="javascript:;"
+										class="blackbutton" onclick="showHideOptionsBottom();">Edit
+									{!$ObjectType.Wiki__c.label} Profile | v</a>
+									<div id="profileOptionsBottom" class="profileOptions"
+										style="display: none;">
+									<ul>
+										<apex:repeat value="{!teamEditProfiles}" var="item">
+											<li onclick="massiveMemberUpdate(this);"
+												onmouseover="bckColor(this)" onmouseout="bckColor(this)"
+												id="{!item.Id}">{!item.Name}</li>
+										</apex:repeat>
+									</ul>
+									</div>
+									</div> -->
+								</apex:outputpanel> <!-- BUTTONS --></div>
 								</td>
 							</tr>
 						</table>
@@ -725,7 +703,7 @@
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 					</tr>
 				</table>
-				<br />
+				<br>
 			</apex:outputpanel>
 		</div>
 	</div>
@@ -738,34 +716,12 @@
 	
 	<script>
 		document.observe('dom:loaded',startupFunc);
-		if(inEdition) {
-			document.observe('dom:loaded', setTimeout('hideOverMemberTab()', 1000));
-			setTimeout('showAddMembersSection()', 1000);
-		}
+		document.observe('dom:loaded', hideDiv);
+		setTimeout('showAddMembersSection()', 1000);
 		readPortalCSSRules();
 		countStringLimit($('WikiCreateWiki:createNewTeamForm:TeamDescription'),'stringSizeCounter');
-        window.onload = function() {
-            setAccessTypeChecked();
-        }
-		function toDelete()
-		{
-			var str = '';
-			arr = $$( 'input.actionCheck' );
-			for( var box in arr )
-			{
-				if( arr[ box ].checked )
-				str += arr[ box ].value + ',';
-			}
-			str = str.substring( 0, str.length -1 );
-			
-			$( 'WikiCreateWiki:incWMMROverlay:WMROverlay:newMemberForm:idsToDelete' ).value = str;
-			//alert( 'L:' + arr.length + ':::' + $( 'WikiCreateWiki:incWMMROverlay:WMROverlay:newMemberForm:idsToDelete' ).value );
-		}
-
-		function backUpDivsForFirstTime(){
-			settingsBackUp = $('body_center').innerHTML;
-			membersBackUp = $('membersListDiv').innerHTML;
-			$('membersListDiv').innerHTML = '';
-		}
+		window.onload = function() { setAccessTypeChecked(); }
+		
+		
 	</script>
 </apex:page>
