@@ -3,16 +3,16 @@
 	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamsMembersMassiveDelete.css')}" />
 	
 	<!-- Content  -->
-	<apex:outputPanel id="masiveRemoveContainer" >
-		<apex:outputPanel id="masiveRemove" rendered="{! NOT( error )}">
-			<script>
-				if( '{!finish}' == 'true' )
-				{
-					modal.close();
-					reloadMemberList();
-				} 
-			</script>
-			<div id="massiveRemoveMemberOverlay" style="display:none;" class="overlayForm">	
+	<div id="massiveRemoveMemberOverlay" style="display:none;" class="overlayForm">	
+		<apex:outputPanel id="masiveRemoveContainer" >
+			<apex:outputPanel rendered="{! NOT( error )}">
+				<script>
+					if( '{!finish}' == 'true' )
+					{
+						modal.close();
+						reloadMemberList();
+					} 
+				</script>
 				<!-- Overlay Title -->
 				<div class="overlayTitleContent">
 					<div class="overlayTitle">Confirmation</div>
@@ -39,18 +39,15 @@
 						<div class="overlaySeparateLine" />
 						<!-- Saven and Cancel Buttons -->
 						<div class="overlayFromButtons" align="center">
-							<apex:commandButton styleClass="allButtons actionButtons" action="{!massiveRemoveMember}" id="massiveRemoveAction" onclick="$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay');" value="Continue" oncomplete="rRemoveOverlay()"/>
+							<apex:commandButton styleClass="allButtons actionButtons" action="{!massiveRemoveMember}" id="massiveRemoveAction" onclick="$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay');" value="Continue" rerender="masiveRemoveContainer"/>
 							<input class="allButtons cancelButtons" type="button" value="Cancel" onclick="modal.close();"/>
 						</div>
 						<apex:actionFunction name="rRemoveOverlay" rerender="masiveRemoveContainer" />
 					</apex:form>
 				</div>
-			</div>
-		</apex:outputPanel>
+			</apex:outputPanel>
 	
-	
-		<apex:outputPanel id="masiveRemoveError" rendered="{! error }">
-			<div id="massiveRemoveMemberOverlay" style="display:none;" class="overlayForm">	
+			<apex:outputPanel rendered="{! error }">
 				<!-- Overlay Title -->
 				<div class="overlayTitleContent">
 					<div class="overlayTitle">Confirmation</div>
@@ -74,11 +71,11 @@
 						<div class="overlaySeparateLine" />
 						<!-- Saven and Cancel Buttons -->
 						<div class="overlayFromButtons" align="center">
-							<input class="allButtons cancelButtons" type="button" value="Cancel" onclick="modal.close();"/>
+							<input class="allButtons cancelButtons" type="button" value="Cancel" onclick="modal.close();$('paginationOverlay').hide()"/>
 						</div>
 					</apex:form>
 				</div>
-			</div>
+			</apex:outputPanel>
 		</apex:outputPanel>
-	</apex:outputPanel>
+	</div>
 </apex:page>

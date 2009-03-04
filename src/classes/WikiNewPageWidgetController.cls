@@ -108,6 +108,7 @@ public with sharing class WikiNewPageWidgetController {
 			newWikiPage.Parent__c = idWikiPage;
 		newWikiPage.Wiki__c = idTeam;
 		newWikiPage.Body__c = '=== Congratulations! === \n You created a new wiki page. Begin by clicking the "Edit" button above to modify this page.';
+		TeamUtil.hostName = TeamUtil.getHost(ApexPages.currentPage());
 		insert newWikiPage;
 		
 		if (idWikiPage == null && idTeamOverview == null) {
@@ -125,6 +126,8 @@ public with sharing class WikiNewPageWidgetController {
 	*@return PageReference
 	*/
 	public PageReference saveWikiAndEdit () {
+		TeamUtil.hostName = TeamUtil.getHost(ApexPages.currentPage());
+		
 		if (idWikiPage != null && idWikiPage != '') 
 			newWikiPage.Parent__c = idWikiPage;
 		newWikiPage.Wiki__c = idTeam;
