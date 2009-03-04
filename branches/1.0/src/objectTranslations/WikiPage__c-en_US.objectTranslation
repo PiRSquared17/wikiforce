@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <value>Wiki Page</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Wiki Pages</value>
+    </caseValues>
+    <fields>
+        <label><!-- Body --></label>
+        <name>Body__c</name>
+    </fields>
+    <fields>
+        <label><!-- LinkCount --></label>
+        <name>LinkCount__c</name>
+    </fields>
+    <fields>
+        <label><!-- PageCreatedBy --></label>
+        <name>PageCreatedBy__c</name>
+        <relationshipLabel><!-- Wiki Pages --></relationshipLabel>
+    </fields>
+    <fields>
+        <label><!-- PageCreatedDate --></label>
+        <name>PageCreatedDate__c</name>
+    </fields>
+    <fields>
+        <label><!-- Parent --></label>
+        <name>Parent__c</name>
+        <relationshipLabel><!-- Wiki Pages --></relationshipLabel>
+    </fields>
+    <fields>
+        <label><!-- Short Description --></label>
+        <name>ShortDescription__c</name>
+    </fields>
+    <fields>
+        <label><!-- Wiki --></label>
+        <name>Wiki__c</name>
+        <relationshipLabel><!-- Wiki Pages --></relationshipLabel>
+    </fields>
+    <fields>
+        <label><!-- isWikiSyntax --></label>
+        <name>isWikiSintax__c</name>
+    </fields>
+    <startsWith>Consonant</startsWith>
+</CustomObjectTranslation>

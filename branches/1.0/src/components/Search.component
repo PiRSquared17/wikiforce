@@ -1,0 +1,33 @@
+<apex:component controller="SearchController">
+	<apex:includeScript value="{!URLFOR($Resource.commonResources, 'inc/js/search.js')}" />
+	<script>
+		var globalDefaultText = "{!DefaultText}";
+	</script>
+	<apex:attribute name="module" description="Type of search" type="String" required="true" assignTo="{!module}" />	
+	<apex:attribute name="teamId" description="Id for team detail search" type="String" required="false" assignTo="{!teamId}" />
+	<div class="searchBox">
+		<div>
+			<div>
+				<div class="center_gray">
+					<apex:form onsubmit="if(!validateSearchLenght()) return false;">
+						<div class="search_box_input f_left">
+							<div class="legend_portal">
+								<span><img class="f_left" alt="" src="{!URLFOR($Resource.TeamsResources, 'images/layout/magnifier.gif')}" />Find&nbsp;{!label}</span>
+							</div>
+							<apex:inputText value="{!key}" styleClass="key_imput" onfocus="changeInputValue('focus');" onblur="changeInputValue('blur');"/>
+							<apex:inputText style="display: none;"/>
+						</div>
+						<apex:commandButton value="Search" action="{!searchKey}" id="searchBtn" styleClass="search_btn f_left" style="background-image: none !important;" />
+						<script>
+							var btnSearch = '{!$Component.searchBtn}';
+						</script>
+					</apex:form>
+					<script>
+						var keyImput = $$('.key_imput')[0];
+						keyImput.value = "{!$CurrentPage.parameters.key}";
+					</script>
+				</div>
+			</div>
+		</div>
+	</div> 
+</apex:component>

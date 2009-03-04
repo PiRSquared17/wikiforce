@@ -1,0 +1,12 @@
+#Wed Mar 04 11:53:12 UYST 2009
+eclipse.preferences.version=1
+endpointApiVersion=14.0
+endpointEnvironment=Production/Developer Edition
+endpointServer=www.salesforce.com
+httpsProtocol=true
+keependpoint=false
+metadataFormatVersion=14.0
+namespacePrefix=wf
+packageName=unpackaged
+readTimeout=400
+username=ngunther@wikiforce.package

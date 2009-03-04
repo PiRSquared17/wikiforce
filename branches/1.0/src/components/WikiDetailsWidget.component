@@ -1,0 +1,149 @@
+<apex:component controller="WikiDetailsWidgetController" allowDml="true">
+	<!-- Attribute Definitions -->
+	<apex:attribute name="teamId" description="The wiki ID" type="String" required="true" assignTo="{!Wiki}" />
+	
+	<script src="/soap/ajax/11.1/connection.js" type="text/javascript"></script>
+	
+	<apex:includeScript value="{!URLFOR($Resource.commonResources, 'inc/js/teamDetailsWidget.js')}" />
+	
+	<apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/teamDetailsWidget.css')}" />
+
+	 
+	<script>
+	
+		var API_SESSION_ID = '{!$Api.Session_ID}';
+		var rootResource = "{!URLFOR($Resource.TeamsResources)}";	
+		var namespace = "{!namespace}";
+		var teamIDActive = '{!Teamspace.Id}';
+		var globalUserId = '{!$User.Id}';
+		var globalUserNotPicture = "{!URLFOR($Resource.TeamsResources, 'images/layout/icons/user_not_picture.gif')}";
+		var globalUnknownTeam = "{!URLFOR($Resource.commonResources, 'images/placeholders/unknowteam_big.gif')}";
+		var globaluserPersmissions = "{!userPermissions.canManage}";
+		var globalTeamLabel = "{!$ObjectType.Wiki__c.label}";
+	
+		leaveConfirm(teamIDActive,globalUserId);
+	</script>
+
+
+	<!-- Hover bubble Team-->
+	<div id="teamBubble" class="bubble" >			
+		<div class="top_border">&nbsp;</div>		
+		<div class="content">
+			<img class="arrowBubble" src="{!URLFOR($Resource.TeamsResources, '/images/layout/bubbles/arrow.gif')}" />				
+			<!-- Content here -->
+			<div class="innerContBubble" onmouseover="clearTimeout(hideBubbleTimeout);" onmouseout="setTimeoutToHide();" >
+				<div class="teamBubbleOverlay" id="teamBubbleOverlay" >
+					<div class="swirl blue" >
+						<img src="{!URLFOR($Resource.TeamsResources, '/images/layout/small_loader.gif')}" /> Loading.....
+					</div>
+				</div>
+				<div id="teamBubbleContent" class="teamBubbleContent" >
+				</div>
+			</div><!-- End Content here -->					
+		</div>
+		<div class="bottom_border">&nbsp;</div>
+	</div>
+	<!-- END Hover Bubble Team -->
+	<!-- Team Details Widget -->
+	<div class="teamWidget mySmallWidget" >
+		<!-- Widget Title -->		
+		<div class="thinHeader">
+			<div><div><h4><script>trunkText("{!Teamspace.Name}", 26)</script></h4></div></div>
+		</div>
+		<!-- Widget Container -->   		
+		<div class="box_content">
+			<div class="swirlyJoinTeam" style="display:none;"></div>
+			<div class="thinBody">
+				<!-- Additional info fetched to not overload the ajax requests -->
+				<div id="adminstatus" style="display:none;">{!IsTeamAdmin}</div>
+				<div id="teamMembercount" style="display:none;">{!TeamCount}</div>
+				<div id="teamMemberId" style="display:none;">{!TeamMemberId}</div>
+				<div id="teamAdmins" style="display:none;"><apex:outputText value="{!TeamAdmins}" escape="false" /></div>
+				<apex:outputPanel styleClass="editLinkSidebar" layout="block" id="teamAction">
+					<apex:outputPanel rendered="{!NOT(teamIsOpen)}">
+						<a href="Javascript:;" onclick="leaveTeamDialog();">Leave {!$ObjectType.Wiki__c.label}</a>
+					</apex:outputPanel>
+					<apex:outputPanel rendered="{!userPermissions.canManage}">
+						| <a href="TeamsCreateNewTeam?parent={!Teamspace.Id}">Create Sub {!$ObjectType.Wiki__c.labelPlural}</a> | 
+						<a href="TeamsCreateNewTeam?id={!Teamspace.Id}">Edit</a>
+					</apex:outputPanel>				
+				</apex:outputPanel>
+				<!-- ### fix for the double-margin bug using float divs in IE6 ### -->
+				<div style="float: left;">
+					<div class="imageHolder" style="float: none;">
+	  					<apex:image width="48" height="48" url="{!IF(TeamspaceImage != '', TeamspaceImage, URLFOR($Resource.commonResources, 'images/placeholders/unknowteam_big.gif'))}" />
+					</div>
+				</div>
+				<apex:outputPanel layout="block" styleClass="description f_right"  rendered="{!IF(LEN(Teamspace.Description__c) == 0, false, true)}">
+					<script>trunkText("{!Teamspace.Description__c}", 52)</script><br /> 
+					<apex:outputPanel layout="block" onmouseover="showBubble('team',this,'{!Teamspace.Id}');"> 
+						(<a href="javascript:;" >More</a>) 
+					</apex:outputPanel>		  
+				</apex:outputPanel> 
+			</div>				
+		</div>
+		<!-- Widget Holder Foot -->
+		<div class="bottom_borders">
+			<div><div></div></div>
+		</div>
+	</div>
+	<div class="clear"></div>
+	<!-- Leave team dialog -->
+	<div id="leaveTeamDialog" style="display:none;" class="overlayForm">
+		<!-- Overlay Title -->
+		<div class="overlayTitleContent">
+			<div class="overlayTitle">Leave {!$ObjectType.Wiki__c.label} ?</div>
+			<div class="overlayCloseEvent">
+				<a href="Javascript:;" onclick="modal.close();">
+					<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/genericClose.gif')}" alt="Close Window" title="Close Window" />
+				</a>
+			</div>
+		</div>
+	  	<div class="modalContent overlayMainContent">
+	  		<!-- Some modal Contents  -->
+	  		<!-- Leave the team -->
+	  		<div id="leaveModal">
+		   		<div class="overlayFormContent modalMessage" style="padding:50px;padding-top:20px;text-align:center;" >
+		    		Are you sure you want to leave <script type="text/javascript">trunkText('{!Teamspace.Name}',35);</script>? 
+		   		</div>
+				<div class="overlaySeparateLine"></div>
+				<!-- Saven and Cancel Buttons -->
+				<div class="overlayFromButtons" align="center">
+		    		<div id="removeButtonContainer">
+		    			<apex:form >
+		    				<apex:actionFunction name="refreshLeaveButton" action="{!refreshLeaveEvent}" rerender="teamAction" />
+		    				<apex:commandButton action="{!leaveTeam}" styleClass="overlaySaveBtn" id="leave" onclick="updateAction('{!$Component.leave}');" value="Leave" oncomplete="rerenderMemberList();refreshJoinButton();hideMessageToUser();modal.close();" rerender="teamAction" />
+		    				<input type="button" class="overlayCancelBtn" onclick="modal.close();" value="Cancel" />
+		    			</apex:form>
+		    		</div>
+		   		</div>
+		   	</div>
+		   	<!-- Cannot Leave  -->
+	  		<div id="leaveConfirm" style="display:none;">
+		   		<div class="overlayFormContent modalMessage" style="padding-top:50px;text-align:center;">
+		    		You cannot leave this {!$ObjectType.Wiki__c.label} because you are the only {!$ObjectType.Wiki__c.label} Administrator.<br>
+		    		Please promote another member to Team Administrator profile from the <a href="TeamsMembersList?id={!Teamspace.Id}" class="linkOverlay">{!$ObjectType.Wiki__c.label} Members Page</a>. Or, you can <a href="javascript:;" onclick="deleteTeamDialog();" class="linkOverlay">delete this {!$ObjectType.Wiki__c.label}</a>
+		   		</div>
+				<div class="overlaySeparateLine"></div>
+				<!-- Saven and Cancel Buttons -->
+				<div class="overlayFromButtons" align="center">
+		    		<input type="button" class="overlayCancelBtn" onclick="modal.close();" value="Cancel" />
+		   		</div> 
+		   	</div>
+		   	<!-- Delete Team  -->
+	  		<div id="deleteConfirm" style="display:none;">
+		   		<div class="overlayFormContent modalMessage" style="padding-top:50px;text-align:center;">
+		    		Are you sure you want to delete {!Teamspace.Name}? There are {!TeamCount} members in this team. Once a team is deleted, there is no way to undo this action.
+		   		</div>
+				<div class="overlaySeparateLine"></div>
+				<!-- Saven and Cancel Buttons -->
+				<div class="overlayFromButtons" align="center">
+		    		<div id="removeButtonContainer">
+		    			<a onclick="deleteTeam('{!Teamspace.Id}');" class="button" href="javascript:;">Delete</a>
+		    		</div>
+		    		<input type="button" class="overlayCancelBtn" onclick="modal.close();" value="Cancel" />
+		   		</div>
+		   	</div>
+	  	</div>
+	</div>
+</apex:component>
