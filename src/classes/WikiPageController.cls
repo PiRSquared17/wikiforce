@@ -28,13 +28,10 @@ public class WikiPageController {
 	* Costructor
 	*/
 	public WikiPageController () {
-		
 		contructMethods();
-		
 		// Evaluatin "can manage" and "owner"
 		currentUsIsOwner = infoWP.getCreatedById() == UserInfo.getUserId() ;
 		currentUsCanManage = userPermissions.getCanManage();
-		
 	}
 	
 	/**
@@ -1774,7 +1771,7 @@ public class WikiPageController {
 		{
 	   		String idAttach = System.currentPageReference().getParameters().get('idAttach');
 	   		Attachment delAttach;
-	   		delAttach = [select Id, Name from Attachment where id =:idAttach ];
+	   		delAttach = [select Id, Name from Attachment where id =: idAttach ];
 	   		delete delAttach; 
 		}
 		else

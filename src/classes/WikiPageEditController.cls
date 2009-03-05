@@ -1936,7 +1936,7 @@ public without sharing class WikiPageEditController {
 					
 					WikiPage__c wiki = wikiPageLinksMap.get(idWikilink);
 					if (linkContent.trim().replaceAll('(?i)<br>', '') != '') {
-						html =  htmlLinkParts[0] + '[[' + wiki.Wiki__r.Name + ':New test wikipage' + ']]' + htmlTail;
+						html =  htmlLinkParts[0] + '[[' + wiki.Wiki__r.Name + ':' + wiki.Name + ']]' + htmlTail;
 					}
 					else {
 						html =  htmlLinkParts[0] + htmlTail;
@@ -2118,11 +2118,12 @@ public without sharing class WikiPageEditController {
 		html = html.replaceAll('(?i)<br>','\n');
 		html = html.replaceAll('<[^>]*>', '');
 		
+		System.debug ( 'AKA:' );
+		
 		editWV = new WikiVersions__c();
 		editWV.Name = editWP.Name;
 		editWV.Body__c = html;
 		editWV.WikiPageId__c = editWP.Id;
-		TeamUtil.hostName = TeamUtil.getHost(ApexPages.currentPage());
 		
 		List<WikiVersions__c> oldCountLst = [select revisionCount__c from WikiVersions__c where WikiPageId__c =: editWP.id order by LastModifiedDate desc limit 1];
 		
@@ -2153,11 +2154,15 @@ public without sharing class WikiPageEditController {
  		}
  		
  		List<WikiPage__c> wikiUpdated = new List<WikiPage__c>();
- 		for (WikiLink__c delLink: wikiLinksDel){
- 			// UPDATE WIKI LINK COUNT
- 			WikiPage__c wikiUpdate1 = wikiMap.get(delLink.ToLink__c);
-			wikiUpdate1.linkCount__c = wikiUpdate1.linkCount__c - 1;
-			wikiMap.put(delLink.ToLink__c, wikiUpdate1);
+ 		if( wikiLinksDel.size() > 0 && wikiMap.size() > 0 ) 
+ 		{
+	 		for (WikiLink__c delLink: wikiLinksDel)
+	 		{
+	 			// UPDATE WIKI LINK COUNT
+	 			WikiPage__c wikiUpdate1 = wikiMap.get(delLink.ToLink__c);
+				wikiUpdate1.linkCount__c = wikiUpdate1.linkCount__c - 1;
+				wikiMap.put(delLink.ToLink__c, wikiUpdate1);
+	 		}
  		}
  		
  		delete wikiLinksDel;
@@ -2300,7 +2305,9 @@ public without sharing class WikiPageEditController {
 						}else {
 							tmpLnkCntWP = wiki;
 						}
-						tmpLnkCntWP.linkCount__c = tmpLnkCntWP.linkCount__c + 1;
+						
+						tmpLnkCntWP.linkCount__c += 1;
+						System.debug( '|||:' + tmpLnkCntWP.linkCount__c );
 						wikiMap.put(tmpLnkCntWP.id, tmpLnkCntWP);
 						//System.debug('\n\n////////////////////////////////////////\n CURRENT SOQL: ' + Limits.getQueries() + '\n/////////////////////////////\n\n');
 			 		}
@@ -2321,8 +2328,8 @@ public without sharing class WikiPageEditController {
 		PageReference pageRef = Page.WikiPage;
 		pageRef.getParameters().put('idWP', editWP.Id);
 		pageRef.setRedirect(true);
-		//return pageRef;
-		return null;
+		TeamUtil.hostName = TeamUtil.getHost(ApexPages.currentPage());
+		return pageRef;
 	} 
 	
 	public PageReference CancelEdit () {
