@@ -90,10 +90,12 @@
 	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamsMembersList.css')}" />
 
 	<!-- TeamsMemebersList JS  -->
-<!--	<apex:includeScript value="{!URLFOR($Resource.TeamsResources, 'inc/js/teamsMembersList.js')}" /> -->
+    <apex:includeScript value="{!URLFOR($Resource.TeamsResources, 'inc/js/teamsMembersList.js')}" />
 	<script>
-
-		var inEdition = {!inEdition};
+	    var inEdition = false;
+        if({!inEdition}){
+            var inEdition = {!inEdition};
+        }		
 		var wikiType = "{!Wiki.Type__c}";
 
 	<!-- Scripts to show the new members overlay and the members list -->
@@ -170,6 +172,7 @@
 																	 rerender="holder" styleClass="{!IF((hasMembers == false || inEdition),'disable','')}" >
 													<apex:param name="allTeams" value="true" />
 												</apex:commandLink>
+												
 												<apex:outputpanel rendered="{!NOT(inEdition)}" styleClass="disable">
 													Members
 												</apex:outputpanel>
@@ -641,16 +644,13 @@
 									</td>
 									<td> 
 										<apex:outputpanel > <!-- rendered="{!userPermissions.canManage}" -->
-                                            <!-- <apex:commandLink styleclass="member_detail_description_underline" value="Delete" action="{!assignRemoveId}" rerender="overlaysPanel"
-                                                              oncomplete="createOverlay('','removeMemberOverlay','','');relocateOverlay();">
+                                            <apex:commandLink styleclass="member_detail_description_underline" value="Delete" action="{!assignRemoveId}"
+                                                              onclick="createOverlay('','removeMemberOverlay','','');relocateOverlay();" oncomplete="rerenderOverlay();">
                                                 <apex:param name="delId" value="{!item.userId}" />
                                             </apex:commandLink>
-                                            <a href="javascript:;" class="member_detail_description_underline">Delete</a> -->
-                                            {!item.userId}
-                                            <apex:actionFunction name="setMemberRemoveId_{!item.userId}" action="{!assignRemoveId}" rerender="overlaysPanel" oncomplete="rerenderOverlay()">
+                                            <!-- <apex:actionFunction name="setMemberRemoveId_{!item.userId}" action="{!assignRemoveId}" rerender="overlaysPanel" oncomplete="rerenderOverlay()">
 								                <apex:param name="delId" value="{!item.userId}" />
-								            </apex:actionFunction>
-                                            <a href="javascript:;" id="memberRemoveLink" class="member_detail_description_underline" onclick="removeMemberOverlay('{!item.userId}')">Delete</a>
+								            </apex:actionFunction>-->
                                         </apex:outputpanel>
                                     </td>
                                     <td class="member_detail_description">
@@ -662,22 +662,6 @@
                                     <td class="member_detail_description">{!item.profile}</td>
                                 </tr>
                             </apex:repeat>
-                            <script>
-                            // SCRIPT FOR MEMBER REMOVE LINK
-                            function removeMemberOverlay(memberRemoveId) {
-                                //alert(memberRemoveId);
-                                //alert('setMemberRemoveId_' + memberRemoveId + '()');
-                                eval('setMemberRemoveId_' + memberRemoveId + '()');
-                                showSwirly('swirlyOverlayMemberRemove');
-                                createOverlay('','removeMemberOverlay','','');
-                                relocateOverlay();
-                                /* var theRemoveLink;
-                                if($('memberRemoveLink')) {
-                                    theRemoveLink = $('memberRemoveLink');
-                                    //alert(theRemoveLink.innerHTML);
-                                } */
-                            }
-                            </script>
 						</tbody>
 					</table>
 				</apex:form>

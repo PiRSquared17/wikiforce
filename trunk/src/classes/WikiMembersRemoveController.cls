@@ -66,13 +66,11 @@ public class WikiMembersRemoveController {
 	* @return delName
 	*/
 	public String getDelName() {
-		System.debug(removeMemberId);
+		System.debug('\n\nThe LAST TIME removeMemberId ==> ' + removeMemberId + '\n\n');
 		String delName = '';
-		if (WikiCreateWikiController.removeMemberId != null 
-				&& WikiCreateWikiController.removeMemberId != '') {
-			
-			removeMemberId = WikiCreateWikiController.removeMemberId;
-			
+		//if (WikiCreateWikiController.removeMemberId != null && WikiCreateWikiController.removeMemberId != '') {
+			//removeMemberId = WikiCreateWikiController.removeMemberId;
+        if (removeMemberId != null && removeMemberId != '') {
 			delName = [select User__r.Name from WikiMember__c 
 						where User__c =: removeMemberId and Wiki__c =: idWiki].User__r.Name;
 		}
@@ -83,15 +81,18 @@ public class WikiMembersRemoveController {
 	* return if the member to remove is the last admin
 	*/
 	public Boolean getIsLastMemberAdmin() {
+		System.debug('LALALAALALALLALA:' + WikiCreateWikiController.removeMemberId);
 		if (WikiCreateWikiController.removeMemberId != null 
 				&& WikiCreateWikiController.removeMemberId != '') {
 			removeMemberId = WikiCreateWikiController.removeMemberId;
 		}
 		wmc.setUserId(removeMemberId);
 		wmc.setWikiId(idWiki);
+		System.debug('LALALAALALALLALA2:' + wmc.isLastMemberAdmin());
 		return wmc.isLastMemberAdmin();	 
 	}
 	
+	public void doRefresh (){}
 
 	/**
 	* Delete selected member
