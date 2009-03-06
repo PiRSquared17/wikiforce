@@ -80,7 +80,7 @@ public class WikiSearchResultController {
 		if (criteria == null || criteria == '')               
 			results= [select Name, Id from WikiPage__c where Wiki__r.Type__c != 'private' OR Wiki__c in:myWikis ORDER By Name]; 
 		else
-			results = (List<WikiPage__c>)[FIND :(criteria + '*') IN ALL FIELDS RETURNING WikiPage__c (Id, Name  where Wiki__r.Type__c != 'private' OR Wiki__c in:myWikis ORDER By Name )][0];	
+			results = (List<WikiPage__c>)[FIND :(criteria + '*') IN ALL FIELDS RETURNING WikiPage__c (Id, Name  where Wiki__r.Type__c != 'private' OR Wiki__c in:myWikis ORDER By Name)][0];	
 		
 		for(WikiPage__c l: results){
 			sr searchResult = new sr();

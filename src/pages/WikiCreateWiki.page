@@ -578,8 +578,8 @@
 								</apex:outputpanel></td>
 								<td width="9%"><apex:outputpanel style="font-weight:bold;">Action</apex:outputpanel> <!-- rendered="{!userPermissions.canManage}" --> 
 								</td>
-								<td width="29%" colspan="2"><apex:commandLink styleclass="member_title_description" action="{!sortList}"
-									value="Full Name" rerender="membersList">
+								<td width="29%" colspan="2"><apex:commandLink styleclass="member_title_description" onclick="$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay');" oncomplete="$('paginationOverlay').hide();" action="{!sortList}"
+									value="Full Name"   rerender="membersList">
 									<apex:param name="sb" value="User__r.Name" />
 								</apex:commandLink>&nbsp; <apex:outputpanel rendered="{!IF(sortBy == 'name',true,false)}">
 									<apex:outputpanel rendered="{!sortByDesc}">
@@ -592,7 +592,7 @@
 									</apex:outputpanel>
 								</apex:outputpanel></td>
 								<td width="16%"><apex:commandLink styleclass="member_title_description" action="{!sortList}"
-									value="Alias" rerender="membersList">
+									value="Alias" onclick="$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay');" oncomplete="$('paginationOverlay').hide();"  rerender="membersList">
 									<apex:param name="sb" value="User__r.Alias" />
 								</apex:commandLink>&nbsp; <apex:outputpanel rendered="{!IF(sortBy == 'alias',true,false)}">
 									<apex:outputpanel rendered="{!sortByDesc}">
@@ -605,7 +605,7 @@
 									</apex:outputpanel>
 								</apex:outputpanel></td>
 								<td width="15%"><apex:commandLink styleclass="member_title_description" action="{!sortList}"
-									value="Username" rerender="membersList">
+									value="Username" onclick="$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay');" oncomplete="$('paginationOverlay').hide();"  rerender="membersList">
 									<apex:param name="sb" value="User__r.Username" />
 								</apex:commandLink>&nbsp; <apex:outputpanel rendered="{!IF(sortBy == 'username',true,false)}">
 									<apex:outputpanel rendered="{!sortByDesc}">
@@ -618,7 +618,7 @@
 									</apex:outputpanel>
 								</apex:outputpanel></td>
 								<td width="16%">
-									<apex:commandLink styleclass="member_title_description" action="{!sortList}" value="{!$ObjectType.Wiki__c.label} Profile" rerender="membersList">
+									<apex:commandLink styleclass="member_title_description" action="{!sortList}" value="{!$ObjectType.Wiki__c.label} Profile" onclick="$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay');" oncomplete="$('paginationOverlay').hide();"  rerender="membersList">
 										<apex:param name="sb" value="WikiProfile__r.Name" />
 									</apex:commandLink>&nbsp; 
 									<apex:outputpanel rendered="{!IF(sortBy == 'profile',true,false)}">
