@@ -50,7 +50,7 @@
 		<!-- - - - - - - - - - - - - - - - - - - - - -->		
 		<apex:outputpanel id="breadCrumbringPanel">
 			<div  class="breadCrumbring">
-				<apex:outputLabel escape="false" value="{!wikiSiteName} {!breadCrumbing}" /><apex:outputLabel styleclass="breadName" value="{!infoWiki.Name}"/><br>
+				<apex:outputLabel escape="false" value="{!wikiSiteName} {!breadCrumbing} JAJA" /><apex:outputLabel styleclass="breadName" value="{!infoWiki.Name}"/><br>
 			</div>
 		</apex:outputpanel>
 		<div class="MainPage">
