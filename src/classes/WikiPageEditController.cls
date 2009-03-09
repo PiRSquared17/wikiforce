@@ -2118,7 +2118,7 @@ public without sharing class WikiPageEditController {
 		html = html.replaceAll('(?i)<br>','\n');
 		html = html.replaceAll('<[^>]*>', '');
 		
-		System.debug ( 'AKA:' );
+		TeamUtil.hostName = TeamUtil.getHost(ApexPages.currentPage());
 		
 		editWV = new WikiVersions__c();
 		editWV.Name = editWP.Name;
@@ -2328,7 +2328,6 @@ public without sharing class WikiPageEditController {
 		PageReference pageRef = Page.WikiPage;
 		pageRef.getParameters().put('idWP', editWP.Id);
 		pageRef.setRedirect(true);
-		TeamUtil.hostName = TeamUtil.getHost(ApexPages.currentPage());
 		return pageRef;
 	} 
 	

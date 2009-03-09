@@ -71,7 +71,7 @@
 			
 			<!-- Overlay Title -->
 			<div class="overlayTitleContent">
-				<div class="overlayTitle">Add new member to {!WikiName}</div>
+				<div class="overlayTitle" title="{!WikiCompleteName}">Add new member to {!WikiName}</div>
 					<div class="overlayCloseEvent"><a href="Javascript:;"
 						onclick="modal.close();"> <img
 						src="{!URLFOR($Resource.TeamsResources, 'images/layout/genericClose.gif')}"

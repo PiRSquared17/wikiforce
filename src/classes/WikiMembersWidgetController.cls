@@ -6,6 +6,7 @@ public with sharing class WikiMembersWidgetController {
 	// Get Wiki Id Attribute
 	String Wiki;
 	Boolean emailNotifications;
+	public String WikiCompleteName;
 	
 	/**
 	* Constructor
@@ -216,9 +217,26 @@ public with sharing class WikiMembersWidgetController {
 	*/
 	public String getWikiName () {
 		if(WikiName == null && idWiki != null)
+		{	
 			WikiName = [select Name from Wiki__c where Id =: idWiki].Name;
+			WikiCompleteName = WikiName;
+			WikiName = ( WikiName.length() > 45 ) ? WikiName.substring( 0, 44 ) + ' ...' : WikiName;
+		}
 		return WikiName;	
 	}
+	
+	/**
+	* Get Wiki Complete Name
+	*@return String Wiki name
+	*/
+	public String getWikiCompleteName () {
+		if(WikiCompleteName == null && idWiki != null)
+		this.getWikiName();
+		
+		return WikiCompleteName;	
+	}
+	
+	
 	
 	/**
 	*@return String

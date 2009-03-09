@@ -1,4 +1,49 @@
 <apex:page id="WikiCreateWiki" controller="WikiCreateWikiController" tabStyle="Wiki__c" sidebar="false">
+    <script>
+        inEdition = false;
+        if({!inEdition}){
+            inEdition = {!inEdition};
+        }       
+        var wikiType = "{!Wiki.Type__c}";
+
+    // <!-- Scripts to show the new members overlay and the members list -->
+
+        var settingsBackUp = '';
+        var membersBackUp = '';
+        var isAdd = getURLParam('add');
+        var insideSettingsTab = true;
+        if(inEdition == false){
+            var globalSaveButton = 'Create';
+            var globalMembersButton = 'Create And Add Members';
+        }else{
+            var globalSaveButton = 'Update';
+        }
+
+        document.observe('dom:loaded',startupFunc);
+        
+
+    // <!-- End of scripts to show the new members overlay and the members list --> 
+
+        /**
+        * Namespace Prefix Getter
+        */
+        var globalTeamId = "{!WikiId}";
+        var globalArrowDown = "{!URLFOR($Resource.commonResources, 'images/arrows/arrow_down.gif')}";
+        var globalArrowUp = "{!URLFOR($Resource.commonResources, 'images/arrows/arrow_up.gif')}";
+        var wikiTypeAccess = "{!WikiType}";
+
+        /**
+        *Set e2 height with e1 height + 15px
+        *For paginationOverlay to cover membersList
+        *@Param ids for element one and two 
+        */
+        function setHeight( idElement1, idElement2 ){
+            o1Dims = $( idElement1 ).getDimensions();
+            $( idElement2 ).style.height = (o1Dims.height * 0.98 ).round() + 'px';
+            $( idElement2 ).style.width = (o1Dims.width * 0.98 ).round() + 'px';
+        }
+
+     </script>
 	<!-- Scripts --> 
 	<apex:includeScript value="{!URLFOR($Resource.WikiResource, 'inc/js/common.js')}"/>
 	<apex:includeScript value="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}"/>
@@ -49,28 +94,6 @@
 	<apex:includeScript value="{!URLFOR($Resource.TeamsResources, 'inc/js/TeamMemberList.js')}" />
 	<apex:includeScript value="{!URLFOR($Resource.TeamsResources, 'inc/js/TeamsWidgetCommon.js')}" />	
 	
-	
-	<script>
-     	/**
-        * Namespace Prefix Getter
-        */
-     	var globalTeamId = "{!WikiId}";
-     	var globalArrowDown = "{!URLFOR($Resource.commonResources, 'images/arrows/arrow_down.gif')}";
-     	var globalArrowUp = "{!URLFOR($Resource.commonResources, 'images/arrows/arrow_up.gif')}";
-     	var wikiTypeAccess = "{!WikiType}";
-
-     	/**
-		*Set e2 height with e1 height + 15px
-		*For paginationOverlay to cover membersList
-		*@Param ids for element one and two 
-		*/
-		function setHeight( idElement1, idElement2 ){
-			o1Dims = $( idElement1 ).getDimensions();
-			$( idElement2 ).style.height = (o1Dims.height * 0.98 ).round() + 'px';
-			$( idElement2 ).style.width = (o1Dims.width * 0.98 ).round() + 'px';
-		}
-
-     </script>
 	<!-- Modal JS -->
 	<script	src="{!URLFOR($Resource.commonResources, 'inc/js/modal.js')}" />
 	
@@ -91,30 +114,6 @@
 
 	<!-- TeamsMemebersList JS  -->
     <apex:includeScript value="{!URLFOR($Resource.TeamsResources, 'inc/js/teamsMembersList.js')}" />
-	<script>
-	    var inEdition = false;
-        if({!inEdition}){
-            var inEdition = {!inEdition};
-        }		
-		var wikiType = "{!Wiki.Type__c}";
-
-	<!-- Scripts to show the new members overlay and the members list -->
-
-		var settingsBackUp = '';
-		var membersBackUp = '';
-		var isAdd = getURLParam('add');
-		var insideSettingsTab = true;
-		if(inEdition == false){
-			var globalSaveButton = 'Create';
-			var globalMembersButton = 'Create And Add Members';
-		}else{
-			var globalSaveButton = 'Update';
-		}
-
-		document.observe('dom:loaded',startupFunc);
-		
-	</script>
-	<!-- End of scripts to show the new members overlay and the members list -->
 
     <!-- Wiki Member Widget -->
 	<c:WikiMembersWidget wikiId="{!Wiki.Id}" showWidget="false" id="wikiMW" /> 
