@@ -50,7 +50,7 @@
 		<!-- - - - - - - - - - - - - - - - - - - - - -->		
 		<apex:outputpanel id="breadCrumbringPanel">
 			<div  class="breadCrumbring">
-				<apex:outputLabel escape="false" value="{!wikiSiteName} {!breadCrumbing}" /><apex:outputLabel styleclass="breadName" value="{!infoWiki.Name}"/><br>
+				<apex:outputLabel escape="false" value="{!wikiSiteName} {!breadCrumbing} JAJA" /><apex:outputLabel styleclass="breadName" value="{!infoWiki.Name}"/><br>
 			</div>
 		</apex:outputpanel>
 		<div class="MainPage">
@@ -249,7 +249,7 @@
 					<!--				 BUTTONS 				 -->
 					<!-- - - - - - - - - - - - - - - - - - - - - -->
 					<div align="center">
-						<apex:commandButton value="Save" styleclass="saveBtn" action="{!SaveEdit}" onclick="saveContent();" rerender="controllerVar, theTextArea2" />
+						<apex:commandButton value="Save" styleclass="saveBtn" action="{!SaveEdit}" onclick="saveContent();" rerender="controllerVar, theTextArea2" oncomplete="refreshRecentChanges();" />
 						<apex:commandButton value="Cancel" styleclass="cancelBtn" action="{!CancelEdit}" onclick="setValResult();switchOverlay(true);"/>
 					</div>
 				</div>

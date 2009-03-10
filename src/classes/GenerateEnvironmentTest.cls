@@ -55,7 +55,8 @@ public class GenerateEnvironmentTest {
             newWikiProfileMember.Name = 'Member Profile';
             newWikiProfileMember.CreateWikiPages__c = true;
             newWikiProfileMember.PostWikiComments__c = true; 
-			
+            upsert newWikiProfileMember;            
+
 			// Create a attachment
             attach.Name = 'Test';
             attach.Body = Blob.valueOf('Content');

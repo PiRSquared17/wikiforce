@@ -20,6 +20,17 @@ public class UserPermissions {
 	Boolean canComment = false;
 	Boolean canView = true;
 	
+	// Determine if is necesary read again the CurrentTeam
+	Boolean readAgain = false;                         ///
+	                                                   ///
+	public void setReadAgain(Boolean value) {          ///
+	   readAgain = value;	                           ///
+	}                                                  ///
+	                                                   ///
+	public Boolean getReadAgain() {                    ///
+	   return readAgain;	                           ///
+	}                                                  ///
+	//////////////////////////////////////////////////////
 	/**
 	* Costructor
 	*/
@@ -145,7 +156,7 @@ public class UserPermissions {
 				// If the user is not a member of the team then we have to go to the public profile of the team
 				// to figure out the permissions.
 				}else{
-					if(currentTeam == null){
+					if(currentTeam == null || readAgain == true){
 						currentTeam = new List<Wiki__c>();
 						List<Wiki__c> currentTeam = [select PublicProfile__c, Type__c,
 													 	Id,
@@ -162,8 +173,10 @@ public class UserPermissions {
 				if (profile != null) {
 					/*		WIKI		*/
 					if (objectType == 'Wiki') {
-						if(profile.CreateWikiPages__c) 	
+						if(profile.CreateWikiPages__c) {
+						    System.debug('\n\nIS CREATE WIKI PAGES TRUE?\n\n');
 							canCreate = true;
+						}
 						if(profile.PostWikiComments__c) 
 							canComment = true;
 						if(profile.ManageWikis__c){ 
@@ -179,8 +192,9 @@ public class UserPermissions {
 			String canManageStr = (canManage) ? 'true' : 'false';
 			System.debug('\n\n User Permissions Results: \n\tObject: ' + objectType + '\n\tCan Manage: ' + canManage + '\n\tCan Create: ' + canCreate+ '\n\tCan Comment: ' + canComment + '\n\tCan View: ' + canView + '\n\n');
 			
-			if(ownerId == id) 
+			if(ownerId == id) {
 				canManage = true;  // Shouldnt this be called user UserId?
+			}
 		}catch(Exception e){
 			throw e;
 		}

@@ -74,9 +74,9 @@
 	<!-- Delete Forum -->
 	<c:WikiOverlayDeleteWiki />
 
-	<apex:outputpanel rendered="{!userPermissions.canCreate}">
-		<c:WikiNewPageWidget />
-	</apex:outputpanel>
+    <!-- Overlay Add Child -->
+	<c:WikiNewPageWidget />
+	
 	<apex:form >
 		<apex:actionFunction name="refreshTeamOverview" action="{!genWikiTree}" rerender="wikiTreePanel, updatedPanel" />
 	</apex:form>
@@ -109,35 +109,34 @@
 							<c:WikiWidgetMyFavorites />
 							<!-- My Recent Changes Widget -->
 							<c:WikiWidgetMyRecentChanges />
+							<!-- Subscription widget -->
+							<c:WikiSubscribe teamId="{!currentTeam.Id}" />
 						</td>
 						<td valign="top" class="mainContentTD">
 							<!-- Main Content DIV-->
 							<div class="MainContent">
-								<div align="center" class="addWikiPageBtn">
 									<div align="center" class="addWikiPageBtn">
 										<div align="center" class="addWikiPageBtn">
 											<apex:form >
-												<apex:outputpanel id="buttonsDiv" layout="block" > 
-													<apex:outputpanel rendered="{!userPermissions.canCreate}">
-														<apex:outputPanel rendered="{!IF((IsAdmin || userPermissions.canManage),true,false)}" >
-															<apex:commandButton styleclass="btn" onclick="location.href = 'WikiCreateWiki?id={!currentTeam.Id}'; return false;" value="Edit Wiki" />
-															<apex:commandButton styleclass="btn" onclick="deleteWikiOverlay('{!currentTeam.Id}'); relocateOverlay(); return false;" value="Delete Wiki" />
-														</apex:outputPanel>
-														<apex:outputPanel rendered="{!userPermissions.canCreate}">
-															<input type="button" value="Add Wiki Page" onclick="createOverlay('','AddChildForm','305',''); relocateOverlay();" class="btn" />
-														</apex:outputPanel>
-														<apex:commandButton value="Unjoin" action="{!unjoinWiki}" rendered="{!IF(isMember,true,false)}" styleclass="btn" onclick="changeJoinStatus(this);" oncomplete="joinComplete();showWarningIsLastAdmin();redirectIfPrivate()" > <!-- rerender="buttonsDiv, buttonsDiv2" -->
-															<apex:param name="wid" value="{!currentTeam.Id}" />
-														</apex:commandButton>
-													</apex:outputpanel>
-													<apex:commandButton value="Join" action="{!joinWiki}" rendered="{!IF(AND(NOT(isMember),isPublic),true,false)}" styleclass="btn" onclick="changeJoinStatus(this);" oncomplete="joinComplete();" rerender="buttonsDiv, buttonsDiv2">
+												<apex:outputpanel id="buttonsDiv" layout="block" >
+													<apex:outputPanel rendered="{!IF( AND( userPermissions.canCreate, (IsAdmin || userPermissions.canManage )),true,false)}" >
+														<apex:commandButton styleclass="btn" onclick="location.href = 'WikiCreateWiki?id={!currentTeam.Id}'; return false;" value="Edit Wiki" />
+														<apex:commandButton styleclass="btn" onclick="deleteWikiOverlay('{!currentTeam.Id}'); relocateOverlay(); return false;" value="Delete Wiki" />
+													</apex:outputPanel>
+													<apex:outputPanel rendered="{!userPermissions.canCreate}">
+														<input type="button" value="Add Wiki Page" onclick="createOverlay('','AddChildForm','',''); relocateOverlay();" class="btn" />
+													</apex:outputPanel>
+													<apex:commandButton value="Join" action="{!joinWiki}" rendered="{!IF(AND(NOT(isMember),isPublic),true,false)}" styleclass="btn" onclick="changeJoinStatus(this);" oncomplete="joinComplete();" rerender="buttonsDiv, buttonsDiv2, caquita" >
 														<apex:param name="wid" value="{!currentTeam.Id}" />
 													</apex:commandButton>
-												</apex:outputpanel>						
+													<apex:commandButton value="Unjoin" action="{!unjoinWiki}" rendered="{!IF(isMember,true,false)}" styleclass="btn" onclick="changeJoinStatus(this);" oncomplete="joinComplete();" rerender="buttonsDiv, buttonsDiv2, caquita" >
+														<apex:param name="wid" value="{!currentTeam.Id}" />
+													</apex:commandButton>
+												</apex:outputpanel>					
 											</apex:form>																						
 										</div>
 									</div>
-								</div>
+								
 								<table border="0" cellspacing="8" style="width:100%;">
 									<tr>
 										<td width="50%" valign="top" id="wikipageDirectoryTD">
@@ -229,42 +228,31 @@
 										</td>
 									</tr>
 								</table>
-									<apex:outputpanel rendered="{!userPermissions.canCreate}">
-									<div align="center" class="addWikiPageBtn">
-										<div align="center" class="addWikiPageBtn">
-											<apex:form >
-													<apex:outputpanel id="buttonsDiv2" layout="block" > 
-														<apex:outputPanel styleClass="isLastMemberAdmin" style="display: none;" >{!isLastMemberAdmin}</apex:outputPanel>
-														<apex:outputPanel styleClass="isPrivate" style="display: block;" >{!isPrivate}</apex:outputPanel>
-															<apex:outputPanel rendered="{!IF((IsAdmin || userPermissions.canManage),true,false)}" >
-																<apex:commandButton styleclass="btn" onclick="location.href = 'WikiCreateWiki?id={!currentTeam.Id}'; return false;" value="Edit Wiki" />
-																<apex:commandButton styleclass="btn" onclick="deleteWikiOverlay('{!currentTeam.Id}'); relocateOverlay(); return false;" value="Delete Wiki" />
-															</apex:outputPanel>
-															<apex:outputPanel rendered="{!userPermissions.canCreate}">
-																<input type="button" value="Add Wiki Page" onclick="createOverlay('','AddChildForm','305',''); relocateOverlay();" class="btn" />
-															</apex:outputPanel>
-															<apex:commandButton value="Join" action="{!joinWiki}" rendered="{!IF(AND(NOT(isMember),isPublic),true,false)}" styleclass="btn" onclick="changeJoinStatus(this);" oncomplete="joinComplete();" rerender="buttonsDiv,buttonsDiv2">
-																<apex:param name="wid" value="{!currentTeam.Id}" />
-															</apex:commandButton>
-															<apex:commandButton value="Unjoin" action="{!unjoinWiki}" rendered="{!IF(isMember,true,false)}" styleclass="btn" onclick="changeJoinStatus(this);" oncomplete="joinComplete();showWarningIsLastAdmin();redirectIfPrivate()" rerender="buttonsDiv,buttonsDiv2">
-																<apex:param name="wid" value="{!currentTeam.Id}" />
-															</apex:commandButton>
-													</apex:outputpanel>
-												</apex:form>
-												<script>
-													function redirectIfPrivate(){
-														var isPriv = $$('.isPrivate')[0].innerHTML;
-														if (isPriv=='true'){
-															document.location.href = 'http://www.google.com';
-														}
-														document.location.href = 'http://www.yahoo.com';
-													}
-												</script>								
-										</div>
-									</div>
-								</apex:outputpanel>
+								<!-- < apex:outputpanel rendered="{!userPermissions.canCreate}"> -->
+                                    <div align="center" class="addWikiPageBtn">
+                                        <div align="center" class="addWikiPageBtn">
+                                            <apex:form >
+                                                <apex:outputpanel id="buttonsDiv2" layout="block" >
+                                                    <apex:outputPanel rendered="{!IF( AND( userPermissions.canCreate, (IsAdmin || userPermissions.canManage )),true,false)}" >
+                                                        <apex:commandButton styleclass="btn" onclick="location.href = 'WikiCreateWiki?id={!currentTeam.Id}'; return false;" value="Edit Wiki" />
+                                                        <apex:commandButton styleclass="btn" onclick="deleteWikiOverlay('{!currentTeam.Id}'); relocateOverlay(); return false;" value="Delete Wiki" />
+                                                    </apex:outputPanel>
+                                                    <apex:outputPanel rendered="{!userPermissions.canCreate}">
+                                                        <input type="button" value="Add Wiki Page" onclick="createOverlay('','AddChildForm','',''); relocateOverlay();" class="btn" />
+                                                    </apex:outputPanel>
+                                                    <apex:commandButton value="Join" action="{!joinWiki}" rendered="{!IF(AND(NOT(isMember),isPublic),true,false)}" styleclass="btn" onclick="changeJoinStatus(this);" oncomplete="joinComplete();" rerender="buttonsDiv, buttonsDiv2, caquita" >
+                                                        <apex:param name="wid" value="{!currentTeam.Id}" />
+                                                    </apex:commandButton>
+                                                    <apex:commandButton value="Unjoin" action="{!unjoinWiki}" rendered="{!IF(isMember,true,false)}" styleclass="btn" onclick="changeJoinStatus(this);" oncomplete="joinComplete();" rerender="buttonsDiv, buttonsDiv2, caquita" >
+                                                        <apex:param name="wid" value="{!currentTeam.Id}" />
+                                                    </apex:commandButton>
+                                                </apex:outputpanel>                 
+                                            </apex:form>                                                                                        
+                                        </div>
+                                    </div>
+								<!--  < /apex:outputpanel> -->
 								<apex:form >
-									<apex:actionFunction name="joinComplete" action="{!genTeamData}" rerender="buttonsDiv, buttonsDiv2" />
+									<apex:actionFunction name="joinComplete" action="{!genTeamData}" oncomplete="showWarningIsLastAdmin();redirectIfPrivate()"/>
 								</apex:form>
 							</div>
 						</td>
@@ -274,35 +262,22 @@
 		</div>
 	</div>
 	<apex:outputpanel id="auxPanel" style="display:none;">
-	</apex:outputpanel>	
+	</apex:outputpanel>
 	<script>
-		/*
 		function redirectIfPrivate(){
 			var isLastAdmin = ($$('.isLastMemberAdmin')[0].innerHTML == 'true');
 			var isPriv = $$('.isPrivate')[0].innerHTML;
 			if (isPriv=='true' && !isLastAdmin){
 				document.location.href = './WikiOverview';
 			}
-		}
-		*/
-		
-		function refreshDeleteList(){
-			location.href = 'WikiOverview';
-		}
-		
-		function changeJoinStatus(){
-			var txt = document.getElementsByTagName('input');
-			
-			for(var i = 0; i < txt.length; i++){
-				if(txt[i].value == 'Join' || txt[i].value == 'Unjoin'){
-					txt[i].value = 'Loading...';
-					txt[i].style.disabled = 'disabled';
-				}
-			}
-		}
-		
-		readPortalCSSRules();
-		
+		} 
 	</script>								
+										
+	<script>
+		/* function refreshDeleteList(){
+			location.href = 'WikiOverview';
+		} */
+		readPortalCSSRules();
+	</script>
 
 </apex:page>

@@ -13,6 +13,12 @@ trigger WikiMemberAfterInsert on WikiMember__c bulk (after insert) {
                 idsTeam.add(tm.Wiki__c);
                 idsProfile.add(tm.WikiProfile__c);  
             }
+
+        	WikiSubscribersEmailServices wEmail = new WikiSubscribersEmailServices();
+            for ( WikiMember__c wm : Trigger.new) 
+            {
+            	wEmail.sendMemberLeaveAdd( 'TeamMemberJoin', wm.Id );  
+            }
             
             List<Wiki__c> teamList = [select id, name, PublicProfile__c, NewMemberProfile__c from Wiki__c where id in: idsTeam];
             List<Group> ManageQueueList = [ select Id, Name From Group where Name in: groupsNames];
