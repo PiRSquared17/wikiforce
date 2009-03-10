@@ -112,7 +112,8 @@ public with sharing class WikiTeamOverviewController {
 		userPermissions.setId(UserInfo.getUserId());
 		userPermissions.setTeam(TEAMID);
 		userPermissions.setObjectType('Wiki');
-		userPermissions.setPermissions();		
+		userPermissions.setReadAgain(true);
+		userPermissions.setPermissions();	
 		
 		System.debug( '###' + UserInfo.getUserId() + ':' + TEAMID + ':' + userPermissions.getCanCreate() );		
 	}
@@ -164,6 +165,7 @@ public with sharing class WikiTeamOverviewController {
 	*/
 	public void joinWiki(){
 		wmc.setWikiId(System.currentPageReference().getParameters().get('wid'));
+		isMember = true;
 		wmc.joinWiki();
 	}
 	
@@ -264,8 +266,6 @@ public with sharing class WikiTeamOverviewController {
 			else 
 				this.setIsMember(false);
 		}
-
-		
 	}
 	
 	/** FIX

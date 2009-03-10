@@ -28,11 +28,15 @@ public class DeleteWikiController {
 	/**
 	* Delete Topic by Id
 	*/
-	public void deleteWiki(){
+	public PageReference deleteWiki(){
 		List<Wiki__c> wikiToDelete = [select Id from Wiki__c where Id =: WIKIID];
 		if (wikiToDelete.size() > 0) {
 			delete wikiToDelete[0];
+			PageReference pr=new PageReference('/apex/WikiOverview');
+			pr.setRedirect(true);
+			return pr;
 		}	
+		return null;
 	}
 
 }

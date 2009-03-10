@@ -28,13 +28,17 @@ public class WikiPageController {
 	* Costructor
 	*/
 	public WikiPageController () {
-		
 		contructMethods();
-		
 		// Evaluatin "can manage" and "owner"
 		currentUsIsOwner = infoWP.getCreatedById() == UserInfo.getUserId() ;
 		currentUsCanManage = userPermissions.getCanManage();
-		
+	}
+	
+	/**
+	*@return bool is instance owner
+	*/
+	public Boolean getCurrentUsIsOwner(){
+		return currentUsIsOwner;
 	}
 		
 	/**
@@ -1279,6 +1283,8 @@ public class WikiPageController {
 	* Saves the new wiki page and sets ints newPage status to false.
 	*/ 
 	public void SaveNew () {
+		TeamUtil.hostName = TeamUtil.getHost(ApexPages.currentPage());
+		System.debug( ')))>' + TeamUtil.hostName );
 		newWP.Parent__c = idWikiPage;
 		newWP.Wiki__c = idWikiSite; 
 		newWP.Body__c = '=== Congratulations! === \n You created a new wiki page for your team. Begin by clicking the "Edit" button above to modify this page.';
@@ -1765,7 +1771,7 @@ public class WikiPageController {
 		{
 	   		String idAttach = System.currentPageReference().getParameters().get('idAttach');
 	   		Attachment delAttach;
-	   		delAttach = [select Id, Name from Attachment where id =:idAttach ];
+	   		delAttach = [select Id, Name from Attachment where id =: idAttach ];
 	   		delete delAttach; 
 		}
 		else

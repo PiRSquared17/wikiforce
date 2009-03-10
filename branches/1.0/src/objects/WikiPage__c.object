@@ -10,6 +10,7 @@
     </fields>
     <fields>
         <fullName>LinkCount__c</fullName>
+        <defaultValue>0</defaultValue>
         <label>LinkCount</label>
         <precision>18</precision>
         <scale>0</scale>

@@ -296,7 +296,7 @@
 	    wiki.refreshAttachs();
 	    
 	   	System.currentPageReference().getParameters().put('idAttach', newAttach2.Id);
-	    wiki.DeleteAttach();
+	    //wiki.DeleteAttach();
 	    
 	    newWiki.Body__c = '[File: FooAttach4.rar]'; 
 		update newWiki;

@@ -2,7 +2,7 @@
 	<!-- WikiOverlayDeleteWiki JS -->
  	<apex:includeScript value="{!URLFOR($Resource.WikiResource, 'inc/js/wikiOverlayDeleteWiki.js')}" />
 	<apex:form >
-		<apex:actionFunction name="removeWikiDef" action="{!deleteWiki}" rerender="dummy, formFavorite" oncomplete="refreshDeleteList(); afterWikiDelete(); refreshActivePeople(); rerenderPaginators(); "/>
+		<apex:actionFunction name="removeWikiDef" action="{!deleteWiki}" rerender="dummy" oncomplete="reloadFavoritesWikis(); refreshRecentChanges(); afterWikiDelete(); refreshActivePeople(); rerenderPaginators();"/>
 		<apex:inputHidden value="{!wikiId}" id="wikiId"/>
 		<div id="auxWikiInputHiddenId" style="display:none;">{!$Component.wikiId}</div>
 	</apex:form>
@@ -27,9 +27,9 @@
 			<div class="overlaySeparateLine"></div>
 			<div class="overlayFromButtons" align="center">
 				<span id="deleteButton">
-					<input type="button" class="overlaySaveBtn" value="Continue and delete wiki" onclick="statusDeleteWiki(this); removeWiki('id');" />
+					<input type="button" class="allButtons actionButtons" value="Continue and delete wiki" onclick="statusDeleteWiki(this); removeWiki('id');" />
 				</span>
-				<input type="button" class="overlayCancelBtn" value="Cancel" onclick="modal.close(); "/>
+				<input type="button" class="allButtons cancelButtons" value="Cancel" onclick="modal.close(); "/>
 			</div>	
 		</div>
 	</div>
