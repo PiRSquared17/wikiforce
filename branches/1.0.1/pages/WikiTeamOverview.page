@@ -58,8 +58,11 @@
         * Namespace Prefix Getter
         */
         var namespace = "{!namespace}";
-
-
+		
+		//This variable indicates if the wiki displayed is or isn't private
+		//used by function redirectIfPrivate
+		var isPrivate = "{!isPrivate}";
+		
 		var staticURLFORWiki = '{!$Resource.WikiResource}';
 		var API_SESSION_ID = '{!$Api.Session_ID}';
 
@@ -119,6 +122,7 @@
 										<div align="center" class="addWikiPageBtn">
 											<apex:form >
 												<apex:outputpanel id="buttonsDiv" layout="block" >
+													<apex:outputPanel styleClass="isLastMemberAdmin" style="display: none;" >{!isLastMemberAdmin}</apex:outputPanel>
 													<apex:outputPanel rendered="{!IF( AND( userPermissions.canCreate, (IsAdmin || userPermissions.canManage )),true,false)}" >
 														<apex:commandButton styleclass="btn" onclick="location.href = 'WikiCreateWiki?id={!currentTeam.Id}'; return false;" value="Edit Wiki" />
 														<apex:commandButton styleclass="btn" onclick="deleteWikiOverlay('{!currentTeam.Id}'); relocateOverlay(); return false;" value="Delete Wiki" />
@@ -126,10 +130,10 @@
 													<apex:outputPanel rendered="{!userPermissions.canCreate}">
 														<input type="button" value="Add Wiki Page" onclick="createOverlay('','AddChildForm','',''); relocateOverlay();" class="btn" />
 													</apex:outputPanel>
-													<apex:commandButton value="Join" action="{!joinWiki}" rendered="{!IF(AND(NOT(isMember),isPublic),true,false)}" styleclass="btn" onclick="changeJoinStatus(this);" oncomplete="joinComplete();" rerender="buttonsDiv, buttonsDiv2, caquita" >
+													<apex:commandButton value="Join" action="{!joinWiki}" rendered="{!IF(AND(NOT(isMember),isPublic),true,false)}" styleclass="btn" onclick="changeJoinStatus(this);" oncomplete="joinComplete();" >
 														<apex:param name="wid" value="{!currentTeam.Id}" />
 													</apex:commandButton>
-													<apex:commandButton value="Unjoin" action="{!unjoinWiki}" rendered="{!IF(isMember,true,false)}" styleclass="btn" onclick="changeJoinStatus(this);" oncomplete="joinComplete();" rerender="buttonsDiv, buttonsDiv2, caquita" >
+													<apex:commandButton value="Unjoin" action="{!unjoinWiki}" rendered="{!IF(isMember,true,false)}" styleclass="btn" onclick="changeJoinStatus(this);" oncomplete="joinComplete();" >
 														<apex:param name="wid" value="{!currentTeam.Id}" />
 													</apex:commandButton>
 												</apex:outputpanel>					
@@ -240,10 +244,10 @@
                                                     <apex:outputPanel rendered="{!userPermissions.canCreate}">
                                                         <input type="button" value="Add Wiki Page" onclick="createOverlay('','AddChildForm','',''); relocateOverlay();" class="btn" />
                                                     </apex:outputPanel>
-                                                    <apex:commandButton value="Join" action="{!joinWiki}" rendered="{!IF(AND(NOT(isMember),isPublic),true,false)}" styleclass="btn" onclick="changeJoinStatus(this);" oncomplete="joinComplete();" rerender="buttonsDiv, buttonsDiv2, caquita" >
+                                                    <apex:commandButton value="Join" action="{!joinWiki}" rendered="{!IF(AND(NOT(isMember),isPublic),true,false)}" styleclass="btn" onclick="changeJoinStatus(this);" oncomplete="joinComplete();" >
                                                         <apex:param name="wid" value="{!currentTeam.Id}" />
                                                     </apex:commandButton>
-                                                    <apex:commandButton value="Unjoin" action="{!unjoinWiki}" rendered="{!IF(isMember,true,false)}" styleclass="btn" onclick="changeJoinStatus(this);" oncomplete="joinComplete();" rerender="buttonsDiv, buttonsDiv2, caquita" >
+                                                    <apex:commandButton value="Unjoin" action="{!unjoinWiki}" rendered="{!IF(isMember,true,false)}" styleclass="btn" onclick="changeJoinStatus(this);" oncomplete="joinComplete();" >
                                                         <apex:param name="wid" value="{!currentTeam.Id}" />
                                                     </apex:commandButton>
                                                 </apex:outputpanel>                 
@@ -252,7 +256,7 @@
                                     </div>
 								<!--  < /apex:outputpanel> -->
 								<apex:form >
-									<apex:actionFunction name="joinComplete" action="{!genTeamData}" oncomplete="showWarningIsLastAdmin();redirectIfPrivate()"/>
+									<apex:actionFunction name="joinComplete" action="{!genTeamData}" oncomplete="showWarningIsLastAdmin();redirectIfPrivate()" rerender="buttonsDiv, buttonsDiv2"/>
 								</apex:form>
 							</div>
 						</td>
@@ -266,8 +270,8 @@
 	<script>
 		function redirectIfPrivate(){
 			var isLastAdmin = ($$('.isLastMemberAdmin')[0].innerHTML == 'true');
-			var isPriv = $$('.isPrivate')[0].innerHTML;
-			if (isPriv=='true' && !isLastAdmin){
+			//var isPriv = $$('.isPrivate')[0].innerHTML;
+			if (isPrivate=='true' && !isLastAdmin){
 				document.location.href = './WikiOverview';
 			}
 		} 
