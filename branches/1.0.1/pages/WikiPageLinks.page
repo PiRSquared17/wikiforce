@@ -1,0 +1,37 @@
+<apex:page sidebar="false" showHeader="false" controller="WikiPageLinksController">
+	<apex:includeScript value="{!URLFOR($Resource.WikiResource, 'inc/js/wikiPageLinks.js')}" />
+	<!--  
+	<script>
+		function SelectFile( fileUrl ) {
+			window.opener.SetUrl( fileUrl ) ;
+			window.close() ;
+		}
+	</script>
+	-->
+	<apex:outputpanel rendered="{!IF(cntAttachments == 0, false, true)}">
+		<h3>Attachments</h3>
+		<apex:repeat value="{!attachments}" var="item">
+			<apex:outputpanel rendered="{!IF(item.name == '', false, true)}">
+				<a href="javascript:SelectFile('https://na1.salesforce.com/servlet/servlet.FileDownload?file={!item.Id}');">{!item.Name}</a><br>
+			</apex:outputpanel>
+		</apex:repeat>
+	</apex:outputpanel>
+	<apex:outputpanel rendered="{!IF(cntWikiChilds == 0, false, true)}">
+		<h3>Current Page Children</h3>
+		<apex:repeat value="{!wikiChilds}" var="item">
+			<a href="javascript:SelectFile('https://na1.salesforce.com/apex/WikiPage?idWP={!item.Id}');">{!item.Name}</a><br>
+		</apex:repeat>
+	</apex:outputpanel>
+	<apex:outputpanel rendered="{!IF(cntTeamWikis == 0, false, true)}">
+		<h3>This {!$ObjectType.Wiki__c.label}'s</h3>
+		<apex:repeat value="{!wikiPagesTeam}" var="item">
+			<a href="javascript:SelectFile('https://na1.salesforce.com/apex/WikiPage?idWP={!item.Id}');">{!item.Name}</a><br>
+		</apex:repeat> 
+	</apex:outputpanel>
+	<apex:outputpanel rendered="{!IF(cntAllWikis == 0, false, true)}">
+		<h3>Others {!$ObjectType.Wiki__c.labelPlural}</h3>
+		<apex:repeat value="{!wikiPagesAll}" var="item">
+			<a href="javascript:SelectFile('https://na1.salesforce.com/apex/WikiPage?idWP={!item.Id}');">{!item.Name} ({!item.Wiki__r.Name})</a><br>
+		</apex:repeat> 
+	</apex:outputpanel>
+</apex:page>

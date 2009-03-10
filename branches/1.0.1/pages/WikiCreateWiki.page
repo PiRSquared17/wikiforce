@@ -1,0 +1,754 @@
+<apex:page id="WikiCreateWiki" controller="WikiCreateWikiController" tabStyle="Wiki__c" sidebar="false">
+    <script>
+        inEdition = false;
+        if({!inEdition}){
+            inEdition = {!inEdition};
+        }       
+        var wikiType = "{!Wiki.Type__c}";
+
+    // <!-- Scripts to show the new members overlay and the members list -->
+
+        var settingsBackUp = '';
+        var membersBackUp = '';
+        var isAdd = getURLParam('add');
+        var insideSettingsTab = true;
+        if(inEdition == false){
+            var globalSaveButton = 'Create';
+            var globalMembersButton = 'Create And Add Members';
+        }else{
+            var globalSaveButton = 'Update';
+        }
+
+        document.observe('dom:loaded',startupFunc);
+        
+
+    // <!-- End of scripts to show the new members overlay and the members list --> 
+
+        /**
+        * Namespace Prefix Getter
+        */
+        var globalTeamId = "{!WikiId}";
+        var globalArrowDown = "{!URLFOR($Resource.commonResources, 'images/arrows/arrow_down.gif')}";
+        var globalArrowUp = "{!URLFOR($Resource.commonResources, 'images/arrows/arrow_up.gif')}";
+        var wikiTypeAccess = "{!WikiType}";
+
+        /**
+        *Set e2 height with e1 height + 15px
+        *For paginationOverlay to cover membersList
+        *@Param ids for element one and two 
+        */
+        function setHeight( idElement1, idElement2 ){
+            o1Dims = $( idElement1 ).getDimensions();
+            $( idElement2 ).style.height = (o1Dims.height * 0.98 ).round() + 'px';
+            $( idElement2 ).style.width = (o1Dims.width * 0.98 ).round() + 'px';
+        }
+
+     </script>
+	<!-- Scripts --> 
+	<apex:includeScript value="{!URLFOR($Resource.WikiResource, 'inc/js/common.js')}"/>
+	<apex:includeScript value="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}"/>
+	<apex:includeScript value="{!URLFOR($Resource.Script_aculo_us, 'scriptaculous.js')}"/>
+	<apex:includeScript value="{!URLFOR($Resource.Script_aculo_us, 'effects.js')}"/>
+	<apex:includeScript value="{!URLFOR($Resource.TeamsResources, 'inc/js/autocomplete.js')}" />
+
+	
+	<!-- Portal Support -->
+	<apex:includeScript value="{!$Resource.portalSupport}"/>
+	<apex:includeScript value="{!URLFOR($Resource.OverlayFunctionsFixed, 'js/overlayFunction.js')}"/>
+	<apex:includeScript value="{!URLFOR($Resource.WikiResource, 'inc/js/WikiOverview.js')}"/>
+	
+    <!-- CSS styles for Portal Integration -->  
+    <apex:stylesheet value="{!URLFOR($Resource.portalStyles, 'portal.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/headerTeams.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/widgetTeam.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/fonts.css')}" />    
+    <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamsCreateNewTeam.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.PeopleResourceFiles, 'inc/css/autocomplete.css')}" />
+    
+	<!-- Styles -->
+	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/commonLayout.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/WikiOverview.css')}" /> 
+	<apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/myTeamsAllTeamsTabs.css')}" />
+	
+	<!-- CSS de TS -->
+	<apex:stylesheet value="{!URLFOR($Resource.commonResources, '/inc/css/validator.css')}" />	
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, '/inc/css/commonLayout.css')}" />	
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, '/inc/css/teamDetailEdit.css')}" />	
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, '/inc/css/teamCreateNew.css')}" />
+	
+    <apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/wikiCreateWiki.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamOverview.css')}" />	
+	<apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/modal.css')}" />
+
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, '/inc/css/teamOverlyInviteNewMember.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamsOverlaysTemplate.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/widgets/TeamMemberWidget.css')}" />
+    
+	<apex:includeScript value="{!URLFOR($Resource.commonResources, 'inc/js/validator.js')}"/>    
+	<apex:includeScript value="/soap/ajax/12.0/connection.js" />
+	<script>
+		var API_SESSION_ID = '{!$Api.Session_ID}';
+	</script>
+	<apex:includeScript value="{!URLFOR($Resource.TeamsResources, 'inc/js/teamsCreateNewTeam.js')}" />
+	<apex:includeScript value="{!URLFOR($Resource.commonResources, 'inc/js/common.js')}" />
+	<apex:includeScript value="{!URLFOR($Resource.TeamsResources, 'inc/js/TeamMemberList.js')}" />
+	<apex:includeScript value="{!URLFOR($Resource.TeamsResources, 'inc/js/TeamsWidgetCommon.js')}" />	
+	
+	<!-- Modal JS -->
+	<script	src="{!URLFOR($Resource.commonResources, 'inc/js/modal.js')}" />
+	
+	<!-- Initialize the overlay box for modal.js -->
+	<a href="#modal_container" id="initializeModalOverlay" style="display:none;"></a>
+	<div id="modal_container" style="display:none;"></div>
+	<script>
+		createOverlay('initializeModalOverlay');
+	</script>
+
+	<apex:form >
+		<apex:actionFunction name="reloadMemberList" action="{!refresh}" rerender="letterFilterContainer, membersList" oncomplete="$('paginationOverlay').hide();" />
+	</apex:form>
+
+	<!-- TeamsMemebersList CSS 	-->
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamMemberList.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamsMembersList.css')}" />
+
+	<!-- TeamsMemebersList JS  -->
+    <apex:includeScript value="{!URLFOR($Resource.TeamsResources, 'inc/js/teamsMembersList.js')}" />
+
+    <!-- Wiki Member Widget -->
+	<c:WikiMembersWidget wikiId="{!Wiki.Id}" showWidget="false" id="wikiMW" /> 
+
+	<div class="BodyPage">
+		
+		<!-- OVERLAY -->
+		<div class="UPF__overlay__" id="UPF__overlay__" style="display:none;"></div>
+		
+		<!-- LOADER	-->
+		<div class="loader__" id="loader__" style="display:none;"><center><img src="{!URLFOR($Resource.commonResources, 'images/loaders/bigLoader.gif')}" /></center><br />Loading...</div>
+		
+		<!-- HEADER -->
+		<apex:composition template="HeaderTemplate">
+			<apex:define name="moduleId"><apex:variable var="moduleId" value="headerWiki"/></apex:define>
+		    <apex:define name="module">Wiki pages</apex:define>
+		    <apex:define name="title">OverView</apex:define>
+		    <apex:define name="search">
+		    	<c:Search module="wiki" />
+		    </apex:define>
+	    </apex:composition>
+	    
+	    <!-- MAIN PAGE -->
+	    <div class="MainPage">
+			<div class="PageBlock">	
+				<!-- LEFT SIDEBAR  -->
+				<table border="0" class="bodyTable">
+					<tr>
+						<td valign="top" class="sideBarTD">
+							<!-- MY FAVORITES WIDGET -->
+							<c:WikiWidgetMyFavorites />
+							<!-- MY RECENT CHANGES WIDGET -->
+							<c:WikiWidgetMyRecentChanges />
+						</td>
+						<td valign="top" class="mainContentTD">
+							<!--  MAIN CONTENT DIV  - -->
+							<div class="main_content" id="main_content">
+								<div class="teamTitle">{!IF(inEdition == false, 'Create New', 'Edit')} {!$ObjectType.Wiki__c.label}</div>
+								<div style="margin-top:15px;">
+									&nbsp;&#171&nbsp; <a href="{!IF (inEdition == true, 'WikiTeamOverview?tid='+Wiki.Id, 'WikiOverview')}" style="font-weight:normal;"> Back </a>
+								</div>
+								<div class="tabContainer">
+									<apex:form id="tabsForm">
+										<ul class="tabs">
+											<li class="selected" id="myTeamTab">
+												<apex:commandLink id="My_teams" action="{!switchTabsController}" value="Settings" 
+																	onclick="switchTabs('myTeamTab');setAccessTypeChecked()" 
+																	rerender="holder">
+													<apex:param name="allTeams" value="false" />
+												</apex:commandLink>
+											</li>
+											<li id="allTeamTab" >
+												<div id="overTabMembers" style="cursor:auto">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+												<apex:commandLink rendered="{!inEdition}" id="allTeamsLink" action="{!switchTabsController}" value="Members" onclick="switchTabs('allTeamTab');setPaginatorToCenter()"
+																	 rerender="holder" styleClass="{!IF((hasMembers == false || inEdition),'disable','')}" >
+													<apex:param name="allTeams" value="true" />
+												</apex:commandLink>
+												
+												<apex:outputpanel rendered="{!NOT(inEdition)}" styleClass="disable">
+													Members
+												</apex:outputpanel>
+											</li>					
+										</ul>
+									</apex:form>
+								</div>
+							
+							<!-- HOLDER -->
+							<div class="holder" style="margin: 0px !important;">				
+								<div id="body_center" class="body_center">
+									<a id="anchorForError"></a>
+										<div id="warning_to_user" class="message_to_user" style="display:none;" >
+				    						<div class="f_left">
+				      							<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/error_icon.gif')}" />
+				    						</div>
+				    						<div class="f_left">
+												<strong>We had trouble unserstanding one or more of your entries or we need more information</strong><br />
+					 							<span id="messageErrorText">Please see the field(s) highlighted</span>
+											</div>
+					  						<div class="clear"></div>
+				  						</div>		
+										<div align="right">	
+											<table border="0" style="margin: 5px 0px 5px 0px;">
+												<tr>
+													<td style="width: 4px;">
+														<span class="requiredLegend"></span>
+													</td>
+													<td>		
+														<span class="infoText" style="font-size: 9px; font-family: Arial, Helvetica, sans-serif;">
+															=&nbsp;Required Information 
+														</span>
+													</td>
+												</tr>
+											</table>
+										</div> 
+										<apex:form id="createNewTeamForm" onsubmit="if(validateWikiFormInfo())return false;" >
+										<!-- <apex:form id="createNewTeamForm" > --> 
+											<apex:outputpanel style="display:none;" id="currentTeamId">{!Wiki.Id}</apex:outputpanel>
+											<apex:inputHidden value="{!Wiki.PictureId__c}" id="teamPicture" />
+											<div class="div_Body">
+												<table cellpadding="0" cellspacing="0" style="margin-left: 40px;" class="newTeamForm">
+													<tr>
+														<td class="alignTop">
+															<span class="inputInfoTitle">{!$ObjectType.Wiki__c.label} Name</span>
+														</td>
+														<td style="width: 4px; vertical-align:top;">
+															<span class="requiredLegend"></span>
+														</td>
+														<td colspan="2">&nbsp;
+															<apex:inputText value="{!Wiki.Name}" id="TeamName" styleClass="RQ_String" maxlength="80" onkeyup="showWikiNameMaxLen()"></apex:inputText>
+
+															<br />
+															<span id="wikiNameMaxLen" class="errorText" style="display: none;">Max length reached (80)</span>
+															<span id="TeamNameErrorMessage" class="errorText" style="display:none;">
+																<b>Error:</b> You must enter a name for this {!$ObjectType.Wiki__c.label}
+															</span>
+														</td>
+													</tr>
+													<tr>
+														<td height="7px"></td>
+													</tr>
+													<tr>
+														<td class="alignTop">
+															<span class="inputInfoTitle">Description</span>
+														</td>
+														<td></td>
+														<td colspan="2">&nbsp;
+															<apex:inputTextarea value="{!Wiki.Description__c}" id="TeamDescription" cols="38" rows="4" style="height: 83px; width: 430px" onkeyup="countStringLimit(this, 'stringSizeCounter');" />
+														</td>
+													</tr>
+													<tr>
+														<td></td>
+														<td></td>
+														<td colspan="2">&nbsp;
+															<span class="explain">(32k character limit) - Characters remaining:</span>
+															<span class="explain" id="stringSizeCounter">32000</span>
+															<br />
+														</td>
+													</tr>
+													<tr> 
+														<td height="10px"></td>
+													</tr>
+													<tr>
+														<td class="alignTop">
+															<!--  <span class="inputInfoTitle">{!$ObjectType.Wiki__c.label} Email</span> -->
+														</td>
+														<td style="width: 4px; vertical-align:top;">
+														</td>
+														<td colspan="2">&nbsp;
+															<!-- <apex:inputText value="{!Wiki.ContactEmail__c}" id="TeamContactEmail"></apex:inputText> -->
+														</td>
+													</tr>
+													<tr>
+														<td height="10px"></td>
+													</tr>
+													<tr>
+														<td class="alignTop">
+															<span class="inputInfoTitle">{!$ObjectType.Wiki__c.label} Avatar</span>
+														</td>
+														<td></td>
+														<td align="center">&nbsp;
+															<img width="99" src="{!IF(wikiPicture == '', URLFOR($Resource.TeamsResources, '/images/layout/pic_upload.gif'), wikiPicture)}" class="imgBorder" />
+															<br />
+															<span class="explain">
+																current picture 
+																<br>
+																<apex:commandLink styleClass="fontSize10" action="{!removeAvatar}" rendered="{!IF( wiki.PictureId__c != null, true, false)}" value="Remove" />
+																
+															</span>
+														</td>
+														<td valign="top">
+															<table cellpadding="0" cellspacing="0" width="400px">
+																<tr>
+																	<td>
+																		<span class="inputInfoDescription">Select the image file</span>
+																	</td>
+																</tr>
+																<tr>
+																	<td>
+																		<span class="inputInfoSubDescription" style="padding-left: 10px;">Type the path of the file or
+																		click the Browse button to find the file.</span>
+																	</td>
+																</tr>
+																<tr>
+																	<td></td> 
+																</tr>
+																<tr>
+																	<td class="paddingLeft" id="imageTeamContainer" >
+																		<apex:inputFile value="{!document.body}" id="teamImage" filename="{!document.name}" contentType="{!document.contentType}" fileSize="{!document.BodyLength}"/> 
+																		<br />
+																		<apex:outputpanel rendered="{!NOT validTypePicture}">
+																		<span id="fileExtensionError" class="errorText">
+																			<b>Error:</b> You must enter a jpg, gif or png files only
+																		</span>
+																		</apex:outputpanel>
+																		<apex:outputpanel rendered="{!NOT validSizePicture}">
+																		<span id="fileSizeError" class="errorText">
+																			<b>Error:</b> The images size must be less than 512 kb
+																		</span>
+																		</apex:outputpanel>
+																	</td>
+																</tr>
+																<tr>
+																	<td></td>
+																</tr>
+																<tr>
+																	<td class="paddingLeft"><span class="explain">File size	limit 512KB. If your upload does not work, try a smaller picture. </span>
+																	</td>
+																</tr>
+																<tr>
+																	<td class="paddingLeft">
+																		<span class="explain">Ideal	size is 100 pixels high by 100 pixels wide.</span>
+																	</td>
+																</tr>
+																<tr>
+																	<td></td>
+																</tr>
+																<tr>
+																	<td class="paddingLeft">
+																		<div class="imageRightsHolder" id="imageRightsHolder">
+																			<input id="imageRights" type="checkbox" />
+																		</div>
+																		<div class="messageRigthHolder">
+																			<span class="inputInfoSubDescription">I certify that I have the right to distribute this picture and that it does not violate the <a href="/apex/TeamsIconTerms" target="_blank">Terms of Use</a></span>
+																			<br />
+																			<span id="RightsErrorMessage" class="errorText" style="display:none;">
+																				<b>Error:</b> You must agree to the <a href="/apex/TeamsIconTerms" target="_blank">Terms of Use</a> to use images for this team.															
+																			</span>
+																		</div>
+																		<div class="clear"></div>													
+																	</td>
+																</tr>
+																<tr>
+																	<td></td>
+																</tr>	
+															</table>
+														</td>
+													</tr>
+													<tr>
+														<td height="10px"></td>
+													</tr>
+													<tr>
+														<td class="alignTop">
+															<!-- <span class="inputInfoTitle">
+																{!$ObjectType.Wiki__c.label} Type
+															</span>
+															-->
+														</td>
+														<td style="width: 4px; vertical-align:top;">
+															<!-- <span class="requiredLegend"></span> -->
+														</td>
+														<td colspan="2">&nbsp;	
+															<!-- <apex:selectList id="TeamType" value="{!Wiki.Type__c}" title="" multiselect="false" size="1" >
+													  	 	 	<apex:selectOptions value="{!Types}"/>
+													  	 	</apex:selectList>
+													  	 	<span id="TeamTypeErrorMessage" class="errorText" style="display:none;">
+																<b>Error:</b> You must enter a {!$ObjectType.Wiki__c.label} Type for this {!$ObjectType.Wiki__c.label}.								  	 	
+													  	 	</span> -->	
+														</td>
+													</tr>
+													<tr>
+														<td>&nbsp;</td>
+													</tr>
+													<tr>
+														<td class="alignTop">
+															<!-- <span class="inputInfoTitle">{!$ObjectType.Wiki__c.label} Parent</span> -->
+														</td>
+														<td></td>
+														<td colspan="2">&nbsp;
+															
+														</td>
+													</tr>
+													<tr>
+														<td>&nbsp;</td>
+													</tr>
+													<tr>
+						                                <td class="alignTop"><span class="inputInfoTitle">Access</span></td>
+														<td></td>
+						                                <td colspan="2">
+						                                	&nbsp;<input type="radio" id="openTeam" name="access" onclick="setAccess(this);"/>
+						                                	<span class="inputInfoDescription">Open</span>
+						                                </td>
+													</tr>  	
+													<tr>
+						                                <td class="alignTop"><span class="inputInfoTitle"></span></td>
+														<td></td>
+						                                <td colspan="2">&nbsp;<span class="inputInfoList">&nbsp;</span><span class="inputInfoSubDescription">Anyone can join. Anyone can see the {!$ObjectType.Wiki__c.label} information and content.</span></td>
+													</tr>	
+													<tr>
+														<td colspan="6" >
+													
+														</td>
+													</tr>					
+													<tr>
+						                                <td  class="alignTop"><span class="inputInfoTitle"></span></td>
+														<td></td>
+						                                <td colspan="2">
+						                                	&nbsp;<input type="radio" id="closedTeam" name="access" onclick="setAccess(this);"/>
+						                                	<span class="inputInfoDescription">Closed</span>
+						                                </td>
+													</tr>   
+													<tr>
+						                                <td class="alignTop"><span class="inputInfoTitle"></span></td>
+														<td></td>
+						                                <td colspan="2">
+						                                	<span class="inputInfoList">&nbsp;</span>
+						                                	<span class="inputInfoSubDescription">{!$ObjectType.Wiki__c.label} Administrator must invite users to join. Anyone can see the {!$ObjectType.Wiki__c.label} information and content.</span>
+						                                </td>
+													</tr> 
+													<tr>
+														<td colspan="6">
+														
+														</td>
+													</tr>	
+													<tr>
+						                                <td class="alignTop"><span class="inputInfoTitle"></span></td>
+														<td></td>
+						                                <td colspan="2">
+						                                	&nbsp;<input type="radio" id="privateTeam" name="access" onclick="setAccess(this);"/>
+						                                	<span class="inputInfoDescription">Private</span>
+						                                </td>
+													</tr>   
+													<tr>
+						                                <td class="alignTop"><span class="inputInfoTitle"></span></td>
+														<td></td>
+						                                <td colspan="2">
+						                                	&nbsp;<span class="inputInfoList">
+						                                	&nbsp;</span>
+						                                	<span class="inputInfoSubDescription">This {!$ObjectType.Wiki__c.label} will not appear in search results or in the profiles of its members. </span>
+						                                </td>
+													</tr> 
+													<tr>
+						                                <td class="alignTop"><span class="inputInfoTitle"></span></td>
+														<td></td>
+						                                <td colspan="2">&nbsp;<span class="inputInfoList">&nbsp;</span><span class="inputInfoSubDescription">Membership is by invitation only, and only members can see the {!$ObjectType.Wiki__c.label}</span></td>
+													</tr>   
+													<tr>
+						                                <td class="alignTop"><span class="inputInfoTitle"></span></td>
+														<td></td>
+						                                <td colspan="2">&nbsp;<span class="inputInfoList">&nbsp;</span><span class="inputInfoSubDescription">information and content.</span></td>
+													</tr>   
+												</table>
+												<div class="DivBtn">
+													<div class="title_line_btn"></div>										
+													<div align="center">
+														<span id="currentEventAction"></span><br />
+														<apex:commandButton styleClass="SaveBtn" action="{!saveAndRedirect}"  value="{!IF(inEdition == false, 'Create', 'Update')}" id="saveButton"  />
+														<apex:outputpanel rendered="{!NOT inEdition}">
+															<apex:commandButton styleClass="SaveBtn" action="{!saveWikiAndAddMembers}"  value="Create And Add Members" id="saveAndAddMembersButton" />
+														</apex:outputpanel>
+														<apex:inputHidden value="{!Wiki.Type__c}" id="openOrClosed" />
+														<apex:commandButton styleClass="CancelBtnWik"  onclick="location.href = '/apex/WikiOverview';return false;" value="Cancel" id="cancelButton"/> 
+													</div>
+												</div>
+											</div>
+										</apex:form>
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<!--<tr>
+						 <td colspan="2">
+							<div class="SidebarTitle" />
+						</td> 
+					</tr>-->
+				</table>
+			</div>
+		</div>
+	</div>
+	<apex:outputpanel id="auxPanel" style="display:none;"></apex:outputpanel>	
+	
+	<!-- MEMBERS LIST --> 
+    <div id="membersListDiv" class="holder" style="visibility: hidden;">
+		<div id="paginationOverlay" style="display: none;" class="paginationOverlay">
+			<div class="loader"></div>
+		</div>
+		<div id="memberListContainer">
+			<table width="100%" align='center'>
+				<tr>
+					<td class="teamTitleButton titleTd">Members</td>
+					<td align='center'>
+					<table width="123px;">
+						<tr>
+							<td>
+								<div>
+									<apex:outputpanel rendered="true"> 
+										<a onclick="createOverlay('','inviteTeam','','showSelects()'); relocateOverlay()" href="javascript:;" class="blackbutton">New</a>
+										<a href="javascript:;" class="blackbutton" onclick="massiveRemoveOverlay(); relocateOverlay()">Remove</a>
+									</apex:outputpanel>
+								</div>
+							</td>
+						</tr>
+					</table>
+					</td>
+					<td class="teamTitleButton titleTd">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+				</tr>
+			</table>
+			<div class="border_body_top"></div>
+			<br />
+			<div style="position: relative; overflow: hidden"><img
+				id="twistImage" style="vertical-align: middle;" class="twistImg"
+				onclick="showHideElement(document.getElementById('filterDiv'),this);"
+				src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_down.gif')}"
+				title="Hide Section" alt="Hide Section" /> &nbsp; <a
+				href="javascript:;"
+				onclick="showHideElement(document.getElementById('filterDiv'),document.getElementById('twistImage'));"
+				class="filterLink">Filter</a></div>
+			<div class="filter" id="filterDiv">
+				<apex:outputPanel id="letterFilterContainer">
+					<div align="center">
+						<apex:form id="filterForm">
+							<ul class="letterFilter">
+								<li><apex:commandLink action="{!genMembers}" value="ALL"
+									styleclass="AllBtn" rerender="membersList" onclick="$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay')" oncomplete="$('paginationOverlay').hide()">
+									<apex:param name="ltr" value="ALL" />
+								</apex:commandLink></li>
+									<apex:repeat id="letterFilterRepeat" value="{!letterFilter}"
+										var="item">
+										<li><apex:outputpanel rendered="{!(item.containMembers)}">
+											<apex:commandLink styleclass="contains" action="{!genMembers}" 
+												value="{!item.letter}" rerender="membersList" onclick="$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay')" oncomplete="$('paginationOverlay').hide()">
+												<apex:param name="ltr" value="{!item.letter}" />
+											</apex:commandLink>
+										</apex:outputpanel> <apex:outputpanel rendered="{!NOT(item.containMembers)}">
+																			{!item.letter}
+																		</apex:outputpanel></li>
+									</apex:repeat>
+							</ul>
+							<br style="clear: both; font-size: 3px;" />
+						</apex:form>
+					</div>
+				</apex:outputPanel>
+			</div>
+			<apex:outputpanel rendered="{!IF(AND(prevPageShow,nextPageShow),false,true)}">
+				<hr class="filterHR" />
+			</apex:outputpanel> 
+			<apex:outputpanel id="membersList">
+				<apex:outputpanel styleClass="pagination" layout="block"
+					rendered="{!IF(AND(prevPageShow,nextPageShow),false,true)}">
+					<apex:form >
+						<div class="pages">
+							<ul>
+								<li class="prev {!IF(prevPageShow,'prev_disabled','')}"><apex:commandLink onclick="switchOverlay(true)" oncomplete="switchOverlay(false)" action="{!prevPage}" value="Previous Page" rerender="membersList"
+									rendered="{!prevPageLinkShow}" /> <apex:outputText value="Previous Page" rendered="{!prevPageShow}" /></li>
+								<li>({!currentPagination} - {!cntPagination})</li>
+								<li class="next {!IF(nextPageShow,'next_disabled','')}">
+								 <apex:commandLink onclick="switchOverlay(true)" oncomplete="switchOverlay(false)" action="{!nextPage}" value="Next Page" rerender="membersList"
+									rendered="{!nextPageLinkShow}" /> <apex:outputText value="Next Page" rendered="{!nextPageShow}" /></li>
+							</ul>
+						</div>
+					</apex:form>
+				</apex:outputpanel>
+				<apex:form id="membersListForm">
+					<table border="0" cellspacing="0" cellpadding="2px" class="pageList">
+						<thead>
+							<tr>
+								<td width="3%"><apex:outputpanel > <!-- rendered="{!userPermissions.canManage}" -->
+									<input class="actionCheckAll" onclick="checkUnCheck(this); setTimeout( 'toDelete()', 100 );"
+										type="checkbox" />
+								</apex:outputpanel></td>
+								<td width="9%"><apex:outputpanel style="font-weight:bold;">Action</apex:outputpanel> <!-- rendered="{!userPermissions.canManage}" --> 
+								</td>
+								<td width="29%" colspan="2"><apex:commandLink styleclass="member_title_description" onclick="$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay');" oncomplete="$('paginationOverlay').hide();" action="{!sortList}"
+									value="Full Name"   rerender="membersList">
+									<apex:param name="sb" value="User__r.Name" />
+								</apex:commandLink>&nbsp; <apex:outputpanel rendered="{!IF(sortBy == 'name',true,false)}">
+									<apex:outputpanel rendered="{!sortByDesc}">
+										<img
+											src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_down.gif')}" />
+									</apex:outputpanel>
+									<apex:outputpanel rendered="{!NOT(sortByDesc)}">
+										<img
+											src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_top.gif')}" />
+									</apex:outputpanel>
+								</apex:outputpanel></td>
+								<td width="16%"><apex:commandLink styleclass="member_title_description" action="{!sortList}"
+									value="Alias" onclick="$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay');" oncomplete="$('paginationOverlay').hide();"  rerender="membersList">
+									<apex:param name="sb" value="User__r.Alias" />
+								</apex:commandLink>&nbsp; <apex:outputpanel rendered="{!IF(sortBy == 'alias',true,false)}">
+									<apex:outputpanel rendered="{!sortByDesc}">
+										<img
+											src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_down.gif')}" />
+									</apex:outputpanel>
+									<apex:outputpanel rendered="{!NOT(sortByDesc)}">
+										<img
+											src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_top.gif')}" />
+									</apex:outputpanel>
+								</apex:outputpanel></td>
+								<td width="15%"><apex:commandLink styleclass="member_title_description" action="{!sortList}"
+									value="Username" onclick="$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay');" oncomplete="$('paginationOverlay').hide();"  rerender="membersList">
+									<apex:param name="sb" value="User__r.Username" />
+								</apex:commandLink>&nbsp; <apex:outputpanel rendered="{!IF(sortBy == 'username',true,false)}">
+									<apex:outputpanel rendered="{!sortByDesc}">
+										<img
+											src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_down.gif')}" />
+									</apex:outputpanel>
+									<apex:outputpanel rendered="{!NOT(sortByDesc)}">
+										<img
+											src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_top.gif')}" />
+									</apex:outputpanel>
+								</apex:outputpanel></td>
+								<td width="16%">
+									<apex:commandLink styleclass="member_title_description" action="{!sortList}" value="{!$ObjectType.Wiki__c.label} Profile" onclick="$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay');" oncomplete="$('paginationOverlay').hide();"  rerender="membersList">
+										<apex:param name="sb" value="WikiProfile__r.Name" />
+									</apex:commandLink>&nbsp; 
+									<apex:outputpanel rendered="{!IF(sortBy == 'profile',true,false)}">
+										<apex:outputpanel rendered="{!sortByDesc}">
+											<img src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_down.gif')}" />
+										</apex:outputpanel>
+										<apex:outputpanel rendered="{!NOT(sortByDesc)}">
+											<img src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_top.gif')}" />
+										</apex:outputpanel>
+									</apex:outputpanel>
+								</td>
+							</tr>
+						</thead>
+						<!-- Description  -->
+						<tbody>
+ 							<apex:repeat var="item" value="{!members}"
+								rows="{!numberOfItemsToShow}" first="{!firstRow}">
+								<tr>
+									<td>
+										<apex:outputpanel >  <!-- rendered="{!userPermissions.canManage}" -->
+											<input value="{!item.wikiMemberId}" class="actionCheck"	type="checkbox" onclick="toDelete()" />
+										</apex:outputpanel>
+									</td>
+									<td> 
+										<apex:outputpanel > <!-- rendered="{!userPermissions.canManage}" -->
+                                            <apex:commandLink styleclass="member_detail_description_underline" value="Delete" action="{!assignRemoveId}"
+                                                              onclick="createOverlay('','removeMemberOverlay','','');relocateOverlay();" oncomplete="rerenderOverlay();">
+                                                <apex:param name="delId" value="{!item.userId}" />
+                                            </apex:commandLink>
+                                            <!-- <apex:actionFunction name="setMemberRemoveId_{!item.userId}" action="{!assignRemoveId}" rerender="overlaysPanel" oncomplete="rerenderOverlay()">
+								                <apex:param name="delId" value="{!item.userId}" />
+								            </apex:actionFunction>-->
+                                        </apex:outputpanel>
+                                    </td>
+                                    <td class="member_detail_description">
+                                       <a href="https://na1.salesforce.com/{!item.userId}" class="member_detail_description_underline">{!item.name}</a>
+                                    </td>
+                                    <td class="member_detail_description"></td>
+                                    <td class="member_detail_description">{!item.alias}</td>
+                                    <td class="member_detail_description">{!item.username}</td>
+                                    <td class="member_detail_description">{!item.profile}</td>
+                                </tr>
+                            </apex:repeat>
+						</tbody>
+					</table>
+				</apex:form>
+				<hr class="filterHR" />
+				<apex:outputpanel styleClass="pagination" layout="block" rendered="{!IF(AND(prevPageShow,nextPageShow),false,true)}">
+					<apex:form >
+						<div class="pages">
+							<ul>
+								<li class="prev {!IF(prevPageShow,'prev_disabled','')}">
+									<apex:commandLink onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" action="{!prevPage}" value="Previous Page" rerender="membersList" rendered="{!prevPageLinkShow}" /> 
+									<apex:outputText value="Previous Page" rendered="{!prevPageShow}" />
+								</li>
+								<li>
+									({!currentPagination} - {!cntPagination})
+								</li>
+								<li class="next {!IF(nextPageShow,'next_disabled','')}">
+									<apex:commandLink onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" action="{!nextPage}" value="Next Page" rerender="membersList" rendered="{!nextPageLinkShow}" /> 
+									<apex:outputText value="Next Page" rendered="{!nextPageShow}" />
+								</li>
+							</ul>
+						</div>
+					</apex:form>
+				</apex:outputpanel>
+				<apex:outputpanel rendered="{!IF(AND(prevPageShow,nextPageShow),false,true)}">
+					<hr class="filterHR" />
+				</apex:outputpanel>
+				<table width="100%">
+					<tr>
+						<td class="teamTitleButton titleTd">
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+						<td align='center'>
+						<table width="123px">
+							<tr>
+								<td>
+								<div><!-- BUTTONS --> 
+									<apex:outputpanel id="thisIs"> <!-- rendered="{!userPermissions.canManage}" -->
+										<a onclick="createOverlay('','inviteTeam','','showSelects()'); relocateOverlay(); setTimeout( 'focusToWikiMW()', 1200 );" href="javascript:;" class="blackbutton">New</a>
+										<a href="javascript:;" class="blackbutton" onclick="massiveRemoveOverlay(); relocateOverlay()">Remove</a>
+									</apex:outputpanel> <!-- BUTTONS --></div>
+								</td>
+							</tr>
+						</table>
+						</td>
+						<td class="teamTitleButton titleTd">
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+					</tr>
+				</table>
+				<br />
+			</apex:outputpanel>
+		</div>
+	</div>
+
+
+	<apex:outputpanel id="overlaysPanel">
+    	<apex:include pageName="WikiMembersRemove" />
+    	<apex:include pageName="WikiMembersMassiveRemove" id="incWMMROverlay"/>
+    </apex:outputpanel>
+	
+	<script>
+		document.observe('dom:loaded',startupFunc);
+		if(inEdition) {
+			document.observe('dom:loaded', setTimeout('hideOverMemberTab()', 1000));
+			setTimeout('showAddMembersSection()', 1000);
+		}
+		readPortalCSSRules();
+		countStringLimit($('WikiCreateWiki:createNewTeamForm:TeamDescription'),'stringSizeCounter');
+        window.onload = function() {
+            setAccessTypeChecked();
+        }
+		function toDelete()
+		{
+			var str = '';
+			arr = $$( 'input.actionCheck' );
+			for( var box in arr )
+			{
+				if( arr[ box ].checked )
+				str += arr[ box ].value + ',';
+			}
+			str = str.substring( 0, str.length -1 );
+			
+			$( 'WikiCreateWiki:incWMMROverlay:WMROverlay:newMemberForm:idsToDelete' ).value = str;
+			//alert( 'L:' + arr.length + ':::' + $( 'WikiCreateWiki:incWMMROverlay:WMROverlay:newMemberForm:idsToDelete' ).value );
+		}
+
+		function backUpDivsForFirstTime(){
+			settingsBackUp = $('body_center').innerHTML;
+			membersBackUp = $('membersListDiv').innerHTML;
+			$('membersListDiv').innerHTML = '';
+		}
+	</script>
+</apex:page>
