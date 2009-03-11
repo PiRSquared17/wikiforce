@@ -31,6 +31,10 @@
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>ParseHtml</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>SearchController</apexClass>
         <enabled>true</enabled>
     </classAccesses>
