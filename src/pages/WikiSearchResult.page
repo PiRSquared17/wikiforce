@@ -22,7 +22,7 @@
        TrunkSearchKeyString();
     }
     </script>
-    
+
 	<!-- WikiSearchResult CSS -->
 	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/wikiSearchResult.css')}" />
 	
@@ -48,7 +48,7 @@
 			<div class="PageBlock">	
 	
 				<!-- Left Sidebar -->
-				<table border="0" class="bodyTable">
+				<table border="0" class="bodyTable" cellspacing="0" cellpadding="0">
 					<tr>
 						<!-- Left Sidebar -->
 						<td valign="top" class="sideBarTD">
