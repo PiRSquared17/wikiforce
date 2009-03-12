@@ -841,8 +841,9 @@ public class ParseHtml {
 		 		html = html.replaceFirst('(?i)' + tocCentinel,'');
 				
 				Integer a = tempToc1[0].length() - 1;
-				String part1 = tempToc1[0].substring(0,a);
-				String numH = tempToc1[0].substring(a,a + 1);
+				System.debug( 'ooooooooooooooo: ' + tempToc1[0].length() );
+				String part1 = '';//tempToc1[0].substring(0,a);
+				String numH = '';//tempToc1[0].substring(a,a + 1);
 		 		html = part1 + '<a name="'+ tempToc2[0] + '"></a>' + tempToc2[1]; 
 		 		
 		 		toc += '<a  href="#' + tempToc2[0] + '" style="padding-left:' + numH + '0px;padding-bottom:5px;">' + tempToc2[0] + '</a><br>\n';
