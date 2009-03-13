@@ -5,6 +5,7 @@
             inEdition = {!inEdition};
         }       
         var wikiType = "{!Wiki.Type__c}";
+        
 
     // <!-- Scripts to show the new members overlay and the members list -->
 
@@ -487,7 +488,7 @@
 	<apex:outputpanel id="auxPanel" style="display:none;"></apex:outputpanel>	
 	
 	<!-- MEMBERS LIST --> 
-    <div id="membersListDiv" class="holder" style="visibility: hidden; margin-bottom:-13px !important;">
+    <div id="membersListDiv" class="holder" style="visibility: hidden; display:none; margin-bottom:-13px !important;">
 		<div id="paginationOverlay" style="display: none;" class="paginationOverlay">
 			<div class="loader"></div>
 		</div>
@@ -726,11 +727,11 @@
 			document.observe('dom:loaded', setTimeout('hideOverMemberTab()', 1000));
 			setTimeout('showAddMembersSection()', 1000);
 		}
+		
+		document.observe('dom:loaded', setTimeout('setAccessTypeChecked()', 1000));
 		readPortalCSSRules();
 		countStringLimit($('WikiCreateWiki:createNewTeamForm:TeamDescription'),'stringSizeCounter');
-        window.onload = function() {
-            setAccessTypeChecked();
-        }
+        
 		function toDelete()
 		{
 			var str = '';

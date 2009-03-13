@@ -1513,5 +1513,5 @@ public class WikiPageController {
    		DeleteWiki delW = new DeleteWiki();
    		return delW.deleteWikiPage(wikiPageBodyList,userPermissions);
    	}
-   	  		  		 		
+
 }
