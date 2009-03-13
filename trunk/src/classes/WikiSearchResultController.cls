@@ -80,7 +80,20 @@ public class WikiSearchResultController {
 		if (criteria == null || criteria == '')               
 			results= [select Name, Id from WikiPage__c where Wiki__r.Type__c != 'private' OR Wiki__c in:myWikis ORDER By Name]; 
 		else
-			results = (List<WikiPage__c>)[FIND :(criteria + '*') IN ALL FIELDS RETURNING WikiPage__c (Id, Name  where Wiki__r.Type__c != 'private' OR Wiki__c in:myWikis ORDER By Name)][0];	
+		{
+			String cad = '';
+			for( WikiMember__c wm: wikisMembers)
+			cad ='Wiki__c = \'' + wm.Wiki__c + '\' OR ';
+			
+			
+			if( cad.length() > 0 )
+			cad = ' OR ' + cad.substring( 0, cad.length() -3 );		
+
+			String namespace = TeamUtil.getNamespace();
+			String prefix = (namespace != '') ? namespace + '__' : '';			
+
+			results = (List<WikiPage__c>) search.query( 'FIND \'' + criteria + '*\' IN ALL FIELDS RETURNING '+ prefix +'WikiPage__c (Id, Name  where Wiki__r.Type__c != \'private\'' + cad + ' ORDER By Name)')[0];	
+		}
 		
 		for(WikiPage__c l: results){
 			sr searchResult = new sr();
