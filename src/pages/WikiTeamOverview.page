@@ -228,6 +228,9 @@
 														</div>
 													</apex:repeat>
 												</apex:form>
+												<apex:outputpanel id="noRecentlyPanel" rendered="{!NOT(pagesUpdates)}">
+													There are no recently updated pages
+												</apex:outputpanel>
 											</apex:outputpanel>
 										</td>
 									</tr>

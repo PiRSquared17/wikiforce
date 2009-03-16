@@ -22,7 +22,7 @@
 		<div class="overlayMainContent">
 			<div class="overlayFormContent">
 				<b>Are you sure you want to delete this wiki?</b><br />
-				<span>Once a wiki is deleted, wiki pages and coments are not recoverable</span>
+				<span>Once a wiki is deleted, wiki pages and comments are not recoverable</span>
 			</div>
 			<div class="overlaySeparateLine"></div>
 			<div class="overlayFromButtons" align="center">
