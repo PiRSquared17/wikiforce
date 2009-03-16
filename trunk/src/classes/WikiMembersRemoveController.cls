@@ -81,15 +81,16 @@ public class WikiMembersRemoveController {
 	* return if the member to remove is the last admin
 	*/
 	public Boolean getIsLastMemberAdmin() {
-		System.debug('LALALAALALALLALA:' + WikiCreateWikiController.removeMemberId);
+		Boolean isLastAdminMember = false;
 		if (WikiCreateWikiController.removeMemberId != null 
 				&& WikiCreateWikiController.removeMemberId != '') {
 			removeMemberId = WikiCreateWikiController.removeMemberId;
+
+			wmc.setUserId(removeMemberId);
+			wmc.setWikiId(idWiki);
+			isLastAdminMember = wmc.isLastMemberAdmin();	 
 		}
-		wmc.setUserId(removeMemberId);
-		wmc.setWikiId(idWiki);
-		System.debug('LALALAALALALLALA2:' + wmc.isLastMemberAdmin());
-		return wmc.isLastMemberAdmin();	 
+		return isLastAdminMember;
 	}
 	
 	public void doRefresh (){}
@@ -125,11 +126,13 @@ public class WikiMembersRemoveController {
 			if( adminList.size() > 0 )
 			{
 				this.finish = true;
+				this.error = false;
 				delete memberListToDelete;
 			}
 			else
 			{
 				this.error = true;
+				this.finish = false;
 				wmc.isLastMemberAdmin();
 			}
 			

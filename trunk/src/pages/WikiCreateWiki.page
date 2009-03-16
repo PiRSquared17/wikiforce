@@ -645,13 +645,9 @@
 									</td>
 									<td> 
 										<apex:outputpanel > <!-- rendered="{!userPermissions.canManage}" -->
-                                            <apex:commandLink styleclass="member_detail_description_underline" value="Delete" action="{!assignRemoveId}"
-                                                              onclick="createOverlay('','removeMemberOverlay','','');relocateOverlay();" oncomplete="rerenderOverlay();">
-                                                <apex:param name="delId" value="{!item.userId}" />
-                                            </apex:commandLink>
-                                            <!-- <apex:actionFunction name="setMemberRemoveId_{!item.userId}" action="{!assignRemoveId}" rerender="overlaysPanel" oncomplete="rerenderOverlay()">
-								                <apex:param name="delId" value="{!item.userId}" />
-								            </apex:actionFunction>-->
+                                            <a href="Javascript:;" onclick="setHiddenMemberId('{!item.userId}'); createOverlay('','removeMemberOverlay','','relocateOverlay()');">
+                                                Delete
+                                            </a>
                                         </apex:outputpanel>
                                     </td>
                                     <td class="member_detail_description">

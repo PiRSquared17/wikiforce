@@ -10,6 +10,7 @@ public with sharing class WikiTeamOverviewController {
 	public Boolean isLastMemberAdmin = wmc.isLastMemberAdmin();
 	//Lcosta added feb 10
 	public Boolean isPrivate;
+	public Boolean pagesUpdates = false;
 	/**
 	* Costructor
 	*/
@@ -17,6 +18,9 @@ public with sharing class WikiTeamOverviewController {
 		genContructor();
 	}
 	
+	public Boolean getPagesUpdates(){
+		return this.pagesUpdates;
+	}
 	/**
 	*@retrun bool is last member admin
 	*/
@@ -599,6 +603,7 @@ public with sharing class WikiTeamOverviewController {
    			wiki.setShortDescription(item.ShortDescription__c);
    			wikis.add(wiki);
    		}
+   		this.pagesUpdates = ( wikis.size() > 0 );
    		return wikis;
    	}
    	

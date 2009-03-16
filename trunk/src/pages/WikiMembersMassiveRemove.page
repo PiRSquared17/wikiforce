@@ -1,31 +1,32 @@
 <apex:page sidebar="false" tabStyle="Wiki__c" controller="WikiMembersRemoveController" id="WMROverlay">
-	
 	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamsMembersMassiveDelete.css')}" />
-	
 	<!-- Content  -->
 	<div id="massiveRemoveMemberOverlay" style="display:none;" class="overlayForm">	
 		<apex:outputPanel id="masiveRemoveContainer" >
-			<apex:outputPanel rendered="{! NOT( error )}">
-				<script>
-					if( '{!finish}' == 'true' )
-					{
-						modal.close();
-						reloadMemberList();
-					} 
-				</script>
-				<!-- Overlay Title -->
-				<div class="overlayTitleContent">
-					<div class="overlayTitle">Confirmation</div>
-					<div class="overlayCloseEvent">
-						<a href="Javascript:;" onclick="modal.close();">
-							<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/genericClose.gif')}" alt="Close Window" title="Close Window" />
-						</a> 
-					</div>
+			<!-- Overlay Title -->
+			<div class="overlayTitleContent">
+				<div class="overlayTitle">Confirmation</div>
+				<div class="overlayCloseEvent">
+					<a href="Javascript:;" onclick="modal.close();">
+						<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/genericClose.gif')}" alt="Close Window" title="Close Window" />
+					</a> 
 				</div>
-				<!-- Overlay Content -->
-				<div class="overlayMainContent">
-					<apex:form id="newMemberForm">
-						<apex:inputHidden id="idsToDelete" value="{!RemoveMemberIds}" />
+			</div>			
+			<script>
+				if( '{!finish}' == 'true' )
+				{
+					modal.close();
+					reloadMemberList();
+				} 
+			</script>
+			
+			<!-- Overlay Content -->
+			<div class="overlayMainContent">
+				
+				<apex:form id="newMemberForm">
+					<apex:inputHidden id="idsToDelete" value="{!RemoveMemberIds}" />
+					
+					<apex:outputPanel rendered="{!NOT(error)}">
 						<div class="overlayFormContent" style="padding-bottom: 10px;">
 							<table style="width:95%;"> 
 								<tr>
@@ -42,25 +43,9 @@
 							<apex:commandButton styleClass="allButtons actionButtons" action="{!massiveRemoveMember}" id="massiveRemoveAction" onclick="$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay');" value="Continue" rerender="masiveRemoveContainer"/>
 							<input class="allButtons cancelButtons" type="button" value="Cancel" onclick="modal.close();"/>
 						</div>
-						<apex:actionFunction name="rRemoveOverlay" rerender="masiveRemoveContainer" />
-					</apex:form>
-				</div>
-			</apex:outputPanel>
-	
-			<apex:outputPanel rendered="{! error }">
-				<!-- Overlay Title -->
-				<div class="overlayTitleContent">
-					<div class="overlayTitle">Confirmation</div>
-					<div class="overlayCloseEvent">
-						<a href="Javascript:;" onclick="modal.close();">
-							<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/genericClose.gif')}" alt="Close Window" title="Close Window" />
-						</a>
-					</div>
-				</div>
-				<!-- Overlay Content -->
-				<div class="overlayMainContent">
-					<apex:form >
-						<apex:inputHidden id="idsToDelete" value="{!RemoveMemberIds}" />
+					</apex:outputPanel>
+					
+					<apex:outputPanel rendered="{!error}">
 						<div class="overlayFormContent" style="padding-bottom: 10px;">
 							<table style="width:95%;"> 
 								<tr>
@@ -73,9 +58,11 @@
 						<div class="overlayFromButtons" align="center">
 							<input class="allButtons cancelButtons" type="button" value="Cancel" onclick="modal.close();$('paginationOverlay').hide()"/>
 						</div>
-					</apex:form>
-				</div>
-			</apex:outputPanel>
+					</apex:outputPanel>
+					
+					<apex:actionFunction name="rRemoveOverlay" rerender="masiveRemoveContainer" />
+				</apex:form>
+			</div>
 		</apex:outputPanel>
 	</div>
 </apex:page>
