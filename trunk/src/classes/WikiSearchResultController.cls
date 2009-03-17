@@ -72,7 +72,7 @@ public class WikiSearchResultController {
 			 
 		List<WikiMember__c> wikisMembers = new List<WikiMember__c>();
 		wikisMembers = [select Id, Wiki__r.Id from WikiMember__c where Wiki__r.Type__c = 'private' and User__c =: UserInfo.getUserId()];
-		
+		System.debug( '================>' + wikisMembers.size());
 		List<Wiki__c> myWikis = new List<Wiki__c>();
 		for( WikiMember__c wm: wikisMembers)
 			myWikis.add(wm.Wiki__r);

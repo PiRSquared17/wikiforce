@@ -115,18 +115,21 @@ public class WikiMembersRemoveController {
 		{
 			List<String> idsList = new List<String>();
 			
-			idsList = removeMemberIds.split( ',' );
+			idsList = removeMemberIds.split(',');
 			
 			List<WikiMember__c> memberListToDelete = new List<WikiMember__c>();
 			memberListToDelete = [ select Id, Name from WikiMember__c where Id in: idsList ];
 			
+			
 			List<WikiMember__c> adminList = new List<WikiMember__c>();
 			adminList = [ select Id from WikiMember__c where WikiProfile__r.ManageWikis__c = true and Wiki__c =: idWiki and Id not in: memberListToDelete ];
+
 						
 			if( adminList.size() > 0 )
 			{
 				this.finish = true;
 				this.error = false;
+				System.debug('this.finish: ' + this.finish);
 				delete memberListToDelete;
 			}
 			else

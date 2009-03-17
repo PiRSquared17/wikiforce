@@ -41,6 +41,7 @@
 			<apex:define name="moduleId"><apex:variable var="moduleId" value="headerWiki"/></apex:define>
 		    <apex:define name="module">Wiki</apex:define>
 		    <apex:define name="title">Home / Test Wiki</apex:define>
+		    <apex:define name="help">PageDetails</apex:define>
 		    <apex:define name="search">
 		    	<c:Search module="wiki" />
 		    </apex:define>
