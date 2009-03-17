@@ -1,5 +1,19 @@
 <apex:page id="WikiCreateWiki" controller="WikiCreateWikiController" tabStyle="Wiki__c" sidebar="false">
     <script>
+ 
+       function changeStatusButtonsRemoveOverlay(isLoading) {
+
+		if(isLoading){
+			$$('.cancelButtons').each(function(e){e.value = 'Deleting...'; e.disabled = true});
+			$$('.actionButtons').each(function(e){e.value = 'Deleting...'; e.disabled = true});
+		}
+		else{
+			$$('.cancelButtons').each(function(e){e.value = 'Cancel'; e.disabled = false});
+			$$('.actionButtons').each(function(e){e.value = 'Continue'; e.disabled = false});
+		}
+	}
+    
+    
         inEdition = false;
         if({!inEdition}){
             inEdition = {!inEdition};
@@ -133,6 +147,7 @@
 			<apex:define name="moduleId"><apex:variable var="moduleId" value="headerWiki"/></apex:define>
 		    <apex:define name="module">Wiki pages</apex:define>
 		    <apex:define name="title">OverView</apex:define>
+		    <apex:define name="help">CreateWiki</apex:define>
 		    <apex:define name="search">
 		    	<c:Search module="wiki" />
 		    </apex:define>
@@ -645,9 +660,7 @@
 									</td>
 									<td> 
 										<apex:outputpanel > <!-- rendered="{!userPermissions.canManage}" -->
-                                            <a href="Javascript:;" onclick="setHiddenMemberId('{!item.userId}'); createOverlay('','removeMemberOverlay','','relocateOverlay()');">
-                                                Delete
-                                            </a>
+                                            <a href="Javascript:;" onclick="setHiddenMemberId('{!item.WikiMemberId}'); createOverlay('','removeMemberOverlay','','relocateOverlay()');">Delete</a>
                                         </apex:outputpanel>
                                     </td>
                                     <td class="member_detail_description">
@@ -749,4 +762,6 @@
 			$('membersListDiv').innerHTML = '';
 		}
 	</script>
+	
+	
 </apex:page>

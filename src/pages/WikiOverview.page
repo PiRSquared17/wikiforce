@@ -69,8 +69,9 @@
 			<apex:define name="moduleId"><apex:variable var="moduleId" value="headerWiki"/></apex:define>
 		    <apex:define name="module">Wiki</apex:define>
 		    <apex:define name="title">Overview</apex:define>
+		    <apex:define name="help">WikiOverview</apex:define>
 		    <apex:define name="search">
-		    	<c:Search module="wiki" />
+		     	<c:Search module="wiki" />
 		    </apex:define>
 	    </apex:composition>
 	    <div class="MainPage">
@@ -370,4 +371,6 @@
 	<script>
 		readPortalCSSRules();
 	</script>
+
+	
 </apex:page>

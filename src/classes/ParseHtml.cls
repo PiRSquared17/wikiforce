@@ -239,6 +239,8 @@ public class ParseHtml {
         // Last Modified ----
         /////////////////////////////////////////////
         /*      Span tag parser     */
+       
+        /*
         
         // Expresiones de busqueda de propiedades
         String tagPropertie = '(?i)\\[[a-z]+:[a-z_0-9(), {}\\.\\-\\#]*\\]';
@@ -316,6 +318,7 @@ public class ParseHtml {
             theCounter++;
             //System.debug('EL contador esta en ' + theCounter);
         }
+        */
         //System.debug('Aca el HTML DEBERIA estar casi completo y es ----->' + html);
 
  		/* ------------------------ */

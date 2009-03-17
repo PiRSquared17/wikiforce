@@ -35,12 +35,13 @@
 	
 		<!-- Header -->
 		<apex:composition template="HeaderTemplate">
-			<apex:define name="moduleId"><apex:variable var="moduleId" value="headerWiki"/></apex:define>
+			   <apex:define name="moduleId"><apex:variable var="moduleId" value="headerWiki"/></apex:define>
 			   <apex:define name="module">Wiki</apex:define>
 			   <apex:define name="title">OverView</apex:define>
+			   <apex:define name="help">FindWiki</apex:define>
 			   <apex:define name="search">
-			   	<c:Search module="wiki" />
-			</apex:define>
+			   		<c:Search module="wiki" />
+			   </apex:define>
 		</apex:composition>
 		
 		<!-- Main Page -->

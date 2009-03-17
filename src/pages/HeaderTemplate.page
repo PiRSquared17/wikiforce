@@ -13,7 +13,8 @@
         <!-- Help for this page -->
         <div class="help">
             <div>
-				<a href="javascript:;">Help for this page</a>  <img src="{!URLFOR($Resource.TeamsResources, 'images/layout/help_icon.gif')}" alt="" />
+            	 <span id="spanHelp" style="display:none;"><apex:insert name="help"/></span>
+				 <a href="javascript:openHelp();">Help for this page</a><img src="{!URLFOR($Resource.TeamsResources, 'images/layout/help_icon.gif')}" alt="" />
             </div>
         </div>
 		<div class="gray_border"></div>
