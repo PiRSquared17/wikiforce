@@ -1475,6 +1475,10 @@
         <enabled>true</enabled>
     </pageAccesses>
     <pageAccesses>
+        <apexPage>WikiHelpContent</apexPage>
+        <enabled>true</enabled>
+    </pageAccesses>
+    <pageAccesses>
         <apexPage>WikiMembersMassiveRemove</apexPage>
         <enabled>true</enabled>
     </pageAccesses>

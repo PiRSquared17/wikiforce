@@ -1,0 +1,817 @@
+<apex:page sidebar="false" showHeader="false">
+	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/WikiHelpContent.css')}" />
+
+	<center>
+		<h2>Wiki Help Content</h2>
+	</center>
+	
+	<table class="helpContent" border="1px" cellspacing="0px" cellpadding="6px">
+		<colgroup span="1" style="width: 227px"></colgroup>
+		<colgroup span="1" style="width: auto"></colgroup>
+		<colgroup span="1" style="width: 205px"></colgroup>
+		<tr class="header">
+			<th>Formatting command and description</th>
+			<th>You type</th>
+			<th>You get</th>
+		</tr>
+		<tr>
+			<td class="type" colspan="3" align="center"><em>Text Formatting</em>
+		</tr>
+		<tr>
+			<td>
+				Italic text
+			</td>
+			<td>
+				''italic''
+			</td>
+			<td>
+				<em>italic</em>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Bold text
+			</td>
+			<td>
+				'''bold'''
+			</td>
+			<td>
+				<strong>bold</strong>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Bold and italic text
+			</td>
+			<td>
+				''' ''bold & italic'' '''
+			</td>
+			<td>
+				<strong><em>bold & italic</em></strong>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Underline text
+			</td>
+			<td>
+				__ underline __
+			</td>
+			<td>
+				<u>underline</u>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Strike text
+			</td>
+			<td>
+				--( strike )--				
+			</td>
+			<td>
+				<strike>strike</strike>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Subscript Text
+			</td>
+			<td>
+				some text ,, subscript ,,				
+			</td>
+			<td>
+				some text<sub>subscript</sub>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Superscript Text
+			</td>
+			<td>
+				some text ^ superscript ^				
+			</td>
+			<td>
+				some text<sup>superscript</sup>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Escape wiki markup
+			</td>
+			<td>
+				{{{ no "markup" }}}
+			</td>
+			<td>
+				<table style="border: 1px solid rgb(175, 175, 175); padding: 20px; background-color: rgb(250, 250, 250);"><tbody><tr><td>no ''markup''</td></tr></tbody></table>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Headings of different levels 
+			</td>
+			<td>
+				==level 2== <br>
+				===level 3=== <br>
+				====level 4==== <br>
+				=====level 5===== <br>
+				======level 6======	<br>		
+			</td>
+			<td>
+				<h2 style="font-size:20px">level 2</h2>
+				<h2 style="font-size:18px">level 3</h2>
+				<h2 style="font-size:16px">level 4</h2>
+				<h2 style="font-size:14px">level 5</h2>
+				<h2 style="font-size:13px">level 6</h2>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Table of Contents<br>
+				For each page with headings, a table of contents (TOC) is automatically generated when you use the TOC syntax.
+			</td>
+			<td>
+				%TOC%		
+			</td>
+			<td> 
+				<table style="padding:20px;background-color:#FFFFFF;border:1px solid #AAAAAA;">
+					<tr>
+						<td>
+							<a  href="#header 2 one" style="padding-left: 20px;padding-bottom:5px;">header 2 one</a><br>
+							<a  href="#header 3 one" style="padding-left: 30px;padding-bottom:5px;">header 3 one</a><br>
+							<a  href="#header 3 two" style="padding-left: 30px;padding-bottom:5px;">header 3 two</a><br>
+							<a  href="#header 4 one" style="padding-left: 40px;padding-bottom:5px;">header 4 one</a><br>
+							<a  href="#header 5 one" style="padding-left: 50px;padding-bottom:5px;">header 5 one</a><br>
+							<a  href="#header 2 two" style="padding-left: 20px;padding-bottom:5px;">header 2 two</a><br>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>		
+		<tr>
+			<td>
+				Horizontal line
+			</td>
+			<td>
+				----			
+			</td>
+			<td>
+				<hr />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Bullet list
+			</td>
+			<td>
+				* one<br>
+				* two<br>
+				* three<br>
+				** three and one-third<br>
+				** three and two-thirds<br>
+				* four	
+			</td>
+			<td>
+				<ul>
+					<li>one</li>
+					<li>two</li>
+					<li>three</li>
+						<ul>
+							<li>three and one-third</li>
+							<li>three and two-thirds</li>
+						</ul>
+					<li>four</li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Numbered list
+			</td>
+			<td>
+				~ one<br>
+				~ two<br>
+				~ three<br>
+				~~ three and one-third<br>
+				~~ three and two-thirds<br>	
+				~ four	
+			</td>
+			<td>
+				<ol>
+					<li>one</li>
+					<li>two</li>
+					<li>three</li>
+						<ol>
+							<li>three and one-third</li>
+							<li>three and two-thirds</li>
+						</ol>
+					<li>four</li>
+				</ol>
+			</td>
+		</tr>
+		<tr>
+			<td class="type" colspan="3" align="center"><em>Colorized Code</em>
+		</tr>
+		<tr>
+			<td>
+				Background Color
+			</td>
+			<td>
+				[Bgcolor:red<br>
+					Red Background color<br>
+				Bgcolor]
+			</td>
+			<td>
+				<span style="background-color:red;">Red Background color</span>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Text Color 
+			</td>
+			<td>
+				[Color:#0000FF<br>
+					Blue Text<br>
+				Color]
+			</td>
+			<td>
+				<span style="color:#0000FF;">Blue Text</span>
+			</td>
+		</tr>
+		<tr>
+			<td class="type" colspan="3" align="center"><em>Text alignment and indentation</em>
+		</tr>
+		<tr>
+			<td>
+				Center alignment
+			</td>
+			<td>
+				[[= Center alignment =]]
+			</td>
+			<td>
+				<p style="text-align: center;">Center alignment</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Left alignment
+			</td>
+			<td>
+				[[< Left alignment <]]
+			</td>
+			<td>
+				<p style="text-align: left;">Left alignment</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Right alignment
+			</td>
+			<td>
+				[[> Right alignment >]]
+			</td>
+			<td>
+				<p style="text-align: right">Right alignment</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Justify alignment
+			</td>
+			<td>
+				[[<> Justify alignment <>]]
+			</td>
+			<td>
+				<p style="text-align: justify">Justify alignment Justify alignment Justify alignment Justify alignment Justify alignment Justify alignment Justify alignment</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Text indentation
+			</td>
+			<td>
+				[[-> text indent 20px ->]]<br>
+				[[--> text indent 40px -->]]<br>
+				[[---> text indent 60px --->]]<br>
+				...<br>
+				...
+			</td>
+			<td>
+				<p style="margin-left: 20px;">text indent 20px</p>
+				<p style="margin-left: 40px;">text indent 40px</p>
+				<p style="margin-left: 60px;">text indent 60px</p>
+				...<br>
+				...
+			</td>
+		</tr>
+		<tr>
+			<td class="type" colspan="3" align="center"><em>Linking Methods</em>
+		</tr>	
+		<tr>
+			<td>
+				Link a Wiki page
+			</td>
+			<td>
+				[[Team Name : Wiki Page 1]]<br>
+				[[Wiki Page 2]] &nbsp;&nbsp;&nbsp;&nbsp;<sup>[<a href="#obs1">1</a>]</sup> 
+			</td>
+			<td>
+				<a href="javascript:;">Wiki Page 1</a><br>
+				<a href="javascript:;">Wiki Page 2</a>				
+			</td>
+		</tr>		
+		<tr>
+			<td>
+				Remote link
+			</td>
+			<td>
+				[http://host.com Link Name]
+			</td>
+			<td>
+				<a href="javascript:;">Link Name</a>			
+			</td>
+		</tr>			
+		<tr>
+			<td>
+				Link to an attached File
+			</td>
+			<td>
+				[File: attachFile]
+			</td>
+			<td>
+				<a href="javascript:;">attachFile</a>			
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Insert an attached Flash
+			</td>
+			<td>
+				[Flash: Appexchange.swf]
+			</td>
+			<td>
+				<embed height="100" width="100" src="Appexchange.swf" type="application/x-shockwave-flash"/>			
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Insert an attached Image<br>
+				a : alignment (left, right or center)<br>
+				w : width<br>
+				h : height<br>
+				src : attached image name <sup>[<a href="#obs2">2</a>]</sup> 
+			</td>
+			<td>
+				[Image: src:default_team_100x100.png; w: 150px; h: 150px; a: right]
+			</td>
+			<td>
+				<img src="{!URLFOR($Resource.commonResources, '/images/placeholders/default_team_100x100.png')}" width="150px" height="150px" align="right" />		
+			</td>
+		</tr>
+		<tr>
+			<td class="type" colspan="3" align="center"><em>Tables</em>
+		</tr>
+		<tr>
+			<td colspan="3">
+				{| start table<br>
+				|- table row, optional on first row (wiki engine assumes the first row)<br>
+				| table data cell, required! Consecutive table data cells may be start on new lines, each with its own single mark (|).<br>
+				|} end table<br>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Plain
+			</td>
+			<td>
+				{|<br>
+				| cell 1.1<br>
+				| cell 2.1<br>
+				|-<br>
+				| cell 2.1<br>
+				| cell 2.2<br>
+				|}	<br>
+			</td>
+			<td>
+				<table>
+					<tr>
+						<td>cell 1.1</td>
+						<td>cell 2.1</td>
+					</tr>
+					<tr>
+						<td>cell 2.1</td>
+						<td>cell 2.2</td>
+					</tr>
+				</table>
+			</td>
+		</tr>	
+		<tr>
+			<td>
+				With HTML attributes
+			</td>
+			<td>
+				{| cellpadding="5" cellspacing="0" border="1" width="100%"<br>
+				| cell 1.1<br>
+				| cell 2.1<br>
+				|-<br>
+				| cell 2.1<br>
+				| cell 2.2<br>
+				|}	<br>
+			</td>
+			<td>
+				<table cellpadding="5" cellspacing="0" border="1" width="100%">
+					<tr>
+						<td>cell 1.1</td>
+						<td>cell 2.1</td>
+					</tr>
+					<tr>
+						<td>cell 2.1</td>
+						<td>cell 2.2</td>
+					</tr>
+				</table>
+			</td>
+		</tr>	
+		<tr>
+			<td>
+				Attributes on cells and rows
+			</td>
+			<td>
+				{| border="1"<br>
+				|Cell 1<br>
+				|Cell 2<br>
+				|align="right"|12,333.00<br>
+				|-<br>
+				|Cell 3<br>
+				|Cell 4<br>
+				|align="right"|500.00<br>
+				|- style="font-style:italic;color:green;"<br>
+				|Cell 5<br>
+				|Cell 6<br>
+				|align="right"|1.00<br>
+				|}
+			</td>
+			<td>
+				<table border="1">
+					<tbody>
+						<tr>
+							<td>Cell 1</td>
+							<td>Cell 2</td>
+							<td align="right">12,333.00</td>
+						</tr>
+						<tr>
+							<td>Cell 3</td>
+							<td>Cell 4</td>
+							<td align="right">500.00</td>
+						</tr>
+						<tr style="font-style: italic; color: green;">
+							<td>Cell 5</td>
+							<td>Cell 6</td>
+							<td align="right">1.00</td>
+						</tr>
+					</tbody>
+				</table>
+			</td>
+		</tr>	
+		<tr>
+			<td>
+				With TH headings
+			</td>
+			<td>
+				{| border="1" cellpadding="20" cellspacing="0"<br>
+				!Header 1<br>
+				!Header 2<br>
+				|-<br>
+				|Cell 1<br>
+				|Cell 2<br>
+				|-<br>
+				|Cell 3<br>
+				|Cell 4<br>
+				|-<br>
+				|Cell 5<br>
+				|Cell 6 <br>
+				|}
+			</td>
+			<td>
+				<table cellspacing="0" cellpadding="20" border="1">
+					<tbody>
+						<tr>
+							<th>Header 1</th>
+							<th>Header 2</th>
+						</tr>
+						<tr>
+							<td>Cell 1</td>
+							<td>Cell 2</td>
+						</tr>
+						<tr>
+							<td>Cell 3</td>
+							<td>Cell 4</td>
+						</tr>
+						<tr>
+							<td>Cell 5</td>
+							<td>Cell 6</td>
+						</tr>
+					</tbody>
+				</table>
+			</td>
+		</tr>	
+		<tr>
+			<td>
+				Simple Caption
+			</td>
+			<td>
+				{| border="1"<br>
+				|+The Table<br>
+				| cell 1.1<br>
+				| cell 2.1<br>
+				|-<br>
+				| cell 2.1<br>
+				| cell 2.2<br>
+				|}	<br>
+			</td>
+			<td>
+				<table border="1">
+					<caption>The Table</caption>
+					<tbody>
+						<tr>
+							<td>cell 1.1</td>
+							<td>cell 2.1</td>
+						</tr>
+						<tr>
+							<td>cell 2.1</td>
+							<td>cell 2.2</td>
+						</tr>
+					</tbody>
+				</table>
+			</td>
+		</tr>	
+		<tr>
+			<td>
+				Caption width attributes
+			</td>
+			<td>
+				{| border="1"<br>
+				|+ align="bottom" style="color:#e76700;"|''The Table''<br>
+				| cell 1.1<br>
+				| cell 2.1<br>
+				|-<br>
+				| cell 2.1<br>
+				| cell 2.2<br>
+				|}	<br>
+			</td>
+			<td>
+				<table border="1">
+					<caption align="bottom" style="color:#e76700;"><strong>The Table</strong></caption>
+					<tbody>
+						<tr>
+							<td>cell 1.1</td>
+							<td>cell 2.1</td>
+						</tr>
+						<tr>
+							<td>cell 2.1</td>
+							<td>cell 2.2</td>
+						</tr>
+					</tbody>
+				</table>
+			</td>
+		</tr>								
+		<tr>
+			<td class="type" colspan="3" align="center"><em>Emoticons</em>
+		</tr>
+		<tr>
+			<td>
+				Happy
+			</td>
+			<td>
+				:)
+			</td>
+			<td>
+				<img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/regular_smile.gif')}" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Very happy
+			</td>
+			<td>
+				:D
+			</td>
+			<td>
+				<img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/teeth_smile.gif')}" />
+			</td>
+		</tr>		
+		<tr>
+			<td>
+				Sad
+			</td>
+			<td>
+				:(
+			</td>
+			<td>
+				<img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/sad_smile.gif')}" />
+			</td>
+		</tr>			
+		<tr>
+			<td>
+				Crying
+			</td>
+			<td>
+				:'(
+			</td>
+			<td>
+				<img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/cry_smile.gif')}" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Wink
+			</td>
+			<td>
+				;)
+			</td>
+			<td>
+				<img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/wink_smile.gif')}" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Devil
+			</td>
+			<td>
+				(6)
+			</td>
+			<td>
+				<img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/devil_smile.gif')}" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Angry
+			</td>
+			<td>
+				:@
+			</td>
+			<td>
+				<img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/angry_smile.gif')}" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Tongue
+			</td>
+			<td>
+				:P
+			</td>
+			<td>
+				<img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/tounge_smile.gif')}" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Oh
+			</td>
+			<td>
+				:O
+			</td>
+			<td>
+				<img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/omg_smile.gif')}" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Confused
+			</td>
+			<td>
+				:S
+			</td>
+			<td>
+				<img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/confused_smile.gif')}" />
+			</td>
+		</tr>		
+		<tr>
+			<td>
+				Embaressed
+			</td>
+			<td>
+				:$
+			</td>
+			<td>
+				<img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/embaressed_smile.gif')}" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Angel
+			</td>
+			<td>
+				(A)
+			</td>
+			<td>
+				<img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/angel_smile.gif')}" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Idea
+			</td>
+			<td>
+				(I)
+			</td>
+			<td>
+				<img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/lightbulb.gif')}" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Thumbs up
+			</td>
+			<td>
+				(Y)
+			</td>
+			<td>
+				<img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/thumbs_up.gif')}" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Thumbs down
+			</td>
+			<td>
+				(N)
+			</td>
+			<td>
+				<img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/thumbs_down.gif')}" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Heart
+			</td>
+			<td>
+				(L)
+			</td>
+			<td>
+				<img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/heart.gif')}" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Broken heart
+			</td>
+			<td>
+				(U)
+			</td>
+			<td>
+				<img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/broken_heart.gif')}" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Kiss
+			</td>
+			<td>
+				(K)
+			</td>
+			<td>
+				<img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/kiss.gif')}" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Email
+			</td>
+			<td>
+				(E)
+			</td>
+			<td>
+				<img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/envelope.gif')}" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Shades
+			</td>
+			<td>
+				(H)
+			</td>
+			<td>
+				<img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/shades_smile.gif')}" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Surprised
+			</td>
+			<td>
+				:|
+			</td>
+			<td>
+				<img src="{!URLFOR($Resource.FCKeditor, 'fckeditor/editor/images/smiley/msn/whatchutalkingabout_smile.gif')}" />
+			</td>
+		</tr>			
+	</table>
+	<br>
+	<strong>Observations:</strong><br>	
+	<ol>
+		<li><a name="obs1"></a>If the Wiki Page that we are linking is in the same Team, there is no need to specify it</li>
+		<li><a name="obs2"></a>Src is the only required attribute</li>
+	</ol>	
+</apex:page>

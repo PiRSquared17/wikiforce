@@ -3,22 +3,6 @@
 	<!-- Content  -->
 	<div id="removeMemberOverlay" style="display: none;" class="overlayForm">
 		<apex:outputPanel id="removeMemberContainer">
-			<script>
-				
-				/**
-				* Assign member id to hidden field idsToDelete
-				* @param member id to remove from wiki. 
-				*/
-				function setHiddenMemberId(memberId){
-					var elems  = $('overlayRemoveMember').getElementsByTagName('input');
-					for(var i = 0; i< elems.length; i++){
-						if(elems[i].type == 'hidden' && elems[i].id.split('idsToDelete').length > 1){
-							elems[i].value = memberId;
-						}
-					}
-				}
-			
-			</script>
 	
 			<!-- Overlay Title -->
 			<div class="overlayTitleContent">
@@ -95,7 +79,7 @@
 				//alert('{!error}');
 				if( errorStatus == 'true' ){
 					$('paginationOverlay').hide();
-					document.getElementById('WikiCreateWiki:j_id417:j_id418:newMemberForm').innerHTML = '<span id="j_id455"><div class="overlayFormContent" style="padding-bottom: 10px;"><table style="width: 95%;"><tbody><tr><td><span class="inputInfoDark">You can not remove all admin members</span></td></tr></tbody></table></div> <div class="overlaySeparateLine"/> <div align="center" class="overlayFromButtons"><input type="button" class="allButtons cancelButtons" onclick="modal.close();" value="Cancel"/></div></span>';
+					document.getElementById('WikiCreateWiki:j_id417:j_id418:newMemberForm').innerHTML = '<span id="j_id455"><div class="overlayFormContent" style="padding-bottom: 10px;"><table style="width: 95%;"><tbody><tr><td><span class="inputInfoDark">You can not remove all admin members</span></td></tr></tbody></table></div> <div class="overlaySeparateLine"></div> <div align="center" class="overlayFromButtons"><input type="button" class="allButtons cancelButtons" onclick="modal.close();" value="Cancel"/></div></span>';
        
 				}
 			</script>
