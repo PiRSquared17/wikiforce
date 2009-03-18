@@ -1,7 +1,7 @@
 /**
 *@author Gabriel Rilo @ 18-12-2008
 */
-public class WikiSearchResultController {
+public  with sharing class WikiSearchResultController {
 
 	public String criteria;
 	
@@ -71,34 +71,32 @@ public class WikiSearchResultController {
 		List<sr> srList2 = new List<sr>();
 			 
 		List<WikiMember__c> wikisMembers = new List<WikiMember__c>();
+
 		wikisMembers = [select Id, Wiki__r.Id from WikiMember__c where Wiki__r.Type__c = 'private' and User__c =: UserInfo.getUserId()];
-		System.debug( '================>' + wikisMembers.size());
+				
 		List<Wiki__c> myWikis = new List<Wiki__c>();
 		for( WikiMember__c wm: wikisMembers)
 			myWikis.add(wm.Wiki__r);
-
+		
+		
 		if (criteria == null || criteria == '')               
 			results= [select Name, Id from WikiPage__c where Wiki__r.Type__c != 'private' OR Wiki__c in:myWikis ORDER By Name]; 
 		else
 		{
 			String cad = '';
 			for( WikiMember__c wm: wikisMembers)
-			cad ='Wiki__c = \'' + wm.Wiki__c + '\' OR ';
+			cad +=' OR Wiki__c = \'' + wm.Wiki__r.Id + '\'';
 			
-			
-			if( cad.length() > 0 )
-			cad = ' OR ' + cad.substring( 0, cad.length() -3 );		
-
-			String namespace = TeamUtil.getNamespace();
+			String namespace = TeamUtil.getNamespace(); 
 			String prefix = (namespace != '') ? namespace + '__' : '';			
-
+			
 			results = (List<WikiPage__c>) search.query( 'FIND \'' + criteria + '*\' IN ALL FIELDS RETURNING '+ prefix +'WikiPage__c (Id, Name  where Wiki__r.Type__c != \'private\'' + cad + ' ORDER By Name)')[0];	
 		}
-		
+		 
 		for(WikiPage__c l: results){
 			sr searchResult = new sr();
 			searchResult.setWikiPageName(l.Name, criteria);
-			searchResult.setWikiPageId(l.Id);
+			searchResult.setWikiPageId(l.Id); 
 			srList2.add(searchResult);
 			
 		}
