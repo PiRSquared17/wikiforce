@@ -243,7 +243,7 @@
 		</apex:define>
 		<apex:define name="module">Wiki</apex:define>
 		<apex:define name="title">Pages</apex:define>
-		<apex:define name="help">WikiFaltaImagen</apex:define>
+		<apex:define name="help">WikiPage</apex:define>
 		<apex:define name="search">
 			<c:Search module="wiki" />
 		</apex:define>

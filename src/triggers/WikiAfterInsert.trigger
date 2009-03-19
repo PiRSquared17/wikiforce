@@ -4,6 +4,11 @@ trigger WikiAfterInsert on Wiki__c bulk(after insert) {
 			
 			WikiProfile__c defaultProfile = [select Id from WikiProfile__c where Name = 'Wiki Administrator' limit 1];
 			List<Group> go = [Select g.Type, g.Name from Group g where Type = 'Organization'];
+			
+            //Customer Portal Group
+            List<Group> portalGroup = new List<Group>();
+            portalGroup = [Select g.Type, g.Name from Group g where Type = 'AllCustomerPortal'];			
+			
 			// build for bulk
 			Wiki__c[] t = Trigger.new;
 			
@@ -21,10 +26,20 @@ trigger WikiAfterInsert on Wiki__c bulk(after insert) {
 				insert g;
 				
 				if(team.PublicProfile__c != null || team.NewMemberProfile__c != null){
+					
 					GroupMember gm = new GroupMember();
 					gm.GroupId = g.Id;
 					gm.UserOrGroupId = go[0].Id;
 					insert gm;
+				
+					//If Customer Portal group exist a to GroupMember
+					if(portalGroup.size() > 0){
+						GroupMember gmPortal = new GroupMember();
+	                    gmPortal.GroupId = g.Id;
+	                    gmPortal.UserOrGroupId = portalGroup[0].Id;
+	                    insert gmPortal;
+					} 				
+				
 				}	
 						
 				/* ### Create Queues ###*/
