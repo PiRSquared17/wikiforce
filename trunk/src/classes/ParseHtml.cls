@@ -19,7 +19,7 @@ public class ParseHtml {
     	
   		//html = replace.content;
 		html = html.replaceAll('\n','<br>');
- 		html = html.replaceAll('=','');
+ 		//html = html.replaceAll('=','');
  		
  		/* ------------------------ */
  		/* 		Code (No parsed) 	*/
@@ -208,7 +208,7 @@ public class ParseHtml {
 
         String headingLevel = '={2,6}';
         
-        /* while(found(headingLevel,html)) {
+        while(found(headingLevel,html)) {
         	
             String theHeadingTag = getMatch(headingLevel,html);
             String hLevel = String.valueOf(theHeadingTag.length());
@@ -233,14 +233,14 @@ public class ParseHtml {
             theContentHeader = theContentHeader.replaceAll(removeFront,'');
             html = html.replaceFirst(theHeadingTag,'%%%%<a name="' + theContentHeader + '"></a>%%%%<h' + hLevel + ' style="font-size: ' + fontSize + 'px">');
             html = html.replaceFirst(theHeadingTag,'</h' + hLevel + '><hr />'); 
-        } */
+        }
  		
         // Created By Miguel Angel Sosa - 13.01.09
         // Last Modified ----
         /////////////////////////////////////////////
         /*      Span tag parser     */
        
-        /*
+        
         
         // Expresiones de busqueda de propiedades
         String tagPropertie = '(?i)\\[[a-z]+:[a-z_0-9(), {}\\.\\-\\#]*\\]';
@@ -255,7 +255,7 @@ public class ParseHtml {
 
         List<String> partsActualPropertie;
         String actualPropertieTag = '';
-        String closeActualPropertie = '';
+        String closeActualPropertie;
         
         //Las propiedades
         String nameStylePropertie;
@@ -263,10 +263,17 @@ public class ParseHtml {
 
         Integer theCounter = 0;
 
-        while(found(tagPropertie,html)) {
+		System.debug('\n\n ENCUENTRA TAGPROPERTIE ' + found(tagPropertie,html) + '\n\n');
+
+        //while(found(tagPropertie,html)) {
+        if(found(tagPropertie,html)) {
+        	System.debug('\n\n SI ES TRUE DEBERIA ESTAR ACA \n\n');
             // Obtengo la primer propiedad encontrada
             //actualPropertie = html.substring(html.indexOf(openerOpenTagPropertie),(html.indexOf(closerOpenTagPropertie)+1));
             actualPropertie = getMatch(tagPropertie,html);
+            
+            System.debug('\n\n ACTUALPROPERTIE ' + actualPropertie + '\n\n');
+            
             // Le quito los parentesis rectos y obtengo el nombre y el valor de la propiedad
             actualPropertieTag = actualPropertie.replaceAll('\\[','');
             actualPropertieTag = actualPropertieTag.replaceAll('\\]','');
@@ -281,8 +288,8 @@ public class ParseHtml {
                 valueActualPropertie = valueActualPropertie.replaceAll('(?i)repeat','');
                 valueActualPropertie = valueActualPropertie.replaceAll('(?i)scroll','');
 
-                closeActualPropertie = '\\[!' + nameActualPropertie + '\\]';
-                
+                closeActualPropertie = '(?i)\\[!' + nameActualPropertie + '\\]';
+                                
                 // Seteo la propiedad y el valor
                 valueStylePropertie = valueActualPropertie + ';';
                 if(nameActualPropertie == 'fontFamily') {
@@ -310,16 +317,15 @@ public class ParseHtml {
             actualPropertie = actualPropertie.replaceFirst('\\{','\\\\{');
             actualPropertie = actualPropertie.replaceFirst('\\}','\\\\}');
 
-                html = html.replaceFirst(actualPropertie,'<span style="' + nameStylePropertie + valueStylePropertie + ' newPropertieHere">');
-                if(nameActualPropertie != '') {
-                    html = html.replaceFirst(closeActualPropertie,'</span>');
-                }
+			System.debug('\n\n ACTUAL PROPERTIE' + actualPropertie + '\n\n');
+			System.debug('\n\n HTML CODE ' + html + '\n\n');
+            html = html.replaceFirst('(?i)' + actualPropertie,'<span style="' + nameStylePropertie + valueStylePropertie + '; newPropertieHere">');
+            if(nameActualPropertie != '') {
+                html = html.replaceFirst(closeActualPropertie,'</span>');
+            }
 
             theCounter++;
-            //System.debug('EL contador esta en ' + theCounter);
         }
-        */
-        //System.debug('Aca el HTML DEBERIA estar casi completo y es ----->' + html);
 
  		/* ------------------------ */
  		/* 			Text Ident 		*/
@@ -896,31 +902,50 @@ public class ParseHtml {
         String beforeString;
         String afterString;
         // List to save string before and string after the match 
-        List<String> tempBeforeAndAfterString;
+        List<String> tempBeforeAndAfterString = new List<string>();
         
         if(theString.trim().split(regExp,2).size() > 1) {
 
-            tempBeforeAndAfterString = theString.trim().split(regExp,2);
+			System.debug('\n\n La expresion regExp' + regExp + '\n\n');
 
-            beforeString = tempBeforeAndAfterString[0].trim().replaceAll('\\(','\\\\(');
+            //List<string> tempBeforeAndAfterString = theString.trim().split(regExp,2);
+			tempBeforeAndAfterString = theString.trim().split(regExp,2);
+			
+            beforeString = tempBeforeAndAfterString[0].trim();
+            beforeString = beforeString.replaceAll('\\(','\\\\(');
             beforeString = beforeString.replaceAll('\\)','\\\\)');
             beforeString = beforeString.replaceAll('\\]','\\\\]');
             beforeString = beforeString.replaceAll('\\[','\\\\[');
             beforeString = beforeString.replaceAll('\\{','\\\\{');
             beforeString = beforeString.replaceAll('\\}','\\\\}');
             beforeString = beforeString.replaceAll('\\*','\\\\*');
+            beforeString = beforeString.replaceAll('\\.','\\\\.');
+            beforeString = beforeString.replaceAll('\\?','\\\\?');
+            beforeString = beforeString.replaceAll('\\|','\\\\|');
             
-            afterString = tempBeforeAndAfterString[1].trim().replaceAll('\\(','\\\\(');
+            afterString = tempBeforeAndAfterString[1].trim();
+            afterString = afterString.replaceAll('\\(','\\\\(');
             afterString = afterString.replaceAll('\\)','\\\\)');
             afterString = afterString.replaceAll('\\[','\\\\[');
             afterString = afterString.replaceAll('\\]','\\\\]');
             afterString = afterString.replaceAll('\\{','\\\\{');
             afterString = afterString.replaceAll('\\}','\\\\}');
             afterString = afterString.replaceAll('\\*','\\\\*');
+            afterString = afterString.replaceAll('\\.','\\\\.');
+            afterString = afterString.replaceAll('\\?','\\\\?');
+            afterString = afterString.replaceAll('\\|','\\\\|');
+            
+            System.debug('\n\n theString ' + theString + '\n\n');
+            System.debug('\n\n beforeString ' + beforeString + '\n\n');
+            System.debug('\n\n afterString ' + afterString + '\n\n');
             
             tempString = theString.replaceFirst(beforeString,'');
+                        
+            System.debug('\n\n tempString sin beforeString ' + tempString + '\n\n');
             
             tempString = tempString.trim().replaceAll(afterString.trim(),'');
+            
+            System.debug('\n\n tempString sin afterString ' + tempString + '\n\n');
             
             regExpResult = tempString.trim();
         

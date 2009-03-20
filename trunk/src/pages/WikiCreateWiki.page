@@ -647,7 +647,7 @@
 									</td>
 									<td> 
 										<apex:outputpanel > <!-- rendered="{!userPermissions.canManage}" -->
-                                            <a href="Javascript:;" onclick="setHiddenMemberId('{!item.WikiMemberId}'); createOverlay('','removeMemberOverlay','','relocateOverlay()');">Delete</a>
+                                            <a href="Javascript:;" onclick="setHiddenMemberId('{!item.WikiMemberId}'); createOverlay('','removeMemberOverlay','','','');relocateOverlay();">Delete</a>
                                         </apex:outputpanel>
                                     </td>
                                     <td class="member_detail_description">

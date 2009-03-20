@@ -51,7 +51,6 @@
 			var remaingToSave = '{!initAddMembers}';
 			if (remaingToSave == 'false' && !firstExecuteTime){
 				//Show swirly here
-				
 				reloadMemberList();
 			}
 			firstExecuteTime = false;
@@ -141,9 +140,9 @@
 					<!-- Save and Cancel Buttons -->
 					<div class="overlayFromButtons" align="center">
 						<apex:commandButton action="{!saveMembers}"
-							oncomplete="setTimeout('modal.close();hideSwirly(\'swirly_overlay\');showSwirly(\'paginationOverlay\');setHeight(\'memberListContainer\', \'paginationOverlay\');', 5000);showMessageToUser(); "
+							oncomplete="setTimeout('modal.close();hideSwirly(\'swirly_overlay\');showSwirly(\'paginationOverlay\');setHeight(\'memberListContainer\', \'paginationOverlay\');', 5000);"
 							styleclass="allButtons actionButtons" value="Send"
-							rerender="membersListContainer, saveMembersSync" /> 
+							rerender="membersListContainer, saveMembersSync, auxPanel" /> 
 							<input class="allButtons cancelButtons" type="button" value="Cancel" onclick="modal.close();" />
 					</div>
 				</apex:form>
@@ -216,8 +215,7 @@
 											url="{!URLFOR($Resource.TeamsResources, 'images/layout/icons/no_image_small.gif')}"
 											style="vertical-align:middle;" /> </a>
 									</apex:outputPanel>
-									<apex:outputPanel layout="block" styleClass="membersImageHolder"
-										>
+									<apex:outputPanel layout="block" styleClass="membersImageHolder">
 										
 									</apex:outputPanel>
 									<apex:outputPanel layout="block" styleClass="membersDescription"
