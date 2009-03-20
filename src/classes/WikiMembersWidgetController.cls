@@ -475,6 +475,7 @@ public with sharing class WikiMembersWidgetController {
 	*@return PageReference
 	*/
 	public PageReference syncSaveMembers(){
+			
 			Integer endIt =  countSaved + 2;
 			for(Integer it = countSaved; it <= endIt; it++){
 				if(it < membersToInsert.size()){
@@ -500,6 +501,7 @@ public with sharing class WikiMembersWidgetController {
 				countSaved += 3;
 			}
 			return null;
+			
 	}
 	
 	/**
