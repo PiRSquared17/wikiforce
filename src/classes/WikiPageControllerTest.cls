@@ -311,8 +311,6 @@
 		Test.startTest();
 		
 		WikiPageController wiki = new WikiPageController();
-		wiki.setIdWikiPage('');  
-		wiki.parseHTML();
 		
 		Wiki__c newTeam = GenerateEnvironmentTest.wiki;
 		WikiPage__c newWiki = new WikiPage__c();
@@ -321,7 +319,9 @@
 		newWiki.Wiki__c = newTeam.Id;
 		insert newWiki;
 		
-		wiki.setIdWikiPage(newWiki.Id); 
+		wiki.setIdWikiPage(newWiki.Id);
+		wiki.parseHTML();
+
 		wiki.contructMethods();
 		
 		wiki.setWikiPageName('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');

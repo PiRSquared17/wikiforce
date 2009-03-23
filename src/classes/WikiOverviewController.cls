@@ -149,9 +149,7 @@ public with sharing class WikiOverviewController {
     		allTeams = 'false';
     	
     	if(allTeams == 'true'){
-    		System.debug('Lcosta is all teams selected : ');
         	if(getIsTeamAdmin()) {
-        		System.debug('Lcosta is team admin : ');
             	sites = [select Id, Name, Description__c, PictureId__c, PublicProfile__c, Type__c from Wiki__c order by Name];
         	}
         	else {
