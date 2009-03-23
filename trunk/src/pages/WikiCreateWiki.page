@@ -340,10 +340,10 @@
 																			<input id="imageRights" type="checkbox" />
 																		</div>
 																		<div class="messageRigthHolder">
-																			<span class="inputInfoSubDescription">I certify that I have the rights to distribute this picture and  it does not violate the <a href="#">Terms of Use</a></span>
+																			<span class="inputInfoSubDescription">I certify that I have the rights to distribute this picture and  it does not violate the <a>Terms of Use</a></span>
 																			<br />
 																			<span id="RightsErrorMessage" class="errorText" style="display:none;">
-																				<b>Error:</b> You must agree to the <a href="#">Terms of Use</a> to use images for this team.															
+																				<b>Error:</b> You must agree to the <a>Terms of Use</a> to use images for this team.															
 																			</span>
 																		</div>
 																		<div class="clear"></div>													

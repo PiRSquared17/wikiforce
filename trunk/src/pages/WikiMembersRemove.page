@@ -1,4 +1,34 @@
 <apex:page sidebar="false" tabStyle="Wiki__c" controller="WikiMembersRemoveController">
+
+    <script>
+        /**
+        * Change the values of buttons to 'Deleting...'
+        * when an ajax call is being made. This function is here 'cause it should
+        * be preprocessed by visual force (in order to resolve the component's id)
+        * @param loading : false to restore buttons, true to put on 'Deleting'
+        */
+        function changeStatusButtonsRemoveOverlay(isLoading) {
+            var newContinue;
+            var newCancel;
+            
+            newContinue = document.getElementById('{!$Component.removeMemberForm.removeContinueButton}');
+            newCancel = document.getElementById('removeCancelButton');
+        
+            if(isLoading) {
+                newContinue.value = 'Deleting...';
+                newContinue.disabled = true;
+                newCancel.value = 'Deleting...';
+                newCancel.disabled = true;
+            }
+            else {
+                newContinue.value = 'Continue';
+                newContinue.disabled = false;
+                newCancel.value = 'Cancel';
+                newCancel.disabled = false;
+            }
+        }
+    </script>
+
 	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamsMembersRemove.css')}" />
 	<!-- Content  -->
 	<div id="removeMemberOverlay" style="display: none;" class="overlayForm">
@@ -16,7 +46,7 @@
 			
 			</div>
 			<div class="overlayMainContent" id="overlayRemoveMember">
-				<apex:form id="newMemberForm">
+				<apex:form id="removeMemberForm">
 					<div class="overlayFormContent style="padding-bottom: 10px;">
 						<apex:inputHidden id="idsToDelete" value="{!RemoveMemberIds}" />
 						<apex:outputPanel rendered="{!NOT(error)}">
@@ -47,18 +77,18 @@
 						<apex:outputPanel rendered="{!IF(error, false, true)}">
 							<apex:commandButton style="background-color: #526921!important"
 								styleclass="overlaySaveBtn allButtons actionButtons"
-								action="{!massiveRemoveMember}" id="removeAction" 
+								action="{!massiveRemoveMember}"
+                                id="removeContinueButton" 
 								onclick="changeStatusButtonsRemoveOverlay(true); $('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay');"  
 								oncomplete="changeStatusButtonsRemoveOverlay(false);" 
 								value="Continue"
 								rerender="removeMemberStatus" />
-							<input class="overlayCancelBtn allButtons cancelButtons" type="button" value="Cancel" onclick="modal.close();" />
+							<input class="overlayCancelBtn allButtons cancelButtons" id="removeCancelButton" type="button" value="Cancel" onclick="modal.close();" />
 							
 						</apex:outputPanel> 
 					
 						<apex:outputPanel rendered="{!IF(error, true, false)}">
-							<input class="overlayCancelBtn allButtons cancelButtons"
-								type="button" value="Cancel" onclick="modal.close();" />
+							<input class="overlayCancelBtn allButtons cancelButtons" id="removeCancelButton" type="button" value="Cancel" onclick="modal.close();" />
 						</apex:outputPanel>
 						
 					</div>
@@ -79,7 +109,7 @@
 				//alert('{!error}');
 				if( errorStatus == 'true' ){
 					$('paginationOverlay').hide();
-					document.getElementById('WikiCreateWiki:j_id417:j_id418:newMemberForm').innerHTML = '<span id="j_id455"><div class="overlayFormContent" style="padding-bottom: 10px;"><table style="width: 95%;"><tbody><tr><td><span class="inputInfoDark">You can not remove all admin members</span></td></tr></tbody></table></div> <div class="overlaySeparateLine"></div> <div align="center" class="overlayFromButtons"><input type="button" class="allButtons cancelButtons" onclick="modal.close();" value="Cancel"/></div></span>';
+					document.getElementById('{!$Component.removeMemberForm}').innerHTML = '<span id="j_id455"><div class="overlayFormContent" style="padding-bottom: 10px;"><table style="width: 95%;"><tbody><tr><td><span class="inputInfoDark">You can not remove all admin members</span></td></tr></tbody></table></div> <div class="overlaySeparateLine"></div> <div align="center" class="overlayFromButtons"><input type="button" class="allButtons cancelButtons" onclick="modal.close();" value="Cancel"/></div></span>';
        
 				}
 			</script>

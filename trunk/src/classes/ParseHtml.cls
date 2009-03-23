@@ -922,6 +922,8 @@ public class ParseHtml {
             beforeString = beforeString.replaceAll('\\.','\\\\.');
             beforeString = beforeString.replaceAll('\\?','\\\\?');
             beforeString = beforeString.replaceAll('\\|','\\\\|');
+            beforeString = beforeString.replaceAll('\\^','\\\\^');
+            beforeString = beforeString.replaceAll('\\$','\\\\$');
             
             afterString = tempBeforeAndAfterString[1].trim();
             afterString = afterString.replaceAll('\\(','\\\\(');
@@ -934,6 +936,8 @@ public class ParseHtml {
             afterString = afterString.replaceAll('\\.','\\\\.');
             afterString = afterString.replaceAll('\\?','\\\\?');
             afterString = afterString.replaceAll('\\|','\\\\|');
+            afterString = afterString.replaceAll('\\^','\\\\^');
+            afterString = afterString.replaceAll('\\$','\\\\$');
             
             System.debug('\n\n theString ' + theString + '\n\n');
             System.debug('\n\n beforeString ' + beforeString + '\n\n');
