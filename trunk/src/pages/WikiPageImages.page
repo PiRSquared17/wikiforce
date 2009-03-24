@@ -7,6 +7,7 @@
 	
 	<apex:includeScript value="{!URLFOR($Resource.WikiResource, 'inc/js/wikiPageImages.js')}"/>
 	
+	
 	<div class="title"><strong>Upload Image</strong></div>
 	<span class="infoText">Type the path of the file or click the Browse button to find it.</span><br/>
 	<div class="form">
