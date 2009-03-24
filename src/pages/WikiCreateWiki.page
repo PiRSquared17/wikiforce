@@ -392,6 +392,47 @@
 													<tr>
 														<td>&nbsp;</td>
 													</tr>
+										<apex:outputPanel rendered="{!AllowCustomerActivated}" >
+											<tr>
+											    <td class="alignTop">
+													<span class="inputInfoTitle">Portal Users</span>
+											    </td>
+											    <td>	
+											    </td>
+											    <td colspan="2">&nbsp;<apex:inputCheckbox value="{!AllowCustomer}" /> 
+													<span class="inputInfoDescription">Allow Customer Portal Users</span>
+											    </td>    
+											</tr>
+										</apex:outputPanel>
+										
+										<apex:outputPanel rendered="{!AllowPartnerActivated}" >
+										<tr>
+										    <td class="alignTop">
+												<span class="inputInfoTitle">
+													<apex:outputPanel rendered="{!NOT( AllowCustomerActivated )}" >
+														Portal Users &nbsp;
+													</apex:outputPanel>
+												</span>
+										    </td>
+										    <td>
+										    </td>
+										    <td colspan="2">&nbsp;<apex:inputCheckbox value="{!AllowPartner}"/>
+										    <span class="inputInfoDescription">Allow Partner Portal Users</span>
+										    </td>    
+										</tr>
+										
+										<tr>
+											<td class="alignTop">
+												<span class="inputInfoTitle"></span>
+											</td>
+											<td></td>
+											<td colspan="2">
+												&nbsp; 
+												<span class="inputInfoList">&nbsp;</span>
+												<span class="inputInfoSubDescription">&nbsp;</span>
+											</td>
+										</tr>
+										</apex:outputPanel>
 													<tr>
 						                                <td class="alignTop"><span class="inputInfoTitle">Access</span></td>
 														<td></td>

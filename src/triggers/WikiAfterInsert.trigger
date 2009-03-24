@@ -3,12 +3,18 @@ trigger WikiAfterInsert on Wiki__c bulk(after insert) {
 		try {	
 			
 			WikiProfile__c defaultProfile = [select Id from WikiProfile__c where Name = 'Wiki Administrator' limit 1];
-			List<Group> go = [Select g.Type, g.Name from Group g where Type = 'Organization'];
-			
-            //Customer Portal Group
+			List<Group> go = [Select g.Type, g.Name from Group g where Type = 'Organization'];			
+
+            //Customer Portal Group            
             List<Group> portalGroup = new List<Group>();
-            portalGroup = [Select g.Type, g.Name from Group g where Type = 'AllCustomerPortal'];			
-			
+            if(WikiCreateWikiController.getAllowCustomerStatic()) 
+            portalGroup = [Select g.Type, g.Name from Group g where Type = 'AllCustomerPortal'];
+	           
+            //Partner Portal Group
+            List<Group> partnerGroup = new List<Group>();
+            if(WikiCreateWikiController.getAllowPartnerStatic())
+            partnerGroup = [Select g.Type, g.Name from Group g where Type = 'PRMOrganization'];
+            			
 			// build for bulk
 			Wiki__c[] t = Trigger.new;
 			
@@ -38,8 +44,15 @@ trigger WikiAfterInsert on Wiki__c bulk(after insert) {
 	                    gmPortal.GroupId = g.Id;
 	                    gmPortal.UserOrGroupId = portalGroup[0].Id;
 	                    insert gmPortal;
+					} 
+									
+					//If Partner Portal group exist add GroupMember
+					if(partnerGroup.size() > 0 ){
+						GroupMember gmPortal = new GroupMember();
+	                    gmPortal.GroupId = g.Id;
+	                    gmPortal.UserOrGroupId = partnerGroup[0].Id;
+	                    insert gmPortal;
 					} 				
-				
 				}	
 						
 				/* ### Create Queues ###*/

@@ -681,6 +681,11 @@
         <field>Contact.Birthdate</field>
     </fieldLevelSecurities>
     <fieldLevelSecurities>
+        <editable>false</editable>
+        <field>Contact.CanAllowPortalSelfReg</field>
+        <hidden>true</hidden>
+    </fieldLevelSecurities>
+    <fieldLevelSecurities>
         <editable>true</editable>
         <field>Contact.Department</field>
     </fieldLevelSecurities>
@@ -932,6 +937,11 @@
         <field>Lead.NumberofLocations__c</field>
     </fieldLevelSecurities>
     <fieldLevelSecurities>
+        <editable>false</editable>
+        <field>Lead.PartnerAccountId</field>
+        <hidden>true</hidden>
+    </fieldLevelSecurities>
+    <fieldLevelSecurities>
         <editable>true</editable>
         <field>Lead.Phone</field>
     </fieldLevelSecurities>
@@ -1006,6 +1016,11 @@
     <fieldLevelSecurities>
         <editable>true</editable>
         <field>Opportunity.OrderNumber__c</field>
+    </fieldLevelSecurities>
+    <fieldLevelSecurities>
+        <editable>false</editable>
+        <field>Opportunity.PartnerAccountId</field>
+        <hidden>true</hidden>
     </fieldLevelSecurities>
     <fieldLevelSecurities>
         <editable>true</editable>

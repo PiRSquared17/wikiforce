@@ -1,5 +1,83 @@
 public class WikiCreateWikiController {
   
+	List<Group> allowCustomerActivated = new List<Group>();
+	List<Group> allowPartnetActivated = new List<Group>();
+	public static Boolean allowCustomer = false;
+	public static Boolean allowPartner = false;  
+
+	/**
+	*@param Boolean
+	*/
+	public static Boolean getAllowCustomerStatic(){ 
+		return allowCustomer ;
+	}
+	/**
+	*@param Boolean
+	*/
+	public static Boolean getAllowPartnerStatic(){ 
+		return allowPartner ;
+	}
+
+	/**
+	*@param Boolean
+	*/
+	public void setAllowCustomer( Boolean value ){
+		WikiCreateWikiController.allowCustomer = value;
+	}
+	/** 
+	*@param Boolean
+	*/
+	public void setAllowPartner( Boolean value ){
+		WikiCreateWikiController.allowPartner = value;
+	}
+	/**
+	*@return Boolean
+	*/
+	public Boolean getAllowCustomer(){
+		return WikiCreateWikiController.allowCustomer;
+	}
+	/**
+	*@return Boolean 
+	*/
+	public Boolean getAllowPartner(){
+		return WikiCreateWikiController.allowPartner;
+	} 
+	/**
+	*@return Boolean
+	*/
+	public Boolean getAllowCustomerActivated(){
+		return allowCustomerActivated.size() > 0;
+	}
+	/**
+	*@return Boolean
+	*/
+	public Boolean getAllowPartnerActivated(){
+		return allowPartnetActivated.size() > 0;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     //Get id from team item
     String param = System.currentPageReference().getParameters().get('id');
     
@@ -21,12 +99,29 @@ public class WikiCreateWikiController {
     * Constructor
     */
     public WikiCreateWikiController(){
+    	
+		allowCustomerActivated = [ SELECT Id FROM Group WHERE Type = 'AllCustomerPortal' ];
+		allowPartnetActivated = [ SELECT Id FROM Group WHERE Type = 'PRMOrganization' ]; 
+ 
         if (param != null){
         	setWiki(param);
         	genPermissions();
         	if(!userPermissions.getCanManage())
         		throw new CustomException('Insufficient Privileges');
         	genMembers();
+			List<GroupMember> gm = new List<GroupMember>();
+			Group instance = new Group();
+			String instanceName = 'wikiSharing' + param;
+			if(allowCustomerActivated.size() > 0 ){
+				instance = [ SELECT Id FROM Group WHERE Name =: instanceName LIMIT 1 ];
+				gm = [ SELECT Id FROM GroupMember WHERE GroupId =: instance.Id AND UserOrGroupId =: allowCustomerActivated[0].Id ];
+				WikiCreateWikiController.allowCustomer = (gm.size() > 0) ? true : false;
+			}
+			if(allowPartnetActivated.size() > 0 ){
+				instance = [ SELECT Id FROM Group WHERE Name =: instanceName LIMIT 1 ];
+				gm = [ SELECT Id FROM GroupMember WHERE GroupId =: instance.Id AND UserOrGroupId =: allowPartnetActivated[0].Id ];
+				WikiCreateWikiController.allowPartner = (gm.size() > 0) ? true : false;
+			}        	
         }
     }
     
