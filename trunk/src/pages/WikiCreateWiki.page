@@ -233,6 +233,11 @@
 															<span id="TeamNameErrorMessage" class="errorText" style="display:none;">
 																<b>Error:</b> You must enter a name for this {!$ObjectType.Wiki__c.label}
 															</span>
+                                                            <apex:outputpanel rendered="{!errWikiNameAlreadyExists}">
+                                                                <span id="WikiNameAlreadyExistsError" class="errorText"> 
+                                                                    <b>Error:</b> A {!$ObjectType.Wiki__c.label} with this name already exists
+                                                                </span>
+                                                            </apex:outputpanel>
 														</td>
 													</tr>
 													<tr>
