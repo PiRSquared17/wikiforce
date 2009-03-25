@@ -1,5 +1,6 @@
 /**
-*@author Alvaro Scuccimarra @ 10/03/2009
+*@author Alvaro Scuccimarra @ 03/10/2009
+* Last modified  Ignacio Toledo @ 03/24/2009
 */
 public class ParseHtml {
 	public String html=null;
@@ -12,17 +13,13 @@ public class ParseHtml {
 	public void setIdWikiPage(String id){
 		this.idWikiPage=id;
 	}
+
 	
-	public void parseHtml(){
- 		 
-    	String toc = '';
-    	
-  		//html = replace.content;
-		html = html.replaceAll('\n','<br>');
- 		//html = html.replaceAll('=','');
- 		
- 		/* ------------------------ */
- 		/* 		Code (No parsed) 	*/
+	/**	
+	* parses Code (No parsed) 	
+	*/
+	private void parseCode(){
+	
  		String noparsedOpen = '{{{';	
  		String noparsedClose = '}}}';
  		String splitOpen = '\\{\\{\\{';
@@ -45,12 +42,36 @@ public class ParseHtml {
 	 		
 	 		html = temp[0] + replacementCode + temp2[1];
  			noparsedText.add(code);
- 		}
- 		
- 		
- 		/* ------------------------ */
- 		/* 			Tables 		 	*/
+ 		}	
+	}
+	
+	private void parseNoWiki(){
 		
+		String noparsedOpen = '{{{';	
+ 		String noparsedClose = '}}}';
+ 		String splitOpen = '\\{\\{\\{';
+ 		String splitClose = '\\}\\}\\}';
+ 		String replacementCode = '%-%-%-%';
+ 		List<String> noparsedText = new List<String>();
+
+		/* ------------------------ */
+ 		/* 		Code (No parsed) 	*/
+ 		Integer countCode = 0;
+ 		String codeText;
+ 		codeText = html;
+ 		
+ 		while (codeText.lastIndexOf(replacementCode) != -1) {
+	 		codeText = codeText.replaceFirst(replacementCode,'<table style="border: 1px solid rgb(175, 175, 175); padding: 20px; background-color: rgb(250, 250, 250);"><tbody><tr><td>' + noparsedText.get(countCode) + '<span></span></td></tr></tbody></table>');
+ 			countCode++;
+ 		} 		
+ 		html = codeText;
+	}
+	
+	/**
+	* parse Tables
+	*/
+	private void parseTables(){
+	
 		String tableStart = '{|';
  		String tableStartExp = '\\{\\|';
  		
@@ -81,8 +102,7 @@ public class ParseHtml {
 				tailParts = htmlParts[1].split(tableEndExp,2);
 				String tableContent = '';
 				
-				tableContent = tailParts[0];
-				
+				tableContent = tailParts[0];			
 				
 				tailHtml = tailParts[1];
 				if (tableContent != '') {
@@ -202,9 +222,12 @@ public class ParseHtml {
 				html = htmlParts[0] + '<table></table>' + htmlParts[1];
 			}
 		}	
- 		
-        /* ------------------------ */
-        /*          HEADINGS        */
+	}
+	
+	/*
+	* parse Headings
+	*/
+	private void parseHeadings(){
 
         String headingLevel = '={2,6}';
         
@@ -234,14 +257,15 @@ public class ParseHtml {
             html = html.replaceFirst(theHeadingTag,'%%%%<a name="' + theContentHeader + '"></a>%%%%<h' + hLevel + ' style="font-size: ' + fontSize + 'px">');
             html = html.replaceFirst(theHeadingTag,'</h' + hLevel + '><hr />'); 
         }
- 		
-        // Created By Miguel Angel Sosa - 13.01.09
-        // Last Modified ----
-        /////////////////////////////////////////////
-        /*      Span tag parser     */
-       
-        
-        
+	}
+	
+	// Created By Miguel Angel Sosa - 13.01.09
+	// Last Modified ----
+	/////////////////////////////////////////////
+	/*      Span tag parser     */
+	private void parseSpanTags(){
+	
+
         // Expresiones de busqueda de propiedades
         String tagPropertie = '(?i)\\[[a-z]+:[a-z_0-9(), {}\\.\\-\\#]*\\]';
         String tagPropertieClose = '(?i)\\[![a-z]+\\]';
@@ -326,9 +350,12 @@ public class ParseHtml {
 
             theCounter++;
         }
-
- 		/* ------------------------ */
- 		/* 			Text Ident 		*/
+	}
+	
+	/**
+	* parse text indent
+	*/
+	private void parseTextIndent(){
  		
  		String identOpen = '[[-';	
 		while (html.IndexOf(identOpen) != -1) {
@@ -357,21 +384,14 @@ public class ParseHtml {
 			String restHtml = temp2[1].replaceFirst(identClose,'</p>');
 			html = temp[0] + '<p style="margin-left:' + identPx + 'px;">' + restHtml;	
 		}
- 			
-  		/* ------------------------ */
- 		/* 		Horizontal Line 	*/
- 		String line = '----';
- 		html = html.replace(line ,'<hr>');
-
-
-		/* ------------------------ */
- 		/* 			Emoticons	 	*/
- 		String resourceId = '1211555009000';
-		String surprised = ':\\|';
-		html = html.replaceAll(surprised , '<img src=\'/resource/' + resourceId + '/FCKeditor/fckeditor/editor/images/smiley/msn/whatchutalkingabout_smile.gif\'>');
-
-		/* ------------------------ */
- 		/* 			Text Align	 	*/
+	}
+	
+	
+	/**
+	* text align
+	*/
+	private void parseTextAlign(){
+	
 		
 		String alignRightOpen = '\\[\\[>';
 		String alignLeftOpen = '\\[\\[<';
@@ -392,9 +412,14 @@ public class ParseHtml {
 		html = html.replaceAll(alignRightClose ,'</p>');
 		html = html.replaceAll(alignLeftClose ,'</p>');
 		html = html.replaceAll(alignCenterClosen ,'</p>');
- 		
-   		/* ------------------------ */
- 		/* 		UnOrdered List	 	*/
+	
+	}
+	
+	/* ------------------------ */
+	/* 		UnOrdered List	 	*/
+	private void parseUnorderedLists(){
+	
+
  		String listSyntax = '*';
  		Boolean first = true;
  		Boolean last = false;
@@ -402,28 +427,29 @@ public class ParseHtml {
 	 		String listS = '\\*';
 	 		List<String> temp;
 	 		temp = html.split(listS,2);
+	 		System.debug(temp);
 	 		html = html.replaceFirst(listS , '<li>');
-	 		if ((temp[1].indexOf(listSyntax) >= temp[1].toLowerCase().indexOf('<br>') && temp[1].toLowerCase().indexOf('<br>') != -1) || temp[1].indexOf(listSyntax)== -1 ) {
-	 			if (temp[1].toLowerCase().indexOf('<br>') == -1) {
+	 		if ((temp[1].indexOf(listSyntax) >= temp[1].toLowerCase().indexOf('<br />') && temp[1].toLowerCase().indexOf('<br />') != -1) || temp[1].indexOf(listSyntax)== -1 ) {
+	 			if (temp[1].toLowerCase().indexOf('<br />') == -1) {
 	 				temp[1] = '>' + temp[1] + '</li></ul>';
 	 				last = true;
 	 			}else {	 
 	 				List<String> temp2;	
-	 				temp2 = temp[1].split('(?i)<br>',2);	
+	 				temp2 = temp[1].split('(?i)<br />',2);	
 	 				if ((temp2[1].indexOf(listSyntax) < 3) && (temp2[1].indexOf(listSyntax) != -1) ) {	
-	 					temp[1] = '>' + temp[1].replaceFirst('(?i)<br>', '</li>');
+	 					temp[1] = '>' + temp[1].replaceFirst('(?i)<br />', '</li>');
 	 				}else {
-	 					temp[1] = '>' + temp[1].replaceFirst('(?i)<br>', '</li></ul>');
+	 					temp[1] = '>' + temp[1].replaceFirst('(?i)<br />', '</li></ul>');
 	 					last = true;
 	 				}
 	 			}
 	 		}else {
 	 			temp[1] = temp[1].replaceFirst(listS,'');
-	 			if (temp[1].toLowerCase().indexOf('<br>') == -1) {
+	 			if (temp[1].toLowerCase().indexOf('<br />') == -1) {
 	 				temp[1] = ' style="padding-left:10px;">' + temp[1] + '</li></ul>';
 	 				last = true;
 	 			}else {	 		
-	 				temp[1] = ' style="padding-left:10px;">' + temp[1].replaceFirst('(?i)<br>', '</li>');
+	 				temp[1] = ' style="padding-left:10px;">' + temp[1].replaceFirst('(?i)<br />', '</li>');
 	 			}
 	 		}	
 	 		if (first) {
@@ -437,8 +463,11 @@ public class ParseHtml {
 	 			last = false;
 	 		}
  		}
- 		
-   		/* ------------------------ */
+	}
+	
+	private void parseOrderedLists(){
+	
+	/* ------------------------ */
  		/* 		Ordered List		*/
  		String listSyntaxOL = '~';
  		Boolean firstOL = true;
@@ -483,62 +512,11 @@ public class ParseHtml {
 	 			lastOL = false;
 	 		}
  		}
- 		
- 		/* ------------------------ */
- 		/* 			Bold Text 		*/ 			
- 		String bold = '\'\'\'';
- 		
- 		while (html.lastIndexOf(bold) != -1) {
-	 		html = html.replaceFirst(bold , '<b>');
-	 		html = html.replaceFirst(bold , '</b>');
- 		}
- 		
- 		/* ------------------------ */
- 		/* 		UnderLine Text 		*/ 			
- 		String under = '__';
- 		
- 		while (html.lastIndexOf(under) != -1) {
-	 		html = html.replaceFirst(under , '<u>');
-	 		html = html.replaceFirst(under , '</u>');
- 		}
- 		
- 		
- 		/* ------------------------ */
- 		/* 		SubScript Text 		*/ 			
- 		String sub = ',,';
- 		
- 		while (html.lastIndexOf(sub) != -1) {
-	 		html = html.replaceFirst(sub , '<sub>');
-	 		html = html.replaceFirst(sub , '</sub>');
- 		}
- 		
- 		/* ------------------------ */
- 		/* 		SuperScript Text 	*/ 			
- 		String sup = '^';
- 		String supExp = '\\^';
- 		
- 		while (html.lastIndexOf(sup) != -1) {
-	 		html = html.replaceFirst(supExp , '<sup>');
-	 		html = html.replaceFirst(supExp , '</sup>');
- 		}
- 		 		
- 		/* ------------------------ */
- 		/* 			Italic Text 	*/ 		
- 		String italic = '\'\'';
- 		
- 		while (html.lastIndexOf(italic) != -1) {
-	 		html = html.replaceFirst(italic , '<i>');
-	 		html = html.replaceFirst(italic , '</i>');
- 		}
- 		
-		/* ------------------------ */
- 		/* 		Strike Text 		*/ 			
- 		String strikeOpen = '\\-\\-\\(';
- 		String strikeClose = '\\)\\-\\-';
-	 	html = html.replaceAll(strikeOpen , '<strike>');
-	 	html = html.replaceAll(strikeClose , '</strike>');
-
- 		/* ------------------------ */
+	
+	}
+	
+	private void parseExternalLinks(){
+	/* ------------------------ */
  		/* 		External Link 		*/
  		/*		HTTPS SUPORT		*/  
  		String extLink = '[http';
@@ -565,8 +543,10 @@ public class ParseHtml {
  				html = temp[0] + '<a href="javascript:;">Malformed Link</a>' + temp[1];	
  			}
  		}  
- 				
- 		/* ------------------------ */
+	}
+	
+	private void parseEmbeddedImages(){
+		/* ------------------------ */
  		/* 		Embedded Image		*/ 
  		Map<String, Attachment> attachmentsMap = new Map<String, Attachment>();
  		for (Attachment iterAttach : [select Name, Id, parentId, ContentType from Attachment where parentid=:idWikiPage]) {
@@ -644,9 +624,15 @@ public class ParseHtml {
  				html = temp[0] + '<img title="Malformed Image" alt="Malformed Image" />' + temp[1];
  			}
  		}
- 		
- 		/* ------------------------ */
+	}
+	
+	private void parseEmbeddedFiles(){
+	
+		/* ------------------------ */
  		/* 		Embedded File		*/ 
+ 		
+ 		Map<String, Attachment> attachmentsMap = new Map<String, Attachment>();
+ 		
  		String fileS = '[File:';
  		while (html.lastIndexOf(fileS) != -1) {
  			List<String> temp;
@@ -696,8 +682,10 @@ public class ParseHtml {
  				html = temp[0] + '<a href="javascript:;">Malformed Link</a>' + temp[1];
  			}
  		}
- 		 		
- 		/* ------------------------ */
+	}
+	
+	private void parseInternalLinks(){
+	/* ------------------------ */
  		/* 		Internal Link 		*/  		
  		
  		
@@ -790,9 +778,13 @@ public class ParseHtml {
  			}
  		}
  		html = html.replaceAll('  ','');
-  		
-  		/* ------------------------ */
+	}
+	
+	private void parseTOC(){
+		/* ------------------------ */
  		/* 	   Table of Content 	*/ 	
+ 		
+ 		String toc = '';
  		String tocSintax = '%TOC%';
  		String tocCentinel = '%%%%';
  		String tocCentinelStart = '%%%%<a name="';
@@ -832,22 +824,22 @@ public class ParseHtml {
             toc += '<a  href="#' + tempToc2[0] + '" style="padding-left:' + numH + '0px;padding-bottom:5px;">' + tempToc2[0] + '</a>\n';
  		}
  		toc = '<table style="padding:20px;background-color:#FFFFFF;border:1px solid #AAAAAA;"><tr><td>' + toc + '</td></tr></table>';
- 		html = html.replaceAll(tocSintax, toc);	
- 		
- 		/* ------------------------ */
- 		/* 		Code (No parsed) 	*/
- 		Integer countCode = 0;
- 		String codeText;
- 		codeText = html;
- 		
- 		while (codeText.lastIndexOf(replacementCode) != -1) {
-	 		codeText = codeText.replaceFirst(replacementCode,'<table style="border: 1px solid rgb(175, 175, 175); padding: 20px; background-color: rgb(250, 250, 250);"><tbody><tr><td>' + noparsedText.get(countCode) + '<span></span></td></tr></tbody></table>');
- 			countCode++;
- 		} 		
- 		html = codeText;
- 		
- 		/* ------------------------ */
+ 		html = html.replaceAll(tocSintax, toc);
+	}
+	
+	
+	
+	private void parseEmoticons(){
+	
+		/* ------------------------ */
  		/* 		  Emoticons 		*/		
+ 		
+ 		/* ------------------------ */
+ 		/* 			Emoticons	 	*/
+ 		String resourceId = '1211555009000';
+		String surprised = ':\\|';
+		html = html.replaceAll(surprised , '<img src=\'/resource/' + resourceId + '/FCKeditor/fckeditor/editor/images/smiley/msn/whatchutalkingabout_smile.gif\'>');
+		
  		String happy = ':\\)';
  		String veryHappy = ':D';
  		String sad = ':\\(';
@@ -889,6 +881,105 @@ public class ParseHtml {
 		html = html.replaceAll(oh , '<img src=\'/resource/' + resourceId + '/FCKeditor/fckeditor/editor/images/smiley/msn/omg_smile.gif\'>');
 		html = html.replaceAll(confused , '<img src=\'/resource/' + resourceId + '/FCKeditor/fckeditor/editor/images/smiley/msn/confused_smile.gif\'>');
 		html = html.replaceAll(angel , '<img src=\'/resource/' + resourceId + '/FCKeditor/fckeditor/editor/images/smiley/msn/angel_smile.gif\'>'); 		
+	}
+	
+	public void parseHtml(){
+    	
+  		//html = replace.content;
+		html = html.replaceAll('\n','<br />');
+ 		//html = html.replaceAll('=','');
+ 		
+ 		parseCode(); 		
+ 		
+ 		parseTables();
+ 		
+		parseHeadings();
+ 		
+        parseSpanTags();
+
+ 		parseTextIndent();
+ 			
+  		/* ------------------------ */
+ 		/* 		Horizontal Line 	*/
+ 		String line = '----';
+ 		html = html.replace(line ,'<hr />');
+
+
+		
+
+		parseTextAlign();
+ 		
+   		parseUnorderedLists();
+ 		
+   		parseOrderedLists();
+ 		
+ 		/* ------------------------ */
+ 		/* 			Bold Text 		*/ 			
+ 		String bold = '\'\'\'';
+ 		
+ 		while (html.lastIndexOf(bold) != -1) {
+	 		html = html.replaceFirst(bold , '<b>');
+	 		html = html.replaceFirst(bold , '</b>');
+ 		}
+ 		
+ 		/* ------------------------ */
+ 		/* 		UnderLine Text 		*/ 			
+ 		String under = '__';
+ 		
+ 		while (html.lastIndexOf(under) != -1) {
+	 		html = html.replaceFirst(under , '<u>');
+	 		html = html.replaceFirst(under , '</u>');
+ 		}
+ 		
+ 		
+ 		/* ------------------------ */
+ 		/* 		SubScript Text 		*/ 			
+ 		String sub = ',,';
+ 		
+ 		while (html.lastIndexOf(sub) != -1) {
+	 		html = html.replaceFirst(sub , '<sub>');
+	 		html = html.replaceFirst(sub , '</sub>');
+ 		}
+ 		
+ 		/* ------------------------ */
+ 		/* 		SuperScript Text 	*/ 			
+ 		String sup = '^';
+ 		String supExp = '\\^';
+ 		
+ 		while (html.lastIndexOf(sup) != -1) {
+	 		html = html.replaceFirst(supExp , '<sup>');
+	 		html = html.replaceFirst(supExp , '</sup>');
+ 		}
+ 		 		
+ 		/* ------------------------ */
+ 		/* 			Italic Text 	*/ 		
+ 		String italic = '\'\'';
+ 		
+ 		while (html.lastIndexOf(italic) != -1) {
+	 		html = html.replaceFirst(italic , '<i>');
+	 		html = html.replaceFirst(italic , '</i>');
+ 		}
+ 		
+		/* ------------------------ */
+ 		/* 		Strike Text 		*/ 			
+ 		String strikeOpen = '\\-\\-\\(';
+ 		String strikeClose = '\\)\\-\\-';
+	 	html = html.replaceAll(strikeOpen , '<strike>');
+	 	html = html.replaceAll(strikeClose , '</strike>');
+
+ 		parseExternalLinks();
+ 				
+ 		parseEmbeddedImages();
+ 		
+ 		parseEmbeddedFiles();
+ 		 		
+ 		parseInternalLinks();
+  		
+  		parseTOC();	
+ 		
+ 		parseNoWiki();
+ 		
+ 		parseEmoticons();
  		
  	}
 

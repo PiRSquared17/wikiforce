@@ -92,6 +92,10 @@ public class WikiCreateWikiController {
 	
 	//Valid Type Image (.jpe?g | .gif | .png)
 	public Boolean validTypePicture = true;
+
+	//Does a wiki with the same name aread exists?
+	public Boolean errWikiNameAlreadyExists = false;
+
    
     public Attachment document = new Attachment();  
    
@@ -190,7 +194,12 @@ public class WikiCreateWikiController {
      public Boolean getValidTypePicture(){
     	return validTypePicture;
     }
+
+    public boolean getErrWikiNameAlreadyExists() {
+    	return errWikiNameAlreadyExists;
+    }
     
+
     /**
     * Set String param
     *@param String p
@@ -365,7 +374,16 @@ public class WikiCreateWikiController {
 					return null;
 				}	
 			} 
-			
+
+			if (theWiki.Id == null) {
+				Wiki__c[] wikis= [ SELECT id FROM Wiki__c WHERE Name =: theWiki.Name ];
+				
+				if (wikis != null && wikis.size() > 0) {
+					errWikiNameAlreadyExists = true;
+					return null;
+				}
+			}
+		 			
 			if(theWiki.Type__c == 'open'){
     			List<WikiProfile__c> wp = [SELECT Name, Id 
     										FROM WikiProfile__c 
