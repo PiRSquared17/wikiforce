@@ -304,6 +304,7 @@ public without sharing class WikiPageEditController {
 		html = html.replaceAll('(?i)&quot;','"');
 		html = html.replaceAll('(?i)&gt;','>');
 		html = html.replaceAll('(?i)&lt;','<');
+
 		
 		html = html.replaceAll('(?i)</li>[^<]*<li','</li><li');
 		html = html.replaceAll('(?i)<ul[^>]*>[^<]*<li','<ul><li');
@@ -632,7 +633,7 @@ public without sharing class WikiPageEditController {
  		}
  		
  		// REMOVE THE RETURN CHAR 
- 		html = html.replaceAll('[\n\r]','');
+ 		html = html.replaceAll('[\n\r]','<br />');
  		
 		/* ------------------------ */
  		/* 			Text Align	 	*/
@@ -1259,6 +1260,7 @@ public without sharing class WikiPageEditController {
 
 		parseWiki();
 		html = html.replaceAll('&nbsp;',' ');
+		html = html.replaceAll('&#43;','+');
 		
 		html = html.replaceAll('(?i)<br>','\n');
 		html = html.replaceAll('<[^>]*>', '');

@@ -161,8 +161,8 @@
 														normal^supstring^ >> normal<sup>supstring</sup><br>
 														normal,,substring,, >> normal<sub>substring</sub><br><br>
 														Text alignment:<br>
-														[[> left >]]<br>
-            											[[< right <]]<br>
+														[[< left <]]<br>
+            											[[> right >]]<br>
             											[[= center =]]<br>
             											[[<> justify <>]]<br>
 														<br>
