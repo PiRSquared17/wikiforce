@@ -7,9 +7,25 @@ public class ParseHtml {
 	private String idWikiPage=null;
 	WikiPage__c	wikiPageBody;
 	
+	static String noparsedOpen = '{{{';	
+ 	static String noparsedClose = '}}}';
+ 	static String splitOpen = '\\{\\{\\{';
+ 	static String splitClose = '\\}\\}\\}';
+ 	static String replacementCode = '%-%-%-%';
+ 	static List<String> noparsedText = new List<String>();
+ 	
+ 	static Integer countCode = 0;
+ 	
+	
+	
 	public void setHtml(String html){
 		this.html=html;
 	}
+	
+	public String getHtml(){
+		return this.html;	
+	}
+	
 	public void setIdWikiPage(String id){
 		this.idWikiPage=id;
 	}
@@ -19,13 +35,7 @@ public class ParseHtml {
 	* parses Code (No parsed) 	
 	*/
 	private void parseCode(){
-	
- 		String noparsedOpen = '{{{';	
- 		String noparsedClose = '}}}';
- 		String splitOpen = '\\{\\{\\{';
- 		String splitClose = '\\}\\}\\}';
- 		String replacementCode = '%-%-%-%';
- 		List<String> noparsedText = new List<String>();
+	 		
  		while (html.lastIndexOf(noParsedOpen) != -1) {
 	 		List<String> temp = new List<String>();
 	 		temp = html.split(splitOpen ,2);
@@ -46,19 +56,11 @@ public class ParseHtml {
 	}
 	
 	private void parseNoWiki(){
-		
-		String noparsedOpen = '{{{';	
- 		String noparsedClose = '}}}';
- 		String splitOpen = '\\{\\{\\{';
- 		String splitClose = '\\}\\}\\}';
- 		String replacementCode = '%-%-%-%';
- 		List<String> noparsedText = new List<String>();
 
 		/* ------------------------ */
  		/* 		Code (No parsed) 	*/
- 		Integer countCode = 0;
- 		String codeText;
- 		codeText = html;
+ 		
+ 		String codeText = this.getHtml();
  		
  		while (codeText.lastIndexOf(replacementCode) != -1) {
 	 		codeText = codeText.replaceFirst(replacementCode,'<table style="border: 1px solid rgb(175, 175, 175); padding: 20px; background-color: rgb(250, 250, 250);"><tbody><tr><td>' + noparsedText.get(countCode) + '<span></span></td></tr></tbody></table>');
@@ -106,9 +108,9 @@ public class ParseHtml {
 				
 				tailHtml = tailParts[1];
 				if (tableContent != '') {
-					if (tableContent.toLowerCase().indexOf('<br>') != -1) {
+					if (tableContent.toLowerCase().indexOf('<br />') != -1) {
 						List<String> tableAttParts = new List<String>();
-						tableAttParts = tableContent.split('(?i)<br>',2);
+						tableAttParts = tableContent.split('(?i)<br />',2);
 						List<String> tableAtts = new List<String>();
 						bodyTable = tableAttParts[1].trim();
 						
@@ -121,10 +123,10 @@ public class ParseHtml {
 					// If have caption Syntax
 					List<String> captionTextParts = new List<String>();
 					
-					if (bodyTable.toLowerCase().indexOf('<br>') != -1) {
-						captionTextParts = bodyTable.substring(2).split('(?i)<br>',2);
+					if (bodyTable.toLowerCase().indexOf('<br />') != -1) {
+						captionTextParts = bodyTable.substring(2).split('(?i)<br />',2);
 						
-						if (bodyTable.trim().indexOf(tableCaption) == 0 && bodyTable.toLowerCase().indexOf('<br>') != -1) {
+						if (bodyTable.trim().indexOf(tableCaption) == 0 && bodyTable.toLowerCase().indexOf('<br />') != -1) {
 							String captionText = captionTextParts[0].trim();
 							if (captionText.indexOf(tableData) == -1) {
 								tableTag += '<caption>' + captionText + '</caption>';
@@ -136,7 +138,7 @@ public class ParseHtml {
 							bodyTable = captionTextParts[1];
 						}else {
 							if (bodyTable.trim().indexOf(tableRow) != 0) {
-								bodyTable = '<br>' + bodyTable;
+								bodyTable = '<br />' + bodyTable;
 							}	
 						}
 						
@@ -150,7 +152,7 @@ public class ParseHtml {
 						for (String itemRow : tableRows) {
 							String iterRow = itemRow;
 							List<String> rowAtt = new List<String>();
-							rowAtt = iterRow.split('(?i)<br>',2);
+							rowAtt = iterRow.split('(?i)<br />',2);
 							
 							if (rowAtt.size() == 2) {
 								tableTag += '<tr ';
@@ -160,7 +162,7 @@ public class ParseHtml {
 								tableTag += '>';
 								iterRow = rowAtt[1].trim();
 								
-								for (String itemCell : iterRow.split('(?i)<br>')) {
+								for (String itemCell : iterRow.split('(?i)<br />')) {
 									if (itemCell.trim().indexOf(tableHeader) == 0) {
 										tableTag += '<th ';
 										String tdContent = '';
@@ -233,7 +235,7 @@ public class ParseHtml {
         
         while(found(headingLevel,html)) {
         	
-            String theHeadingTag = getMatch(headingLevel,html);
+            String theHeadingTag = getMatch(headingLevel, html);
             String hLevel = String.valueOf(theHeadingTag.length());
             String fontSize;
                         
@@ -254,7 +256,7 @@ public class ParseHtml {
             String removeFront = '(?i)\\[![a-z]+\\]';
             theContentHeader = theContentHeader.replaceAll(removeBack,'');
             theContentHeader = theContentHeader.replaceAll(removeFront,'');
-            html = html.replaceFirst(theHeadingTag,'%%%%<a name="' + theContentHeader + '"></a>%%%%<h' + hLevel + ' style="font-size: ' + fontSize + 'px">');
+            html = html.replaceFirst(theHeadingTag,'%%%%<a name="' + theContentHeader + '"></a>%%%%<h' + hLevel + '>');
             html = html.replaceFirst(theHeadingTag,'</h' + hLevel + '><hr />'); 
         }
 	}
@@ -289,66 +291,67 @@ public class ParseHtml {
 
 		System.debug('\n\n ENCUENTRA TAGPROPERTIE ' + found(tagPropertie,html) + '\n\n');
 
-        //while(found(tagPropertie,html)) {
-        if(found(tagPropertie,html)) {
-        	System.debug('\n\n SI ES TRUE DEBERIA ESTAR ACA \n\n');
-            // Obtengo la primer propiedad encontrada
-            //actualPropertie = html.substring(html.indexOf(openerOpenTagPropertie),(html.indexOf(closerOpenTagPropertie)+1));
-            actualPropertie = getMatch(tagPropertie,html);
-            
-            System.debug('\n\n ACTUALPROPERTIE ' + actualPropertie + '\n\n');
-            
-            // Le quito los parentesis rectos y obtengo el nombre y el valor de la propiedad
-            actualPropertieTag = actualPropertie.replaceAll('\\[','');
-            actualPropertieTag = actualPropertieTag.replaceAll('\\]','');
-            actualPropertieTag = actualPropertieTag.replaceAll('\\{','').replaceAll('\\}','');
-            partsActualPropertie = actualPropertieTag.split(':',2);
-            if(partsActualPropertie.size() > 1) {
-                nameActualPropertie = partsActualPropertie[0];
-                valueActualPropertie = partsActualPropertie[1];
-                
-                valueActualPropertie = valueActualPropertie.replaceAll('(?i)[0-9]{1,2}%','');
-                valueActualPropertie = valueActualPropertie.replaceAll('(?i)none','');
-                valueActualPropertie = valueActualPropertie.replaceAll('(?i)repeat','');
-                valueActualPropertie = valueActualPropertie.replaceAll('(?i)scroll','');
-
-                closeActualPropertie = '(?i)\\[!' + nameActualPropertie + '\\]';
-                                
-                // Seteo la propiedad y el valor
-                valueStylePropertie = valueActualPropertie + ';';
-                if(nameActualPropertie == 'fontFamily') {
-                    nameStylePropertie = 'font-family: ';
-                } else if(nameActualPropertie == 'fontSize') {
-                    nameStylePropertie = 'font-size: ';
-                } else if(nameActualPropertie == 'fontVariant') {
-                    nameStylePropertie = 'font-variant: ';
-                } else if(nameActualPropertie == 'lineHeight') {
-                    nameStylePropertie = 'line-height: ';
-                } else if(nameActualPropertie == 'Bgcolor') {
-                    nameStylePropertie = 'background-color: ';
-                } else if(nameActualPropertie == 'Color') {
-                    nameStylePropertie = 'color: ';
-                } else {
-                    nameStylePropertie = '';
-                    valueStylePropertie = '';
-                }
-            }
-            
-            actualPropertie = actualPropertie.replaceFirst('\\[','\\\\[');
-            actualPropertie = actualPropertie.replaceFirst('\\]','\\\\]');
-            actualPropertie = actualPropertie.replaceFirst('\\(','\\\\(');
-            actualPropertie = actualPropertie.replaceFirst('\\)','\\\\)');
-            actualPropertie = actualPropertie.replaceFirst('\\{','\\\\{');
-            actualPropertie = actualPropertie.replaceFirst('\\}','\\\\}');
-
-			System.debug('\n\n ACTUAL PROPERTIE' + actualPropertie + '\n\n');
-			System.debug('\n\n HTML CODE ' + html + '\n\n');
-            html = html.replaceFirst('(?i)' + actualPropertie,'<span style="' + nameStylePropertie + valueStylePropertie + '; newPropertieHere">');
-            if(nameActualPropertie != '') {
-                html = html.replaceFirst(closeActualPropertie,'</span>');
-            }
-
-            theCounter++;
+        while(found(tagPropertie,html)) {
+	        if(found(tagPropertie,html)) {
+	        	System.debug('\n\n SI ES TRUE DEBERIA ESTAR ACA \n\n');
+	            // Obtengo la primer propiedad encontrada
+	            //actualPropertie = html.substring(html.indexOf(openerOpenTagPropertie),(html.indexOf(closerOpenTagPropertie)+1));
+	            actualPropertie = getMatch(tagPropertie,html);
+	            
+	            System.debug('\n\n ACTUALPROPERTIE ' + actualPropertie + '\n\n');
+	            
+	            // Le quito los parentesis rectos y obtengo el nombre y el valor de la propiedad
+	            actualPropertieTag = actualPropertie.replaceAll('\\[','');
+	            actualPropertieTag = actualPropertieTag.replaceAll('\\]','');
+	            actualPropertieTag = actualPropertieTag.replaceAll('\\{','').replaceAll('\\}','');
+	            partsActualPropertie = actualPropertieTag.split(':',2);
+	            if(partsActualPropertie.size() > 1) {
+	                nameActualPropertie = partsActualPropertie[0];
+	                valueActualPropertie = partsActualPropertie[1];
+	                
+	                valueActualPropertie = valueActualPropertie.replaceAll('(?i)[0-9]{1,2}%','');
+	                valueActualPropertie = valueActualPropertie.replaceAll('(?i)none','');
+	                valueActualPropertie = valueActualPropertie.replaceAll('(?i)repeat','');
+	                valueActualPropertie = valueActualPropertie.replaceAll('(?i)scroll','');
+	
+	                closeActualPropertie = '(?i)\\[!' + nameActualPropertie + '\\]';
+	                                
+	                // Seteo la propiedad y el valor
+	                valueStylePropertie = valueActualPropertie + ';';
+	                if(nameActualPropertie == 'fontFamily') {
+	                    nameStylePropertie = 'font-family: ';
+	                } else if(nameActualPropertie == 'fontSize') {
+	                    nameStylePropertie = 'font-size: ';
+	                } else if(nameActualPropertie == 'fontVariant') {
+	                    nameStylePropertie = 'font-variant: ';
+	                } else if(nameActualPropertie == 'lineHeight') {
+	                    nameStylePropertie = 'line-height: ';
+	                } else if(nameActualPropertie == 'Bgcolor') {
+	                    nameStylePropertie = 'background-color: ';
+	                } else if(nameActualPropertie == 'Color') {
+	                    nameStylePropertie = 'color: ';
+	                } else {
+	                    nameStylePropertie = '';
+	                    valueStylePropertie = '';
+	                }
+	            }
+	            
+	            actualPropertie = actualPropertie.replaceFirst('\\[','\\\\[');
+	            actualPropertie = actualPropertie.replaceFirst('\\]','\\\\]');
+	            actualPropertie = actualPropertie.replaceFirst('\\(','\\\\(');
+	            actualPropertie = actualPropertie.replaceFirst('\\)','\\\\)');
+	            actualPropertie = actualPropertie.replaceFirst('\\{','\\\\{');
+	            actualPropertie = actualPropertie.replaceFirst('\\}','\\\\}');
+	
+				System.debug('\n\n ACTUAL PROPERTIE' + actualPropertie + '\n\n');
+				System.debug('\n\n HTML CODE ' + html + '\n\n');
+	            html = html.replaceFirst('(?i)' + actualPropertie,'<span style="' + nameStylePropertie + valueStylePropertie + '; newPropertieHere">');
+	            if(nameActualPropertie != '') {
+	                html = html.replaceFirst(closeActualPropertie,'</span>');
+	            }
+	
+	            theCounter++;
+	        }
         }
 	}
 	
@@ -885,11 +888,9 @@ public class ParseHtml {
 	
 	public void parseHtml(){
     	
-  		//html = replace.content;
 		html = html.replaceAll('\n','<br />');
- 		//html = html.replaceAll('=','');
  		
- 		parseCode(); 		
+ 		parseCode();
  		
  		parseTables();
  		
@@ -903,9 +904,6 @@ public class ParseHtml {
  		/* 		Horizontal Line 	*/
  		String line = '----';
  		html = html.replace(line ,'<hr />');
-
-
-		
 
 		parseTextAlign();
  		
