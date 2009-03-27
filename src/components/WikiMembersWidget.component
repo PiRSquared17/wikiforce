@@ -34,13 +34,31 @@
 		var myTeamId = "{!WikiId}";
 		var myMembersIds = "{!WikispaceMembersIds}";
 		var firstExecuteTime = true;		
-		
-		//window.onload = onloadFunctions();
+
+        
+        function memberRefreshSwirly (id) {
+            if (countRemaind != 0)
+                memberShowSwirly(id);
+            else
+                memberHideSwirly(id);
+        }
+        
+        function memberShowSwirly(id) {
+            var swirlyElem = document.getElementById(id);
+            var div = swirlyElem.ancestors()[0];
+            swirlyElem.style.height = div.getHeight()+'px';
+            Effect.Appear(swirlyElem, { duration: 0.1, to: 0.8 });
+        }
+        
+        function memberHideSwirly(id){
+            var swirlyElem = document.getElementById(id);
+            Effect.Fade(swirlyElem);
+        }
 	</script>
 	
 	<!-- Sync Save Members -->
 	<apex:form id="saveMembersSync">
-		<apex:actionPoller action="{!syncSaveMembers}" enabled="{!initAddMembers}" rerender="auxPanel, membersListContainer" interval="5" onComplete="refreshCount(); refreshSwirly();" />
+		<apex:actionPoller action="{!syncSaveMembers}" enabled="{!initAddMembers}" rerender="auxPanel, membersListContainer" interval="5" onComplete="refreshCount(); memberSefreshSwirly('swirlyDiv');" />
 		<!-- Action Function for Refresh Member List -->
 		<apex:actionFunction name="rerenderMemberList" action="{!refreshMethod}" rerender="membersListContainer" />
 	</apex:form>
@@ -66,7 +84,7 @@
 
 		<!-- Content  -->
 		<div id="inviteTeam" style="display: none;" class="overlayForm">
-			<div class="swirly_overlay" style="display: none;"></div>
+			<div id="swirlyDiv" class="swirly_overlay" style="display: none;"></div>
 			
 			<!-- Overlay Title -->
 			<div class="overlayTitleContent">
@@ -79,73 +97,102 @@
 			</div>
 			<div class="overlayMainContent">
 				<span class="overlayRequiredInfo">= Required Information</span> 
-				<apex:form id="newMemberForm" onSubmit="if(validateColleguesInput()){showSwirly('swirly_overlay');Form.disable(this.id);}else return false;">
-					<div class="overlayFormContent">
-						<table cellpadding="0" cellspacing="0"	style="margin: 0px; padding: 0px; width: 100%;">
-							<tr>
-								<td class="inputInfoTitle">
-									<span class="inputInfoTitle">Add colleagues</span><br />
-									<span class="explainBottom">(enter name or email)</span>
-								</td>
-								<td style="width: 4px;">
-									<span style="display: block; width: 4px; height: 67px; background-color: #C0272D;"></span>
-								</td>
-								<td>
-									&nbsp; 
-									<apex:inputTextArea id="colleaguesNames" styleClass="colleaguesNames" style="width:310px; height:63px;" value="{!newMemberVars.colleagueNames}"
-										onFocus="javascript:var options = {
-													script: function(input){	
-																return ('SuggestDispatcher?input='+input+'&class=colleagueNames&wikiId={!WikiId}');
-															}
-														};
-													xml = new AutoComplete('{!$Component.colleaguesNames}',options);return true;"
-										onBlur="hideSuggest();" /> 
-									<br/>
-								</td>
-							</tr>
-							<tr>
-								<td></td>
-								<td></td>
-								<td>
-									&nbsp;<span class="explain">(comma separated)</span>
-									<span id="errorUsers" class="explain" style="color: #ee5555; display: none">Please search or add a user in Add colleagues field.</span><br />
-								</td>
-							</tr>
-						
-							<tr>
-								<td></td>
-								<td></td>
-								<td >
-									<apex:inputCheckBox value="{!emailNotifications}" id="emailNotifications" />
-									<span style="font-weight: bold; font-size: 13px; font-family: Arial, Helvetica, sans-serif; color: #666666;">Email notifications </span>
-								</td>					
-							</tr>
-							
-						
-							<tr>
-								<td></td>
-								<td></td>
-								<td >
-									<apex:inputCheckBox value="{!makeMembersAdmins}" id="makeMembersAdmins"  />
-									<span style="font-weight: bold; font-size: 13px; font-family: Arial, Helvetica, sans-serif; color: #666666;">Make members administrators</span>					
-								</td>					
-							</tr>
-						</table>
-					</div>
-					<div class="informationPanel clear" id="infoToUser"
-						style="display: none;"></div>
+				<apex:form id="newMemberForm" onSubmit="if(validateColleguesInput()){memberShowSwirly('swirlyDiv');Form.disable(this.id);}else return false;">
 					
-					<div class="overlaySeparateLine"></div>
-					
-					<!-- Save and Cancel Buttons -->
-					<div class="overlayFromButtons" align="center">
-						<apex:commandButton action="{!saveMembers}"
-							oncomplete="setTimeout('modal.close();hideSwirly(\'swirly_overlay\');showSwirly(\'paginationOverlay\');setHeight(\'memberListContainer\', \'paginationOverlay\');', 5000);"
-							styleclass="allButtons actionButtons" value="Send"
-							rerender="membersListContainer, saveMembersSync, auxPanel" /> 
-							<input class="allButtons cancelButtons" type="button" value="Cancel" onclick="modal.close();" />
-					</div>
+                    <script>
+                        if ( {!finishedAdding} && ! {!errNotAllUsersAdded} ) {
+                            modal.close();
+                        }
+                    </script>
+                    
+                    <apex:outputpanel id="newMemberErrorPanel" style="{!IF(errNotAllUsersAdded,'','display: none;')}"> <!-- rendered="{!errNotAllUsersAdded}"> -->
+                        <br>
+                        <table style="width: 95%; text-align: center;">
+                            <tr>
+                                <td>
+                                    <span class="inputInfoDark">
+                                        One or more of the selected users do not exist
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="overlaySeparateLine"></div>
+                        <div class="overlayFromButtons" align="center" >
+                            <input class="allButtons cancelButtons" type="button" value="Cancel" onclick="modal.close();"/>
+                        </div>
+                    </apex:outputpanel>
+                                        
+                    <apex:outputpanel id="newMemberInfoPanel" style="{!IF(errNotAllUsersAdded,'display: none;','')}">
+                        <div class="overlayFormContent">
+    						<table cellpadding="0" cellspacing="0"	style="margin: 0px; padding: 0px; width: 100%;">
+    							<tr>
+    								<td class="inputInfoTitle">
+    									<span class="inputInfoTitle">Add colleagues</span><br />
+    									<span class="explainBottom">(enter name or email)</span>
+    								</td>
+    								<td style="width: 4px;">
+    									<span style="display: block; width: 4px; height: 67px; background-color: #C0272D;"></span>
+    								</td>
+    								<td>
+    									&nbsp; 
+    									<apex:inputTextArea id="colleaguesNames" styleClass="colleaguesNames" style="width:310px; height:63px;" value="{!newMemberVars.colleagueNames}"
+    										onFocus="javascript:var options = {
+    													script: function(input){	
+    																return ('SuggestDispatcher?input='+input+'&class=colleagueNames&wikiId={!WikiId}');
+    															}
+    														};
+    													xml = new AutoComplete('{!$Component.colleaguesNames}',options);return true;"
+    										onBlur="hideSuggest();" /> 
+    									<br/>
+    								</td>
+    							</tr>
+    							<tr>
+    								<td></td>
+    								<td></td>
+    								<td>
+    									&nbsp;<span class="explain">(comma separated)</span>
+    									<span id="errorUsers" class="explain" style="color: #ee5555; display: none">Please search or add a user in Add colleagues field.</span><br />
+    								</td>
+    							</tr>
+    						
+    							<tr>
+    								<td></td>
+    								<td></td>
+    								<td >
+    									<apex:inputCheckBox value="{!emailNotifications}" id="emailNotifications" />
+    									<span style="font-weight: bold; font-size: 13px; font-family: Arial, Helvetica, sans-serif; color: #666666;">Email notifications </span>
+    								</td>					
+    							</tr>
+    							
+    							<tr>
+    								<td></td>
+    								<td></td>
+    								<td >
+    									<apex:inputCheckBox value="{!makeMembersAdmins}" id="makeMembersAdmins"  />
+    									<span style="font-weight: bold; font-size: 13px; font-family: Arial, Helvetica, sans-serif; color: #666666;">Make members administrators</span>					
+    								</td>					
+    							</tr>
+    						</table>
+    					</div>
+    					<div class="informationPanel clear" id="infoToUser"
+    						style="display: none;"></div>
+    					
+    					<div class="overlaySeparateLine"></div>
+    					
+    					<!-- Save and Cancel Buttons -->
+    					<div class="overlayFromButtons" align="center">
+    						<apex:commandButton action="{!saveMembers}"
+    							oncomplete="memberHideSwirly('swirlyDiv');setTimeout('showSwirly(\'paginationOverlay\');setHeight(\'memberListContainer\', \'paginationOverlay\');', 5000);"
+    							styleclass="allButtons actionButtons" value="Send"
+    							rerender="membersListContainer, saveMembersSync, auxPanel, newMemberForm" /> 
+    							<input class="allButtons cancelButtons" type="button" value="Cancel" onclick="modal.close();" />
+    					</div>
+                    </apex:outputpanel>
+                    
 				</apex:form>
+                
+                
+                
 			</div>
 		</div>
 	</apex:outputpanel>
@@ -186,6 +233,11 @@
 		</div>
 		<!-- On Hover Bubble Team member -->
 	
+    
+    
+    
+ 
+    
 		<!-- Team Details Widget -->
 		<apex:outputPanel rendered="{!showWidget}">
 			<div class="teamWidget mySmallWidget" id="teamMemberID"><!-- Widget Title -->
