@@ -1,0 +1,376 @@
+<apex:page id="WikiOverview" controller="WikiOverviewController" tabStyle="Wiki__c" sidebar="false" action="{!genProfiles}" >
+		
+	
+	<!-- Scripts --> 
+	<apex:includeScript value="{!URLFOR($Resource.WikiResource, 'inc/js/common.js')}"/>
+	<apex:includeScript value="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}"/>
+	<apex:includeScript value="{!URLFOR($Resource.Script_aculo_us, 'scriptaculous.js')}"/>
+	<apex:includeScript value="{!URLFOR($Resource.Script_aculo_us, 'effects.js')}"/>
+	
+	<!-- Modal JS -->
+	<script type="text/javascript" src="{!URLFOR($Resource.commonResources, 'inc/js/modal.js')}"></script>
+	<link rel="stylesheet" media="screen" href="{!URLFOR($Resource.commonResources, 'inc/css/modal.css')}" />
+	
+	<!-- Portal Support -->
+	<apex:includeScript value="{!$Resource.portalSupport}"/>
+	<apex:includeScript value="{!URLFOR($Resource.OverlayFunctionsFixed, 'js/overlayFunction.js')}"/>
+	<apex:includeScript value="{!URLFOR($Resource.WikiResource, 'inc/js/WikiOverview.js')}"/>
+    
+    <!-- CSS styles for Portal Integration -->  
+    <apex:stylesheet value="{!URLFOR($Resource.portalStyles, 'portal.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/headerTeams.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/widgetTeam.css')}" />
+	
+	<!-- Styles -->
+	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/commonLayout.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/myTeamsAllTeamsTabs.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/WikiOverview.css')}" /> 
+	<apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/fonts.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamsOverlaysTemplate.css')}" />
+
+	
+	<a href="#modal_container" id="initializeModal" style="display: none;"></a>
+	<div id="modal_container"></div>
+	<script>createOverlay('initializeModal')</script>
+	
+	<!-- Delete Forum -->
+	<c:WikiOverlayDeleteWiki />
+	
+	
+	<div class="BodyPage">
+		
+		<!-- Overlay -->
+		<div class="UPF__overlay__" id="UPF__overlay__" style="display:none;" ></div>
+	
+		<!-- Loader	-->
+		<div class="loader__" id="loader__" style="display:none;"><center><img src="{!URLFOR($Resource.commonResources, 'images/loaders/bigLoader.gif')}" /></center><br />Loading...</div>
+	
+		<script>
+			var staticURLFORWiki = '{!$Resource.WikiResource}';
+			
+			function fixHeader () {
+				var inputWidth = 390 - $('labelDisc').getWidth();
+				var inputDisc = $('inputDisc');
+				inputDisc.style.width = inputWidth -2 + 'px';
+			}
+			
+			
+			var version;
+			if (navigator.appName == "Microsoft Internet Explorer") {
+				version = navigator.appVersion;
+				if (version.indexOf("MSIE 6") != -1) {
+					document.getElementById('loader__').className = 'loaderIE6__';
+					document.getElementById('loader__').style.position = 'absolute';
+				}
+			}
+		</script>	
+		<!-- Header -->
+		<apex:composition template="HeaderTemplate">
+			<apex:define name="moduleId"><apex:variable var="moduleId" value="headerWiki"/></apex:define>
+		    <apex:define name="module">Wiki</apex:define>
+		    <apex:define name="title">Overview</apex:define>
+		    <apex:define name="help">WikiOverview</apex:define>
+		    <apex:define name="search">
+		     	<c:Search module="wiki" />
+		    </apex:define>
+	    </apex:composition>
+	    <div class="MainPage">
+			<div class="PageBlock">	
+				
+				<!-- Left Sidebar -->
+				<table border="0" class="bodyTable" cellpadding="0" cellspacing="0">
+					<tr>
+						<td valign="top" class="sideBarTD">
+							<!-- My Favorites Widget -->
+							<c:WikiWidgetMyFavorites />
+							<!-- My Recent Changes Widget -->
+							<c:WikiWidgetMyRecentChanges />
+						</td>
+						<td valign="top" class="mainContentTD">
+							<!-- Main Content Div -->
+							<div class="MainContent">	
+								<div class="tabContainer">
+									<apex:form >
+										<ul class="tabs">
+											<li class="selected" id="myTeamTab">
+												<apex:commandLink action="{!refreshTab}" value="My {!$ObjectType.Wiki__c.labelPlural}" 
+																	onclick="switchTab('myTeamTab'); switchOverlay(true);" 
+																	rerender="myTeamsAllTeamsPanel" 
+																	oncomplete="switchOverlay(false);">
+													<apex:param name="allTeams" value="false" />
+												</apex:commandLink>
+											</li>
+											<li id="allTeamTab">
+												<apex:commandLink action="{!refreshTab}" value="All {!$ObjectType.Wiki__c.labelPlural}" 
+																	onclick="switchTab('allTeamTab'); switchOverlay(true);" 
+																	rerender="myTeamsAllTeamsPanel" 
+																	oncomplete="switchOverlay(false);">
+													<apex:param name="allTeams" value="true" />
+												</apex:commandLink>
+											</li>		
+											<li id="CreateNewWikiContainer">
+												<a href="/apex/WikiCreateWiki" ><div id="left"></div><div id="middle">Create New Wiki</div><div id="right"></div></a>
+											</li>		
+										</ul>
+									</apex:form>
+										
+								</div>
+								<div class="tabBorder"></div>
+								<apex:outputpanel id="myTeamsAllTeamsPanel">
+									<table border="0" cellspacing="8" style="width:100%;">
+										<tr>
+											<td width="55%" valign="top">
+												<div class="teamBlockTitle">
+													<h4>{!$ObjectType.Wiki__c.label}</h4>
+												</div>
+												<br>
+												<apex:image id="twistImage" style="vertical-align:middle;" styleclass="twistImg" onclick="hideSection(this,'filterDiv')" value="{!URLFOR($Resource.WikiResource, 'images/layout/rc_boxes/arrow_down.gif')}" title="Hide Section" alt="Hide Section" />&nbsp; 
+												<a href="javascript:;" onclick="hideSection(document.getElementById('WikiOverview:twistImage'),'filterDiv')" style="text-decoration:none;font-weight:bold;">Filter</a>
+
+												<!-- Letter Filter -->
+												<div class="filter" id="filterDiv"  style="">
+													<div align="center">
+														<apex:form id="filterForm">
+															<ul class="letterFilter">
+																<li>
+																	<apex:commandLink id="ALL"
+																		action="{!filterSites}" 
+																		value="ALL" 
+																		onmouseover="gainFocus(this);" 
+																		onmouseout="looseFocus(this);" 
+																		onclick="setFoo(this); switchOverlay(true);" 
+																		oncomplete="switchOverlay(false);" 
+																		styleclass="AllBtnSet"
+																		rerender="wikiSitesPanel">
+																		<apex:param name="ltr" value="ALL" />
+																	</apex:commandLink>
+																</li>
+																<apex:repeat id="letterFilterRepeat" value="{!letterFilter}" var="item">
+																	<li>
+																		<apex:outputpanel rendered="{!item.containSites}">
+																			<apex:commandLink styleclass="contains"
+																				action="{!filterSites}"
+																				onmouseover="gainFocus(this);"
+																				onmouseout="looseFocus(this);"
+																				onclick="setFoo(this); switchOverlay(true);"
+																				oncomplete="switchOverlay(false);" 
+																				value="{!item.letter}"
+																				rerender="wikiSitesPanel">
+																				<apex:param name="ltr" value="{!item.letter}" />
+																			</apex:commandLink>
+																		</apex:outputpanel>
+																		<apex:outputpanel rendered="{!NOT(item.containSites)}">
+																			{!item.letter}
+																		</apex:outputpanel>
+																	</li>
+																</apex:repeat>
+															</ul>
+															<br style="clear:both; font-size:3px;" />
+														</apex:form>
+													</div>
+												</div>
+												<hr class="filterHR">
+												<apex:outputpanel styleclass="noWikisYet" layout="block" rendered="{!IF(cntPagination == 0, true, false)}">
+													No {!$ObjectType.Wiki__c.LabelPlural} Yet.
+												</apex:outputpanel>
+												<apex:outputpanel id="wikiSitesPanel" rendered="{!IF(cntPagination == 0, false, true)}">
+													
+													<!-- Pagination -->
+													<div class="pagination">
+														<apex:outputpanel id="paginationPanelTop">
+															<apex:form id="paginationFormTop">
+																<div class="pages">
+																	<ul>
+																		<li>
+																			<apex:commandLink action="{!firstPage}" rerender="wikiSitesPanel" rendered="{!NOT(currentPagination == 1)}" onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" >
+																				<img src="{!URLFOR($Resource.WikiResource, 'images/layout/pagination_arrow_first.gif')}" alt="<<" title="<<first"/>
+																			</apex:commandLink>
+																			<apex:outputPanel rendered="{!(currentPagination == 1)}">
+																				<img src="{!URLFOR($Resource.WikiResource, 'images/layout/pagination_arrow_first_disabled.gif')}" alt="<<"/>
+																			</apex:outputPanel>	
+																		</li>
+																		<li class="prev {!IF(currentPagination == 1,'disabled','')}">
+																			<apex:outputText value="Previous Page" rendered="{!(currentPagination == 1)}" />
+																			<apex:commandLink rendered="{!NOT(currentPagination == 1)}" onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" action="{!prevPage}" value="Previous Page" rerender="wikiSitesPanel" />
+																		</li>
+																		<li>({!currentPagination}</li>
+																		<li class="center">-</li>
+																		<li>{!cntPagination})</li>
+																		<li class="next {!IF(currentPagination == cntPagination,'disabled','')}">
+																			<apex:outputText value="Next Page" rendered="{!(currentPagination == cntPagination)}" />
+																			<apex:commandLink rendered="{!(currentPagination < cntPagination)}" onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" action="{!nextPage}" value="Next Page" rerender="wikiSitesPanel" />
+																		</li>
+																		<li>
+																			<apex:commandLink action="{!lastPage}" rerender="wikiSitesPanel" rendered="{!(currentPagination < cntPagination)}" onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" >
+																				<img src="{!URLFOR($Resource.WikiResource, 'images/layout/pagination_arrow_last.gif')}" alt=">>" title="last>>"/>
+																			</apex:commandLink>
+																			<apex:outputPanel rendered="{!(currentPagination == cntPagination)}">
+																				<img src="{!URLFOR($Resource.WikiResource, 'images/layout/pagination_arrow_last_disabled.gif')}" alt=">>"/>
+																			</apex:outputPanel>	
+																		</li>
+																	</ul>
+																</div>
+															</apex:form>
+														</apex:outputpanel>
+													</div>
+													<hr style="border: 0px solid ; background-color: #333434; height: 1px;"/>
+													<!-- Wiki Sites -->
+													<apex:outputpanel id="wikiSitesForm">
+														<apex:form >
+												            <apex:outputPanel styleClass="isLastMemberAdmin" style="display: none;" >{!isLastMemberAdmin}</apex:outputPanel>
+															<apex:repeat rows="{!numSitesRows}" first="{!firstRow}" value="{!wikiSites}" var="item">
+																<div class="recentlyUpdated" id="row-{!item.Id}">
+																	<table border="0" style="width:100%;">
+																		<tr>
+																			<td width="110px">
+																				<apex:commandLink value="Join" action="{!joinWiki}" rendered="{!IF( AND( NOT( item.isMember ), OR( item.isPublic, item.isAdmin )), true,false)}" onclick="changeJoinStatus(this)" oncomplete="refreshJoinList();" >
+																					<apex:param name="wid" value="{!item.Id}" />
+																				</apex:commandLink>
+																				<apex:commandLink value="Unjoin" action="{!unjoinWiki}" rendered="{!IF(item.isMember,true,false)}" onclick="changeJoinStatus(this);" oncomplete="refreshJoinList();" >
+																					<apex:param name="wid" value="{!item.Id}" />
+																				</apex:commandLink>  
+																				<apex:outputpanel rendered="{!IF(item.IsAdmin,true,false)}" >
+																					|&nbsp;<a href="WikiCreateWiki?id={!item.Id}" >Edit</a> | <a href="Javascript:;" onclick="deleteWikiOverlay('{!item.Id}');relocateOverlay();">Del</a>
+																				</apex:outputpanel>
+																			</td>
+																			<td width="70px" valign="top">
+																				<apex:outputpanel rendered="{!IF(item.picture == '', true, false)}">
+																					<apex:image onclick="location.href='/apex/WikiTeamOverview?tid={!item.id}';" styleclass="teamPicture" value="{!URLFOR($Resource.commonResources, '/images/placeholders/default_team_100x100.png')}" />
+																				</apex:outputpanel>
+																				<apex:outputpanel rendered="{!IF(item.picture == '', false, true)}">
+																					<apex:image onclick="location.href='/apex/WikiTeamOverview?tid={!item.id}';" styleclass="teamPicture" value="/servlet/servlet.FileDownload?file={!item.picture}" />
+																				</apex:outputpanel>
+																			</td>
+																			<td valign="top">
+																				<table border="0" style="width:99%;">
+																					<tr>
+																						<td valign="top" align="left">
+																							<a href="/apex/WikiTeamOverview?tid={!item.id}" class="WikiLink">{!item.name}</a>
+																						</td>
+																						<td valign="top" align="right">
+																							<!-- <a href="javascript:;" class="SiteMap">SITE MAP</a> -->
+																						</td>
+																					</tr>
+																					<tr>
+																						<td valign="top" colspan="2">
+																							<div class="description">
+																								<apex:outputText title="{!item.fullDescription}" escape="false" value="{!item.description}" />
+																							</div>
+																						</td>
+																					</tr>
+																				</table>
+																			</td>
+																		</tr>
+																	</table>
+																</div>
+															</apex:repeat>
+														</apex:form>
+													</apex:outputpanel>
+
+													<!-- Pagination -->
+													<div class="pagination">
+														<apex:outputpanel id="paginationPanelBottom">
+															<apex:form id="paginationFormBottom">
+																<div class="pages">
+																	<ul>
+																		<li>
+																			<apex:commandLink action="{!firstPage}" rerender="wikiSitesPanel" rendered="{!NOT(currentPagination == 1)}" onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" >
+																				<img src="{!URLFOR($Resource.WikiResource, 'images/layout/pagination_arrow_first.gif')}" alt="<<" title="<<first"/>
+																			</apex:commandLink>
+																			<apex:outputPanel rendered="{!(currentPagination == 1)}">
+																				<img src="{!URLFOR($Resource.WikiResource, 'images/layout/pagination_arrow_first_disabled.gif')}" alt="<<"/>
+																			</apex:outputPanel>	
+																		</li>
+																		<li class="prev {!IF(currentPagination == 1,'disabled','')}">
+																			<apex:outputText value="Previous Page" rendered="{!(currentPagination == 1)}" />
+																			<apex:commandLink rendered="{!NOT(currentPagination == 1)}" onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" action="{!prevPage}" value="Previous Page" rerender="wikiSitesPanel" />
+																		</li>
+																		<li>({!currentPagination}</li>
+																		<li class="center">-</li>
+																		<li>{!cntPagination})</li>
+																		<li class="next {!IF(currentPagination == cntPagination,'disabled','')}">
+																			<apex:outputText value="Next Page" rendered="{!(currentPagination == cntPagination)}" />
+																			<apex:commandLink rendered="{!(currentPagination < cntPagination)}" onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" action="{!nextPage}" value="Next Page" rerender="wikiSitesPanel" />
+																		</li>
+																		<li>
+																			<apex:commandLink action="{!lastPage}" rerender="wikiSitesPanel" rendered="{!(currentPagination < cntPagination)}" onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" >
+																				<img src="{!URLFOR($Resource.WikiResource, 'images/layout/pagination_arrow_last.gif')}" alt=">>" title="last>>"/>
+																			</apex:commandLink>
+																			<apex:outputPanel rendered="{!(currentPagination == cntPagination)}">
+																				<img src="{!URLFOR($Resource.WikiResource, 'images/layout/pagination_arrow_last_disabled.gif')}" alt=">>"/>
+																			</apex:outputPanel>	
+																		</li>
+																	</ul>
+																</div>
+															</apex:form>
+														</apex:outputpanel>
+												
+													</div>
+												</apex:outputpanel>											
+											</td>
+											<td style="width:3px;"></td>
+											<td width="45%" valign="top">
+
+												<!-- Recently Updated -->
+												<div class="teamBlockTitle">
+													<h4>Recently Updated Pages</h4>
+												</div>
+
+												<apex:outputpanel id="updatedPanel">
+													<apex:outputpanel id="formRecentlyUpdate">
+												
+																<table border="0" cellpadding="0" cellspacing="0">
+																	<apex:repeat value="{!recentlyUpdated}" var="item">
+																		<tr>
+																			<td valign="top" class="recentlyUpdated">
+																				
+																				<apex:image value="{!URLFOR($Resource.commonResources, 'images/placeholders/unknownperson32x32.jpg')}" />
+																			</td>
+																			<td class="recentlyUpdated">
+																				&nbsp;
+																			</td> 
+																			<td valign="top" class="recentlyUpdated">
+																				<a href="/apex/WikiPage?idWP={!item.Id}" class="WikiLink">{!item.Name}</a>
+																				<br>
+																				<div class="description">{!item.shortDescription}</div>
+																				<span class="updatedDate">
+																					<a href ="/{!item.LastModifiedById}" class="WikiSite">{!item.LastModifiedBy}</a>&nbsp; in 
+																					&nbsp;
+																					<a href="/apex/WikiTeamOverview?tid={!item.parentId}" class="WikiSite">{!item.parentName}</a>
+																					&nbsp;
+																					on {!item.LastModifiedDate} 
+																				</span>
+																			</td>
+																		</tr>
+																	</apex:repeat>
+																</table>
+													</apex:outputpanel>
+												</apex:outputpanel>
+												<apex:outputpanel id="noRecentlyPanel" rendered="{!recentlyUpdatedIsEmpty}">
+													There are no recently updated pages
+												</apex:outputpanel>												
+											</td>
+										</tr>
+									</table>
+								</apex:outputpanel>
+								<apex:form >
+									<apex:actionFunction name="refreshDeleteList" action="{!refreshTab}"
+										rerender="myTeamsAllTeamsPanel"
+										oncomplete="showHideOverlay(); showMessageToUser('The wiki has been deleted.', 'success');" />
+									<apex:actionFunction name="refreshJoinList" action="{!refreshTab}" rerender="wikiSitesForm, myTeamsAllTeamsPanel" oncomplete="showWarningIsLastAdmin();"/>
+								</apex:form> 
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+	<apex:outputpanel id="auxPanel" style="display:none;">
+	</apex:outputpanel>
+	<script>
+		readPortalCSSRules();
+	</script>
+
+	
+</apex:page>

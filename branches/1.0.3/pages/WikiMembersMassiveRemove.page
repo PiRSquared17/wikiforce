@@ -1,0 +1,76 @@
+<apex:page sidebar="false" tabStyle="Wiki__c" controller="WikiMembersRemoveController" id="WMROverlay">
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamsMembersMassiveDelete.css')}" />
+	<!-- Content  -->
+	<div id="massiveRemoveMemberOverlay" style="display:none;" class="overlayForm">	
+		<apex:outputPanel id="masiveRemoveContainer" >
+			<!-- Overlay Title -->
+			<div class="overlayTitleContent">
+				<div class="overlayTitle">Confirmation</div>
+				<div class="overlayCloseEvent">
+					<a href="Javascript:;" onclick="modal.close();">
+						<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/genericClose.gif')}" alt="Close Window" title="Close Window" />
+					</a> 
+				</div>
+			</div>			
+			<script>
+
+				if( '{!finish}' == 'true' )
+				{
+				
+					modal.close();
+					reloadMemberList(); 
+					
+				} 
+			</script>
+			
+			<!-- Overlay Content -->
+			<div class="overlayMainContent">
+				
+				<apex:form id="newMemberForm">
+					<apex:inputHidden id="idsToDelete" value="{!RemoveMemberIds}" />
+					
+					<apex:outputPanel rendered="{!NOT(error)}">
+						<div class="overlayFormContent" style="padding-bottom: 10px;">
+							<table style="width:95%;"> 
+								<tr>
+									<td><span class="inputInfoDark">Are you sure you want to remove these members from {!WikiName}?</span></td>
+								</tr>
+								<tr>
+									<td><span class="inputInfo">Once a member is removed there is no way to undo this action.</span></td>
+								</tr>			
+							</table>
+						</div>
+						<div class="overlaySeparateLine" />
+						<!-- Saven and Cancel Buttons -->
+						<div class="overlayFromButtons" align="center">
+							<apex:commandButton styleClass="allButtons actionButtons" 
+							action="{!massiveRemoveMember}" id="massiveRemoveAction" 
+							onclick="changeStatusButtonsRemoveOverlay(true); $('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay');" 
+							oncomplete="changeStatusButtonsRemoveOverlay(false);"
+							value="Continue" 
+							rerender="masiveRemoveContainer"/>
+							<input class="allButtons cancelButtons" type="button" value="Cancel" onclick="modal.close();"/>
+						</div>
+					</apex:outputPanel>
+					
+					<apex:outputPanel rendered="{!error}">
+						<div class="overlayFormContent" style="padding-bottom: 10px;">
+							<table style="width:95%;"> 
+								<tr>
+									<td><span class="inputInfoDark">You can not remove all admin members</span></td>
+								</tr>
+							</table>
+						</div>
+						<div class="overlaySeparateLine" />
+						<!-- Saven and Cancel Buttons -->
+						<div class="overlayFromButtons" align="center">
+							<input class="allButtons cancelButtons" type="button" value="Cancel" onclick="modal.close();$('paginationOverlay').hide()"/>
+						</div>
+					</apex:outputPanel>
+					
+					<apex:actionFunction name="rRemoveOverlay" rerender="masiveRemoveContainer" />
+				</apex:form>
+			</div>
+		</apex:outputPanel>
+	</div>
+</apex:page>
