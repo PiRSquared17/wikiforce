@@ -166,8 +166,8 @@
 				* one<br>
 				* two<br>
 				* three<br>
-				** three and one-third<br>
-				** three and two-thirds<br>
+				* three and one-third<br>
+				* three and two-thirds<br>
 				* four	
 			</td>
 			<td>
@@ -175,10 +175,10 @@
 					<li>one</li>
 					<li>two</li>
 					<li>three</li>
-						<ul>
+
 							<li>three and one-third</li>
 							<li>three and two-thirds</li>
-						</ul>
+
 					<li>four</li>
 				</ul>
 			</td>
@@ -191,8 +191,8 @@
 				~ one<br>
 				~ two<br>
 				~ three<br>
-				~~ three and one-third<br>
-				~~ three and two-thirds<br>	
+				~ three and one-third<br>
+				~ three and two-thirds<br>	
 				~ four	
 			</td>
 			<td>
@@ -209,16 +209,16 @@
 			</td>
 		</tr>
 		<tr>
-			<td class="type" colspan="3" align="center"><em>Colorized Code</em>
+			<td class="type" colspan="3" align="center"><em>Colored Code</em>
 		</tr>
 		<tr>
 			<td>
 				Background Color
 			</td>
 			<td>
-				[Bgcolor:red<br>
-					Red Background color<br>
-				Bgcolor]
+				[Bgcolor:red]<br />
+					Red Background color<br />
+				[!Bgcolor]
 			</td>
 			<td>
 				<span style="background-color:red;">Red Background color</span>
@@ -229,9 +229,9 @@
 				Text Color 
 			</td>
 			<td>
-				[Color:#0000FF<br>
+				[Color:#0000FF]<br>
 					Blue Text<br>
-				Color]
+				[!Color]
 			</td>
 			<td>
 				<span style="color:#0000FF;">Blue Text</span>
@@ -811,7 +811,7 @@
 	<br>
 	<strong>Observations:</strong><br>	
 	<ol>
-		<li><a name="obs1"></a>If the Wiki Page that we are linking is in the same Team, there is no need to specify it</li>
-		<li><a name="obs2"></a>Src is the only required attribute</li>
+		<li><a name="obs1"></a>If the Wiki Page that you are linking is in the same Team, there is no need to specify it</li>
+		<li><a name="obs2"></a><i>src</i> is the only required attribute</li>
 	</ol>	
 </apex:page>

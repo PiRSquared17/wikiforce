@@ -104,9 +104,14 @@ public class ParseHtml {
 				tailParts = htmlParts[1].split(tableEndExp,2);
 				String tableContent = '';
 				
-				tableContent = tailParts[0];			
+				tableContent = tailParts[0];
 				
+				System.debug('tableContent' + tailParts[0]);
+								
 				tailHtml = tailParts[1];
+				
+				System.debug('tailHtml' + tailHtml);
+				
 				if (tableContent != '') {
 					if (tableContent.toLowerCase().indexOf('<br />') != -1) {
 						List<String> tableAttParts = new List<String>();
@@ -114,7 +119,7 @@ public class ParseHtml {
 						List<String> tableAtts = new List<String>();
 						bodyTable = tableAttParts[1].trim();
 						
-						// If the table have attributes
+						// If the table has attributes
 						if (tableAttParts[0].length() != 0) 
 							tableTag += tableAttParts[0].trim(); //support all attributes
 					}
@@ -128,6 +133,9 @@ public class ParseHtml {
 						
 						if (bodyTable.trim().indexOf(tableCaption) == 0 && bodyTable.toLowerCase().indexOf('<br />') != -1) {
 							String captionText = captionTextParts[0].trim();
+							
+							System.debug('captionText: ' + captionText);
+							
 							if (captionText.indexOf(tableData) == -1) {
 								tableTag += '<caption>' + captionText + '</caption>';
 							}else {
@@ -149,12 +157,19 @@ public class ParseHtml {
 							tableRows.add(bodyTable);
 						}
 						
+						System.debug('tableRows ' + tableRows);
+						
 						for (String itemRow : tableRows) {
+							
+							System.debug('itemRow' + itemRow);
+							
 							String iterRow = itemRow;
 							List<String> rowAtt = new List<String>();
 							rowAtt = iterRow.split('(?i)<br />',2);
 							
-							if (rowAtt.size() == 2) {
+							System.debug('rowAtt '  +  rowAtt);
+							
+							if (rowAtt.size() == 2) { //check from here
 								tableTag += '<tr ';
 								if (rowAtt[0] != '' && rowAtt[0] != null ) 
 									tableTag += rowAtt[0].trim();
@@ -430,11 +445,13 @@ public class ParseHtml {
 	 		String listS = '\\*';
 	 		List<String> temp;
 	 		temp = html.split(listS,2);
-	 		System.debug(temp);
+	 		System.debug('tempX' + temp);
 	 		html = html.replaceFirst(listS , '<li>');
 	 		if ((temp[1].indexOf(listSyntax) >= temp[1].toLowerCase().indexOf('<br />') && temp[1].toLowerCase().indexOf('<br />') != -1) || temp[1].indexOf(listSyntax)== -1 ) {
 	 			if (temp[1].toLowerCase().indexOf('<br />') == -1) {
-	 				temp[1] = '>' + temp[1] + '</li></ul>';
+	 				temp[1] = '>' 
+	 						+ temp[1] 
+	 						+ '</li></ul>';
 	 				last = true;
 	 			}else {	 
 	 				List<String> temp2;	
@@ -449,10 +466,14 @@ public class ParseHtml {
 	 		}else {
 	 			temp[1] = temp[1].replaceFirst(listS,'');
 	 			if (temp[1].toLowerCase().indexOf('<br />') == -1) {
-	 				temp[1] = ' style="padding-left:10px;">' + temp[1] + '</li></ul>';
+	 				temp[1] = ' style="padding-left:10px;">' 
+	 						+ temp[1] 
+	 						+ '</li></ul>';
 	 				last = true;
+	 				
 	 			}else {	 		
-	 				temp[1] = ' style="padding-left:10px;">' + temp[1].replaceFirst('(?i)<br />', '</li>');
+	 				temp[1] = ' style="padding-left:10px;">' 
+	 						+ temp[1].replaceFirst('(?i)<br />', '</li>');
 	 			}
 	 		}	
 	 		if (first) {
@@ -471,7 +492,7 @@ public class ParseHtml {
 	private void parseOrderedLists(){
 	
 	/* ------------------------ */
- 		/* 		Ordered List		*/
+ 	/* 		Ordered List		*/
  		String listSyntaxOL = '~';
  		Boolean firstOL = true;
  		Boolean lastOL = false;
@@ -481,27 +502,27 @@ public class ParseHtml {
 	 		List<String> temp;
 	 		temp = html.split(listS,2);
 	 		html = html.replaceFirst(listS , '<li>');
-	 		if ((temp[1].indexOf(listSyntaxOL) >= temp[1].toLowerCase().indexOf('<br>') && temp[1].toLowerCase().indexOf('<br>') != -1) || temp[1].indexOf(listSyntaxOL)== -1 ) {
-	 			if (temp[1].toLowerCase().indexOf('<br>') == -1) {
+	 		if ((temp[1].indexOf(listSyntaxOL) >= temp[1].toLowerCase().indexOf('<br />') && temp[1].toLowerCase().indexOf('<br />') != -1) || temp[1].indexOf(listSyntaxOL)== -1 ) {
+	 			if (temp[1].toLowerCase().indexOf('<br />') == -1) {
 	 				temp[1] = '>' + temp[1] + '</li></ol>';
 	 				lastOL = true;
 	 			}else {	 
 	 				List<String> temp2;	
-	 				temp2 = temp[1].split('(?i)<br>',2);	
+	 				temp2 = temp[1].split('(?i)<br />',2);	
 	 				if (temp2[1].indexOf(listSyntaxOL) == 0) {	
-	 					temp[1] = '>' + temp[1].replaceFirst('(?i)<br>', '</li>');
+	 					temp[1] = '>' + temp[1].replaceFirst('(?i)<br />', '</li>');
 	 				}else {
-	 					temp[1] = '>' + temp[1].replaceFirst('(?i)<br>', '</li></ol>');
+	 					temp[1] = '>' + temp[1].replaceFirst('(?i)<br />', '</li></ol>');
 	 					lastOL = true;
 	 				}
 	 			}
 	 		}else {
 	 			temp[1] = temp[1].replaceFirst(listS,'');
-	 			if (temp[1].toLowerCase().indexOf('<br>') == -1) {
+	 			if (temp[1].toLowerCase().indexOf('<br />') == -1) {
 	 				temp[1] = ' style="padding-left:10px;">' + temp[1] + '</li></ol>';
 	 				lastOL = true;
 	 			}else {	 		
-	 				temp[1] = ' style="padding-left:10px;">' + temp[1].replaceFirst('(?i)<br>', '</li>');
+	 				temp[1] = ' style="padding-left:10px;">' + temp[1].replaceFirst('(?i)<br />', '</li>');
 	 			}
 	 		}	
 	 		if (firstOL) {
@@ -890,14 +911,11 @@ public class ParseHtml {
     	
 		html = html.replaceAll('\n','<br />');
  		
- 		parseCode();
- 		
  		parseTables();
- 		
+ 		parseCode();
+	
 		parseHeadings();
- 		
         parseSpanTags();
-
  		parseTextIndent();
  			
   		/* ------------------------ */

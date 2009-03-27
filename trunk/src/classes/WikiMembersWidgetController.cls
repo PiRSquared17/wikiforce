@@ -7,6 +7,8 @@ public with sharing class WikiMembersWidgetController {
 	String Wiki;
 	Boolean emailNotifications;
 	public String WikiCompleteName;
+	public Boolean errNotAllUsersAdded = false;
+	public Boolean finishedAdding = false;
 	
 	/**
 	* Constructor
@@ -76,6 +78,14 @@ public with sharing class WikiMembersWidgetController {
 	*/
 	public Boolean getShowWidget(){
 		return showWidget;
+	}
+	
+	public Boolean getErrNotAllUsersAdded() {
+		return errNotAllUsersAdded;
+	}
+	
+	public Boolean getFinishedAdding() {
+		return finishedAdding;
 	}
 	
 	/**
@@ -388,10 +398,18 @@ public with sharing class WikiMembersWidgetController {
 		List<String> newMembers = newMemberVars.colleagueNames.split('[ ]*,[ ]*');
 		List<User> userList = new List<User>();
 		already = false;
+		errNotAllUsersAdded = false;
+		finishedAdding = false;
+		
 		Map<String, User> usersMap = new Map<String, User>();
+		
 		for (User iterUser :[select id, Name, IsActive, Email from User where Name in:newMembers]) {
 			usersMap.put(iterUser.Name, iterUser);
 		}
+		
+		if (usersMap.size() != newMembers.size())
+			errNotAllUsersAdded = true;
+		
 		for(String item: newMembers) {
 			if (usersMap.get(item) != null) {
 				already = false;
@@ -464,6 +482,8 @@ public with sharing class WikiMembersWidgetController {
 		newMemberVars.WikiRole = '';
 		newMemberVars.profileId = '';
 		newMemberVars.message = '';
+		
+		finishedAdding = true;
 	}
 	
 	//New save
