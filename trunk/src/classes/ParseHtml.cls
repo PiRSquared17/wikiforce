@@ -115,7 +115,7 @@ public class ParseHtml {
 				if (tableContent != '') {
 					if (tableContent.toLowerCase().indexOf('<br />') != -1) {
 						List<String> tableAttParts = new List<String>();
-						tableAttParts = tableContent.split('(?i)<br />',2);
+						tableAttParts = tableContent.split('<br />',2);
 						List<String> tableAtts = new List<String>();
 						bodyTable = tableAttParts[1].trim();
 						
@@ -129,7 +129,7 @@ public class ParseHtml {
 					List<String> captionTextParts = new List<String>();
 					
 					if (bodyTable.toLowerCase().indexOf('<br />') != -1) {
-						captionTextParts = bodyTable.substring(2).split('(?i)<br />',2);
+						captionTextParts = bodyTable.substring(2).split('<br />',2);
 						
 						if (bodyTable.trim().indexOf(tableCaption) == 0 && bodyTable.toLowerCase().indexOf('<br />') != -1) {
 							String captionText = captionTextParts[0].trim();
@@ -159,25 +159,40 @@ public class ParseHtml {
 						
 						System.debug('tableRows ' + tableRows);
 						
+						Integer cIndex = 0;
 						for (String itemRow : tableRows) {
 							
-							System.debug('itemRow' + itemRow);
+							//String iterRow = itemRow; 
+							//Fix for split function
+							String iterRow;
+							if(cIndex != 0)
+								 iterRow = itemRow;
+							else
+								 iterRow = '<br />' + itemRow;
 							
-							String iterRow = itemRow;
+							cIndex++;
+							
 							List<String> rowAtt = new List<String>();
-							rowAtt = iterRow.split('(?i)<br />',2);
+							rowAtt = iterRow.split('<br />',2);
 							
-							System.debug('rowAtt '  +  rowAtt);
+							System.debug('rowAtt[0]: '  +  rowAtt[0]);
+							System.debug('rowAtt[1]: '  +  rowAtt[1]);
 							
-							if (rowAtt.size() == 2) { //check from here
+							
+							
+							if (rowAtt.size() == 2) {
 								tableTag += '<tr ';
 								if (rowAtt[0] != '' && rowAtt[0] != null ) 
-									tableTag += rowAtt[0].trim();
+									//tableTag += rowAtt[0].trim();
 
 								tableTag += '>';
+								System.debug('iterRow PRE: ' + iterRow);
 								iterRow = rowAtt[1].trim();
 								
-								for (String itemCell : iterRow.split('(?i)<br />')) {
+								System.debug('iterRow POST: ' + iterRow);
+								for (String itemCell : iterRow.split('<br />')) {
+									System.debug('itemCell: ' + itemCell);
+									
 									if (itemCell.trim().indexOf(tableHeader) == 0) {
 										tableTag += '<th ';
 										String tdContent = '';
@@ -238,7 +253,8 @@ public class ParseHtml {
 			}else {
 				html = htmlParts[0] + '<table></table>' + htmlParts[1];
 			}
-		}	
+		}
+		System.debug('HTML FINAL: ' + html);	
 	}
 	
 	/*
