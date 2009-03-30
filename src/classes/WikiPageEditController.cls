@@ -1170,6 +1170,7 @@ public without sharing class WikiPageEditController {
  				
  				tableContent = htmlTailParts[0];
  				tableContent = tableContent.replaceAll('(?i)<br>','');
+ 				tableContent = tableContent.replaceAll('(?i)<br />','');
  				tableContent = tableContent.replaceAll('(?i)<br/>','');
  				//tableContent = tableContent.replaceAll('(?i)\r\n','');
  				
@@ -1187,24 +1188,28 @@ public without sharing class WikiPageEditController {
  				tableContent = tableContent.replaceAll('(?i)</td>[ ]*','\n');
  				tableContent = tableContent.replaceAll('(?i)</th>[ ]*','\n');
  				tableContent = tableContent.replaceAll('(?i)</tr>[ ]*','\n');
- 				tableContent = tableContent.replaceAll('(?i)[ ]*<tr>','<br>|-\n');
- 				tableContent = tableContent.replaceAll('(?i)[ ]*<td>','<br>|');
+ 				tableContent = tableContent.replaceAll('(?i)[ ]*<tr>','<br />|-\n');
+ 				tableContent = tableContent.replaceAll('(?i)[ ]*<td>','<br />|');
  				tableContent = tableContent.replaceAll('(?i)[ ]*<th>','!');
+ 				
+ 				
  				
  				if (tableContent.toLowerCase().indexOf('<caption') != -1) {
  					if (tableContent.toLowerCase().indexOf('<caption>') != -1) {
- 						tableContent = tableContent.replaceAll('(?i)<caption>','|+');
+ 						tableContent = tableContent.replaceAll('(?i)<caption>','<br />|+');
  					}else {
- 						tableContent = tableContent.replaceAll('(?i)[ ]*<caption','|+');
+ 						tableContent = tableContent.replaceAll('(?i)[ ]*<caption','<br />|+');
  						tableContent = tableContent.replaceFirst('(?i)>[ ]*','|');	
  					}
  					tableContent = tableContent.replaceAll('(?i)</caption>[ ]*','\n');	
  				}
+ 				
  				while (tableContent.toLowerCase().indexOf('<tr') != -1) {
  					List<String> trParts = new List<String>();
  					trParts = tableContent.split('(?i)[ ]*<tr',2);
  					trParts[1] = trParts[1].replaceFirst('>[ ]*','');	
  					tableContent = trParts[0] + '<tr' + trParts[1];
+ 					
  					tableContent = tableContent.replaceFirst('(?i)[ ]*<tr','|-');
  				
  					while (tableContent.toLowerCase().indexOf('<td') != -1) {
@@ -1237,16 +1242,17 @@ public without sharing class WikiPageEditController {
 	 				tableContent = thParts[0] + '<th' + thParts[1];
 	 				tableContent = tableContent.replaceFirst('(?i)[ ]*<th','!');
 	 			}
+	 			tableContent = tableContent.replaceFirst('<br />\\|-', '');
  				//tableContent = tableContent.replaceAll('\n','');
  			}else {
  				htmlTail = htmlParts[1];
  			}
- 			html = htmlHead + '{|' + tableContent + '|}' + htmlTail;
+ 			html = htmlHead + '{|' + tableContent + '<br />|}' + htmlTail;
  		}
  		
- 		html = html.replaceAll('(?i)' + '</p>([ ]*[\r\n]*)*<p>','<br><br>');
+ 		html = html.replaceAll('(?i)' + '</p>([ ]*[\r\n]*)*<p>','<br /><br />');
  		html = html.replaceAll('(?i)' + '<p>','');
- 		html = html.replaceAll('(?i)' + '</p>','<br>');
+ 		html = html.replaceAll('(?i)' + '</p>','<br />');
  		
  	}
 
