@@ -62,14 +62,6 @@
 		mainForm.style.display= 'none';
 	}
 	
-
-	
-	
-	
-	
-	
-	
-	
 	</script>
 	
 	<!-- Initialize the overlay box for modal.js -->
@@ -93,7 +85,7 @@
 		<!-- Overlay Content -->
 		<div id="someDiv" class="overlayMainContent">
 			<!-- Required Information -->
-			<span class="overlayRequiredInfo">= Required Information |||</span>
+			<span class="overlayRequiredInfo">= Required Information</span>
 			<div id="saving" class="overlayFormStatus" style="display:none;">Saving...</div>
 			<apex:form id="formNew" onsubmit="return validateName('errorName','{!$Component.nameNewWP}', '{!$Component.formNew}');">
 				<div class="overlayFormContent">
@@ -103,7 +95,8 @@
 							<td align="right" valign="top" style="width:85px;"><span class="inputLabel">Page Name</span></td>
 							<td valign="top" style="width: 4px;"><span class="overlayRequiredInfo" style="height: 21px; margin: 0; padding: 0;"></span></td>
 							<td valign="top">
-								<apex:inputText value="{!newWikiPage.Name}" id="nameNewWP" style="width:98%" maxlength="79"/>
+								<apex:inputText value="{!newWikiPage.Name}" id="nameNewWP" style="width:98%" maxlength="79" 
+									onkeyup = "if(this.value.length >= this.maxLength){ alert('You have reached the maximum WikiPage Name length') };" />
 								<div id="errorName" style="color: red; display: none;">The name is empty or already exist!</div>
 							</td>
 						</tr>
