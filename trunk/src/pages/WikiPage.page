@@ -247,9 +247,12 @@
 		<apex:define name="search">
 			<c:Search module="wiki" />
 		</apex:define>
-	</apex:composition> <apex:outputpanel id="breadCrumbringPanel">
+	</apex:composition> 
+	<apex:outputpanel id="breadCrumbringPanel" rendered="true">
 		<div class="breadCrumbring"><apex:outputLabel escape="false"
-			value="{!wikiSiteName} {!breadCrumbing}" /><apex:outputLabel escape="false" value="{!wikiPageName}" /><br>
+			value="{!wikiSiteName} {!breadCrumbing}" />
+			<apex:outputLabel escape="false" value="{!infoWiki.Name}" />
+			<br />
 		</div>
 	</apex:outputpanel>
 
@@ -668,7 +671,7 @@
 	</apex:form>
 
 	<apex:form >  
-		<apex:actionFunction name="reloadPageInfo" rerender="bodyPageHeaderName, informationPanel, RecentChanges, editPageInfoOverlay" />					
+		<apex:actionFunction name="reloadPageInfo" rerender="breadCrumbringPanel, bodyPageHeaderName, informationPanel, RecentChanges, editPageInfoOverlay" />					
 	</apex:form>	
 	<apex:outputpanel id="auxPanel" />
 	<!-- <img src="{!URLFOR($Resource.FCKeditor ,'fckeditor/editor/images/smiley/msn/teeth_smile.gif')}" /> -->
