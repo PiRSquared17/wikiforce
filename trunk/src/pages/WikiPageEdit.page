@@ -260,4 +260,33 @@
 		</div>
 	</div>
 	<apex:outputpanel id="aux" />
+	<script>
+			function OnLoad()
+			{
+				alert('here');
+				// First of all, translate the dialog box texts.
+				oEditor.FCKLanguageManager.TranslatePage( document ) ;
+			
+				// Show the appropriate tab at startup.
+				if ( dialogArguments.CustomValue == 'Find' )
+				{
+					dialog.SetSelectedTab( 'Find' ) ;
+					dialog.SetAutoSize( true ) ;
+				}
+				else
+					dialog.SetSelectedTab( 'Replace' ) ;
+			
+				SelectField( 'txtFind' + dialogArguments.CustomValue ) ;
+			}
+			function btnStat()
+			{
+				alert('stat');
+				GetE('btnReplace').disabled =
+					GetE('btnReplaceAll').disabled =
+						GetE('btnFind').disabled =
+							( GetE(idMap["FindText"]).value.length == 0 ) ;
+			}
+						
+						
+	</script>
 </apex:page>
