@@ -8,6 +8,7 @@
 	<apex:stylesheet value="{!URLFOR($Resource.portalStyles, 'portal.css')}" />
 	<link rel="stylesheet" media="screen" href="{!URLFOR($Resource.TeamsResources, 'inc/css/teamsOverlaysTemplate.css')}" />
 	<apex:includeScript value="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/prototype.js')}"/>
+	
 	<!-- Portal Support -->
 	<apex:includeScript value="{!$Resource.portalSupport}"/>	
 
