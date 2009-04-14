@@ -14,6 +14,16 @@
 	<div id="modal_container" style="display:none;"></div>
 	<script>
 		createOverlay('initializeModalOverlay');
+		
+		var idTeam = '{!idTeam}';
+		var API_SESSION_ID = '{!$Api.Session_ID}';
+
+		/**
+		* Namespace Prefix Getter
+		*/
+        var namespace = "{!namespace}";	
+		
+		
 	</script>
 
 	<div id="AddChildForm" style="display:none;" class="overlayForm">	
