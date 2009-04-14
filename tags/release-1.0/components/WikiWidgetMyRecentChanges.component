@@ -1,0 +1,63 @@
+<apex:component controller="WikiWidgetMyRecentChangesController" >
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/widgetTeam.css')}" />
+	<style>
+		div.thinHeader {
+			background-color:#526921;
+		}
+	</style>
+	
+	<div class="sidebar">
+	<apex:form >
+    	<apex:actionFunction name="refreshRecentChanges" rerender="formMyRecentChanges"/>
+   	</apex:form>
+		<!-- - - - - - - - - - - - - - - - - - - - - -->	
+		<!-- 			MY RECENT CHANGES			 -->
+		<!-- - - - - - - - - - - - - - - - - - - - - -->
+		<div class="teamWidget mySmallWidget" >
+			<!-- Widget Title -->		
+			<div class="thinHeader">
+				<div><div><h4>My Recent Changes</h4></div></div>
+			</div>
+			<!-- Widget Container -->   		
+			<div class="box_content">
+				<div class="thinBody">
+					<apex:outputpanel rendered="{!IF(cntMyRecentChanges == 0 , false, true)}">
+						
+						<!-- Not Implemented yet. It should show WikiVersions
+						<div class="linkAction">
+							<a href="javascript:;" class="topRightLinks" >See More&#187</a>
+						</div>
+						 -->
+						 
+					</apex:outputpanel>
+					<apex:outputpanel id="formMyRecentChanges">
+						<table width="100%" style="margin-top:7px;" border="0">
+							<apex:repeat value="{!myRecentChanges}" var="item">
+								<tr>
+									<td width="28px" valign="top">
+										<apex:image styleclass="userPicture" value="{!URLFOR($Resource.commonResources, 'images/placeholders/unknownperson32x32.jpg')}" />
+									</td>
+									<td>
+										<a href="/apex/WikiPage?idWP={!item.Id}" class="WikiLink">{!item.Name}</a>
+										<br />
+										<a href="/apex/WikiTeamOverview?tid={!item.parentId}" class="WikiSite">{!item.parentName}</a>
+									</td>
+								</tr> 
+							</apex:repeat>
+							<apex:outputPanel layout="block" rendered="{!IF(cntMyRecentChanges == 0 , true, false)}">
+								<tr>
+									<td style="padding:5px;" align="center" valign="middle">No Recent Changes </td>
+								</tr>
+							</apex:outputPanel>
+						</table>
+					</apex:outputpanel>
+				</div>				
+			</div>
+			<!-- Widget Holder Foot -->
+			<div class="bottom_borders">
+				<div><div></div></div>
+			</div>
+		</div>
+		<div class="clear"></div>
+	</div>	
+</apex:component>

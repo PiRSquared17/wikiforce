@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <deploymentStatus>Deployed</deploymentStatus>
+    <fields>
+        <fullName>Body__c</fullName>
+        <label>Body</label>
+        <length>32000</length>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>LinkCount__c</fullName>
+        <defaultValue>0</defaultValue>
+        <label>LinkCount</label>
+        <precision>18</precision>
+        <scale>0</scale>
+        <type>Number</type>
+    </fields>
+    <fields>
+        <fullName>PageCreatedBy__c</fullName>
+        <label>PageCreatedBy</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>R00N30000002lNsHEAU</relationshipName>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>PageCreatedDate__c</fullName>
+        <label>PageCreatedDate</label>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Parent__c</fullName>
+        <label>Parent</label>
+        <referenceTo>WikiPage__c</referenceTo>
+        <relationshipLabel>Wiki Pages</relationshipLabel>
+        <relationshipName>WikiPages</relationshipName>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>ShortDescription__c</fullName>
+        <label>Short Description</label>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Wiki__c</fullName>
+        <label>Wiki</label>
+        <referenceTo>Wiki__c</referenceTo>
+        <relationshipLabel>Wiki Pages</relationshipLabel>
+        <relationshipName>WikiPages</relationshipName>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>isWikiSintax__c</fullName>
+        <defaultValue>true</defaultValue>
+        <label>isWikiSyntax</label>
+        <type>Checkbox</type>
+    </fields>
+    <label>Wiki Page</label>
+    <nameField>
+        <label>Wiki Page Name</label>
+        <type>Text</type>
+    </nameField>
+    <pluralLabel>Wiki Pages</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>Private</sharingModel>
+</CustomObject>

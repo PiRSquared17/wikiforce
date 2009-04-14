@@ -1,0 +1,120 @@
+<apex:page sidebar="false" tabStyle="Wiki__c" controller="WikiMembersRemoveController">
+
+    <script>
+        /**
+        * Change the values of buttons to 'Deleting...'
+        * when an ajax call is being made. This function is here 'cause it should
+        * be preprocessed by visual force (in order to resolve the component's id)
+        * @param loading : false to restore buttons, true to put on 'Deleting'
+        */
+        function changeStatusButtonsRemoveOverlay(isLoading) {
+            var newContinue;
+            var newCancel;
+            
+            newContinue = document.getElementById('{!$Component.removeMemberForm.removeContinueButton}');
+            newCancel = document.getElementById('removeCancelButton');
+        
+            if(isLoading) {
+                newContinue.value = 'Deleting...';
+                newContinue.disabled = true;
+                newCancel.value = 'Deleting...';
+                newCancel.disabled = true;
+            }
+            else {
+                newContinue.value = 'Continue';
+                newContinue.disabled = false;
+                newCancel.value = 'Cancel';
+                newCancel.disabled = false;
+            }
+        }
+    </script>
+
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamsMembersRemove.css')}" />
+	<!-- Content  -->
+	<div id="removeMemberOverlay" style="display: none;" class="overlayForm">
+		<apex:outputPanel id="removeMemberContainer">
+	
+			<!-- Overlay Title -->
+			<div class="overlayTitleContent">
+			<div class="overlayTitle">Confirmation</div>
+			
+				<div class="overlayCloseEvent">
+						<a href="Javascript:;" onclick="modal.close();">
+							<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/genericClose.gif')}" alt="Close Window" title="Close Window" />
+						</a> 
+				</div>
+			
+			</div>
+			<div class="overlayMainContent" id="overlayRemoveMember">
+				<apex:form id="removeMemberForm">
+					<div class="overlayFormContent style="padding-bottom: 10px;">
+						<apex:inputHidden id="idsToDelete" value="{!RemoveMemberIds}" />
+						<apex:outputPanel rendered="{!NOT(error)}">
+							<table style="width:95%;"> 
+								<tr>
+									<td ><span class="inputInfoDark">Are you sure you want to remove this member from {!wikiName}?</span></td>
+								</tr>
+								<tr>
+									<td ><span class="inputInfo">Once a member is removed there is no way to undo this action.</span></td>
+								</tr>			
+							</table>
+						</apex:outputPanel>
+						
+						<apex:outputPanel rendered="{!error}"> 
+							<table style="width:95%;"> 
+								<tr>
+									<td ><span class="inputInfoDark">You could not remove {!delName} from {!wikiName} because is the last Wiki Adminstrator</span></td>
+								</tr>			
+							</table>
+						</apex:outputPanel>						
+					</div>
+							
+					<div class="overlaySeparateLine"></div>
+
+					<!-- Save and Cancel Buttons -->			
+					<div class="overlayFromButtons" align="center">
+						
+						<apex:outputPanel rendered="{!IF(error, false, true)}">
+							<apex:commandButton style="background-color: #526921!important"
+								styleclass="overlaySaveBtn allButtons actionButtons"
+								action="{!massiveRemoveMember}"
+                                id="removeContinueButton" 
+								onclick="changeStatusButtonsRemoveOverlay(true); $('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay');"  
+								oncomplete="changeStatusButtonsRemoveOverlay(false);" 
+								value="Continue"
+								rerender="removeMemberStatus" />
+							<input class="overlayCancelBtn allButtons cancelButtons" id="removeCancelButton" type="button" value="Cancel" onclick="modal.close();" />
+							
+						</apex:outputPanel> 
+					
+						<apex:outputPanel rendered="{!IF(error, true, false)}">
+							<input class="overlayCancelBtn allButtons cancelButtons" id="removeCancelButton" type="button" value="Cancel" onclick="modal.close();" />
+						</apex:outputPanel>
+						
+					</div>
+				</apex:form>
+			</div>
+		</apex:outputpanel>
+		
+		<!-- Used to close overlay and rerender member list  -->
+		<apex:outputPanel id="removeMemberStatus">
+			<script>
+				var removeStatus = '{!finish}';
+				if( removeStatus == 'true' ){
+					modal.close();
+					reloadMemberList();
+				}
+				
+				var errorStatus = '{!error}';
+				//alert('{!error}');
+				if( errorStatus == 'true' ){
+					$('paginationOverlay').hide();
+					document.getElementById('{!$Component.removeMemberForm}').innerHTML = '<span id="j_id455"><div class="overlayFormContent" style="padding-bottom: 10px;"><table style="width: 95%;"><tbody><tr><td><span class="inputInfoDark">You can not remove all admin members</span></td></tr></tbody></table></div> <div class="overlaySeparateLine"></div> <div align="center" class="overlayFromButtons"><input type="button" class="allButtons cancelButtons" onclick="modal.close();" value="Cancel"/></div></span>';
+       
+				}
+			</script>
+		</apex:outputPanel>
+	
+	</div>
+
+</apex:page>

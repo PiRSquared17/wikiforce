@@ -1,0 +1,228 @@
+<apex:page sidebar="false" id="WikiSearchResult" controller="WikiSearchResultController" tabStyle="Wiki__c" action="{!search}">
+	
+	<!-- Scripts -->
+	<apex:includeScript value="{!URLFOR($Resource.WikiResource, 'inc/js/common.js')}"/>
+	<apex:includeScript value="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}"/>
+	<apex:includeScript value="{!URLFOR($Resource.Script_aculo_us, 'scriptaculous.js')}"/>
+	<apex:includeScript value="{!URLFOR($Resource.Script_aculo_us, 'effects.js')}"/>
+	
+	<!-- CSS styles for Portal Integration --> 
+    <apex:stylesheet value="{!URLFOR($Resource.portalStyles, 'portal.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/headerTeams.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/widgetTeam.css')}" />
+	 
+	<!-- Styles -->
+	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/commonLayout.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/WikiOverview.css')}" /> 
+	<apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/myTeamsAllTeamsTabs.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/fonts.css')}" />
+
+    <script>
+    window.onload = function() {
+       TrunkSearchKeyString();
+    }
+    </script>
+
+	<!-- WikiSearchResult CSS -->
+	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/wikiSearchResult.css')}" />
+	
+	<!-- WikiSearchResult jS -->
+	<apex:includeScript value="{!URLFOR($Resource.WikiResource, 'inc/js/wikiSearchResult.js')}" />
+	
+	
+	<!-- Body Page -->
+	<div class="BodyPage">
+	
+		<!-- Header -->
+		<apex:composition template="HeaderTemplate">
+			   <apex:define name="moduleId"><apex:variable var="moduleId" value="headerWiki"/></apex:define>
+			   <apex:define name="module">Wiki</apex:define>
+			   <apex:define name="title">OverView</apex:define>
+			   <apex:define name="help">FindWiki</apex:define>
+			   <apex:define name="search">
+			   		<c:Search module="wiki" />
+			   </apex:define>
+		</apex:composition>
+		
+		<!-- Main Page -->
+		<div class="MainPage">
+			<div class="PageBlock">	
+	
+				<!-- Left Sidebar -->
+				<table border="0" class="bodyTable" cellspacing="0" cellpadding="0">
+					<tr>
+						<!-- Left Sidebar -->
+						<td valign="top" class="sideBarTD">
+		
+						<!-- My Favorites Widget -->
+						<c:WikiWidgetMyFavorites />
+						
+						<!-- My Recent Changes Widget -->
+						<c:WikiWidgetMyRecentChanges />
+						</td>
+						<td valign="top" class="mainContentTD">
+							<!-- Main Content Div -->
+							<div class="MainContent">	
+								<!-- Holder Start -->
+								<div class="holder">
+								<!-- Output panel searchResult Start -->
+								<apex:outputpanel id="searchResult">			
+									<!-- Holder Start -->
+									<div class="holderWrapper">
+										<apex:outputpanel rendered="{!IF(totalItemsNumber == 0 ,true,false)}">
+											<div class="noResult">
+												No result for '{!criteria}'
+											</div>
+										</apex:outputpanel>
+										
+											<!-- Output panel Start -->								
+											<apex:outputpanel rendered="{!IF(totalItemsNumber == 0 ,false,true)}">
+												
+												<!-- Results Pag. Start -->									
+												<div class="searchResultsPagination"> 
+													<div class="data">
+														Results {!firstItem} - {!lastItem} of {!totalItemsNumber}
+														<apex:outputpanel rendered="{!IF(criteria == '', false,true)}">
+															&nbsp;for <span class="seachTerm">'{!criteria}'</span>
+														</apex:outputpanel>
+													</div>
+													
+													<!-- Navigation Start -->	
+													<div class="navigation">
+														<apex:form >
+															<ul>
+																<li>
+																	<apex:commandLink action="{!firstPage}" rerender="searchResult" rendered="{!prevPageLinkShow}" onclick="showHideOverlay();" >
+																		<img src="{!URLFOR($Resource.discussionResourceFiles, 'images/searchresults/search_result_first.gif')}" alt="" />
+																	</apex:commandLink>
+																	<apex:outputpanel rendered="{!NOT(prevPageLinkShow)}">
+																		<img class="disabled" src="{!URLFOR($Resource.discussionResourceFiles, 'images/searchresults/search_result_first_disabled.gif')}" alt="" />
+																	</apex:outputpanel>
+																</li>
+																<li>
+																	<apex:commandLink styleclass="prevPage" action="{!prevPage}" value="Previous Page" rerender="searchResult" rendered="{!prevPageLinkShow}" onclick="showHideOverlay();"  />	
+																	<apex:outputpanel rendered="{!prevPageShow}">
+																		<a href="javascript:;" class="prevPageDisabled">Previous Page </a>
+																	</apex:outputpanel>
+																</li>
+																<li>&nbsp; | &nbsp; </li>
+																<li>
+																	<apex:commandLink styleclass="nextPage" action="{!nextPage}" value="Next Page" rerender="searchResult" rendered="{!nextPageLinkShow}" onclick="showHideOverlay();"  />	
+																	<apex:outputPanel rendered="{!nextPageShow}">
+																		<a href="javascript:;" class="nextPageDisabled">Next Page</a>
+																	</apex:outputPanel>
+																</li>
+																<li>
+																	<apex:commandLink action="{!lastPage}" rerender="searchResult" rendered="{!nextPageLinkShow}" onclick="showHideOverlay();" >
+																		<img src="{!URLFOR($Resource.discussionResourceFiles, 'images/searchresults/search_result_last.gif')}" alt="" />
+																	</apex:commandLink>
+																	<apex:outputpanel rendered="{!NOT(nextPageLinkShow)}">
+																		<img class="disabled" src="{!URLFOR($Resource.discussionResourceFiles, 'images/searchresults/search_result_last_disabled.gif')}" alt="" />
+																	</apex:outputpanel>
+																</li>
+															</ul>	
+														</apex:form>						
+													</div>
+											
+													<!--  Navigation End -->
+													<div class="pagecount">
+														<apex:form id="jumpToPageFormUp" onkeypress="return submitForm(event, '{!$Component.jumpToPageBtnUp}')" onsubmit="showHideOverlay();" >
+															Page <apex:inputText maxlength="3" size="1" id="jumpToPageInputUp" value="{!jumpPage}" onkeypress="submitForm(event,'{!$Component.jumpToPageBtnUp}')" /> of {!cntPagination}
+															<apex:commandButton style="display:none;" id="jumpToPageBtnUp" value="Jump to Page" action="{!jumpToPage}" rerender="searchResult"/>
+														</apex:form>
+													</div>
+												</div>
+											
+												<!-- Loader -->
+												<div style="opacity: 0.6; display: none" id="paginationOverlay">
+       												<div class="loader">
+      						  							<img title="Loading..." src="/resource/1229617276000/discussionResourceFiles/images/common/layout/big-loader.gif" alt="Loading..."/>
+     												</div>
+   												</div>
+											
+												<!-- The Results -->	
+												<apex:repeat var="wikiPage" value="{!srList}" rows="{!numberOfItemsToShow}" first="{!firstRow}">
+													<div class="searchResultItem">
+														<div class="teamInfo">
+															<a class="title" href="/apex/WikiPage?idWP={!wikiPage.wikiPageId}">
+																<apex:outputtext value="{!wikiPage.wikiPageName}" escape="false" />
+															</a><br />
+														</div>
+													</div>
+												</apex:repeat>
+										
+												<!-- Start Search Results Pagination -->
+												<div class="searchResultsPagination"> 
+													<div class="data">
+														Results {!firstItem} - {!lastItem} of {!totalItemsNumber} 
+														<apex:outputpanel rendered="{!IF(criteria == '', false,true)}">
+															&nbsp;for <span class="seachTerm">'{!criteria}'</span>
+														</apex:outputpanel>
+													</div>
+													
+													<!-- Start Navigation -->
+													<div class="navigation">
+														<apex:form >
+															<ul>
+																<li>
+																	<apex:commandLink action="{!firstPage}" rerender="searchResult" rendered="{!prevPageLinkShow}" onclick="showHideOverlay();"  >
+																		<img src="{!URLFOR($Resource.discussionResourceFiles, 'images/searchresults/search_result_first.gif')}" alt="" />
+																	</apex:commandLink>
+																	<apex:outputpanel rendered="{!NOT(prevPageLinkShow)}">
+																		<img class="disabled" src="{!URLFOR($Resource.discussionResourceFiles, 'images/searchresults/search_result_first_disabled.gif')}" alt="" />
+																	</apex:outputpanel>
+																</li>
+																<li>
+																	<apex:commandLink styleclass="prevPage" action="{!prevPage}" value="Previous Page" rerender="searchResult" rendered="{!prevPageLinkShow}" onclick="showHideOverlay();"  />	
+																	<apex:outputpanel rendered="{!prevPageShow}">
+																		<a href="javascript:;" class="prevPageDisabled">Previous Page </a>
+																	</apex:outputpanel>
+																</li>
+																<li>&nbsp; | &nbsp; </li>
+																<li>
+																	<apex:commandLink styleclass="nextPage" action="{!nextPage}" value="Next Page" rerender="searchResult" rendered="{!nextPageLinkShow}" onclick="showHideOverlay();"  />	
+																	<apex:outputPanel rendered="{!nextPageShow}">
+																		<a href="javascript:;" class="nextPageDisabled">Next Page</a>
+																	</apex:outputPanel>
+																</li>
+																<li>
+																	<apex:commandLink action="{!lastPage}" rerender="searchResult" rendered="{!nextPageLinkShow}" onclick="showHideOverlay();"  >
+																		<img src="{!URLFOR($Resource.discussionResourceFiles, 'images/searchresults/search_result_last.gif')}" alt="" />
+																	</apex:commandLink>
+																	<apex:outputpanel rendered="{!NOT(nextPageLinkShow)}">
+																		<img class="disabled" src="{!URLFOR($Resource.discussionResourceFiles, 'images/searchresults/search_result_last_disabled.gif')}" alt="" />
+																	</apex:outputpanel>
+																</li>
+															</ul>	
+														</apex:form>	
+													</div>
+												
+													<!-- Navigation End -->
+													<div class="pagecount">
+														<apex:form id="jumpToPageFormDown" onkeypress="return submitForm(event, '{!$Component.jumpToPageBtnDown}')" onsubmit="showHideOverlay();" >
+															Page <apex:inputText maxlength="3" size="1" id="jumpToPageInputDown" value="{!jumpPage}" onkeypress="submitForm(event,'{!$Component.jumpToPageBtnDown}')"/> of {!cntPagination}
+															<apex:commandButton style="display:none;" id="jumpToPageBtnDown" value="Jump to Page" action="{!jumpToPage}" rerender="searchResult"/>
+														</apex:form>
+													</div>
+												</div>
+												<!-- Search Results Pagination End -->
+											
+											</apex:outputpanel>
+											<!-- Output panel End -->	
+									
+										</div>
+										<!-- Holder End -->	
+									
+									</apex:outputpanel> 
+									<!-- Output panel searchResult End -->
+								</div>
+									
+								</div>
+							</div>			
+						</td>					
+					</tr>			
+				</table>
+			</div>
+		</div>		
+	</div>
+</apex:page>
