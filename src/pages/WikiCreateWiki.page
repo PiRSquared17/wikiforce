@@ -288,7 +288,11 @@
 															<span class="explain">
 																current picture 
 																<br>
-																<apex:commandLink styleClass="fontSize10" action="{!removeAvatar}" rendered="{!IF( wiki.PictureId__c != null, true, false)}" value="Remove" />
+																<apex:commandLink styleClass="fontSize10" 
+																	action="{!removeAvatar}"
+																	 rendered="{!IF( wiki.PictureId__c != null, true, false)}" 
+																	 value="Remove"
+																	 onclick="javascript:return confirm('Are you sure you want to remove the wiki avatar')" />
 																
 															</span>
 														</td>
