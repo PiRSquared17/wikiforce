@@ -45,7 +45,8 @@
 		<!-- Loader	-->
 		<div class="loader__" id="loader__" style="display:none;"><center><img src="{!URLFOR($Resource.commonResources, 'images/loaders/bigLoader.gif')}" /></center><br />Loading...</div>
 	
-		<script>
+		<script>	
+		
 			var staticURLFORWiki = '{!$Resource.WikiResource}';
 			
 			function fixHeader () {
@@ -179,8 +180,8 @@
 													<div class="pagination">
 														<apex:outputpanel id="paginationPanelTop">
 															<apex:form id="paginationFormTop">
-																<div class="pages">
-																	<ul>
+																<div class="pages" style="margin-left:45px; width:300px;">
+																	<ul align="center">
 																		<li>
 																			<apex:commandLink action="{!firstPage}" rerender="wikiSitesPanel" rendered="{!NOT(currentPagination == 1)}" onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" >
 																				<img src="{!URLFOR($Resource.WikiResource, 'images/layout/pagination_arrow_first.gif')}" alt="<<" title="<<first"/>
@@ -271,7 +272,7 @@
 													<div class="pagination">
 														<apex:outputpanel id="paginationPanelBottom">
 															<apex:form id="paginationFormBottom">
-																<div class="pages">
+																<div class="pages"  style="margin-left:45px; width:300px;">
 																	<ul>
 																		<li>
 																			<apex:commandLink action="{!firstPage}" rerender="wikiSitesPanel" rendered="{!NOT(currentPagination == 1)}" onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" >
