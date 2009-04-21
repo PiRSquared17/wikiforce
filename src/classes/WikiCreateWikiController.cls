@@ -854,7 +854,7 @@ public class WikiCreateWikiController {
 		}
 	}
 	
-	public String letter = System.currentPageReference().getParameters().get('ltr');
+	public String letter;// = System.currentPageReference().getParameters().get('ltr');
 	
 	/**
 	* Set letter value
@@ -862,8 +862,15 @@ public class WikiCreateWikiController {
 	*/
 	public void setLetter(String s){
 		letter = s;	
-	}
-	
+	} 
+
+	/**
+	* Get letter value
+	*@return String
+	*/
+	public String getLetter(){
+		return letter;	
+	}	
 	/**
 	* Search members
 	*@void
@@ -874,10 +881,12 @@ public class WikiCreateWikiController {
 		sortByDesc = false;
 		sortBy = 'User__r.Name'; 
 		
-		if(System.currentPageReference().getParameters().get('ltr') != null)
+		if(System.currentPageReference().getParameters().get('ltr') != null){
 			letter = System.currentPageReference().getParameters().get('ltr');
-		else
+		}
+		else{
 			letter = 'ALL';
+		}
 				
 		if (letter == null || letter == '' || letter== 'ALL') {
 			for (WikiMember__c item: [select id, Name, WikiProfile__r.Name, WikiProfile__r.ManageWikis__c, User__r.Name, User__r.Username, User__r.Id, User__r.Alias from WikiMember__c where Wiki__c =:idWiki and User__r.IsActive != false order by User__r.Name]) {
