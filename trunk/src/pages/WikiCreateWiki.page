@@ -582,19 +582,24 @@
 						<apex:form id="filterForm">
 							<ul class="letterFilter">
 								<li><apex:commandLink action="{!genMembers}" value="ALL"
-									styleclass="AllBtn" rerender="membersList" onclick="$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay')" oncomplete="$('paginationOverlay').hide()">
+									styleclass="{!IF( Letter == 'ALL', 'AllBtn', 'contains') }" rerender="membersList, filterForm" onclick="$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay')" oncomplete="$('paginationOverlay').hide()"
+									onmouseover="$(this.id).toggleClassName( 'contains' );$(this.id).toggleClassName( 'AllBtn' );"
+									onmouseout="$(this.id).toggleClassName( 'contains' );$(this.id).toggleClassName( 'AllBtn' );">
 									<apex:param name="ltr" value="ALL" />
 								</apex:commandLink></li>
 									<apex:repeat id="letterFilterRepeat" value="{!letterFilter}"
 										var="item">
 										<li><apex:outputpanel rendered="{!(item.containMembers)}">
-											<apex:commandLink styleclass="contains" action="{!genMembers}" 
-												value="{!item.letter}" rerender="membersList" onclick="$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay')" oncomplete="$('paginationOverlay').hide()">
+											<apex:commandLink styleclass="{!IF( Letter == item.letter, 'AllBtn', 'contains')}" action="{!genMembers}" 
+												value="{!item.letter}" rerender="membersList, filterForm" onclick="$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay')" oncomplete="$('paginationOverlay').hide()"
+												onmouseover="$(this.id).toggleClassName( 'contains' );$(this.id).toggleClassName( 'AllBtn' );"
+												onmouseout="$(this.id).toggleClassName( 'contains' );$(this.id).toggleClassName( 'AllBtn' );">
 												<apex:param name="ltr" value="{!item.letter}" />
 											</apex:commandLink>
-										</apex:outputpanel> <apex:outputpanel rendered="{!NOT(item.containMembers)}">
-																			{!item.letter}
-																		</apex:outputpanel></li>
+										</apex:outputpanel> 
+										<apex:outputpanel rendered="{!NOT(item.containMembers)}">
+											{!item.letter}
+										</apex:outputpanel></li>
 									</apex:repeat>
 							</ul>
 							<br style="clear: both; font-size: 3px;" />
