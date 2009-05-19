@@ -1258,6 +1258,9 @@
         <layout>Campaign-Campaign Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
+        <layout>CampaignMember-Campaign Member Page Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
         <layout>Case-Case %28Sales%29 Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
