@@ -549,7 +549,7 @@
 				<tr>
 					<td class="teamTitleButton titleTd">Members</td>
 					<td align='center'>
-					<table width="123px;">
+					<table width="40%;">
 						<tr>
 							<td>
 								<div>
@@ -745,7 +745,7 @@
 						<td class="teamTitleButton titleTd">
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 						<td align='center'>
-						<table width="123px">
+						<table width="40%">
 							<tr>
 								<td>
 								<div><!-- BUTTONS --> 

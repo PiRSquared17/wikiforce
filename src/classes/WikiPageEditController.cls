@@ -299,7 +299,7 @@ public without sharing class WikiPageEditController {
  	public void parseWiki() {
 
   		html = replace.content;
-		html = html.replaceAll('(?i)&nbsp;',' ');
+		html = html.replaceAll('(?i)&nbsp;','');
 		html = html.replaceAll('(?i)&amp;','&');
 		html = html.replaceAll('(?i)&quot;','"');
 		html = html.replaceAll('(?i)&gt;','>');

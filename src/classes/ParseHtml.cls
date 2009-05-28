@@ -925,7 +925,10 @@ public class ParseHtml {
 	
 	public void parseHtml(){
     	
+    	html = html.replaceAll('\\\\','###&&&&');
+		html = html.replaceAll('\r\n','<br />');
 		html = html.replaceAll('\n','<br />');
+	
  		
  		parseTables();
  		parseCode();
@@ -1013,6 +1016,7 @@ public class ParseHtml {
  		
  		parseEmoticons();
  		
+ 		html = html.replaceAll('###&&&&','\\\\');
  	}
 
     private String getMatch(String regExp,String theString) {
