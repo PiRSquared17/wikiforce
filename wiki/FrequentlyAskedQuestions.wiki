@@ -1,4 +1,12 @@
 #labels Featured
+Example:
+
 Q:What is the limit of wikis a user can create, administrate, be a member or view?
 
 A:There's no limit.
+
+--------------------------------------------------------------------------------------------
+
+Q: Are the wiki's stored on Salesforce? 
+
+A: Yes, all data are stored on Salesforce.
