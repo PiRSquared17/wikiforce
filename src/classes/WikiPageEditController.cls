@@ -1,4 +1,4 @@
-/**
+/** 
 *@author Yuri Alvarez @ 5-2-2008
 */
 public without sharing class WikiPageEditController {
@@ -153,10 +153,11 @@ public without sharing class WikiPageEditController {
             
             tempString = tempString.trim().replaceAll(afterString.trim(),'');
             
-            regExpResult = tempString.trim();
-        
+            regExpResult = tempString.trim();           
+         
             return regExpResult.trim();
         } else {
+        	       	
             return theString.trim();
         }
     }
@@ -290,6 +291,212 @@ public without sharing class WikiPageEditController {
  	public String getHtml () {
  		return html;	
  	}
+ 	
+ 	
+ 	/**
+ 	* Convert the word size to html size in pixels
+ 	*/
+ 	public String wordToHtmlSize(String wordSize){
+ 		String htmlSize;
+ 		
+ 		if(wordSize == '1')
+ 			htmlSize = '10px;';
+ 		if(wordSize == '2')
+ 			htmlSize = '14px;';
+ 		if(wordSize == '3')
+ 			htmlSize = '16px;';
+ 		if(wordSize == '4')
+ 			htmlSize = '18px;';
+ 		if(wordSize == '5')
+ 			htmlSize = '24px;';
+ 		if(wordSize == '6')
+ 			htmlSize = '32px;';
+ 		if(wordSize == '7')
+ 			htmlSize = '48px;';
+ 		
+ 		return htmlSize;
+ 	}
+ 	
+ 	/**
+ 	* Convert from hexa Char to integer 
+ 	*@return integer
+ 	*/
+ 	public Integer hexaToInteger(String h){
+ 		Integer value;
+ 		if((h >= '0')&&(h <= '9')) 
+ 			value = Integer.valueOf(h);
+ 		else if(h == 'A')
+ 			value = 10;
+ 		else if(h == 'B')
+ 			value = 11;
+ 		else if(h == 'C')
+ 			value = 12;
+ 		else if(h == 'D')
+ 			value = 13;
+ 		else if(h == 'E')
+ 			value = 14;
+ 		else if(h == 'F')
+ 			value = 15;
+ 		return value;		
+ 	} 
+ 	
+ 	
+ 	/**
+ 	* Return the rgb color form
+ 	*@Return String
+ 	*/ 	
+ 	public String getRgbColor(String color){ 
+ 			
+ 			String rgbColor = color.replaceAll('#','');
+ 			rgbColor = rgbColor.toUpperCase();
+ 			
+ 			//get the red color integer number
+ 			Integer rColor = (hexaToInteger(rgbColor.substring(0,1)) * 16) +
+ 								(hexaToInteger(rgbColor.substring(1,2)));
+ 								
+ 			//get the green color integer number 								
+ 			Integer gColor = (hexaToInteger(rgbColor.substring(2,3)) * 16) +
+ 								(hexaToInteger(rgbColor.substring(3,4)));
+ 			
+ 			//get the blue color integer number 								
+ 			Integer bColor = (hexaToInteger(rgbColor.substring(4,5)) * 16) +
+ 								(hexaToInteger(rgbColor.substring(5,6)));
+ 			 			
+ 			rgbColor = 'rgb('+String.valueOf(rColor)+','+String.valueOf(gColor)+','+ String.valueOf(bColor) +')';
+ 			return rgbColor;
+ 	}
+ 	
+ 
+ 	/**
+ 	* Convert the font tags to span tags in html
+ 	*@return String
+ 	*Created by Juan Pablo Vaz - 29/05/09
+ 	*/
+ 	public String convertFontToSpan(){
+ 		
+        String fontParser = '(?i)<font[^>]*>';
+        String fontCloseparser = '(?i)</font>';
+        String tempFontTag;
+        
+        while(found(fontParser,html)){        
+        	
+        	// get the first font tag content
+	        tempFontTag = html.split('<font ', 2)[1]; 
+	        tempFontTag = tempFontTag.split('>', 2)[0];
+	        
+	        //replace the font tag by a keyword	        
+	        html = html.replaceFirst(fontParser,'###FontsHere###');
+	        
+	        //get the font properties
+	        String propertyName = tempFontTag.split('=',2)[0];
+	        String propertyValue = tempFontTag.split('=',2)[1];
+	        
+	        propertyValue = propertyValue.replaceAll('"','');	  
+	        
+	        //if has more that one properties take the font-size
+	        if(propertyValue.split('font-size: ').size() > 1){
+	        	propertyValue = propertyValue.split('font-size: ')[1];
+	        	propertyValue = propertyValue.split(';')[0];
+	        	propertyName = 'size';
+	        }else if(propertyName == 'size'){	        	
+	        	propertyValue = wordToHtmlSize(propertyValue);
+	        }
+	        
+	        String spanResult = '';      
+	        
+	        System.debug('name and value ============================= >>>> : ' + propertyName + '--'+ propertyValue);
+	        
+	        if(propertyName == 'color'){		       	
+	        	
+	        	// get the rgb color notation from #123456 notation	
+		       	String rgbColor = getRgbColor(propertyValue);
+				spanResult += '<span style="color:'+ rgbColor +'";>';
+				 
+	        }else if(propertyName == 'size'){
+	        	
+	        	spanResult += '<span style="font-size:'+ propertyValue +'";>';
+	        			       	
+	        }else if(propertyName == 'face'){
+	        	spanResult += '<span style="font-family:'+ propertyValue +'";>';	        	
+	        }
+	        	
+	        //replace again the keyword by the new span tag	
+	    	html = html.replaceFirst('###FontsHere###',spanResult);
+	    	System.debug('html Final ============================= >>>> : ' + html );
+        }
+      
+        html = html.replaceAll(fontCloseparser,'</span>');	 
+        
+        //System.debug('html Final ============================= : ' + html ); 
+        return html;
+ 		
+ 	}	
+
+
+	/**
+ 	* Convert the word div tags to html div tags
+ 	*@return String
+ 	*Created by Juan Pablo Vaz - 29/05/09
+ 	*/
+ /*	public String convertDivs(){
+ 		
+        String divParser = '(?i)<div [^>]*>';
+        String tempFontTag;
+        
+        while(found(divParser,html)){        
+        	
+        	// get the first div tag content
+	        tempDivTag = html.split('<div ', 2)[1]; 
+	        tempDivTag = tempDivTag.split('>', 2)[0];
+	        
+	        //replace the div tag by a keyword	        
+	        html = html.replaceFirst(divParser,'###DivHere###');
+	        
+	        //get the div properties
+	        String propertyName = tempFontTag.split('=',2)[0];
+	        String propertyValue = tempFontTag.split('=',2)[1];
+	        
+	        propertyValue = propertyValue.replaceAll('"','');	  
+	        
+	        //if has more that one properties take the font-size
+	        if(propertyValue.split('font-size: ').size() > 1){
+	        	propertyValue = propertyValue.split('font-size: ')[1];
+	        	propertyValue = propertyValue.split(';')[0];
+	        	propertyName = 'size';
+	        }else if(propertyName == 'size'){	        	
+	        	propertyValue = wordToHtmlSize(propertyValue);
+	        }
+	        
+	        String spanResult = '';      
+	        
+	        System.debug('name and value ============================= >>>> : ' + propertyName + '--'+ propertyValue);
+	        
+	        if(propertyName == 'color'){		       	
+	        	
+	        	// get the rgb color notation from #123456 notation	
+		       	String rgbColor = getRgbColor(propertyValue);
+				spanResult += '<span style="color:'+ rgbColor +'";>';
+				 
+	        }else if(propertyName == 'size'){
+	        	
+	        	spanResult += '<span style="font-size:'+ propertyValue +'";>';
+	        			       	
+	        }else if(propertyName == 'face'){
+	        	spanResult += '<span style="font-family:'+ propertyValue +'";>';	        	
+	        }
+	        	
+	        //replace again the keyword by the new span tag	
+	    	html = html.replaceFirst('###FontsHere###',spanResult);
+	    	System.debug('html Final ============================= >>>> : ' + html );
+        }
+      
+        html = html.replaceAll(fontCloseparser,'</span>');	 
+        
+        //System.debug('html Final ============================= : ' + html ); 
+        return html;
+ 		
+ 	}	*/
+ 		
 	
 	/**
 	* Parse Wiki code to HTML
@@ -299,6 +506,8 @@ public without sharing class WikiPageEditController {
  	public void parseWiki() {
 
   		html = replace.content;
+  		
+  		
 		html = html.replaceAll('(?i)&nbsp;','');
 		html = html.replaceAll('(?i)&amp;','&');
 		html = html.replaceAll('(?i)&quot;','"');
@@ -315,18 +524,27 @@ public without sharing class WikiPageEditController {
 		
 		html = html.replaceAll('(?i)<ol[^>]*>[^<]*<li','<ol><li');
 		html = html.replaceAll('(?i)</li>[^<]*</ol>','</li></ol>');
+		
+		
+		
 		// REMOVE ALL THE METADATA AND CSS STYLES INCLUDE FROM WORD
 		
         html = html.replaceAll('(?i)(<(meta[^>]*>|link[^>]*>|w[^>]*>[^><]*</w[^>]*>|w[^>]*>|/w[^>]*>|xml>|/xml>|!(--)?\\[[^>]*>)|/\\*[^*]*\\*/)','');
         html = html.replaceAll('(?i)<\\!--','');
-        html = html.replaceAll('(?i)-->','');
+        html = html.replaceAll('(?i)-->','');     
         
+		
         while(found('(?i)<style[^>]*>[^<]*</style>',html)) {
             html = html.replaceFirst('(?i)<style[^>]*>[^<]*</style>','');
         }
 
         html = html.replaceAll('(?i)<b{1} [^>]*="[^\"]*" *>','<b>');
         html = html.replaceAll('(?i)<i{1} [^>]*="[^\"]*" *>','<i>');
+
+		
+        // convert the font to span tags
+        
+        html = convertFontToSpan();
 
   		/* ------------------------ */
  		/* 		Code (no parsed) 	*/ 		
@@ -352,7 +570,10 @@ public without sharing class WikiPageEditController {
         String tempSpanStyles;
         String tempStylesInside;
 
-        while(found(forSpanStyles,html)) {
+		
+
+        while(found(forSpanStyles,html)) {        		
+        
             // Debo eliminar cualquier propiedad dentro de span que no sea style
             String propertyNoLong = '(?i)lang="[^"]*"';
             html = html.replaceAll(propertyNoLong,'');
@@ -387,7 +608,9 @@ public without sharing class WikiPageEditController {
             String spanContent = '';
             
             // Obtengo primer span que encuentro y lo guardo temporalmente
-            tempSpanStyles = getMatch(forSpanStyles,html);
+            //tempSpanStyles = getMatch(forSpanStyles,html);
+            
+            tempSpanStyles = '<span' +  html.split('<span', 2)[1];  
             
             // Lo sustituyo por una linea clave para despues reemplazarla denuevo\
             String theSpanTag;
@@ -395,7 +618,7 @@ public without sharing class WikiPageEditController {
             html = html.replaceFirst(forSpanStyles,'##hereStyles##');
             
             tempStylesInside = getMatch(forStylesInside,tempSpanStyles).replaceAll('"','');
-            System.debug('Y los estilos son -----> ' + tempStylesInside);
+            
             List<String> stylePropertys = tempStylesInside.split(';');
             
             for(Integer i = 0; i < stylePropertys.size(); i++ ) {
@@ -404,26 +627,24 @@ public without sharing class WikiPageEditController {
                 if(partsPropertie.size() > 1) {
                     String namePropertie = partsPropertie[0];
                     String valuePropertie = partsPropertie[1];
-                    
-                    
+                       
                     String theSpanContent;
                     String theStyleAttribute;
                     String theStyleContent;
                     List<String> thePropertiesStyle;
                     List<String> sizeAndLineHeight;
-                    System.debug('PROBANDO CON EL HTML ' + html);
+            
                     // Forma la propiedad encontrada al nuevo modo
                     if(namePropertie.trim() == 'font' || namePropertie.trim() == 'FONT') {
                         //theSpanTag = getMatch('<span{1} +[^>]*>.*</span>',html);
                         theStyleAttribute = getMatch('(?i)style="[^"]*"',theSpanTag);
                         theStyleContent = getMatch('(?i)"[^"]*"',theStyleAttribute);
-                            System.debug('Todos los estilos ----> ' + theStyleContent);
                         thePropertiesStyle = theStyleContent.split(' ');
-                            System.debug('Cantidad de propiedades ----> ' + thePropertiesStyle.size());
+            
                         for(integer k = 0; k < thePropertiesStyle.size(); k++) {
                             thePropertiesStyle[k] = thePropertiesStyle[k].trim().replaceAll('\'','').replaceAll('\"','');
-                            System.debug('La propiedad ----> ' + thePropertiesStyle[k]);
-                            if(thePropertiesStyle[k].toLowerCase().trim() == 'bold' || thePropertiesStyle[k].toLowerCase().trim() == 'bolder' || thePropertiesStyle[k].toLowerCase().trim() == 'lighter') {
+            
+			                if(thePropertiesStyle[k].toLowerCase().trim() == 'bold' || thePropertiesStyle[k].toLowerCase().trim() == 'bolder' || thePropertiesStyle[k].toLowerCase().trim() == 'lighter') {
                                 fontWeightPropertie = '\'\'\'';
                                 fontWeightClose = '\'\'\'';
                             } else if(thePropertiesStyle[k].toLowerCase().trim() == 'italic' || thePropertiesStyle[k].toLowerCase().trim() == 'oblique') {
@@ -457,7 +678,8 @@ public without sharing class WikiPageEditController {
                             fontFamilyPropertie = '[fontFamily:{' + valuePropertie.replaceAll('\'','').replaceAll('\"','').trim() + '}]';
                             fontFamilyClose = '[!fontFamily]';
                         }
-                    } else if(namePropertie.trim() == 'font-size') {
+                    } else if(namePropertie.trim() == 'font-size') {	                   
+	                    
                         if(valuePropertie != '') {
                             fontSizePropertie = '[fontSize:' + valuePropertie.replaceAll('\'','').replaceAll('"','').trim() + ']';
                             fontSizeClose = '[!fontSize]';
@@ -485,12 +707,10 @@ public without sharing class WikiPageEditController {
                             fontWeightPropertie = '';
                             fontWeightClose = '';
                         } else if(valuePropertie.trim() == 'bold' || valuePropertie.trim() == 'bolder' || valuePropertie.trim() == 'lighter') {
-                            //System.debug('Estoy en font-weight: Bold');
                             fontWeightPropertie = ' \'\'\' ';
                             fontWeightClose = ' \'\'\' ';
                         }
                     } else if(namePropertie.trim() == 'background-color' || namePropertie.trim() == 'BACKGROUND-COLOR' || namePropertie.trim() == 'background') {
-                        //System.debug('Estoy en background-color');
                         if(valuePropertie.trim() != '') {
                             valuePropertie = valuePropertie.replaceAll('(?i)[0-9]{1,2}%','');
                             valuePropertie = valuePropertie.replaceAll('(?i)none','');
@@ -500,7 +720,7 @@ public without sharing class WikiPageEditController {
                             fontBgColorClose = '[!Bgcolor]';
                         }
                     }
-                }   
+                }    
             }
             
             newFontStyles = fontBgColorPropertie + fontColorPropertie + fontFamilyPropertie + fontSizePropertie + fontVariantPropertie + lineHeightPropertie + fontWeightPropertie + fontStylePropertie;
@@ -509,8 +729,10 @@ public without sharing class WikiPageEditController {
             //html = html.replaceFirst('</span>','##hereFinish##');
             html = html.replaceFirst('##hereStyles##',newFontStyles);
             html = html.replaceFirst('(?i)</span>',closeFontStyles);
-            //System.debug('Ahora html es ' + html);
         }
+        
+        
+          
 
  		/* ------------------------ */
  		/* 			Ident Text 		*/ 		
@@ -633,7 +855,10 @@ public without sharing class WikiPageEditController {
  		}
  		
  		// REMOVE THE RETURN CHAR 
- 		html = html.replaceAll('[\n\r]','<br />');
+ 		html = html.replaceAll('[\n\r]',''); 		
+ 		
+ 		
+ 		//System.debug('html after --> '+ html);
  		
 		/* ------------------------ */
  		/* 			Text Align	 	*/
@@ -682,7 +907,7 @@ public without sharing class WikiPageEditController {
 			html = tempRight[0] + '[[<>' + tempRight[1].replaceFirst('(?i)' + alignClose ,'<>]]');
 		}
 		
-
+		
   		/* ------------------------ */
  		/* 			HEADINGS 		*/
  		for (Integer i = 6; i > 1; i--) {
@@ -1252,7 +1477,7 @@ public without sharing class WikiPageEditController {
  		
  		html = html.replaceAll('(?i)' + '</p>([ ]*[\r\n]*)*<p>','<br /><br />');
  		html = html.replaceAll('(?i)' + '<p>','');
- 		html = html.replaceAll('(?i)' + '</p>','<br />');
+ 		html = html.replaceAll('(?i)' + '</p>','<br />'); 		
  		
  	}
 
@@ -1265,11 +1490,12 @@ public without sharing class WikiPageEditController {
 	public PageReference SaveEdit () {
 
 		parseWiki();
+		
 		html = html.replaceAll('&nbsp;',' ');
 		html = html.replaceAll('&#43;','+');
 		
 		html = html.replaceAll('(?i)<br>','\n');
-		html = html.replaceAll('<[^>]*>', '');
+		html = html.replaceAll('<[^>]*>', '');		
 		
 		TeamUtil.hostName = TeamUtil.getHost(ApexPages.currentPage());
 		
@@ -1460,7 +1686,7 @@ public without sharing class WikiPageEditController {
 						}
 						
 						tmpLnkCntWP.linkCount__c += 1;
-						System.debug( '|||:' + tmpLnkCntWP.linkCount__c );
+						//System.debug( '|||:' + tmpLnkCntWP.linkCount__c );
 						wikiMap.put(tmpLnkCntWP.id, tmpLnkCntWP);
 						//System.debug('\n\n////////////////////////////////////////\n CURRENT SOQL: ' + Limits.getQueries() + '\n/////////////////////////////\n\n');
 			 		}

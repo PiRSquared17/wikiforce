@@ -106,11 +106,11 @@ public class ParseHtml {
 				
 				tableContent = tailParts[0];
 				
-				System.debug('tableContent' + tailParts[0]);
+				//System.debug('tableContent' + tailParts[0]);
 								
 				tailHtml = tailParts[1];
 				
-				System.debug('tailHtml' + tailHtml);
+				//System.debug('tailHtml' + tailHtml);
 				
 				if (tableContent != '') {
 					if (tableContent.toLowerCase().indexOf('<br />') != -1) {
@@ -134,7 +134,7 @@ public class ParseHtml {
 						if (bodyTable.trim().indexOf(tableCaption) == 0 && bodyTable.toLowerCase().indexOf('<br />') != -1) {
 							String captionText = captionTextParts[0].trim();
 							
-							System.debug('captionText: ' + captionText);
+							//System.debug('captionText: ' + captionText);
 							
 							if (captionText.indexOf(tableData) == -1) {
 								tableTag += '<caption>' + captionText + '</caption>';
@@ -157,7 +157,7 @@ public class ParseHtml {
 							tableRows.add(bodyTable);
 						}
 						
-						System.debug('tableRows ' + tableRows);
+						//System.debug('tableRows ' + tableRows);
 						
 						Integer cIndex = 0;
 						for (String itemRow : tableRows) {
@@ -175,8 +175,8 @@ public class ParseHtml {
 							List<String> rowAtt = new List<String>();
 							rowAtt = iterRow.split('<br />',2);
 							
-							System.debug('rowAtt[0]: '  +  rowAtt[0]);
-							System.debug('rowAtt[1]: '  +  rowAtt[1]);
+							//System.debug('rowAtt[0]: '  +  rowAtt[0]);
+							//System.debug('rowAtt[1]: '  +  rowAtt[1]);
 							
 							
 							
@@ -186,12 +186,12 @@ public class ParseHtml {
 									//tableTag += rowAtt[0].trim();
 
 								tableTag += '>';
-								System.debug('iterRow PRE: ' + iterRow);
+								//System.debug('iterRow PRE: ' + iterRow);
 								iterRow = rowAtt[1].trim();
 								
-								System.debug('iterRow POST: ' + iterRow);
+								//System.debug('iterRow POST: ' + iterRow);
 								for (String itemCell : iterRow.split('<br />')) {
-									System.debug('itemCell: ' + itemCell);
+									//System.debug('itemCell: ' + itemCell);
 									
 									if (itemCell.trim().indexOf(tableHeader) == 0) {
 										tableTag += '<th ';
@@ -254,7 +254,7 @@ public class ParseHtml {
 				html = htmlParts[0] + '<table></table>' + htmlParts[1];
 			}
 		}
-		System.debug('HTML FINAL: ' + html);	
+		//System.debug('HTML FINAL: ' + html);	
 	}
 	
 	/*
@@ -320,16 +320,16 @@ public class ParseHtml {
 
         Integer theCounter = 0;
 
-		System.debug('\n\n ENCUENTRA TAGPROPERTIE ' + found(tagPropertie,html) + '\n\n');
+		//System.debug('\n\n ENCUENTRA TAGPROPERTIE ' + found(tagPropertie,html) + '\n\n');
 
         while(found(tagPropertie,html)) {
 	        if(found(tagPropertie,html)) {
-	        	System.debug('\n\n SI ES TRUE DEBERIA ESTAR ACA \n\n');
+	        	//System.debug('\n\n SI ES TRUE DEBERIA ESTAR ACA \n\n');
 	            // Obtengo la primer propiedad encontrada
 	            //actualPropertie = html.substring(html.indexOf(openerOpenTagPropertie),(html.indexOf(closerOpenTagPropertie)+1));
 	            actualPropertie = getMatch(tagPropertie,html);
 	            
-	            System.debug('\n\n ACTUALPROPERTIE ' + actualPropertie + '\n\n');
+	            //System.debug('\n\n ACTUALPROPERTIE ' + actualPropertie + '\n\n');
 	            
 	            // Le quito los parentesis rectos y obtengo el nombre y el valor de la propiedad
 	            actualPropertieTag = actualPropertie.replaceAll('\\[','');
@@ -374,8 +374,8 @@ public class ParseHtml {
 	            actualPropertie = actualPropertie.replaceFirst('\\{','\\\\{');
 	            actualPropertie = actualPropertie.replaceFirst('\\}','\\\\}');
 	
-				System.debug('\n\n ACTUAL PROPERTIE' + actualPropertie + '\n\n');
-				System.debug('\n\n HTML CODE ' + html + '\n\n');
+				//System.debug('\n\n ACTUAL PROPERTIE' + actualPropertie + '\n\n');
+				//System.debug('\n\n HTML CODE ' + html + '\n\n');
 	            html = html.replaceFirst('(?i)' + actualPropertie,'<span style="' + nameStylePropertie + valueStylePropertie + '; newPropertieHere">');
 	            if(nameActualPropertie != '') {
 	                html = html.replaceFirst(closeActualPropertie,'</span>');
@@ -461,7 +461,7 @@ public class ParseHtml {
 	 		String listS = '\\*';
 	 		List<String> temp;
 	 		temp = html.split(listS,2);
-	 		System.debug('tempX' + temp);
+	 		//System.debug('tempX' + temp);
 	 		html = html.replaceFirst(listS , '<li>');
 	 		if ((temp[1].indexOf(listSyntax) >= temp[1].toLowerCase().indexOf('<br />') && temp[1].toLowerCase().indexOf('<br />') != -1) || temp[1].indexOf(listSyntax)== -1 ) {
 	 			if (temp[1].toLowerCase().indexOf('<br />') == -1) {
@@ -1033,7 +1033,7 @@ public class ParseHtml {
         
         if(theString.trim().split(regExp,2).size() > 1) {
 
-			System.debug('\n\n La expresion regExp' + regExp + '\n\n');
+			//System.debug('\n\n La expresion regExp' + regExp + '\n\n');
 
             //List<string> tempBeforeAndAfterString = theString.trim().split(regExp,2);
 			tempBeforeAndAfterString = theString.trim().split(regExp,2);
@@ -1066,17 +1066,17 @@ public class ParseHtml {
             afterString = afterString.replaceAll('\\^','\\\\^');
             afterString = afterString.replaceAll('\\$','\\\\$');
             
-            System.debug('\n\n theString ' + theString + '\n\n');
-            System.debug('\n\n beforeString ' + beforeString + '\n\n');
-            System.debug('\n\n afterString ' + afterString + '\n\n');
+            //System.debug('\n\n theString ' + theString + '\n\n');
+            //System.debug('\n\n beforeString ' + beforeString + '\n\n');
+            //System.debug('\n\n afterString ' + afterString + '\n\n');
             
             tempString = theString.replaceFirst(beforeString,'');
                         
-            System.debug('\n\n tempString sin beforeString ' + tempString + '\n\n');
+            //System.debug('\n\n tempString sin beforeString ' + tempString + '\n\n');
             
             tempString = tempString.trim().replaceAll(afterString.trim(),'');
             
-            System.debug('\n\n tempString sin afterString ' + tempString + '\n\n');
+            //System.debug('\n\n tempString sin afterString ' + tempString + '\n\n');
             
             regExpResult = tempString.trim();
         
