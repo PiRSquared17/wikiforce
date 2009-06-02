@@ -298,8 +298,7 @@ public class ParseHtml {
 	/*      Span tag parser     */
 	private void parseSpanTags(){
 	
-
-        // Expresiones de busqueda de propiedades
+		// Expresiones de busqueda de propiedades
         String tagPropertie = '(?i)\\[[a-z]+:[a-z_0-9(), {}\\.\\-\\#]*\\]';
         String tagPropertieClose = '(?i)\\[![a-z]+\\]';
 
@@ -380,6 +379,8 @@ public class ParseHtml {
 	            if(nameActualPropertie != '') {
 	                html = html.replaceFirst(closeActualPropertie,'</span>');
 	            }
+	            
+	            
 	
 	            theCounter++;
 	        }
@@ -935,7 +936,7 @@ public class ParseHtml {
 	
 		parseHeadings();
         parseSpanTags();
- 		parseTextIndent();
+        parseTextIndent();
  			
   		/* ------------------------ */
  		/* 		Horizontal Line 	*/
@@ -961,7 +962,8 @@ public class ParseHtml {
  		/* 		UnderLine Text 		*/ 			
  		String under = '__';
  		
- 		while (html.lastIndexOf(under) != -1) {
+ 		while (html.lastIndexOf(under) != -1) { 			
+ 			
 	 		html = html.replaceFirst(under , '<u>');
 	 		html = html.replaceFirst(under , '</u>');
  		}
@@ -1016,7 +1018,8 @@ public class ParseHtml {
  		
  		parseEmoticons();
  		
- 		html = html.replaceAll('###&&&&','\\\\');
+ 		html = html.replaceAll('###&&&&','\\\\'); 		
+ 		
  	}
 
     private String getMatch(String regExp,String theString) {
