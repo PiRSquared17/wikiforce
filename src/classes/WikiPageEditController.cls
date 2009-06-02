@@ -75,11 +75,14 @@ public without sharing class WikiPageEditController {
 			if(wikiView.getWikiEditView(idWikiPage).size() == 0) {
 				throw new CustomException('Insufficient Privileges');	
 			}else {
-		 		iniReplace();
+		 		iniReplace();	
+ 		
 		 		genEditWP();
+		 		 		
 		 		idWikiSite = editWP.Wiki__r.Id;
 		 		nameCurrentTeam = editWP.Wiki__r.Name;
 		 		parseHTML();
+		 		
 		 		infoGen();
 		 		iniBody = html;	
 		 		genPermissions(editWP.PageCreatedBy__c); 
@@ -87,6 +90,7 @@ public without sharing class WikiPageEditController {
 		 		if(!userPermissions.getCanManage()) {
 					throw new CustomException('Insufficient Privileges');	
 				}
+				
 			}
  		}
  	}
@@ -404,8 +408,6 @@ public without sharing class WikiPageEditController {
 	        
 	        String spanResult = '';      
 	        
-	        System.debug('name and value ============================= >>>> : ' + propertyName + '--'+ propertyValue);
-	        
 	        if(propertyName == 'color'){		       	
 	        	
 	        	// get the rgb color notation from #123456 notation	
@@ -422,7 +424,7 @@ public without sharing class WikiPageEditController {
 	        	
 	        //replace again the keyword by the new span tag	
 	    	html = html.replaceFirst('###FontsHere###',spanResult);
-	    	System.debug('html Final ============================= >>>> : ' + html );
+	    	//System.debug('html Final ============================= >>>> : ' + html );
         }
       
         html = html.replaceAll(fontCloseparser,'</span>');	 
@@ -434,68 +436,46 @@ public without sharing class WikiPageEditController {
 
 
 	/**
- 	* Convert the word div tags to html div tags
+ 	* Convert the word div tags to <p> tags
  	*@return String
  	*Created by Juan Pablo Vaz - 29/05/09
  	*/
- /*	public String convertDivs(){
+ 	public String convertDivs(){
  		
-        String divParser = '(?i)<div [^>]*>';
-        String tempFontTag;
-        
+        String divParser = '(?i)<div [^>]*style=[^>]*>';
+        String divCloseparser = '(?i)</div>';
+        String tempDivTag;
+        String newPTag = '';
+                
         while(found(divParser,html)){        
         	
         	// get the first div tag content
 	        tempDivTag = html.split('<div ', 2)[1]; 
 	        tempDivTag = tempDivTag.split('>', 2)[0];
 	        
-	        //replace the div tag by a keyword	        
-	        html = html.replaceFirst(divParser,'###DivHere###');
-	        
-	        //get the div properties
-	        String propertyName = tempFontTag.split('=',2)[0];
-	        String propertyValue = tempFontTag.split('=',2)[1];
-	        
-	        propertyValue = propertyValue.replaceAll('"','');	  
-	        
-	        //if has more that one properties take the font-size
-	        if(propertyValue.split('font-size: ').size() > 1){
-	        	propertyValue = propertyValue.split('font-size: ')[1];
-	        	propertyValue = propertyValue.split(';')[0];
-	        	propertyName = 'size';
-	        }else if(propertyName == 'size'){	        	
-	        	propertyValue = wordToHtmlSize(propertyValue);
+			//replace the div tag by a keyword	        
+			html = html.replaceFirst(divParser,'###DivHere###');
+		    
+	        if(tempDivTag.split('align=',2).size() > 1){        
+	              	        
+		        //get the div properties
+		        String align = tempDivTag.split('align=',2)[1];
+		        align = align.replaceAll('"','');
+		        
+		        newPTag = '<p style="text-align: '+ align +';">';
+				html = html.replaceFirst(divCloseparser,'</p>');
+				        
+	        }else{
+	        	html = html.replaceFirst(divCloseparser,'');
 	        }
-	        
-	        String spanResult = '';      
-	        
-	        System.debug('name and value ============================= >>>> : ' + propertyName + '--'+ propertyValue);
-	        
-	        if(propertyName == 'color'){		       	
-	        	
-	        	// get the rgb color notation from #123456 notation	
-		       	String rgbColor = getRgbColor(propertyValue);
-				spanResult += '<span style="color:'+ rgbColor +'";>';
-				 
-	        }else if(propertyName == 'size'){
-	        	
-	        	spanResult += '<span style="font-size:'+ propertyValue +'";>';
-	        			       	
-	        }else if(propertyName == 'face'){
-	        	spanResult += '<span style="font-family:'+ propertyValue +'";>';	        	
-	        }
-	        	
-	        //replace again the keyword by the new span tag	
-	    	html = html.replaceFirst('###FontsHere###',spanResult);
-	    	System.debug('html Final ============================= >>>> : ' + html );
+	        //replace the keyword by the new p tag	
+	        html = html.replaceFirst('###DivHere###',newPTag);
         }
-      
-        html = html.replaceAll(fontCloseparser,'</span>');	 
         
-        //System.debug('html Final ============================= : ' + html ); 
+        System.debug('------------------------------------------->'+html);
         return html;
  		
- 	}	*/
+ 	}	
  		
 	
 	/**
@@ -507,13 +487,15 @@ public without sharing class WikiPageEditController {
 
   		html = replace.content;
   		
+  		System.debug('----------------------------------------------->'+html);
   		
 		html = html.replaceAll('(?i)&nbsp;','');
 		html = html.replaceAll('(?i)&amp;','&');
 		html = html.replaceAll('(?i)&quot;','"');
 		html = html.replaceAll('(?i)&gt;','>');
 		html = html.replaceAll('(?i)&lt;','<');
-
+		
+		
 		
 		html = html.replaceAll('(?i)</li>[^<]*<li','</li><li');
 		html = html.replaceAll('(?i)<ul[^>]*>[^<]*<li','<ul><li');
@@ -525,7 +507,7 @@ public without sharing class WikiPageEditController {
 		html = html.replaceAll('(?i)<ol[^>]*>[^<]*<li','<ol><li');
 		html = html.replaceAll('(?i)</li>[^<]*</ol>','</li></ol>');
 		
-		
+		System.debug('----------------------------------------------->'+html);
 		
 		// REMOVE ALL THE METADATA AND CSS STYLES INCLUDE FROM WORD
 		
@@ -540,13 +522,16 @@ public without sharing class WikiPageEditController {
 
         html = html.replaceAll('(?i)<b{1} [^>]*="[^\"]*" *>','<b>');
         html = html.replaceAll('(?i)<i{1} [^>]*="[^\"]*" *>','<i>');
-
 		
-        // convert the font to span tags
-        
-        html = convertFontToSpan();
+		// convert the word divs to html divs		
+		html = convertDivs();
 
-  		/* ------------------------ */
+		// convert the font to span tags        
+        html = convertFontToSpan();
+        
+        System.debug('----------------------------------------------->'+html);
+        
+		/* ------------------------ */
  		/* 		Code (no parsed) 	*/ 		
 		html = html.replaceAll('(?i)' + '<table style=\\\"border: 1px solid rgb\\(175, 175, 175\\); padding: 20px; background-color: rgb\\(250, 250, 250\\);\\\"><tbody><tr><td>','{{{');
 		html = html.replaceAll('(?i)' + '<span></span></td></tr></tbody></table>','}}}');
@@ -954,14 +939,14 @@ public without sharing class WikiPageEditController {
  		/* ------------------------ */
  		/* 			Bold Text 		*/ 			
   		String boldOpen = '<b>';
- 		html = html.replaceAll('(?i)' + boldOpen ,' \'\'\' ');	
+ 		html = html.replaceAll('(?i)' + boldOpen ,'\'\'\'');	
  		String boldClose = '</b>';
- 		html = html.replaceAll('(?i)' + boldClose ,' \'\'\' '); 	
+ 		html = html.replaceAll('(?i)' + boldClose ,'\'\'\''); 	
  		
  		String boldOpen2 = '<strong>';
- 		html = html.replaceAll('(?i)' + boldOpen2 ,' \'\'\' ');	
+ 		html = html.replaceAll('(?i)' + boldOpen2 ,'\'\'\'');	
  		String boldClose2 = '</strong>';
- 		html = html.replaceAll('(?i)' + boldClose2 ,' \'\'\' '); 	
+ 		html = html.replaceAll('(?i)' + boldClose2 ,'\'\'\''); 	
  		
  		/* ------------------------ */
  		/* 			Sub Text 		*/ 			
@@ -980,21 +965,21 @@ public without sharing class WikiPageEditController {
  		/* ------------------------ */
  		/* 			Italic Text 	*/ 		
   		String italicOpen = '<i>';
- 		html = html.replaceAll('(?i)' + italicOpen ,' \'\' ');	
+ 		html = html.replaceAll('(?i)' + italicOpen ,'\'\'');	
  		String italicClose = '</i>';
- 		html = html.replaceAll('(?i)' + italicClose ,' \'\' '); 
+ 		html = html.replaceAll('(?i)' + italicClose ,'\'\''); 
  		
  		String italicOpen2 = '<em>';
- 		html = html.replaceAll('(?i)' + italicOpen2 ,' \'\' ');	
+ 		html = html.replaceAll('(?i)' + italicOpen2 ,'\'\'');	
  		String italicClose2 = '</em>';
- 		html = html.replaceAll('(?i)' + italicClose2 ,' \'\' '); 
+ 		html = html.replaceAll('(?i)' + italicClose2 ,'\'\''); 
 
  		/* ------------------------ */
  		/* 		  UnderLine Text 	*/ 		
   		String underOpen = '<u>';
- 		html = html.replaceAll('(?i)' + underOpen ,' __');	
+ 		html = html.replaceAll('(?i)' + underOpen ,'__');	
  		String underClose = '</u>';
- 		html = html.replaceAll('(?i)' + underClose ,'__ ');
+ 		html = html.replaceAll('(?i)' + underClose ,'__');
  		
  		/* ------------------------ */
  		/* 		 Strike Text 	*/ 
@@ -1490,13 +1475,10 @@ public without sharing class WikiPageEditController {
 	public PageReference SaveEdit () {
 
 		parseWiki();
-		
 		html = html.replaceAll('&nbsp;',' ');
 		html = html.replaceAll('&#43;','+');
-		
 		html = html.replaceAll('(?i)<br>','\n');
 		html = html.replaceAll('<[^>]*>', '');		
-		
 		TeamUtil.hostName = TeamUtil.getHost(ApexPages.currentPage());
 		
 		editWV = new WikiVersions__c();
