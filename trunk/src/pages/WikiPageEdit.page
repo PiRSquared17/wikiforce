@@ -130,7 +130,7 @@
 										<!-- 				AUX TEXT 				 -->
 										<!-- - - - - - - - - - - - - - - - - - - - - -->
 										<apex:outputPanel id="controllerVar" style="display:none;">
-											<apex:outputText value="{!html}" escape="false"></apex:outputText>
+											<apex:outputText value="{!html}" escape="false"/>
 										</apex:outputPanel>
 										<!-- - - - - - - - - - - - - - - - - - - - - -->	
 										<!-- 				FCK LOADER 				 -->

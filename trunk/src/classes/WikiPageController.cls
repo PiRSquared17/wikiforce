@@ -127,8 +127,9 @@ public class WikiPageController {
 			idWikiSite = wikiPageBody.Wiki__r.Id;
 			
 			parseHTML();
-			infoGen();
-			
+			 
+       		infoGen();
+		
 			genPermissions(wikiPageBody.PageCreatedBy__c);
 			
 		}
@@ -266,12 +267,15 @@ public class WikiPageController {
     	}
  		
   		html = wikiHTML.Body__c;
+  		System.debug('html wikipage ------------------------ >>>>>>>>>>>>>>>>'+html);
  		ParseHtml ph =new ParseHtml();
  		ph.setHtml(html);
  		ph.setIdWikiPage(idWikiPage);
  		
  		ph.parseHtml();
  		html=ph.html;
+ 		
+ 		System.debug('html wikipage ------------------------ >>>>>>>>>>>>>>>>'+html);
  	}   
  	
  	/**

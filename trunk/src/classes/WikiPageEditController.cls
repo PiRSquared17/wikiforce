@@ -279,8 +279,6 @@ public without sharing class WikiPageEditController {
  	
  	public void parseHTML() {
 		html = replace.content;
- 		
-  		
  		ParseHtml ph =new ParseHtml();
  		ph.setHtml(html);
  		ph.setIdWikiPage(idWikiPage);
@@ -424,12 +422,10 @@ public without sharing class WikiPageEditController {
 	        	
 	        //replace again the keyword by the new span tag	
 	    	html = html.replaceFirst('###FontsHere###',spanResult);
-	    	//System.debug('html Final ============================= >>>> : ' + html );
-        }
+	    }
       
         html = html.replaceAll(fontCloseparser,'</span>');	 
         
-        //System.debug('html Final ============================= : ' + html ); 
         return html;
  		
  	}	
@@ -466,13 +462,13 @@ public without sharing class WikiPageEditController {
 				html = html.replaceFirst(divCloseparser,'</p>');
 				        
 	        }else{
-	        	html = html.replaceFirst(divCloseparser,'');
+	        	newPTag = '<p>';				
+	        	html = html.replaceFirst(divCloseparser,'</p>');
 	        }
 	        //replace the keyword by the new p tag	
 	        html = html.replaceFirst('###DivHere###',newPTag);
         }
         
-        System.debug('------------------------------------------->'+html);
         return html;
  		
  	}	
@@ -487,15 +483,16 @@ public without sharing class WikiPageEditController {
 
   		html = replace.content;
   		
-  		System.debug('----------------------------------------------->'+html);
-  		
-		html = html.replaceAll('(?i)&nbsp;','');
+		html = html.replaceAll('(?i)&nbsp;',' '); 
 		html = html.replaceAll('(?i)&amp;','&');
 		html = html.replaceAll('(?i)&quot;','"');
 		html = html.replaceAll('(?i)&gt;','>');
 		html = html.replaceAll('(?i)&lt;','<');
 		
+		//clear all end of lines
 		
+		html = html.replaceAll('>[\r\n]','> ');
+		html = html.replaceAll('[\r\n]',' '); 	
 		
 		html = html.replaceAll('(?i)</li>[^<]*<li','</li><li');
 		html = html.replaceAll('(?i)<ul[^>]*>[^<]*<li','<ul><li');
@@ -506,8 +503,6 @@ public without sharing class WikiPageEditController {
 		
 		html = html.replaceAll('(?i)<ol[^>]*>[^<]*<li','<ol><li');
 		html = html.replaceAll('(?i)</li>[^<]*</ol>','</li></ol>');
-		
-		System.debug('----------------------------------------------->'+html);
 		
 		// REMOVE ALL THE METADATA AND CSS STYLES INCLUDE FROM WORD
 		
@@ -529,9 +524,7 @@ public without sharing class WikiPageEditController {
 		// convert the font to span tags        
         html = convertFontToSpan();
         
-        System.debug('----------------------------------------------->'+html);
-        
-		/* ------------------------ */
+       /* ------------------------ */
  		/* 		Code (no parsed) 	*/ 		
 		html = html.replaceAll('(?i)' + '<table style=\\\"border: 1px solid rgb\\(175, 175, 175\\); padding: 20px; background-color: rgb\\(250, 250, 250\\);\\\"><tbody><tr><td>','{{{');
 		html = html.replaceAll('(?i)' + '<span></span></td></tr></tbody></table>','}}}');
@@ -717,9 +710,7 @@ public without sharing class WikiPageEditController {
         }
         
         
-          
-
- 		/* ------------------------ */
+        /* ------------------------ */
  		/* 			Ident Text 		*/ 		
 		String identOpen = '<p style="margin-left: ';
 		
@@ -839,13 +830,11 @@ public without sharing class WikiPageEditController {
 	 		html = olPart[0] + olString + olPart2[1];
  		}
  		
+ 		
  		// REMOVE THE RETURN CHAR 
  		html = html.replaceAll('[\n\r]',''); 		
  		
- 		
- 		//System.debug('html after --> '+ html);
- 		
-		/* ------------------------ */
+ 		/* ------------------------ */
  		/* 			Text Align	 	*/
 		String alignRightOpen = '<p style="text-align: right;">';
 		String alignLeftOpen = '<p style="text-align: left;">';
@@ -1256,6 +1245,8 @@ public without sharing class WikiPageEditController {
 			}
 		}
 		
+		
+		
 		Map<String, WikiPage__c> wikiPageLinksMap = new Map<String, WikiPage__c>();
 		for (WikiPage__c iterWiki : [select id, Name, Wiki__c, Wiki__r.Name, Wiki__r.Id from WikiPage__c where id in:wikiPageIds]) {
 			wikiPageLinksMap.put(iterWiki.Id, iterWiki);
@@ -1460,6 +1451,8 @@ public without sharing class WikiPageEditController {
  			html = htmlHead + '{|' + tableContent + '<br />|}' + htmlTail;
  		}
  		
+ 		
+ 		
  		html = html.replaceAll('(?i)' + '</p>([ ]*[\r\n]*)*<p>','<br /><br />');
  		html = html.replaceAll('(?i)' + '<p>','');
  		html = html.replaceAll('(?i)' + '</p>','<br />'); 		
@@ -1498,10 +1491,8 @@ public without sharing class WikiPageEditController {
 		}else {
 			editWV.revisionCount__c = 1;
 		}
-	 	//System.debug('\n\n////////////////////////////////////////\n CURRENT SOQL1: ' + Limits.getQueries() + '\n/////////////////////////////\n\n');
- 		// out/in Links	
+		// out/in Links	
  		List<WikiLink__c> wikiLinksDel = [select Id, Name, FromLink__c, ToLink__c from WikiLink__c where FromLink__c =: editWP.Id];
- 		//System.debug('### wikiLinksDel.size[' + wikiLinksDel.size() + ']');
  		List<Id> wikiPagesLinks = new List<Id>();
  		
  		for(WikiLink__c delLinks : wikiLinksDel){
@@ -1528,7 +1519,6 @@ public without sharing class WikiPageEditController {
  		
  		delete wikiLinksDel;
  		
- 		//System.debug('\n\n////////////////////////////////////////\n CURRENT SOQL2: ' + Limits.getQueries() + '\n/////////////////////////////\n\n');
  		
  		String wikiBodyCode;
  		wikiBodyCode = html;
@@ -1689,6 +1679,7 @@ public without sharing class WikiPageEditController {
 		PageReference pageRef = Page.WikiPage;
 		pageRef.getParameters().put('idWP', editWP.Id);
 		pageRef.setRedirect(true);
+		
 		return pageRef;
 	} 
 	
