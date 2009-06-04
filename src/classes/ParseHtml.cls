@@ -327,8 +327,9 @@ public class ParseHtml {
 	            // Obtengo la primer propiedad encontrada
 	            //actualPropertie = html.substring(html.indexOf(openerOpenTagPropertie),(html.indexOf(closerOpenTagPropertie)+1));
 	            actualPropertie = getMatch(tagPropertie,html);
+	                        
 	            
-	            //System.debug('\n\n ACTUALPROPERTIE ' + actualPropertie + '\n\n');
+	            //System.debug('\n\n ACTUALPROPERTIE ----------------------------------->' + actualPropertie + '\n\n');
 	            
 	            // Le quito los parentesis rectos y obtengo el nombre y el valor de la propiedad
 	            actualPropertieTag = actualPropertie.replaceAll('\\[','');
@@ -373,14 +374,14 @@ public class ParseHtml {
 	            actualPropertie = actualPropertie.replaceFirst('\\{','\\\\{');
 	            actualPropertie = actualPropertie.replaceFirst('\\}','\\\\}');
 	
-				//System.debug('\n\n ACTUAL PROPERTIE' + actualPropertie + '\n\n');
-				//System.debug('\n\n HTML CODE ' + html + '\n\n');
+				//System.debug('\n\n ACTUALPROPERTIE ----------------------------------->' + actualPropertie + '\n\n');	            
 	            html = html.replaceFirst('(?i)' + actualPropertie,'<span style="' + nameStylePropertie + valueStylePropertie + '; newPropertieHere">');
+	            
 	            if(nameActualPropertie != '') {
 	                html = html.replaceFirst(closeActualPropertie,'</span>');
 	            }
 	            
-	            
+	            //System.debug('\n\n HTML ---------------------------------------------->' + html + '\n\n');
 	
 	            theCounter++;
 	        }
@@ -930,14 +931,16 @@ public class ParseHtml {
 		html = html.replaceAll('\r\n','<br />');
 		html = html.replaceAll('\n','<br />');
 	
- 		
+		
+ 			
  		parseTables();
  		parseCode();
 	
 		parseHeadings();
         parseSpanTags();
         parseTextIndent();
- 			
+        
+        	
   		/* ------------------------ */
  		/* 		Horizontal Line 	*/
  		String line = '----';
@@ -1004,7 +1007,7 @@ public class ParseHtml {
 	 	html = html.replaceAll(strikeOpen , '<strike>');
 	 	html = html.replaceAll(strikeClose , '</strike>');
 
- 		parseExternalLinks();
+		parseExternalLinks();
  				
  		parseEmbeddedImages();
  		
@@ -1018,8 +1021,13 @@ public class ParseHtml {
  		
  		parseEmoticons();
  		
- 		html = html.replaceAll('###&&&&','\\\\'); 		
+ 		html = html.replaceAll('###&&&&','\\\\');
  		
+ 		// replace all spaces next to a tag
+ 		html = html.replaceAll('> ','>&nbsp;');
+ 		html = html.replaceAll(' <','&nbsp;<');
+ 		 		
+ 		System.debug('\n\n HTML final ----------------------------------->' + html + '\n\n'); 
  	}
 
     private String getMatch(String regExp,String theString) {
