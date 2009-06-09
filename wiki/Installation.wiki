@@ -1,27 +1,27 @@
 #labels Featured
 *_1. Click on "Force.com App Exchange"_*
 
-http://wikiforce.googlecode.com/svn/wiki/images/installation/install1.jpg
+http://wikiforce.googlecode.com/svn/wiki/images/installation/install1.png
 
 *_2. Select category_*
 
-http://wikiforce.googlecode.com/svn/wiki/images/installation/install2.jpg
+http://wikiforce.googlecode.com/svn/wiki/images/installation/install2.png
 
 *_3. Select the application_*
 
-http://wikiforce.googlecode.com/svn/wiki/images/installation/install3.jpg
+http://wikiforce.googlecode.com/svn/wiki/images/installation/install3.png
 
 *_4. Click on "Get It Now"_*
 
-http://wikiforce.googlecode.com/svn/wiki/images/installation/install4.jpg
+http://wikiforce.googlecode.com/svn/wiki/images/installation/install4.png
 
 *_5. Write your User Name, Password, select "I am a Salesforce Administrator" and click on Continue_*
 
-http://wikiforce.googlecode.com/svn/wiki/images/installation/install5.jpg
+http://wikiforce.googlecode.com/svn/wiki/images/installation/install5.png
 
 *_6. Select "Production", check "I have read and agree..." and click on Continue._*
 
-http://wikiforce.googlecode.com/svn/wiki/images/installation/install6.jpg
+http://wikiforce.googlecode.com/svn/wiki/images/installation/install6.png
 
 *_7. Click on "Continue"_*
 
