@@ -3,7 +3,7 @@
 
 http://wikiforce.googlecode.com/svn/wiki/images/installation/install1.png
 
-*_2. In "Find Apps" section write "Wikiforce" and click on the assistant. _*
+*_2. In "Find Apps" section write "Wikiforce" and click on the assistant or press Enter key. _*
 
 http://wikiforce.googlecode.com/svn/wiki/images/installation/install2.png
 
