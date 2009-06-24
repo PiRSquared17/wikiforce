@@ -54,6 +54,11 @@
             var swirlyElem = document.getElementById(id);
             Effect.Fade(swirlyElem);
         }
+        
+        function switchF(){
+			$$('.NewMemberErrorPanel')[0].hide();
+			$$('.NewMemberErrorPanel')[1].show();        
+        }
 	</script>
 	
 	<!-- Sync Save Members -->
@@ -105,12 +110,12 @@
                         }
                     </script>
                     
-                    <apex:outputpanel id="newMemberErrorPanel" style="{!IF(errNotAllUsersAdded,'','display: none;')}"> <!-- rendered="{!errNotAllUsersAdded}"> -->
-                        <br>
+                    <apex:outputpanel styleClass="NewMemberErrorPanel" id="newMemberErrorPanel" style="{!IF(errNotAllUsersAdded,'','display: none;')}"> <!-- rendered="{!errNotAllUsersAdded}"> -->
+                        <br> 
                         <table style="width: 95%; text-align: center;">
                             <tr>
                                 <td>
-                                    <span class="inputInfoDark">
+                                    <span class="inputInfoDark"> 
                                         One or more of the selected users do not exist
                                     </span>
                                 </td>
@@ -118,11 +123,10 @@
                         </table>
                         <div class="overlaySeparateLine"></div>
                         <div class="overlayFromButtons" align="center" >
-                            <input class="allButtons cancelButtons" type="button" value="Cancel" onclick="modal.close();"/>
+                            <input class="allButtons cancelButtons" type="button" value="Ok" onclick="switchF();"/> 
                         </div>
                     </apex:outputpanel>
-                                        
-                    <apex:outputpanel id="newMemberInfoPanel" style="{!IF(errNotAllUsersAdded,'display: none;','')}">
+                    <apex:outputpanel styleClass="NewMemberErrorPanel" id="newMemberInfoPanel" style="{!IF(errNotAllUsersAdded,'display: none;','')}">
                         <div class="overlayFormContent">
     						<table cellpadding="0" cellspacing="0"	style="margin: 0px; padding: 0px; width: 100%;">
     							<tr>

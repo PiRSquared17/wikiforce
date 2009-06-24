@@ -279,12 +279,11 @@ public without sharing class WikiPageEditController {
  	
  	public void parseHTML() {
 		html = replace.content;
- 		ParseHtml ph =new ParseHtml();
+ 		ParseHtml ph = new ParseHtml();
  		ph.setHtml(html);
  		ph.setIdWikiPage(idWikiPage);
- 		
  		ph.parseHtml();
- 		html=ph.html;
+ 		html = ph.html;
  	}   
  	/**
  	* Return parsed HTML
@@ -547,8 +546,6 @@ public without sharing class WikiPageEditController {
         String forStylesInside = '(?i)"[^"]*"';
         String tempSpanStyles;
         String tempStylesInside;
-
-		
 
         while(found(forSpanStyles,html)) {        		
         
@@ -884,7 +881,7 @@ public without sharing class WikiPageEditController {
 		
   		/* ------------------------ */
  		/* 			HEADINGS 		*/
- 		for (Integer i = 6; i > 1; i--) {
+ 		for (Integer i = 6; i >= 1; i--) {
 	  		String headerOpen = '<h' + i + '[^>]*>'; 		
 	  		String header = '';
 	  		for (Integer j = 1; j <= i; j++) {
@@ -912,8 +909,8 @@ public without sharing class WikiPageEditController {
 	 		String headerClose4 = '</h' + i + '><hr[^>]*>';
 	 		String headerClose5 = '</h' + i + '>[\r\n]*<hr[^>]*>';
 	 		String headerClose6 = '</h' + i + '>';
+
 	 		html = html.replaceAll('(?i)' + headerClose1 ,' ' + header + ' ');
-	 			
 	 		html = html.replaceAll('(?i)' + headerClose3 ,' ' + header + ' ');
 	 		html = html.replaceAll('(?i)' + headerClose4 ,' ' + header + ' ');	
 	 		html = html.replaceAll('(?i)' + headerClose5 ,' ' + header + ' ');	
@@ -979,7 +976,6 @@ public without sharing class WikiPageEditController {
 
   		/* ------------------------ */
  		/* 		 Embedded Image 	*/  
-  		
   		
   		// GENERATE THE ATTACHMENT MAP FOR THIS WIKI.
 		Map<String, Attachment> attachmentsMap = new Map<String, Attachment>();
@@ -1506,7 +1502,7 @@ public without sharing class WikiPageEditController {
  		}
  		
  		List<WikiPage__c> wikiUpdated = new List<WikiPage__c>();
- 		if( wikiLinksDel.size() > 0 && wikiMap.size() > 0 ) 
+ 		if( wikiLinksDel.size() > 0 && wikiMap.size() > 0 )
  		{
 	 		for (WikiLink__c delLink: wikiLinksDel)
 	 		{
@@ -1519,38 +1515,11 @@ public without sharing class WikiPageEditController {
  		
  		delete wikiLinksDel;
  		
- 		
  		String wikiBodyCode;
  		wikiBodyCode = html;
  		List<WikiLink__c> listWikiLinkOut = new List<WikiLink__c>();
  		String intLink = '[[';
- 		/**
- 		List<String> temp;
- 		String intL = '\\[\\[';
- 		temp = wikiBodyCode.split(intL , 2);
- 		Map<Integer, List<String>> allLinks;
- 		List<String> listNameLink;
- 		Integer mapIndex = 0;
- 		while(wikiBodyCode.lastIndexOf(intLink) != -1){
- 			if (temp[1].indexOf(']]') != -1) {
-	 			if (linkContent.indexOf(':') != -1) {
-		 			List<String> linkParts = new List<String>();
-		 			linkParts = linkContent.split(':',2);
-		 			listNameLink.add(linkParts[1].trim());
-		 			listNameLink.add(linkParts[0].trim());
-		 			allLinks.put(mapIndex, listNameLink);
-		 		}else {
-		 			listNameWiki.add(linkContent.trim());
-		 		}
-		 	}else {
- 				wikiBodyCode = temp[0] + temp[1];
- 			}
- 		}
- 		
- 		if(listNameWiki.size() > 0){
- 			
- 		}*/
- 		
+		
  		String tempWikiBodyCode = wikiBodyCode;
  		
  		while (tempWikiBodyCode.lastIndexOf(intLink) != -1) {
