@@ -9,6 +9,11 @@ public with sharing class WikiMembersWidgetController {
 	public String WikiCompleteName;
 	public Boolean errNotAllUsersAdded = false;
 	public Boolean finishedAdding = false;
+
+	public Boolean errorMembersFlag = false;
+	public Boolean memberAdd = false;
+	public String  invalidMembers = '';
+	public List<String> errorMembers = new List<String>(); 
 	
 	/**
 	* Constructor
@@ -33,6 +38,26 @@ public with sharing class WikiMembersWidgetController {
 		this.makeMembersAdmins = makeMembersAdmins;
 	}
 	
+	/**
+	*@return Boolean
+	*/
+	public Boolean getErrorMembersFlag(){
+		return this.errorMembersFlag;
+	}
+	
+	/**
+	*@return Boolean
+	*/
+	public Boolean getMemberAdd(){
+		return this.memberAdd;
+	}
+	
+	/**
+	*@return String 
+	*/
+	public String  getInvalidMembers(){
+		return this.invalidMembers;
+	}
 	/**
 	* Setter method for Wiki Id variable
 	*@param String idWiki
@@ -406,10 +431,20 @@ public with sharing class WikiMembersWidgetController {
 		for (User iterUser :[select id, Name, IsActive, Email from User where Name in:newMembers]) {
 			usersMap.put(iterUser.Name, iterUser);
 		}
+
+
+		errorMembers.clear();
+		for( String n : newMembers )
+			if( usersMap.get( n ) == null)
+			errorMembers.add( n );
 		
+		this.errorMembersFlag = errorMembers.size() > 0;
+		
+		this.memberAdd = (errorMembers.size() != newMembers.size()) ? true : false ;
+ 		
 		if (usersMap.size() != newMembers.size())
 			errNotAllUsersAdded = true;
-		
+ 
 		for(String item: newMembers) {
 			if (usersMap.get(item) != null) {
 				already = false;
