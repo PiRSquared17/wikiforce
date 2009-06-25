@@ -53,7 +53,7 @@ public class WikiSubscribersEmailServices {
 				//Body: {Name} has left team {team name} 
 				
 				String oldMemberName = dm.User__r.Name;
-				emailMsj = oldMemberName + 'has left wiki  <a href="//' + TeamUtil.hostName +'/apex/WikiTeamOverview?tid=' + dm.Wiki__c + '">' +  dm.Wiki__r.Name+ '</a>.';
+				emailMsj = oldMemberName + ' has left wiki  <a href="//' + TeamUtil.hostName +'/apex/WikiTeamOverview?tid=' + dm.Wiki__c + '">' +  dm.Wiki__r.Name+ '</a>.';
 				emailSub = 'Wiki Member has Left the Wiki ';
 			}
 			else 
@@ -106,7 +106,10 @@ public class WikiSubscribersEmailServices {
 	}
 
 	/**
-	*Send message whe new page was created in the wiki
+	*Sends a message when new page was created in the wiki 
+	* The same happens when there is an update or delete, it depends on "acction" param
+	*@param String acction
+	*@param String IdNewPage
 	*/
 	public void sendNewPageMessage(  String acction, String IdNewPage )
 	{
@@ -116,7 +119,7 @@ public class WikiSubscribersEmailServices {
 		String emailSub = '';
 		String emailMsj = '';
 		WikiPage__c wp = new WikiPage__c();
-		wp = [ SELECT Id, Wiki__c, Wiki__r.Name, LastModifiedById, LastModifiedBy.Name FROM WikiPage__c WHERE Id =: IdNewPage ];
+		wp = [ SELECT Id,Name, Wiki__c, Wiki__r.Name, LastModifiedById, LastModifiedBy.Name FROM WikiPage__c WHERE Id =: IdNewPage ];
 
 
 
@@ -144,38 +147,71 @@ public class WikiSubscribersEmailServices {
 				where Team__c =: wp.Wiki__c and WikiNewPage__c = true];
 			}
 		}
-		else if( acction == 'updatePage' )
-		{
-			System.debug( '::: updating' );
-			List<WikiPage__c> wikiPageList = [select id, PageCreatedBy__c from WikiPage__c where id=: IdNewPage ];
-			String createdById = wikiPageList[0].PageCreatedBy__c;
-			//wp = [ SELECT Id, Wiki__c, Wiki__r.Name, LastMo FROM WikiPage__c WHERE Id =: IdNewPage ];
+		else{ 
+			if( acction == 'updatePage' ){
+				System.debug( '::: updating' );
+				List<WikiPage__c> wikiPageList = [select id, PageCreatedBy__c from WikiPage__c where id=: IdNewPage ];
+				String createdById = wikiPageList[0].PageCreatedBy__c;
+				//wp = [ SELECT Id, Wiki__c, Wiki__r.Name, LastMo FROM WikiPage__c WHERE Id =: IdNewPage ];
 			
-			//wikiName = mf.Message__c.replaceFirst('.*<a href="/apex/WikiPage\\?idWP=[^>]*">', '');
-			//wikiName = wikiName.replaceFirst('</a>.*', '');
-			emailSub = 'Wiki page ' + wikiName + ' with in Wiki ' + wp.Wiki__r.Name + ' has been edited';
-			emailMsj = 'Wiki page ' + wikiName + ' has been edited by <a href="https://' + TeamUtil.hostName + '/?id=' + wp.LastModifiedById + '">' +  wp.LastModifiedBy.Name + '</a><br><a href="https://' + TeamUtil.hostName + '/apex/WikiPage?idWP=' + wp.Id + '">Click here to see the page</a>.';
+				//wikiName = mf.Message__c.replaceFirst('.*<a href="/apex/WikiPage\\?idWP=[^>]*">', '');
+				//wikiName = wikiName.replaceFirst('</a>.*', '');
+				emailSub = 'Wiki page ' + wikiName + ' with in Wiki ' + wp.Wiki__r.Name + ' has been edited';
+				emailMsj = 'Wiki page ' + wikiName + ' has been edited by <a href="https://' + TeamUtil.hostName + '/?id=' + wp.LastModifiedById + '">' +  wp.LastModifiedBy.Name + '</a><br><a href="https://' + TeamUtil.hostName + '/apex/WikiPage?idWP=' + wp.Id + '">Click here to see the page</a>.';
 			
-			if (!isTest) 
-			{
-				TeamMemberSubscription = [Select 
-					t.WikiPageUpdated__c, 
-					t.WikiNewPage__c, 
-					t.WikiCreatedByMeUpdated__c, 
-					t.User__c, 
-					t.User__r.Id,
-					t.User__r.Name,
-					t.User__r.Email,
-					t.Team__c,
-					t.Team__r.Name,
-					t.Team__r.Id, 
-					t.TeamMemberStatusUpdated__c, 
-					t.TeamMemberJoinLeave__c, 
-					t.Id
-					From WikiSubscription__c t
-					where Team__c =: wp.Wiki__c and ((WikiPageUpdated__c = true and User__c !=:createdById) or (WikiCreatedByMeUpdated__c = true and User__c =:createdById))];
-			}			
-		}
+				if (!isTest) 
+				{
+					TeamMemberSubscription = [Select 
+						t.WikiPageUpdated__c, 
+						t.WikiNewPage__c, 
+						t.WikiCreatedByMeUpdated__c, 
+						t.User__c, 
+						t.User__r.Id,
+						t.User__r.Name,
+						t.User__r.Email,
+						t.Team__c,
+						t.Team__r.Name,
+						t.Team__r.Id, 
+						t.TeamMemberStatusUpdated__c, 
+						t.TeamMemberJoinLeave__c, 
+						t.Id
+						From WikiSubscription__c t
+						where Team__c =: wp.Wiki__c and ((WikiPageUpdated__c = true and User__c !=:createdById) or (WikiCreatedByMeUpdated__c = true and User__c =:createdById))];
+				}			
+			}else{
+				if( acction == 'deletePage' ){
+					//System.debug( '::: updating' );
+					List<WikiPage__c> wikiPageList = [select id, PageCreatedBy__c from WikiPage__c where id=: IdNewPage ];
+					String createdById = wikiPageList[0].PageCreatedBy__c;
+					
+					emailSub = 'Wiki page ' + wikiName + ' with in Wiki ' + wp.Wiki__r.Name + ' has been deleted';
+					emailMsj = 'Wiki page <b>' + wp.Name + '</b> has been deleted from <b>' + wp.Wiki__r.Name + '</b> by <a href="https://' + TeamUtil.hostName + '/' + wp.LastModifiedById + '">' +  wp.LastModifiedBy.Name + '</a>';
+			
+					if (!isTest) 
+					{
+						TeamMemberSubscription = [Select 
+							t.WikiPageUpdated__c, 
+							t.WikiNewPage__c, 
+							t.WikiCreatedByMeUpdated__c, 
+							t.User__c, 
+							t.User__r.Id,
+							t.User__r.Name,
+							t.User__r.Email,
+							t.Team__c,
+							t.Team__r.Name,
+							t.Team__r.Id, 
+							t.TeamMemberStatusUpdated__c, 
+							t.TeamMemberJoinLeave__c, 
+							t.Id
+							From WikiSubscription__c t
+							where Team__c =: wp.Wiki__c] ;
+					}	
+					
+							
+				}//if delete
+			}//else update
+		}//else new
+		
 		//Array address
 		String[] address = new String[]{}; 
 		Integer it = 0;
@@ -253,6 +289,70 @@ public class WikiSubscribersEmailServices {
 				SendMail(address, TeamMemberSubscription[0].Team__r, emailMsj, emailSub);
 			}
 		}
+	}
+	
+	
+	public void wikiDeleted(List<String> idsWiki){
+		String emailSub;
+		String emailMsj;
+		Wiki__c wiki = new Wiki__c();
+		
+		for(String idWiki : idsWiki){
+			
+			wiki = [ SELECT Name, LastModifiedById, LastModifiedBy.Name FROM Wiki__c WHERE Id =: idWiki ];
+						
+			emailSub = 'Wiki ' + wiki.Name + ' has been deleted.';
+			emailMsj = 'Wiki <b>' + wiki.Name + '</b> has been deleted by <a href="https://' + TeamUtil.hostName + '/' + wiki.LastModifiedById + '">' +  wiki.LastModifiedBy.Name + '</a>';
+			
+			if (!isTest) 
+			{
+				TeamMemberSubscription = [Select 
+								t.WikiPageUpdated__c, 
+								t.WikiNewPage__c, 
+								t.WikiCreatedByMeUpdated__c, 
+								t.User__c, 
+								t.User__r.Id,
+								t.User__r.Name,
+								t.User__r.Email,
+								t.Team__c,
+								t.Team__r.Name,
+								t.Team__r.Id, 
+								t.TeamMemberStatusUpdated__c, 
+								t.TeamMemberJoinLeave__c, 
+								t.Id
+								From WikiSubscription__c t
+								where Team__c =: idWiki] ; 
+			} 
+						
+			//Array address
+			String[] address = new String[]{}; 
+			Integer it = 0;
+			if(TeamMemberSubscription.size() > 10)
+			{
+				for(Integer i =0; i < TeamMemberSubscription.size(); i++ )
+				{	
+					if(it < 10 || i == TeamMemberSubscription.size() ){
+						address.add(TeamMemberSubscription[i].User__r.Email);
+						it ++;
+					}
+					else
+					{
+						SendMail(address, TeamMemberSubscription[0].Team__r, emailMsj, emailSub);
+						it = 0;
+					}
+				}
+			}
+			else if(TeamMemberSubscription.size() > 0 && TeamMemberSubscription != null)
+			{	
+				for(WikiSubscription__c ts : TeamMemberSubscription)
+				{
+					address.add(ts.User__r.Email);
+				}
+				SendMail(address, TeamMemberSubscription[0].Team__r, emailMsj, emailSub);
+			}
+		
+		}//end of 'for(String idWiki : idsWiki)'
+						
 	}
 			
 	/**

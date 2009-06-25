@@ -3,6 +3,8 @@ trigger WikiBeforeDelete on Wiki__c bulk (before delete) {
         try{
             TeamUtil.currentlyExeTrigger = true;
             TeamUtil.DeletingWiki = true;
+            TeamUtil.setSendsEmailTriggerWikiPageBeforeDelete(false);
+            TeamUtil.setSendsEmailTriggerWikiMemberBeforeDelete(false);
             
             List<String> idsWiki = new List<String>();
             for (Wiki__c iterWiki : Trigger.old) {
@@ -11,6 +13,9 @@ trigger WikiBeforeDelete on Wiki__c bulk (before delete) {
             
             List<WikiPage__c> pagesList = [select Id, Name, Wiki__c from WikiPage__c where Wiki__c in : idsWiki ];
             List<WikiMember__c> membersList = [select Id, Name, Wiki__c from WikiMember__c where Wiki__c in : idsWiki ];
+            
+            WikiSubscribersEmailServices wEmail = new WikiSubscribersEmailServices();
+            wEmail.wikiDeleted(idsWiki);
             
             System.debug('\n WikiId[' + idsWiki + ']');
             System.debug('\n\n Pages[' + pagesList.size() + ']');
@@ -26,8 +31,14 @@ trigger WikiBeforeDelete on Wiki__c bulk (before delete) {
 
 			TeamUtil.currentlyExeTrigger = false;
             delete pagesList;
-            delete membersList;            
+            delete membersList;  
+            
+            TeamUtil.setSendsEmailTriggerWikiPageBeforeDelete(true);
+            TeamUtil.setSendsEmailTriggerWikiMemberBeforeDelete(true);
+                      
         } catch(Exception e){
+        	TeamUtil.setSendsEmailTriggerWikiPageBeforeDelete(true);
+            TeamUtil.setSendsEmailTriggerWikiMemberBeforeDelete(true);
         	throw e;
         }
     }

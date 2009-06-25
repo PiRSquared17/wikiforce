@@ -9,6 +9,45 @@ public class TeamUtil {
 	public static Boolean DeletingWiki = false;
 	public static Integer MAX_SIZE = 4194304;
 	public static String hostName = null;
+	//true if it must send emails
+	//false when a wiki is deleted
+	//this is to avoid that WikiPageBeforeDelete sends an email
+	private static Boolean sendsEmailTriggerWikiPageBeforeDelete = true;
+	
+	//true if it must send emails
+	//false when a wiki is deleted
+	//this is to avoid that WikiMemberBeforeDelete sends an email
+	private static Boolean sendsEmailTriggerWikiMemberBeforeDelete = true;
+	
+	/**
+	* Returns sendsEmailTriggerWikiPageBeforeDelete value
+	*@return Boolean sendsEmailTriggerWikiPageBeforeDelete
+	*/
+	public static Boolean getSendsEmailTriggerWikiPageBeforeDelete(){
+		return sendsEmailTriggerWikiPageBeforeDelete;
+	}
+	
+	/**
+	* Returns sendsEmailTriggerWikiMemberBeforeDelete value
+	*@return Boolean sendsEmailTriggerWikiMemberBeforeDelete
+	*/
+	public static Boolean getSendsEmailTriggerWikiMemberBeforeDelete(){
+		return sendsEmailTriggerWikiMemberBeforeDelete;
+	}
+	
+	/**
+	* Sets sendsEmailTriggerWikiPageBeforeDelete value
+	*/
+	public static void setSendsEmailTriggerWikiPageBeforeDelete(Boolean b){
+		sendsEmailTriggerWikiPageBeforeDelete = b;
+	}
+	
+	/**
+	* Sets sendsEmailTriggerWikiMembersBeforeDelete value
+	*/
+	public static void setSendsEmailTriggerWikiMemberBeforeDelete(Boolean b){
+		sendsEmailTriggerWikiMemberBeforeDelete = b;
+	}
 	
 	
 	/**
