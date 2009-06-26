@@ -26,7 +26,20 @@
                 newCancel.value = 'Cancel';
                 newCancel.disabled = false;
             }
+            
+            if(!isLoading){
+            	
+            }
+            
+            
         }
+        
+        function displayAlerts(){
+            	
+            	alert('{!removeMemberId}');
+            	alert('{!removeMemberIds}');
+            	
+            }
     </script>
 
 	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamsMembersRemove.css')}" />
@@ -80,15 +93,15 @@
 								action="{!massiveRemoveMember}"
                                 id="removeContinueButton" 
 								onclick="changeStatusButtonsRemoveOverlay(true); $('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay');"  
-								oncomplete="changeStatusButtonsRemoveOverlay(false);" 
+								oncomplete="changeStatusButtonsRemoveOverlay(false); " 
 								value="Continue"
 								rerender="removeMemberStatus" />
-							<input class="overlayCancelBtn allButtons cancelButtons" id="removeCancelButton" type="button" value="Cancel" onclick="modal.close();" />
+							<input class="overlayCancelBtn allButtons cancelButtons" id="removeCancelButton" type="button" value="Cancel" onclick="modal.close(); displayAlerts();" />
 							
 						</apex:outputPanel> 
 					
 						<apex:outputPanel rendered="{!IF(error, true, false)}">
-							<input class="overlayCancelBtn allButtons cancelButtons" id="removeCancelButton" type="button" value="Cancel" onclick="modal.close();" />
+							<input class="overlayCancelBtn allButtons cancelButtons" id="removeCancelButton" type="button" value="Cancel" onclick="modal.close(); displayAlerts();" />
 						</apex:outputPanel>
 						
 					</div>
@@ -109,7 +122,7 @@
 				//alert('{!error}');
 				if( errorStatus == 'true' ){
 					$('paginationOverlay').hide();
-					document.getElementById('{!$Component.removeMemberForm}').innerHTML = '<span id="j_id455"><div class="overlayFormContent" style="padding-bottom: 10px;"><table style="width: 95%;"><tbody><tr><td><span class="inputInfoDark">You can not remove all admin members</span></td></tr></tbody></table></div> <div class="overlaySeparateLine"></div> <div align="center" class="overlayFromButtons"><input type="button" class="allButtons cancelButtons" onclick="modal.close();" value="Cancel"/></div></span>';
+					document.getElementById('{!$Component.removeMemberForm}').innerHTML = '<span id="j_id455"><div class="overlayFormContent" style="padding-bottom: 10px;"><table style="width: 95%;"><tbody><tr><td><span class="inputInfoDark">You can not remove all admin members</span></td></tr></tbody></table></div> <div class="overlaySeparateLine"></div> <div align="center" class="overlayFromButtons"><input type="button" class="allButtons cancelButtons" onclick="modal.close(); displayAlerts();" value="Cancel"/></div></span>';
        
 				}
 			</script>
