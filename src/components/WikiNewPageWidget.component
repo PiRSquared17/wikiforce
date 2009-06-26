@@ -37,12 +37,14 @@
 				</a>
 			</div>
 		</div>
+		
+		
 		<!-- Overlay Content -->
 		<div id="someDiv" class="overlayMainContent">
 			<!-- Required Information -->
 			<span class="overlayRequiredInfo">= Required Information</span>
 			<div id="saving" class="overlayFormStatus" style="display:none;">Saving...</div>
-			<apex:form id="formNew" onsubmit="return validateName();">
+			<apex:form id="formNew" onsubmit="return saveEvent('{!$Component.nameNewWP}', '{!$Component.formNew}');">
 				<div class="overlayFormContent">
 					<span class="newChild" style="display:none;">Your new page will be a child-page of <a href="Javascript:;"></a></span>
 					<table width="95%">
@@ -80,7 +82,7 @@
 						<!-- Wiki Page --> 
 						<apex:outputpanel rendered="{!IF(idWikiPage == null, false, true)}">
 							<apex:commandButton id="saveBtnNewPageWiki" 
-								onclick="return saveEvent(); this.disabled=true; " 
+							    
 								action="{!saveWiki}" 
 								style="background-color: #526921!important" 
 								styleclass="overlaySaveBtn allButtons actionButtons" 

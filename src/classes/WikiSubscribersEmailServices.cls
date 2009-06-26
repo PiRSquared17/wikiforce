@@ -302,7 +302,7 @@ public class WikiSubscribersEmailServices {
 			wiki = [ SELECT Name, LastModifiedById, LastModifiedBy.Name FROM Wiki__c WHERE Id =: idWiki ];
 						
 			emailSub = 'Wiki ' + wiki.Name + ' has been deleted.';
-			emailMsj = 'Wiki <b>' + wiki.Name + '</b> has been deleted by <a href="https://' + TeamUtil.hostName + '/' + wiki.LastModifiedById + '">' +  wiki.LastModifiedBy.Name + '</a>';
+			emailMsj = 'Wiki <b>' + wiki.Name + '</b> has been deleted by <a href="https://' + TeamUtil.getDomain() + '/' + wiki.LastModifiedById + '">' +  wiki.LastModifiedBy.Name + '</a>';
 			
 			if (!isTest) 
 			{

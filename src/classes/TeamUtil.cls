@@ -154,4 +154,30 @@ public class TeamUtil {
 		delete gm;
 	}
 	
+	/**
+    *
+    * Get the organization Domain
+    */  
+    public static String getDomain () {
+        String domain = '';
+        PageReference PR =  ApexPages.currentPage();
+      
+        String props = '';
+        if(PR.getHeaders() != null){
+            props = (PR.getHeaders()).get('Host');
+        }
+        if (props == '' || props == null) {
+            domain = '';  
+        }else {
+            String [] path = props.split('</?[a-z][a-z0-9]*[^<>]*>');
+            if(path.size() == 0){
+                domain = path[0];
+            }else{
+                for(Integer i = 0; i < path.size(); i++){  
+                    domain += path[i];
+                }
+            }
+        }
+        return domain;  
+    }
 }
