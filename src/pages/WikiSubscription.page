@@ -35,8 +35,23 @@
 		.widgetsCont
 		{
 			position: absolute;
+			top: 103px;
+		}
+
+		.bread{
+			position: absolute;
+			left: 10px;
 		}
 		
+		.bread a{
+			font-size: 12px;
+			font-weight: normal;		
+			font-family:'Arial','Helvetica',sans-serif;			
+		}
+		
+		.bread End{
+		}
+
 		div.sidebar
 		{
 			position: static !important;
@@ -63,6 +78,10 @@
 	<!-- BreadCrumbs -->
 	<apex:form id="form_content" onsubmit="getInputValue(); if(!isCloneAction){if(validator('{!$Component.form_content}', 'warning_to_user'))return false;};">
 		<div class="breadcrumbs"  align="center">
+			<div class="bread">
+				<a href="WikiTeamOverview?tid={!idTeam}">{!wikiName}</a>&nbsp;&gt;&nbsp;<span class="End">Manage Subscriptionss</span>
+			</div>
+		
 			<apex:outputpanel rendered="{!IF(subscriptionCount == 0, true, false)}">
 				<apex:commandButton value="Save" action="{!saveSubscription}"/>
 			</apex:outputpanel>

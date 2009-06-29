@@ -254,26 +254,26 @@ public class WikiCreateWikiController {
     *@void
     */
     public void setWiki (String tId){
-	    theWiki = [Select t.Type__c,  
-	                t.PublicProfile__c,
-	                t.NewMemberProfile__c,
-	                t.Name,
-	                t.PictureId__c, 
-	                t.Id, 
-	                t.Description__c 
-	                From Wiki__c t Where t.Id =:tId];
-	    if(theWiki.Type__c != null){
-	    	WikiType = theWiki.Type__c;
-	    }
-	    if(theWiki.Id != null){
-            getWikiImage();
-    		if(theWiki.PublicProfile__c != null && theWiki.NewMemberProfile__c != null){
-	    		newProfile.newProfileOpen = theWiki.NewMemberProfile__c;
-	    		newProfile.publicProfileOpen = theWiki.PublicProfile__c;
-    		}else if (theWiki.PublicProfile__c != null){
-    			newProfile.publicProfileClosed = theWiki.PublicProfile__c;
-    		}
-	    } 
+		    theWiki = [Select t.Type__c,  
+		                t.PublicProfile__c,
+		                t.NewMemberProfile__c,
+		                t.Name,
+		                t.PictureId__c, 
+		                t.Id, 
+		                t.Description__c 
+		                From Wiki__c t Where t.Id =:tId];
+		    if(theWiki.Type__c != null){
+		    	WikiType = theWiki.Type__c;
+		    }
+		    if(theWiki.Id != null){
+	            getWikiImage();
+	    		if(theWiki.PublicProfile__c != null && theWiki.NewMemberProfile__c != null){
+		    		newProfile.newProfileOpen = theWiki.NewMemberProfile__c;
+		    		newProfile.publicProfileOpen = theWiki.PublicProfile__c;
+	    		}else if (theWiki.PublicProfile__c != null){
+	    			newProfile.publicProfileClosed = theWiki.PublicProfile__c;
+	    		}
+		    }
     }
     /**
     * Team Profile Select
@@ -318,13 +318,12 @@ public class WikiCreateWikiController {
 			wiki.PictureId__c = null;
 			upsert wiki;
 			this.wikiPicture = '';
-			
-			
+			setWiki( theWiki.Id );
 		}
 
 		PageReference pageRef = new PageReference('/apex/WikiCreateWiki?id=' + theWiki.Id );
 		pageRef.setRedirect(true);
-		return pageRef;
+		return null;//pageRef;
 	}
     /**
     * Class teamProfile
