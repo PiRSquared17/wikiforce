@@ -18,6 +18,16 @@ public class WikiSubscriptionController {
 		return subscriptionCount;
 	}
 	
+	/**
+	*
+	*/
+	public String getWikiName(){
+		Wiki__c w = new Wiki__c();
+		w = [ select Id, name from Wiki__c where id =: idTeam limit 1 ];
+		
+		return w.name;
+	}
+	
 	public WikiSubscription__c subscription = new WikiSubscription__c();
 	
 	/**

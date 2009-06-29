@@ -109,6 +109,7 @@
 
 	<apex:form >
 		<apex:actionFunction name="reloadMemberList" action="{!refresh}" rerender="letterFilterContainer, membersList" oncomplete="$('paginationOverlay').hide();" />
+		<apex:actionFunction name="deleteAvatarNow" action="{!removeAvatar}" rerender="oPAvatar" oncomplete="$('avatarOverlay').hide();"/>
 	</apex:form>
 
 	<!-- TeamsMemebersList CSS 	-->
@@ -283,18 +284,22 @@
 														</td>
 														<td></td>
 														<td align="center">&nbsp;
-															<img width="99" src="{!IF(wikiPicture == '', URLFOR($Resource.TeamsResources, '/images/layout/pic_upload.gif'), wikiPicture)}" class="imgBorder" />
-															<br />
-															<span class="explain">
-																current picture 
-																<br>
-																<apex:commandLink styleClass="fontSize10" 
-																	action="{!removeAvatar}"
-																	 rendered="{!IF( wiki.PictureId__c != null, true, false)}" 
-																	 value="Remove"
-																	 onclick="javascript:return confirm('Are you sure you want to remove the wiki avatar')" />
-																
-															</span>
+							                                <div id="avatarOverlay" style="display: none; width: 99px; height: 99px;" class="paginationOverlay">
+															</div>
+							
+  															<apex:outputPanel id="oPAvatar" layout="block" >
+																<img width="99" src="{!IF(wikiPicture == '', URLFOR($Resource.TeamsResources, '/images/layout/pic_upload.gif'), wikiPicture)}" class="imgBorder" />
+																<br />
+																<span class="explain">
+																	current picture 
+																	<br>
+																	 <apex:outputPanel rendered="{!IF( wiki.PictureId__c != null, true, false)}" > 
+																	 	<a href="javascript:;" onclick="javascript:return confirmDelAvatar(); " >
+																	 		remove
+																	 	</a>
+																	</apex:outputPanel>
+																</span>
+															</apex:outputPanel>
 														</td>
 														<td valign="top">
 															<table cellpadding="0" cellspacing="0" width="400px">
@@ -802,6 +807,15 @@
 			settingsBackUp = $('body_center').innerHTML;
 			membersBackUp = $('membersListDiv').innerHTML;
 			$('membersListDiv').innerHTML = '';
+		}
+		
+		function confirmDelAvatar(){
+			cond = confirm('Are you sure you want to remove the wiki avatar');
+			if( cond ){
+				$('avatarOverlay').show();
+				deleteAvatarNow();
+			}
+			return cond;
 		}
 	</script>
 	

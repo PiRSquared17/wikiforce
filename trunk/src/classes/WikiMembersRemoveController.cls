@@ -10,9 +10,8 @@ public class WikiMembersRemoveController {
  	public String removeMemberIds = '';
  	public Boolean error = false;
  	public Boolean finish = false;
+ 	private Boolean redirectPage;
 
-	
- 
 	/**
 	* Constructor
 	*/
@@ -98,21 +97,34 @@ public class WikiMembersRemoveController {
 	/**
 	* Delete selected member
 	*/
-	public void removeMember () 
+	public PageReference removeMember () 
 	{
+		PageReference page = null;
 		TeamUtil.hostName = TeamUtil.getHost(ApexPages.currentPage());
 		if (!getIsLastMemberAdmin()) 
 		{
 			wmc.setUserId(removeMemberId);
 			wmc.setWikiId(idWiki);
 			wmc.unjoinWiki();	
+			
+			if(removeMemberId == UserInfo.getUserId()){
+				User user = [Select id, Profile.PermissionsModifyAllData, ProfileId, Name From User where id =: UserInfo.getUserId() limit 1];
+				
+				if(!user.Profile.PermissionsModifyAllData){
+					page = new PageReference('/apex/WikiOverview');
+					page.setRedirect(true);	
+				}
+			}
 		}
+		
+		return page;
 	}
 	
-	public void massiveRemoveMember()
+	public PageReference massiveRemoveMember()
 	{
 		this.error = false;
 		this.finish = false;
+		PageReference page = null;
 		
 		if( removeMemberIds != '' )
 		{
@@ -120,19 +132,29 @@ public class WikiMembersRemoveController {
 			
 			idsList = removeMemberIds.split(',');
 			
+			redirectPage = false;
+
+			//Read members to delete
 			List<WikiMember__c> memberListToDelete = new List<WikiMember__c>();
-			memberListToDelete = [ select Id, Name from WikiMember__c where Id in: idsList ];
+			memberListToDelete = [ select Id, Name, User__c from WikiMember__c where Id in: idsList ];
 			
-			
+			//Read all admin members
 			List<WikiMember__c> adminList = new List<WikiMember__c>();
 			adminList = [ select Id from WikiMember__c where WikiProfile__r.ManageWikis__c = true and Wiki__c =: idWiki and Id not in: memberListToDelete ];
-
-						
+			
 			if( adminList.size() > 0 )
 			{
 				this.finish = true;
 				this.error = false;
-				System.debug('this.finish: ' + this.finish);
+				
+				Integer i=0;
+				while(i < memberListToDelete.size() && !redirectPage ){
+					if(memberListToDelete.get(i).User__c == UserInfo.getUserId()){
+						redirectPage = true;
+					}
+					i++;
+				}
+				
 				delete memberListToDelete;
 			}
 			else
@@ -142,8 +164,17 @@ public class WikiMembersRemoveController {
 				wmc.isLastMemberAdmin();
 			}
 			
-
+			//asks if the user wich did delete is admin or standard user to redirect page or not
+			if(redirectPage){
+				User user = [Select id, Profile.PermissionsModifyAllData, ProfileId, Name From User where id =: UserInfo.getUserId() limit 1];
+				
+				if(!user.Profile.PermissionsModifyAllData){
+					page = new PageReference('/apex/WikiOverview');
+					page.setRedirect(true);	
+				}
+			}
 		}
+		return page;
 	}
 	
 }
