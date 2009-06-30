@@ -22,8 +22,7 @@
 		* Namespace Prefix Getter
 		*/
         var namespace = "{!namespace}";	
-		
-		
+	
 	</script>
 
 	<div id="AddChildForm" style="display:none;" class="overlayForm">	
@@ -37,8 +36,6 @@
 				</a>
 			</div>
 		</div>
-		
-		
 		<!-- Overlay Content -->
 		<div id="someDiv" class="overlayMainContent">
 			<!-- Required Information -->
@@ -88,7 +85,8 @@
 								styleclass="overlaySaveBtn allButtons actionButtons" 
 								oncomplete="modal.close();" 
 								value="Save"  
-								rerender="rightSidebarPanel, childrenPanel, bodyPagePanel, infoPanel" />
+								rerender="rightSidebarPanel, childrenPanel, bodyPagePanel, infoPanel"
+								onclick="$(this).form.disable();" />
 						</apex:outputpanel> 
 						<!-- Wiki Team Overview -->
 						<apex:outputpanel rendered="{!IF(idTeamOverview == null, false, true)}">
@@ -98,7 +96,7 @@
 						<apex:outputpanel rendered="{!IF(AND(idTeamOverview == null, idWikiPage == null), true, false)}">
 							<apex:commandButton onclick="this.disabled=true" id="saveBtnNewPageTeam" action="{!saveWiki}" style="background-color: #526921!important" styleclass="overlaySaveBtn allButtons actionButtons" oncomplete="modal.close();reloadWikiList();" value="Save" rerender="theFeeds" />
 						</apex:outputpanel>
-						<apex:commandButton onclick="this.disabled=true" action="{!saveWikiAndEdit}" id="saveBtnNewPageEdit" style="background-color: #526921!important" styleclass="overlaySaveBtn allButtons actionButtons" value="Save and Edit" oncomplete="refreshRecentChanges()"/>
+						<apex:commandButton onclick="$(this).form.disable();" action="{!saveWikiAndEdit}" id="saveBtnNewPageEdit" style="background-color: #526921!important" styleclass="overlaySaveBtn allButtons actionButtons" value="Save and Edit" oncomplete="refreshRecentChanges()"/>
 						<apex:commandButton styleclass="allButtons cancelButtons" onclick="modal.close(); return false;" value="Cancel" />
 					</div>
 				</div>

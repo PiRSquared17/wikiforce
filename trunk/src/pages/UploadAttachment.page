@@ -24,7 +24,7 @@
 						<span class="infoText">Type the path of the file or click the Browse button to find the file.</span><br/>
 						<apex:inputFile value="{!newAttach.Body}" id="newAttach" contentType="{!newAttach.ContentType}" filename="{!newAttach.Name}" fileSize="{!newAttach.BodyLength}"/><br/>
 						<apex:outputPanel rendered="{!NOT validAttSize}">
-							<span class="errorText"><b>Error:</b> The attachment size must be less than 5 mb</span>
+							<span class="errorText"><b>Error:</b>Please select the file you want upload. Attachment size must be less than 5Mb.</span>
 						</apex:outputPanel>
 					</div>
 					<div class="overlaySeparateLine"></div>
