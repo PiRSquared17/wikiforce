@@ -109,7 +109,7 @@
 					</table>
 				</div>
 				<iframe name="iframeUploadAttach" id="iframeUploadAttach"
-					src="/apex/UploadAttachment?pId={!idWikiPage}" height="150px"
+					src="/apex/UploadAttachment?pId={!idWikiPage}" height="155px"
 					width="99%" style="border: 0px;" frameborder="0" marginheight="0"
 					marginwidth="0"></iframe>
 			</div>
@@ -218,8 +218,7 @@
 							class="requiredTextArea"></span></td>
 						<td class="descriptionInput"><apex:inputtextarea id="commentTextArea" value="{!commentBody}" onkeyup="countLimit(this, 'textCounter', 250)" /> <span
 							class="infoText"><span id="textCounter">250</span> character limit
-						<div id="errorComment" style="color: red; display: none;">The
-						comment is empty or already exist!</div>
+						<div id="errorComment" style="color: red; display: none;">The comment is empty!</div>
 						</span></td>
 					</tr>
 				</table>
@@ -522,7 +521,7 @@
 					({!attachCount})</a>&nbsp;<apex:outputpanel rendered="{!userPermissions.canCreate}">
 						<span style="font-weight: bold; color: #000000;">+</span>&nbsp;<a
 							href="javascript:;"
-							onclick="createOverlay('','WikiPage:newAttachmentOverlay','180','refreshAttachObserver();reloadIframeAttach();');relocateOverlay()"
+							onclick="createOverlay('','WikiPage:newAttachmentOverlay','190','refreshAttachObserver();reloadIframeAttach();');relocateOverlay()"
 							class="WikiLink">New Attachment</a>
 					</apex:outputpanel></div>
 					<div id="attachDiv" class="infoExpanded" style="display: none;">
@@ -578,15 +577,15 @@
 							</table>
 						</apex:outputpanel>
 						<apex:outputpanel rendered="{!IF(attachCount = 0,true,false)}">
-							<span class="infoText">This wiki page has no attachments
-							yet.</span>
+							<span class="infoText">This wiki page has no attachments yet.</span>
 						</apex:outputpanel>
 					</apex:form> <br>
 					</div>
 				</apex:outputpanel></td>
 			</tr>
 			<tr>
-				<td><!-- 				COMMENTS	 			 -->
+				<td>
+				<!-- COMMENTS -->
 				<apex:outputpanel id="commentsPanel">
 					<div class="infoSection">
 						<a href="Javascript:;" class="infoTitle" onclick="hideSection(this,'commentDiv')">
@@ -618,11 +617,28 @@
 											<table border="0" align="right">
 												<tr>
 													<td valign="top">
-													<div align="right"><b>{!item.showShortCommentBy}</b><br>
-													<span class="infoText">{!item.commentDate}</span></div>
+														<div align="right">
+															<b>{!item.showShortCommentBy}</b><br />
+															<span class="infoText">{!item.commentDate}</span>
+														</div>
 													</td>
 													<td valign="top">
 														<img alt="" src="{!URLFOR($Resource.commonResources, 'images/placeholders/unknownperson32x32.jpg')}" width="32">
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<apex:outputpanel rendered="{!userPermissions.canManage}">
+															<apex:commandLink value="Delete Comment" action="{!deleteComment}" 
+																rerender="commentsPanel"
+																onclick="if(!confirm('Do you really want to delete this comment?')){return false;}else{setImage('{!item.commentId}'); showLoader();}"
+																oncomplete="setImage(''); hideLoader();">
+																<apex:param name="commentId" value="{!item.commentId}" />
+															</apex:commandLink>
+														</apex:outputpanel>														
+													</td>
+													<td>
+														<img style="position: relative; display: none;" id="{!item.commentId}" src="{!URLFOR($Resource.WikiResource, 'images/layout/small_loader.gif')}" />
 													</td>
 												</tr>
 											</table>
@@ -631,9 +647,9 @@
 												value="{!URLFOR($Resource.WikiResource, 'images/WikiImages/arrow_comment.gif')}" />
 											</td>
 											<td style="margin-left: 0px; padding-left: 0px">
-											<div
-												style="width: 553px; padding: 20px; background-color: #E1E2E1;">
-											{!item.comment}</div>
+												<div style="width: 553px; padding: 20px; background-color: #E1E2E1;">
+													{!item.comment}
+												</div>
 											</td>
 										</tr>
 									</table>
@@ -653,6 +669,7 @@
 	<br>
 	</div>
 	</div>
+	
 	<apex:form id="auxForm" style="display:none;">
 		<!-- style="display:none;"> -->
 		<apex:commandLink id="auxLink" value="AuxLink"
@@ -688,6 +705,7 @@
 				fabLoading = false;
 			}
 		}
+		
 		function validateWikiInfo()
 		{
 			$('nameEmptyError').style.display="block";
@@ -703,8 +721,10 @@
 				return true
 			}
 		}
+		
 		cargarimagenes();
 		auxFunction();
 		readPortalCSSRules();
+	
 	</script>
 </apex:page>

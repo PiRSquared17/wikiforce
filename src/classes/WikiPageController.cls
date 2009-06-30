@@ -1276,10 +1276,30 @@ public class WikiPageController {
 	* Class Comments
 	*/
    	public class Comments {
+   		
    		String commentDate;
    		String comment;
    		String commentName;
    		String commentBy;
+   		String commentId;
+   		   		
+   		/**
+   		* Get comment id
+   		*@return id comment
+   		*/
+   		public String getCommentId (){
+   			return commentId;
+   		}
+   		
+   		/**
+		* Set comment Id
+		*@param id comment
+   		*/
+   		public void setCommentID (String s){
+   			commentId = s;
+   		}
+
+   		
    		
    		/**
 		*@param String
@@ -1393,10 +1413,11 @@ public class WikiPageController {
 		List<Wiki__c> pictureId = [SELECT PictureId__c FROM Wiki__c WHERE Id =: idWikiPage limit 1];
 		Integer countComment = [select count() from Comment__c WHERE ParentWikiPage__c =:idWikiPage];
    		if (countComment != 0) {
-	   		for (Comment__c item: [ SELECT Message__c, CreatedBy.Name,CreatedById, LastModifiedDate FROM Comment__c WHERE ParentWikiPage__c =:idWikiPage ORDER BY LastModifiedDate desc]) {
+	   		for (Comment__c item: [ SELECT Id, Message__c, CreatedBy.Name, CreatedById, LastModifiedDate FROM Comment__c WHERE ParentWikiPage__c =:idWikiPage ORDER BY LastModifiedDate desc]) {
 	   			Comments itemComment = new Comments();
 	   			itemComment.setCommentBy(item.CreatedBy.Name);
 	   			itemComment.setComment(item.Message__c);
+	   			itemComment.setCommentId(item.Id);
 	   			itemComment.setCommentDate(item.LastModifiedDate);
 	   			//itemComment.setCommentPicture(pictureId[0]);
 	   			commentsList.add(itemComment);
@@ -1416,7 +1437,7 @@ public class WikiPageController {
 	*@return Boolean
 	*/ 
    	public Boolean getAddComment () {
-   		return addComment;	
+   		return addComment;
    	}
    	 
     /**
@@ -1436,6 +1457,17 @@ public class WikiPageController {
    		insert newComment;
    		commentBody = '';
    		addComment = false;
+   	}
+   	
+   	/**
+   	* Delete comment
+   	*/
+   	public void deleteComment (){
+   		String commentId = ApexPages.currentPage().getParameters().get('commentId');
+   		if(commentId != null && !commentId.equals('')){
+   			Comment__c comment = [select Id from Comment__c where Id =: commentId];
+   			delete comment;
+   		}
    	}
    	
    	/**
