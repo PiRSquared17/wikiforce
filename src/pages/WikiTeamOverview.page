@@ -30,29 +30,19 @@
 		div.wikiPageTree div.wikiPageContainer div.wikiPage {
 			background:url('{!URLFOR($Resource.WikiResource, 'images/layout/icons/wikipage.png')}') no-repeat top left;
 		}
-		/*
-		.SidebarTitle{
-			margin-left: 195px;
-			background: #ffffff;
-			margin-top: -5px;
-			height: 200px;
-			border-top: -5px;
-		}
-		*/
-		
+
 		div.bPageFooter{
 			background: #ffffff !important;
 			margin-top: -2px;
 			margin-left: 201px;
 			margin-right: 0px;
 		}
+
 		.bodyTable{
 			margin-bottom: -2px;
 		}
-		
-
-
 	</style>
+
 	<script>
 		/**
         * Namespace Prefix Getter
@@ -68,13 +58,14 @@
 
 		var globalExpandWiki = "{!URLFOR($Resource.WikiResource, 'images/layout/icons/expandwiki.gif')}";
 		var globalCollapseWiki = "{!URLFOR($Resource.WikiResource, 'images/layout/icons/collapsewiki.gif')}";
+	
 	</script>
 	
 	<a href="#modal_container" id="initializeModal" style="display: none;"></a>
 	<div id="modal_container"></div>
 	<script>createOverlay('initializeModal')</script>
 	
-	<!-- Delete Forum -->
+	<!-- Delete Wiki -->
 	<c:WikiOverlayDeleteWiki />
 
     <!-- Overlay Add Child -->
@@ -109,12 +100,16 @@
 				<table border="0" class="bodyTable" >
 					<tr>
 						<td valign="top" class="sideBarTD">
+							
 							<!-- My Favorites Widget -->
 							<c:WikiWidgetMyFavorites />
+							
 							<!-- My Recent Changes Widget -->
 							<c:WikiWidgetMyRecentChanges />
+							
 							<!-- Subscription widget -->
 							<c:WikiSubscribe teamId="{!currentTeam.Id}" />
+							
 						</td>
 						<td valign="top" class="mainContentTD">
 							<!-- Main Content DIV-->
@@ -148,7 +143,14 @@
 											<div class="teamBlockTitle" style="margin-bottom:10px;">
 												<h4>Wiki Tree</h4>
 											</div>
-											<strong><a href="/apex/WikiCreateWiki?id={!currentTeam.Id}">{!currentTeam.Name}</a></strong>
+											<strong>
+												<apex:outputPanel rendered="{!userPermissions.canManage}">
+													<a href="/apex/WikiCreateWiki?id={!currentTeam.Id}">{!currentTeam.Name}</a>
+												</apex:outputPanel>
+												<apex:outputPanel rendered="{!NOT(userPermissions.canManage)}">
+													{!currentTeam.Name}
+												</apex:outputPanel>
+											</strong>
 											<br style="clear:both;"/>
 											<br style="clear:both;"/>
 											<!-- Wiki Page Tree Start -->											
