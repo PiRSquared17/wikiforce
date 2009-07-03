@@ -74,28 +74,29 @@
 	<apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/myTeamsAllTeamsTabs.css')}" />
 	
 	<!-- CSS de TS -->
-	<apex:stylesheet value="{!URLFOR($Resource.commonResources, '/inc/css/validator.css')}" />	
-	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, '/inc/css/commonLayout.css')}" />	
-	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, '/inc/css/teamDetailEdit.css')}" />	
-	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, '/inc/css/teamCreateNew.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.commonResources, '/inc/css/validator.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, '/inc/css/commonLayout.css')}" /> 	
+	 <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, '/inc/css/teamDetailEdit.css')}" />
+	 <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, '/inc/css/teamCreateNew.css')}" /> 
 	
-    <apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/wikiCreateWiki.css')}" />
+    <!--  <apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/wikiCreateWiki.css')}" />-->
     <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamOverview.css')}" />	
 	<apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/modal.css')}" />
 
 	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, '/inc/css/teamOverlyInviteNewMember.css')}" />
 	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamsOverlaysTemplate.css')}" />
-	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/widgets/TeamMemberWidget.css')}" />
+	<!-- <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/widgets/TeamMemberWidget.css')}" />-->
     
 	<apex:includeScript value="{!URLFOR($Resource.commonResources, 'inc/js/validator.js')}"/>    
 	<apex:includeScript value="/soap/ajax/12.0/connection.js" />
 	<script>
 		var API_SESSION_ID = '{!$Api.Session_ID}';
 	</script>
-	<apex:includeScript value="{!URLFOR($Resource.TeamsResources, 'inc/js/teamsCreateNewTeam.js')}" />
+	
 	<apex:includeScript value="{!URLFOR($Resource.commonResources, 'inc/js/common.js')}" />
 	<apex:includeScript value="{!URLFOR($Resource.TeamsResources, 'inc/js/TeamMemberList.js')}" />
 	<apex:includeScript value="{!URLFOR($Resource.TeamsResources, 'inc/js/TeamsWidgetCommon.js')}" />	
+	<apex:includeScript value="{!URLFOR($Resource.TeamsResources, 'inc/js/teamsCreateNewTeam.js')}" />
 	
 	<!-- Modal JS -->
 	<script	src="{!URLFOR($Resource.commonResources, 'inc/js/modal.js')}" />
@@ -121,7 +122,9 @@
 
     <!-- Wiki Member Widget -->
 	<c:WikiMembersWidget wikiId="{!Wiki.Id}" showWidget="false" id="wikiMW" /> 
-
+	
+	
+	
 	<div class="BodyPage">
 		
 		<!-- OVERLAY -->
@@ -257,8 +260,9 @@
 														<td></td>
 														<td></td>
 														<td colspan="2">&nbsp;
-															<span class="explain">(32k character limit) - Characters remaining:</span>
+															<span id="warning" class="explain">(32k character limit) - Characters remaining:</span>
 															<span class="explain" id="stringSizeCounter">32000</span>
+															<span class="explain classColorRed" style="display:none;" id="numberOfCharacterExceeded">The number of characters was exceeded</span>
 															<br />
 														</td>
 													</tr>
