@@ -1,9 +1,11 @@
 <apex:component allowDML="true" controller="DeleteWikiController" id="wikiOverlay" >
+	<apex:attribute name="pageFrom" type="String" required="false" description="Variable to show from which page the controller is called from"/>
 	<!-- WikiOverlayDeleteWiki JS -->
  	<apex:includeScript value="{!URLFOR($Resource.WikiResource, 'inc/js/wikiOverlayDeleteWiki.js')}" />
 	<apex:form >
 		<apex:actionFunction name="removeWikiDef" action="{!deleteWiki}" rerender="dummy" oncomplete="reloadFavoritesWikis(); refreshRecentChanges(); afterWikiDelete(); refreshActivePeople(); rerenderPaginators();"/>
 		<apex:inputHidden value="{!wikiId}" id="wikiId"/>
+		<apex:inputHidden value="{!pageFrom}" id="pageFrom"/>
 		<div id="auxWikiInputHiddenId" style="display:none;">{!$Component.wikiId}</div>
 	</apex:form>
 	<apex:outputPanel id="dummy"></apex:outputPanel>

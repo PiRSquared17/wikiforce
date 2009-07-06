@@ -120,6 +120,17 @@ public with sharing class WikiOverviewController {
 		System.debug('\n\n\tThe wikiSites = ' + wikiSites.size() + '\n\n');
 		return wikiSites;
 	}
+	
+	/**
+	*Determines who can view the Create New Wiki button
+	*@return Boolean
+	*/
+	
+	public Boolean getCanViewCreateNewWiki(){
+		WikiSetupController canV = new WikiSetupController();
+		return canV.canView();
+	}
+		
 	/**
 	* For rerender use
 	*/

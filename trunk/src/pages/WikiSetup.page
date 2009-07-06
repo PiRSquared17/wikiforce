@@ -1,0 +1,211 @@
+<apex:page id="TeamsSubscription" sidebar="false" tabStyle="Wiki__c" controller="WikiSetupController">
+	<apex:includeScript value="/soap/ajax/11.1/connection.js"/>
+	<script>
+		var API_SESSION_ID = '{!$Api.Session_ID}';
+		//Common Resource URL  
+		var globalCommonResourcesPath = '{!URLFOR($Resource.commonResources)}';
+	</script>
+	<!-- Prototype + Scriptaculous -->
+	<apex:includeScript value="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}"/>
+	<apex:includeScript value="{!URLFOR($Resource.Script_aculo_us, 'scriptaculous.js')}"/>
+	<apex:includeScript value="{!URLFOR($Resource.Script_aculo_us, 'effects.js')}"/>
+	<!-- Portal Support -->
+	<apex:includeScript value="{!$Resource.portalSupport}"/>	
+	<!-- Common Js for All Sections -->
+	<apex:includeScript value="{!URLFOR($Resource.TeamsResources, 'inc/js/admin.js')}"/>
+	<apex:includeScript value="{!URLFOR($Resource.commonResources, 'inc/js/common.js')}"/>
+	<!-- CSS de TS -->
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/commonLayout.css')}" />	
+	<link rel="stylesheet"  href="{!URLFOR($Resource.TeamsResources, '/inc/css/profileEdition.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamDetail.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/widgets/TeamMemberWidget.css')}" />	
+    <!-- CSS styles for Portal Integration -->
+    <apex:stylesheet value="{!URLFOR($Resource.portalStyles, 'portal.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/headerTeams.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/widgetTeam.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/fonts.css')}" />   
+	
+	
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamsSubscription.css')}" />
+	
+	<style>
+		.inputButton{
+			background:transparent url({!URLFOR($Resource.TeamsResources, 'images/layout/buttons/button_right_bkg.gif')}) no-repeat scroll right bottom;
+		}
+		.widgetsCont
+		{
+			position: absolute;
+			top: 103px;
+		}
+
+		.bread{
+			position: absolute;
+			left: 10px;
+		}
+		
+		.bread a{
+			font-size: 12px;
+			font-weight: normal;		
+			font-family:'Arial','Helvetica',sans-serif;			
+		}
+		
+		.bread End{
+		}
+
+		div.sidebar
+		{
+			position: static !important;
+		}
+	    .AllProfiles, .SelectedProfiles{
+	        height: 250px;
+	        width: 200px;
+	    }
+	</style>
+	<!-- Header -->
+		<apex:composition template="HeaderTemplate">
+			<apex:define name="moduleId"><apex:variable var="moduleId" value="headerWiki"/></apex:define>
+		    <apex:define name="module">Wiki</apex:define>
+		    <apex:define name="title">Settings</apex:define>
+		    <apex:define name="search">
+		    	<c:Search module="wiki" />
+		    </apex:define>
+	    </apex:composition>
+	    
+	<div class="widgetsCont" >
+		<!-- My Favorites Widget -->
+		<c:WikiWidgetMyFavorites />
+		<!-- My Recent Changes Widget -->
+		<c:WikiWidgetMyRecentChanges />
+	</div>
+	<script>
+	</script>
+	<!-- BreadCrumbs -->
+	<apex:form id="form_content" onsubmit="return false;">
+		<div class="breadcrumbs"  align="center">
+			<div class="bread">
+				<a href="WikiTeamOverview">Wiki Overview</a>&nbsp;&gt;&nbsp;<span class="End">Settings</span>
+			</div>
+		
+            <table align="center" cellpadding="0" cellspacing="0">
+            	<tr>
+            		<td>
+			            <apex:commandButton value="Save"  onclick="toSendF();" /> 
+					</td>
+					<td>
+			            <apex:commandButton value="Cancel" />
+					</td>
+				</tr>
+			</table>
+		</div>
+		<!-- Main Content Div -->
+		<div class="main_content">		
+			<div class="holder">
+			<!-- Start Main Content -->
+				<!-- Section Title -->
+				<div class="teamsTitleBlue" id="titleSection">
+					Show "Create New Wiki" button to Profiles 
+				</div>
+					<!-- Form Begin -->
+					<div class="formContainer">
+					<table>
+						<tr>
+	                    	<td>
+	                        	<span>All Profiles</span>
+	                        </td>
+	                        </td>
+	                        <td>
+	                        <td>
+	                        	<span>Selected profiles</span>
+	                        </td>
+	                    </tr>
+	                    
+						<tr>
+	                    	<td>
+		                        <span>
+		                            <apex:selectList multiselect="true" styleClass="AllProfiles"  style="float:left;">
+		                                <apex:selectOptions value="{!allProfiles}" />
+		                            </apex:selectList>
+		                        </span>
+	                        </td>
+	                        <td>
+	                        <span  style="float: left;">
+	                            <input type="button" value="&gt;&gt;" onclick="setSelProfs( $$('.AllProfiles')[0], $$('.SelectedProfiles')[0], 'toRight',$('TeamsSubscription:fToSend:profileToSend'));" />
+	                            <br />
+	                            <input type="button" value="&lt;&lt;" onclick="setSelProfs( $$('.AllProfiles')[0], $$('.SelectedProfiles')[0], 'toLeft', $('TeamsSubscription:fToSend:profileToSend'));" />
+	                        </span>
+	                        </td>
+	                        <td>
+		                        <span>
+		                            <apex:selectList id="aqwa" multiselect="true" styleClass="SelectedProfiles" style="float:left;">
+		                                <apex:selectOptions value="{!savedProfiles}" />
+		                            </apex:selectList>                          
+		                        </span>
+		                    </td>
+		            	</tr>
+	                </table>
+					</div>
+					<!-- End Form container -->
+			</div><!-- End Main Content -->
+		</div>
+		<!-- BreadCrumbs -->
+		<div class="breadcrumbs" style="padding-bottom: 10px;" align="center">
+			<br>
+            <table align="center" cellpadding="0" cellspacing="0">
+            	<tr>
+            		<td>
+			            <apex:commandButton value="Save"  onclick="toSendF();" /> 
+					</td>
+					<td>
+			            <apex:commandButton value="Cancel" />
+					</td>
+				</tr>
+			</table>
+		</div>
+	</apex:form>
+    <apex:form id="fToSend">
+        <apex:actionFunction name="toSendF" action="{!saveAdmSettings}" rerender="form_content" />
+        <apex:inputHidden value="{!SelectedProfsStr}" id="profileToSend" />
+    </apex:form>
+	<script>	
+		readPortalCSSRules();
+        function setSelProfs( multiSelLeft, multiSelRight, direction, hiddenField ){
+        
+            mSelLeft  = multiSelLeft.options;
+            mSelRight = multiSelRight.options;
+            
+            toRemove = new Array();
+            toAdd    = new Array();
+            toSend   = new Array();
+                
+            if( direction == "toRight"){
+                for( var p = 0; p < mSelLeft.length; p++ )
+                if( mSelLeft[p].selected ){
+                    toAdd.push( mSelLeft[ p ]);
+                    toRemove.push( p )
+                }
+                for( var r = 0; r < toRemove.length; r++ )
+                    mSelRight[ mSelRight.length ] = toAdd[ r ];
+        
+                //if( mSelRight[0].value == "") mSelRight[0].remove();
+            }else if( direction == "toLeft"){
+                
+                for( var p = 0; p < mSelRight.length; p++ )
+                if( mSelRight[p].selected ){
+                    toAdd.push( mSelRight[ p ]);
+                    toRemove.push( p )
+                }
+                for( var r = 0; r < toRemove.length; r++ )
+                    mSelLeft[ mSelLeft.length ] = toAdd[ r ];
+        
+                //if( mSelLeft[0].value == "") mSelLeft[0].remove();
+            }
+            
+            for( var p = 0; p < mSelRight.length; p++ )
+            toSend.push( mSelRight[ p ].value );
+            
+            hiddenField.value = toSend.join( '#' );
+            //alert( hiddenField.value );
+            
+        } 	
+       </script>	
+</apex:page>

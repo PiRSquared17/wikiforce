@@ -8,6 +8,26 @@ public class DeleteWikiController {
 	*/
 	public DeleteWikiController (){}
 	
+	String pageFrom = '';
+	/**
+	* Get Page from which delete function has 
+	* been called from
+	*@return String
+	*/
+	public String getPageFrom() {	
+		return pageFrom;
+	}
+	
+	/**
+	* Set age from which delete function has 
+	* been called from
+	*@param String
+	*/
+	public void setPageFrom(String page) {	
+		pageFrom = page;
+	}
+	
+	
 	String wikiId = '';
 	/**
 	* Get Topic Id
@@ -29,12 +49,21 @@ public class DeleteWikiController {
 	* Delete Topic by Id
 	*/
 	public PageReference deleteWiki(){
+		
 		List<Wiki__c> wikiToDelete = [select Id from Wiki__c where Id =: WIKIID];
 		if (wikiToDelete.size() > 0) {
 			delete wikiToDelete[0];
-			PageReference pr=new PageReference('/apex/WikiOverview');
-			pr.setRedirect(true);
-			return pr;
+			if(this.pageFrom == 'WikiTeamOverview'){
+				System.debug('With PR' + this.pageFrom);
+				PageReference pr=new PageReference('/apex/WikiOverview');
+				pr.setRedirect(true);
+				return pr;
+			}
+			else{
+				System.debug('Without PR' + this.pageFrom);
+				return null;
+			}
+			
 		}	
 		return null;
 	}

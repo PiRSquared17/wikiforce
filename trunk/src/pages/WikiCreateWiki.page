@@ -216,11 +216,13 @@
 												</tr>
 											</table>
 										</div> 
+										<div class="div_Body">
+										
 										<apex:form id="createNewTeamForm" onsubmit="if(validateWikiFormInfo())return false;" >
 										<!-- <apex:form id="createNewTeamForm" > --> 
 											<apex:outputpanel style="display:none;" id="currentTeamId">{!Wiki.Id}</apex:outputpanel>
 											<apex:inputHidden value="{!Wiki.PictureId__c}" id="teamPicture" />
-											<div class="div_Body">
+											
 												<table cellpadding="0" cellspacing="0" style="margin-left: 40px;" class="newTeamForm">
 													<tr>
 														<td class="alignTop">
@@ -417,7 +419,7 @@
 											    </td>
 											    <td>	
 											    </td>
-											    <td colspan="2">&nbsp;<apex:inputCheckbox value="{!AllowCustomer}" /> 
+											    <td colspan="2">&nbsp;<apex:inputCheckbox id="allowCustomer" value="{!AllowCustomer}" /> 
 													<span class="inputInfoDescription">Allow Customer Portal Users</span>
 											    </td>    
 											</tr>
@@ -434,7 +436,7 @@
 										    </td>
 										    <td>
 										    </td>
-										    <td colspan="2">&nbsp;<apex:inputCheckbox value="{!AllowPartner}"/>
+										    <td colspan="2">&nbsp;<apex:inputCheckbox id="allowPartner" value="{!AllowPartner}"/>
 										    <span class="inputInfoDescription">Allow Partner Portal Users</span>
 										    </td>    
 										</tr>
@@ -518,8 +520,9 @@
 						                                <td colspan="2">&nbsp;<span class="inputInfoList">&nbsp;</span><span class="inputInfoSubDescription">information and content.</span></td>
 													</tr>   
 												</table>
+												<hr class="filterHR" style="margin-left:50px !important;"/>
 												<div class="DivBtn">
-													<div class="title_line_btn"></div>										
+																						
 													<div align="center">
 														<span id="currentEventAction"></span><br />
 														<apex:commandButton styleClass="SaveBtn" action="{!saveAndRedirect}"  value="{!IF(inEdition == false, 'Create', 'Update')}" id="saveButton"  />
@@ -530,8 +533,12 @@
 														<apex:commandButton styleClass="CancelBtnWik"  onclick="location.href = '/apex/WikiOverview';return false;" value="Cancel" id="cancelButton"/> 
 													</div>
 												</div>
-											</div>
+												
+												
+											
 										</apex:form>
+										</div>
+										
 									</div>
 								</div>
 							</div>

@@ -351,25 +351,38 @@ public class WikiCreateWikiController {
     *@throws Exception
     */    
     public PageReference saveWiki(){
+    	
     	try{
 	    	validSizePicture = true;
 			validTypePicture = true; 
-			
+			System.debug('Wiki Saving..');
 			if (document.name == null || document.name == '' || document.BodyLength > MAX_SIZE || 
-					!(document.ContentType == 'image/jpeg' || document.ContentType == 'image/pjpeg' || document.ContentType == 'image/gif' 
-					|| document.ContentType == 'image/png')) {
-
+					!(document.ContentType == 'image/jpeg' || document.ContentType == 'image/pjpeg' 
+					|| document.ContentType == 'image/gif' 
+					|| document.ContentType == 'image/png'
+					|| document.ContentType == 'image/x-png')) {
+				System.debug('First IF passed');
 				if (document.BodyLength > MAX_SIZE) {
 					validSizePicture = false;
 				}
-
-				if (!(document.name == null || document.name == '') && !(document.ContentType == 'image/jpeg' || document.ContentType == 'image/pjpeg' ||  
-						document.ContentType == 'image/gif' || document.ContentType == 'image/png')) {
-					validTypePicture = false;
-				} 
+				
+				if(document.ContentType != ''){
+					if (document.ContentType == 'image/jpeg' || document.ContentType == 'image/pjpeg' 
+						|| document.ContentType == 'image/gif' || document.ContentType == 'image/png' 
+						|| document.ContentType == 'image/x-png') {
+							System.debug('INVALID PIC');
+						validTypePicture = false;
+					} 
+				}
+				else{
+					validTypePicture = true;
+					System.debug('content empty');
+				}
+				
 				document = new Attachment();
 
 				if (!validSizePicture || !validTypePicture) {
+					System.debug('Returning NULL');
 					return null;
 				}	
 			} 

@@ -1,0 +1,37 @@
+<apex:component allowDML="true" controller="WikiSetupController" >	
+	
+	<apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/teamSubscribe.css')}" />
+	<style>
+	.sus{
+		background: transparent url({!URLFOR($Resource.commonResources, 'images/icons/settings.png')}) no-repeat scroll left center;
+		padding-left: 20px;
+	}
+	</style>
+	<apex:outputPanel >
+		<div class="sidebar">
+			<div class="teamWidget mySmallWidget" >
+				<!-- Widget Title -->		
+				<div class="thinHeader">
+					<div><div><h4>Setup</h4></div></div>
+				</div>
+				<!-- Widget Container -->   		
+				<div class="box_content">
+					<div class="thinBody">
+						<div>					    
+						    <apex:outputpanel layout="block" styleClass="suscribeTeam">
+				                <apex:outputPanel id="teamLinkSuscribe">
+				                	<a class="sus" href="/apex/WikiSetup">Manage Configuration</a>
+				                </apex:outputPanel> 
+							</apex:outputpanel>
+						</div>	
+					</div>				
+				</div>
+				<!-- Widget Holder Foot -->
+				<div class="bottom_borders">
+					<div><div></div></div>
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+	</apex:outputPanel>
+</apex:component>

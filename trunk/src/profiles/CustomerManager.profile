@@ -191,6 +191,10 @@
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>WikiSetupController</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>WikiSubscribeController</apexClass>
         <enabled>false</enabled>
     </classAccesses>
@@ -1363,6 +1367,11 @@
     </fieldLevelSecurities>
     <fieldLevelSecurities>
         <editable>false</editable>
+        <field>WikiSetup__c.CanViewButtonNew__c</field>
+        <hidden>true</hidden>
+    </fieldLevelSecurities>
+    <fieldLevelSecurities>
+        <editable>false</editable>
         <field>WikiSubscription__c.TeamMemberJoinLeave__c</field>
         <hidden>true</hidden>
     </fieldLevelSecurities>
@@ -1509,6 +1518,9 @@
         <layout>WikiRecentlyViewed__c-Wiki Recently Viewed Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
+        <layout>WikiSetup__c-WikiSetup Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
         <layout>WikiSubscription__c-WikiSubscription Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
@@ -1581,6 +1593,9 @@
         <object>WikiRecentlyViewed__c</object>
     </objectPermissions>
     <objectPermissions>
+        <object>WikiSetup__c</object>
+    </objectPermissions>
+    <objectPermissions>
         <object>WikiSubscription__c</object>
     </objectPermissions>
     <objectPermissions>
@@ -1643,6 +1658,10 @@
     </pageAccesses>
     <pageAccesses>
         <apexPage>WikiSearchResult</apexPage>
+        <enabled>false</enabled>
+    </pageAccesses>
+    <pageAccesses>
+        <apexPage>WikiSetup</apexPage>
         <enabled>false</enabled>
     </pageAccesses>
     <pageAccesses>
