@@ -34,7 +34,7 @@
 	<script>createOverlay('initializeModal')</script>
 	
 	<!-- Delete Forum -->
-	<c:WikiOverlayDeleteWiki />
+	<c:WikiOverlayDeleteWiki pageFrom=""/>
 	
 	
 	<div class="BodyPage">
@@ -86,6 +86,7 @@
 							<c:WikiWidgetMyFavorites />
 							<!-- My Recent Changes Widget -->
 							<c:WikiWidgetMyRecentChanges />
+							<c:WikiSetupWidget />
 						</td>
 						<td valign="top" class="mainContentTD">
 							<!-- Main Content Div -->
@@ -110,7 +111,9 @@
 												</apex:commandLink>
 											</li>		
 											<li id="CreateNewWikiContainer">
-												<a href="/apex/WikiCreateWiki" ><div id="left"></div><div id="middle">Create New Wiki</div><div id="right"></div></a>
+												<apex:outputPanel rendered="{!CanViewCreateNewWiki}">
+													<a href="/apex/WikiCreateWiki" ><div id="left"></div><div id="middle">Create New Wiki</div><div id="right"></div></a>
+												</apex:outputPanel>
 											</li>		
 										</ul>
 									</apex:form>
