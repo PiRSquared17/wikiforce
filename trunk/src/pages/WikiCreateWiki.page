@@ -101,6 +101,8 @@
 	<!-- Modal JS -->
 	<script	src="{!URLFOR($Resource.commonResources, 'inc/js/modal.js')}" />
 	
+	<apex:stylesheet value="{!URLFOR($Resource.commonResources, 'inc/css/breadcrumbs.css')}" />
+
 	<!-- Initialize the overlay box for modal.js -->
 	<a href="#modal_container" id="initializeModalOverlay" style="display:none;"></a>
 	<div id="modal_container" style="display:none;"></div>
@@ -149,6 +151,12 @@
 			<div class="PageBlock">	
 				<!-- LEFT SIDEBAR  -->
 				<table border="0" class="bodyTable" cellpadding="0" cellspacing="0">
+					<tr>
+						<td colspan="2" class="Breadcrums">
+							<a href="/apex/WikiOverview">Wiki Overview</a> > <a href="/apex/WikiTeamOverview?id{!Wiki.Id}">Wiki Team Overview</a> > <span>Wiki Create Wiki</span>
+						</td>
+						
+					</tr>
 					<tr>
 						<td valign="top" class="sideBarTD">
 							<!-- MY FAVORITES WIDGET -->
@@ -453,11 +461,13 @@
 											</td>
 										</tr>
 										</apex:outputPanel>
+											
 													<tr>
 						                                <td class="alignTop"><span class="inputInfoTitle">Access</span></td>
 														<td></td>
 						                                <td colspan="2">
-						                                	&nbsp;<input type="radio" id="openTeam" name="access" onclick="setAccess(this);"/>
+						                                	&nbsp;<input type="radio" id="openTeam" name="access" onclick="setAccess(this);" />
+						                                	
 						                                	<span class="inputInfoDescription">Open</span>
 						                                </td>
 													</tr>  	
@@ -475,7 +485,7 @@
 						                                <td  class="alignTop"><span class="inputInfoTitle"></span></td>
 														<td></td>
 						                                <td colspan="2">
-						                                	&nbsp;<input type="radio" id="closedTeam" name="access" onclick="setAccess(this);"/>
+						                                	&nbsp;<input type="radio" id="closedTeam" name="access" onclick="setAccess(this);" />
 						                                	<span class="inputInfoDescription">Closed</span>
 						                                </td>
 													</tr>   
@@ -496,9 +506,9 @@
 						                                <td class="alignTop"><span class="inputInfoTitle"></span></td>
 														<td></td>
 						                                <td colspan="2">
-						                                	&nbsp;<input type="radio" id="privateTeam" name="access" onclick="setAccess(this);"/>
+						                                	&nbsp;<input type="radio" id="privateTeam" name="access" onclick="setAccess(this);" />
 						                                	<span class="inputInfoDescription">Private</span>
-						                                </td>
+						                                </td>						                               
 													</tr>   
 													<tr>
 						                                <td class="alignTop"><span class="inputInfoTitle"></span></td>
@@ -520,6 +530,15 @@
 						                                <td colspan="2">&nbsp;<span class="inputInfoList">&nbsp;</span><span class="inputInfoSubDescription">information and content.</span></td>
 													</tr>   
 												</table>
+												
+												<!-- Hidden radio button to control mapping between page refreshs -->
+												<apex:selectRadio value="{!Wikitype}" layout="pageDirection" style="display:none;">
+													<apex:selectOption id="openTeam_hid" itemValue="open" itemLabel="Open"/> 
+													<apex:selectOption id="closedTeam_hid" itemValue="closed" itemLabel="Closed"/>
+													<apex:selectOption id="privateTeam_hid" itemValue="private" itemLabel="Private"/> 
+												</apex:selectRadio>
+												
+												
 												<hr class="filterHR" style="margin-left:50px !important;"/>
 												<div class="DivBtn">
 																						
@@ -533,9 +552,7 @@
 														<apex:commandButton styleClass="CancelBtnWik"  onclick="location.href = '/apex/WikiOverview';return false;" value="Cancel" id="cancelButton"/> 
 													</div>
 												</div>
-												
-												
-											
+
 										</apex:form>
 										</div>
 										
@@ -557,7 +574,7 @@
 	
 	<!-- MEMBERS LIST --> 
     <div id="membersListDiv" class="holder" style="visibility: hidden; display:none; margin-bottom:-13px !important;">
-		<div id="paginationOverlay" style="display: none;" class="paginationOverlay">
+		<div id="paginationOverlay" style="display: none;z-index: 9998; position: absolute; background: #FFFFFF url({!URLFOR($Resource.TeamsResources, '/images/layout/small_loader.gif')}) no-repeat scroll center center; opacity: 0.8;" class="paginationOverlay">
 			<div class="loader"></div>
 		</div>
 		<div id="memberListContainer">
@@ -789,10 +806,11 @@
     </apex:outputpanel>
 	
 	<script>
+
 		document.observe('dom:loaded',startupFunc);
 		if(inEdition) {
 			document.observe('dom:loaded', setTimeout('hideOverMemberTab()', 1000));
-			setTimeout('showAddMembersSection()', 1000);
+			setTimeout('showAddMembersSection()', 1000 );
 		}
 		
 		document.observe('dom:loaded', setTimeout('setAccessTypeChecked()', 1000));

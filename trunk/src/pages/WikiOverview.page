@@ -227,10 +227,10 @@
 																	<table border="0" style="width:100%;">
 																		<tr>
 																			<td width="110px">
-																				<apex:commandLink value="Join" action="{!joinWiki}" rendered="{!IF( AND( NOT( item.isMember ), OR( item.isPublic, item.isAdmin )), true,false)}" onclick="changeJoinStatus(this)" oncomplete="refreshJoinList();" >
+																				<apex:commandLink value="Join" action="{!joinWiki}" rendered="{!IF( AND( NOT( item.isMember ), OR( item.isPublic, item.isAdmin )), true,false)}" onclick="changeStatusToLoading(this)" oncomplete="refreshJoinList();" >
 																					<apex:param name="wid" value="{!item.Id}" />
 																				</apex:commandLink>
-																				<apex:commandLink value="Unjoin" action="{!unjoinWiki}" rendered="{!IF(item.isMember,true,false)}" onclick="changeJoinStatus(this);" oncomplete="refreshJoinList();" >
+																				<apex:commandLink value="Unjoin" action="{!unjoinWiki}" rendered="{!IF(item.isMember,true,false)}" onclick="changeStatusToLoading(this);" oncomplete="refreshJoinList();" >
 																					<apex:param name="wid" value="{!item.Id}" />
 																				</apex:commandLink>  
 																				<apex:outputpanel rendered="{!IF(item.IsAdmin,true,false)}" >
@@ -374,6 +374,9 @@
 	</apex:outputpanel>
 	<script>
 		readPortalCSSRules();
+		function changeStatusToLoading(o){
+			$(o.id).innerHTML = "Loading...";  
+		}
 	</script>
 
 	
