@@ -21,6 +21,7 @@
 	<!-- Modal JS -->
 	<script type="text/javascript" src="{!URLFOR($Resource.commonResources, 'inc/js/modal.js')}"></script>
 	<link rel="stylesheet" media="screen" href="{!URLFOR($Resource.commonResources, 'inc/css/modal.css')}" />
+	<link rel="stylesheet" media="screen" href="{!URLFOR($Resource.commonResources, 'inc/css/breadcrumbs.css')}" />
 	 
 	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/wikiTeamOverview.css')}" />
 	
@@ -98,6 +99,12 @@
 			<div class="PageBlock">	
 				<!-- Left Sidebar  -->
 				<table border="0" class="bodyTable" >
+					<tr>
+						<td colspan="2" class="Breadcrums">
+							<a href="/apex/WikiOverview">Wiki Overview</a> > <span>Wiki Team Overview</span>
+						</td>
+						
+					</tr>
 					<tr>
 						<td valign="top" class="sideBarTD">
 							

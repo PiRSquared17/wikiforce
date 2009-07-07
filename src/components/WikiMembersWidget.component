@@ -186,7 +186,7 @@
     					<!-- Save and Cancel Buttons -->
     					<div class="overlayFromButtons" align="center">
     						<apex:commandButton action="{!saveMembers}"
-    							oncomplete="memberHideSwirly('swirlyDiv');setTimeout('showSwirly(\'paginationOverlay\');setHeight(\'memberListContainer\', \'paginationOverlay\');', 5000);"
+    							oncomplete="memberHideSwirly('swirlyDiv');setHeight('memberListContainer', 'paginationOverlay');showSwirly('paginationOverlay');"
     							styleclass="allButtons actionButtons" value="Send"
     							rerender="membersListContainer, saveMembersSync, auxPanel, newMemberForm" /> 
     							<input class="allButtons cancelButtons" type="button" value="Cancel" onclick="modal.close();" />

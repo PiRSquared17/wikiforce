@@ -355,7 +355,7 @@ public class WikiCreateWikiController {
     	try{
 	    	validSizePicture = true;
 			validTypePicture = true; 
-			System.debug('Wiki Saving..');
+			System.debug('WIKI SAVING..');
 			if (document.name == null || document.name == '' || document.BodyLength > MAX_SIZE || 
 					!(document.ContentType == 'image/jpeg' || document.ContentType == 'image/pjpeg' 
 					|| document.ContentType == 'image/gif' 
@@ -365,11 +365,11 @@ public class WikiCreateWikiController {
 				if (document.BodyLength > MAX_SIZE) {
 					validSizePicture = false;
 				}
-				
-				if(document.ContentType != ''){
-					if (document.ContentType == 'image/jpeg' || document.ContentType == 'image/pjpeg' 
-						|| document.ContentType == 'image/gif' || document.ContentType == 'image/png' 
-						|| document.ContentType == 'image/x-png') {
+				System.debug('File Upload: '+ document.ContentType);
+				if(document.ContentType != null){
+					if (document.ContentType != 'image/jpeg' || document.ContentType != 'image/pjpeg' 
+						|| document.ContentType != 'image/gif' || document.ContentType != 'image/png' 
+						|| document.ContentType != 'image/x-png') {
 							System.debug('INVALID PIC');
 						validTypePicture = false;
 					} 
@@ -395,7 +395,7 @@ public class WikiCreateWikiController {
 					return null;
 				}
 			}
-		 			
+		 	System.debug(theWiki.Type__c);		
 			if(theWiki.Type__c == 'open'){
     			List<WikiProfile__c> wp = [SELECT Name, Id 
     										FROM WikiProfile__c 
