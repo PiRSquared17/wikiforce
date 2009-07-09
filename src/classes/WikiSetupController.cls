@@ -132,14 +132,26 @@ public class WikiSetupController {
 	*
 	*/
 	public Boolean canView(){		
-		return  this.getIfCanModifyAllData() || savedProfilesStr[0].CanViewButtonNew__c.contains( UserInfo.getProfileId());
+		if( savedProfilesStr.size() > 0 )
+			if(savedProfilesStr[0].CanViewButtonNew__c != null)
+				return  this.getIfCanModifyAllData() || savedProfilesStr[0].CanViewButtonNew__c.contains(UserInfo.getProfileId());
+
+
+		return  this.getIfCanModifyAllData();
+		
 	}	
 
 	/**
 	*
 	*/
 	public Boolean getIfCanModifyAllData(){
-		return [Select id, Profile.PermissionsModifyAllData From User where id =: UserInfo.getUserId() limit 1].Profile.PermissionsModifyAllData; 		
+		List<User> aProfile = new List<User>();
+		aProfile = [Select id, Profile.PermissionsModifyAllData From User where id =: UserInfo.getUserId() ];
+		
+		if( aProfile.size() > 0 ) 		
+			return aProfile[0].Profile.PermissionsModifyAllData;
+		else
+			return false;
 	}	
 
 }
