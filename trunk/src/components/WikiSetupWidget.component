@@ -7,7 +7,7 @@
 		padding-left: 20px;
 	}
 	</style>
-	<apex:outputPanel >
+	<apex:outputPanel rendered="{!IfCanModifyAllData}">
 		<div class="sidebar">
 			<div class="teamWidget mySmallWidget" >
 				<!-- Widget Title -->		

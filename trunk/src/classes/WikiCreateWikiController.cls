@@ -150,7 +150,7 @@ public class WikiCreateWikiController {
     	return hasMembers;
     }
 
-	//Flag to determine if is in edition.
+	//Flag to determine if is in edition.   
     Boolean inEdition = false; 
     
     /**

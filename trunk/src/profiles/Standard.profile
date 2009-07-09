@@ -192,7 +192,7 @@
     </classAccesses>
     <classAccesses>
         <apexClass>WikiSetupController</apexClass>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>WikiSubscribeController</apexClass>
