@@ -659,6 +659,12 @@
 						</div>
 					</apex:form>
 				</apex:outputpanel>
+				<style>
+					table.pageList thead td {
+						border-bottom:1px #D1D1D1 solid !important;
+						border-top:1px #D1D1D1 solid !important;
+					}
+				</style>
 				<apex:form id="membersListForm">
 					<table border="0" cellspacing="0" cellpadding="2px" class="pageList">
 						<thead>
