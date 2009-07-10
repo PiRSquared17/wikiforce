@@ -9,7 +9,7 @@
 		var imagenes = new Array(wikiResourcePath + "/images/layout/rc_boxes/arrow_down.gif");
 		var lista_imagenes = new Array();
 	</script>
-
+  
 	<!-- Scripts -->
 	<apex:includeScript value="{!URLFOR($Resource.WikiResource, 'inc/js/common.js')}" />
 	<apex:includeScript value="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}" />
@@ -41,7 +41,7 @@
 	}	
 	</style>
 	
-
+ 
 	<!-- 		  Overlay		-->
 	<div class="UPF__overlay__" id="UPF__overlay__" style="display: none;">
 	</div>
@@ -548,6 +548,7 @@
 												<tr>
 													<td>
 														<apex:commandLink action="{!DeleteAttach}"
+															rendered="{!IF(userPermissions.canManage == true,true,false)}"
 															onclick="setImage('{!item5.Id}'); showLoader();" oncomplete="hideLoader(); setImage('');"
 															rerender="attachmentsPanel" value="Delete">
 															<apex:param name="idAttach" value="{!item5.Id}" />

@@ -36,7 +36,6 @@
 	<!-- Delete Forum -->
 	<c:WikiOverlayDeleteWiki pageFrom=""/>
 	
-	
 	<div class="BodyPage">
 		
 		<!-- Overlay -->
@@ -217,6 +216,7 @@
 															</apex:form>
 														</apex:outputpanel>
 													</div>
+													
 													<hr style="border: 0px solid ; background-color: #333434; height: 1px;"/>
 													<!-- Wiki Sites -->
 													<apex:outputpanel id="wikiSitesForm">
@@ -275,7 +275,7 @@
 													<div class="pagination">
 														<apex:outputpanel id="paginationPanelBottom">
 															<apex:form id="paginationFormBottom">
-																<div class="pages"  style="margin-left:45px; width:300px;">
+																<div class="pages" align="center">
 																	<ul>
 																		<li>
 																			<apex:commandLink action="{!firstPage}" rerender="wikiSitesPanel" rendered="{!NOT(currentPagination == 1)}" onclick="switchOverlay(true);" oncomplete="switchOverlay(false);" >
