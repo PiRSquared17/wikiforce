@@ -16,6 +16,7 @@ public class WikiPageController {
 	public Integer maxView = 5;	  
 
    	public Info infoWP = new Info();
+   	String currentUser =  UserInfo.getUserId();
 		
 	public String linkpart1 = 'switchOverlay(true);;A4J.AJAX.Submit(\'_viewRoot\',\'WikiPage:auxForm\',event,{\'parameters\':{\'WikiPage:auxForm:auxLink\':\'WikiPage:auxForm:auxLink\',\'idWP2\':\'';
 	public String linkpart2 = '\'} ,\'actionUrl\':\'/apex/WikiPage?javax.portlet.faces.DirectLink=true\',\'oncomplete\':function(request,event,data){switchOverlay(false);}} );return false;\" name=\"WikiPage:auxForm:auxLink\" id=\"WikiPage:auxForm:auxLink\" href=\"#\">';
@@ -39,6 +40,20 @@ public class WikiPageController {
 	*/
 	public Boolean getCurrentUsIsOwner(){
 		return currentUsIsOwner;
+	}
+	
+	/**
+	*@param String currentUser
+	*/
+	public void setCurrentUser(String currentUser){
+		this.currentUser = currentUser;
+	}
+	
+	/**
+	*@return String
+	*/
+	public String getCurrentUser(){
+		return currentUser;
 	}
 		
 	/**
@@ -408,7 +423,7 @@ public class WikiPageController {
 			WikiPage__c currentWP = new WikiPage__c();
 			Info currentInfo = new Info();
 			
-			currentInfo = getInfoWP();
+			currentInfo = getInfoWiki();
 					
 			currentWP = [ SELECT Name, ShortDescription__c FROM wikiPage__c WHERE Id =: paramIdWP ];
 			currentWP.Name = currentInfo.Name;
@@ -619,7 +634,7 @@ public class WikiPageController {
    	/**
 	*@return Info
 	*/
- 	public Info getInfoWP () {
+ 	public Info getInfoWiki () {
  		return infoWP;
  	}
 
