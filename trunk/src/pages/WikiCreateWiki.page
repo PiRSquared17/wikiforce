@@ -539,7 +539,7 @@
 												</apex:selectRadio>
 												
 												
-												<hr class="filterHR" style="margin-left:50px !important;"/>
+												<hr class="filterHR" style="margin-left:50px !important;color: #E1E1E2;"/>
 												<div class="DivBtn">
 																						
 													<div align="center">
@@ -641,7 +641,7 @@
 				</apex:outputPanel>
 			</div>
 			<apex:outputpanel rendered="{!IF(AND(prevPageShow,nextPageShow),false,true)}">
-				<hr class="filterHR" />
+				<hr class="filterHR" style="color: #E1E1E2;"/>
 			</apex:outputpanel> 
 			<apex:outputpanel id="membersList">
 				<apex:outputpanel styleClass="pagination" layout="block"
@@ -756,7 +756,7 @@
 						</tbody>
 					</table>
 				</apex:form>
-				<hr class="filterHR" />
+				<hr class="filterHR" style="color: #E1E1E2;"/>
 				<apex:outputpanel styleClass="pagination" layout="block" rendered="{!IF(AND(prevPageShow,nextPageShow),false,true)}">
 					<apex:form >
 						<div class="pages">
@@ -777,7 +777,7 @@
 					</apex:form>
 				</apex:outputpanel>
 				<apex:outputpanel rendered="{!IF(AND(prevPageShow,nextPageShow),false,true)}">
-					<hr class="filterHR" />
+					<hr class="filterHR" style="color: #E1E1E2;"/>
 				</apex:outputpanel>
 				<table width="100%">
 					<tr>

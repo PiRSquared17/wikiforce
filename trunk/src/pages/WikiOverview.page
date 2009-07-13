@@ -172,7 +172,7 @@
 														</apex:form>
 													</div>
 												</div>
-												<hr class="filterHR">
+												<hr class="filterHR" style="color: #E1E1E2;">
 												<apex:outputpanel styleclass="noWikisYet" layout="block" rendered="{!IF(cntPagination == 0, true, false)}">
 													No {!$ObjectType.Wiki__c.LabelPlural} Yet.
 												</apex:outputpanel>
@@ -217,7 +217,7 @@
 														</apex:outputpanel>
 													</div>
 													
-													<hr style="border: 0px solid ; background-color: #333434; height: 1px;"/>
+													<hr style="color: #E1E1E2;border: 0px solid ; background-color: #E1E2E1; height: 1px;"/>
 													<!-- Wiki Sites -->
 													<apex:outputpanel id="wikiSitesForm">
 														<apex:form >
