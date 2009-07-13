@@ -408,7 +408,7 @@ public class WikiPageController {
 			WikiPage__c currentWP = new WikiPage__c();
 			Info currentInfo = new Info();
 			
-			currentInfo = getInfoWiki();
+			currentInfo = getInfoWP();
 					
 			currentWP = [ SELECT Name, ShortDescription__c FROM wikiPage__c WHERE Id =: paramIdWP ];
 			currentWP.Name = currentInfo.Name;
@@ -619,7 +619,7 @@ public class WikiPageController {
    	/**
 	*@return Info
 	*/
- 	public Info getInfoWiki () {
+ 	public Info getInfoWP () {
  		return infoWP;
  	}
 
@@ -666,8 +666,25 @@ public class WikiPageController {
 		String id;
         String lastModifiedDate;
         String lastModifiedBy;
+        String createdBy;
         String createdDate;
         String lastModifiedById;
+        
+        /**
+        * Returns who created the attachment
+        *@return String
+        */
+        public String getCreatedBy () {
+        	return createdBy;
+        }
+        
+        /**
+        * Sets who created the attachment
+        *@param String
+        */
+        public void setCreatedBy (String createdBy) {
+        	this.createdBy = createdBy;
+        }
         
         /**
         *@return String
@@ -774,13 +791,18 @@ public class WikiPageController {
 	*/
     public List<AttachmentInfo> getAttachments() {
     	
-    	List<Attachment> Attachments = [select name, id, parentid, ContentType, LastModifiedDate, LastModifiedBy.Id, LastModifiedBy.Name, CreatedDate from Attachment where parentid=:idWikiPage order by name];		
+    	List<Attachment> Attachments = [select name, id, parentid, ContentType, LastModifiedDate, 
+    										LastModifiedBy.Id, LastModifiedBy.Name, CreatedDate, CreatedById 
+    										from Attachment 
+    										where parentid=:idWikiPage 
+    										order by name];		
 		List<AttachmentInfo> infos = new List<AttachmentInfo>();
 
 		for (Attachment item: Attachments){	
             AttachmentInfo info = new AttachmentInfo();
             info.setId(item.Id);
             info.setName(item.Name);
+            info.setCreatedBy(item.CreatedById);
             info.setCreatedDate(item.CreatedDate.format());
             info.setLastModifiedDate(item.LastModifiedDate.format());
             info.setLastModifiedBy(item.LastModifiedBy.Name);

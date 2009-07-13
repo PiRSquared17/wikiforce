@@ -543,12 +543,12 @@
 								<apex:repeat value="{!attachments}" var="item5">
 									<tr>
 										<td class="delete">
-											<!-- Temporal Script. Should be in WikiPage.js -->
+											
 											<table>
 												<tr>
-													<td>
+													<td>{!userPermissions.canManage}  item:{!item5.createdBy} user:{!$User.Id}
 														<apex:commandLink action="{!DeleteAttach}"
-															rendered="{!IF(userPermissions.canManage == true,true,false)}"
+															rendered="{!IF(userPermissions.canManage == true || item5.createdBy == $User.Id,true, false)}"
 															onclick="setImage('{!item5.Id}'); showLoader();" oncomplete="hideLoader(); setImage('');"
 															rerender="attachmentsPanel" value="Delete">
 															<apex:param name="idAttach" value="{!item5.Id}" />
