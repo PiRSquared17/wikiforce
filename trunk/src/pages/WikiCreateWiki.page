@@ -1,4 +1,56 @@
 <apex:page id="WikiCreateWiki" controller="WikiCreateWikiController" tabStyle="Wiki__c" sidebar="false">
+    
+    <script>
+    function showHideElement2(div,twisty)
+	{
+	if(div.style.visibility == 'hidden')
+		{
+		div.style.visibility = 'visible';
+		twisty.src = globalArrowDown;
+		document.twistImage.src = globalArrowDown;
+		 }
+	else
+		{
+		div.style.visibility = 'hidden';
+		twisty.src = globalArrowUp;
+		document.twistImage.src = globalArrowUp;
+		}
+	}
+	
+	var wikiName
+	var wikiDescription
+	var termsOfUse
+	var allowCustomerPortalUsers
+	var allowPartnerPortalUsers
+	var wikiAccessOpen
+	var wikiAccessClosed
+	var wikiAccessPrivate
+	
+	//setFields() and getFields() are used to remember the info when swapping between  tabs
+	function setFields(){
+		wikiName = document.getElementById('{!$Component.createNewTeamForm.TeamName}').value
+		wikiDescription = document.getElementById('{!$Component.createNewTeamForm.TeamDescription}').value
+		termsOfUse = document.getElementById('imageRights').checked
+		allowCustomerPortalUsers = document.getElementById('{!$Component.createNewTeamForm.allowCustomer}').checked
+		allowPartnerPortalUsers = document.getElementById('{!$Component.createNewTeamForm.allowPartner}').checked
+		wikiAccessOpen = document.getElementById('openTeam').checked
+		wikiAccessClosed = document.getElementById('closedTeam').checked
+		wikiAccessPrivate = document.getElementById('privateTeam').checked
+	}
+	
+	function getFields(){
+		document.getElementById('{!$Component.createNewTeamForm.TeamName}').value = wikiName
+		document.getElementById('WikiCreateWiki:createNewTeamForm:TeamDescription').value = wikiDescription
+		document.getElementById('imageRights').checked = termsOfUse
+		document.getElementById('{!$Component.createNewTeamForm.allowCustomer}').checked = allowCustomerPortalUsers
+		document.getElementById('{!$Component.createNewTeamForm.allowPartner}').checked = allowPartnerPortalUsers
+		document.getElementById('openTeam').checked = wikiAccessOpen
+		document.getElementById('closedTeam').checked = wikiAccessClosed
+		document.getElementById('privateTeam').checked = wikiAccessPrivate
+	}
+	
+    </script>
+    
     <script> 
     
         inEdition = false;
@@ -46,6 +98,22 @@
         }
 
      </script>
+     
+     <script type="text/javascript">
+     
+     function setRadioButtons(){
+     		document.getElementById('openTeam').checked = document.getElementById('WikiCreateWiki:createNewTeamForm:accessRadioButton:0').checked
+			document.getElementById('closedTeam').checked = document.getElementById('WikiCreateWiki:createNewTeamForm:accessRadioButton:1').checked
+			document.getElementById('privateTeam').checked = document.getElementById('WikiCreateWiki:createNewTeamForm:accessRadioButton:2').checked
+			
+     }
+													
+		document.observe('dom:loaded', function(){
+			setTimeout("setRadioButtons()", 1000)
+		});
+		
+												
+	</script>
      
 	<!-- Scripts --> 
 	<apex:includeScript value="{!URLFOR($Resource.WikiResource, 'inc/js/common.js')}"/>
@@ -153,7 +221,7 @@
 				<table border="0" class="bodyTable" cellpadding="0" cellspacing="0">
 					<tr>
 						<td colspan="2" class="Breadcrums">
-							<a href="/apex/WikiOverview">Wiki Overview</a> > <a href="/apex/WikiTeamOverview?id{!Wiki.Id}">Wiki Team Overview</a> > <span>Wiki Create Wiki</span>
+							<a href="/apex/WikiOverview">Wiki Overview</a> > <a href="/apex/WikiTeamOverview?tid={!Wiki.Id}">Wiki Team Overview</a> > <span>Wiki Create Wiki</span>
 						</td>
 						
 					</tr>
@@ -176,22 +244,23 @@
 										<ul class="tabs">
 											<li class="selected" id="myTeamTab">
 												<apex:commandLink id="My_teams" action="{!switchTabsController}" value="Settings" 
-																	onclick="switchTabs('myTeamTab');setAccessTypeChecked()" 
-																	rerender="holder">
+																  onclick="switchTabs('myTeamTab');setAccessTypeChecked(); getFields()" 
+																  rerender="holder">
 													<apex:param name="allTeams" value="false" />
 												</apex:commandLink>
 											</li>
-											<li id="allTeamTab" >
+											<apex:outputpanel rendered="{!IF(inEdition == false, false, true)}" >
+											<li id="allTeamTab">
 												<div id="overTabMembers" style="cursor:auto">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-												<apex:commandLink rendered="{!inEdition}" id="allTeamsLink" action="{!switchTabsController}" value="Members" onclick="switchTabs('allTeamTab');setPaginatorToCenter()"
+												<apex:commandLink rendered="{!inEdition}" id="allTeamsLink" action="{!switchTabsController}" value="Members" onclick="setFields(); switchTabs('allTeamTab');setPaginatorToCenter();"
 																	 rerender="holder" styleClass="{!IF((hasMembers == false || inEdition),'disable','')}" >
 													<apex:param name="allTeams" value="true" />
 												</apex:commandLink>
-												
 												<apex:outputpanel rendered="{!NOT(inEdition)}" styleClass="disable">
 													Members
 												</apex:outputpanel>
-											</li>					
+											</li>
+											</apex:outputpanel>				
 										</ul>
 									</apex:form>
 								</div>
@@ -263,7 +332,7 @@
 														</td>
 														<td></td>
 														<td colspan="2">&nbsp;
-															<apex:inputTextarea value="{!Wiki.Description__c}" id="TeamDescription" cols="38" rows="4" style="height: 83px; width: 430px" onkeyup="countStringLimit(this, 'stringSizeCounter');" />
+															<apex:inputTextarea value="{!Wiki.Description__c}" id="TeamDescription" cols="38" rows="4" style="height: 83px; width: 430px" onkeyup="countStringLimit2(this, 'stringSizeCounter');" />
 														</td>
 													</tr>
 													<tr>
@@ -272,7 +341,7 @@
 														<td colspan="2">&nbsp;
 															<span id="warning" class="explain">(32k character limit) - Characters remaining:</span>
 															<span class="explain" id="stringSizeCounter">32000</span>
-															<span class="explain classColorRed" style="display:none;" id="numberOfCharacterExceeded">The number of characters was exceeded</span>
+															<span class="explain" style="display:none;color:red;" id="numberOfCharacterExceeded">The number of characters was exceeded</span>
 															<br />
 														</td>
 													</tr>
@@ -324,8 +393,7 @@
 																</tr>
 																<tr>
 																	<td>
-																		<span class="inputInfoSubDescription" style="padding-left: 10px;">Type the path of the file or
-																		click the Browse button to find the file.</span>
+																		<span class="inputInfoSubDescription" style="padding-left: 10px;"></span>
 																	</td>
 																</tr>
 																<tr>
@@ -333,7 +401,7 @@
 																</tr>
 																<tr>
 																	<td class="paddingLeft" id="imageTeamContainer" >
-																		<apex:inputFile value="{!document.body}" id="teamImage" filename="{!document.name}" contentType="{!document.contentType}" fileSize="{!document.BodyLength}"/> 
+																		<apex:inputFile value="{!document.body}" id="teamImage" filename="{!document.name}" onkeydown="this.blur();" contentType="{!document.contentType}" fileSize="{!document.BodyLength}"/>  
 																		<br />
 																		<apex:outputpanel rendered="{!NOT validTypePicture}">
 																		<span id="fileExtensionError" class="errorText">
@@ -460,17 +528,27 @@
 												<span class="inputInfoSubDescription">&nbsp;</span>
 											</td>
 										</tr>
+										
+										<tr style="display: none">
+											<td></td>
+											<td></td>
+											<td>
+												<apex:selectRadio value="{!access}" layout="pageDirection" id="accessRadioButton">
+													<apex:selectOptions value="{!accessOptions}" />
+												</apex:selectRadio>
+											</td>
+										<tr>
 										</apex:outputPanel>
 											
 													<tr>
 						                                <td class="alignTop"><span class="inputInfoTitle">Access</span></td>
 														<td></td>
 						                                <td colspan="2">
-						                                	&nbsp;<input type="radio" id="openTeam" name="access" onclick="setAccess(this);" />
+						                                	&nbsp;<input type="radio" id="openTeam" name="access" onclick="setAccessItem('0'); setAccess(this); " />
 						                                	
 						                                	<span class="inputInfoDescription">Open</span>
 						                                </td>
-													</tr>  	
+													</tr>  
 													<tr>
 						                                <td class="alignTop"><span class="inputInfoTitle"></span></td>
 														<td></td>
@@ -485,7 +563,7 @@
 						                                <td  class="alignTop"><span class="inputInfoTitle"></span></td>
 														<td></td>
 						                                <td colspan="2">
-						                                	&nbsp;<input type="radio" id="closedTeam" name="access" onclick="setAccess(this);" />
+						                                	&nbsp;<input type="radio" id="closedTeam" name="access" onclick="setAccessItem('1'); setAccess(this);" />
 						                                	<span class="inputInfoDescription">Closed</span>
 						                                </td>
 													</tr>   
@@ -506,10 +584,11 @@
 						                                <td class="alignTop"><span class="inputInfoTitle"></span></td>
 														<td></td>
 						                                <td colspan="2">
-						                                	&nbsp;<input type="radio" id="privateTeam" name="access" onclick="setAccess(this);" />
+						                                	&nbsp;<input type="radio" id="privateTeam" name="access" onclick="setAccessItem('2'); setAccess(this); " />
 						                                	<span class="inputInfoDescription">Private</span>
 						                                </td>						                               
 													</tr>   
+													
 													<tr>
 						                                <td class="alignTop"><span class="inputInfoTitle"></span></td>
 														<td></td>
@@ -602,12 +681,12 @@
 			<div class="border_body_top"></div>
 			<br />
 			<div style="position: relative; overflow: hidden"><img
-				id="twistImage" style="vertical-align: middle;" class="twistImg"
-				onclick="showHideElement(document.getElementById('filterDiv'),this);"
+				name="twistImage" id="twistImage" style="vertical-align: middle;" class="twistImg"
+				onclick="showHideElement2(document.getElementById('filterDiv'),this);"
 				src="{!URLFOR($Resource.commonResources, 'images/arrows/arrow_down.gif')}"
 				title="Hide Section" alt="Hide Section" /> &nbsp; <a
 				href="javascript:;"
-				onclick="showHideElement(document.getElementById('filterDiv'),document.getElementById('twistImage'));"
+				onclick="showHideElement2(document.getElementById('filterDiv'),document.getElementById('twistImage'));"
 				class="filterLink">Filter</a></div>
 			<div class="filter" id="filterDiv">
 				<apex:outputPanel id="letterFilterContainer">
@@ -745,7 +824,7 @@
                                         </apex:outputpanel>
                                     </td>
                                     <td class="member_detail_description">
-                                       <a href="https://na1.salesforce.com/{!item.userId}" class="member_detail_description_underline">{!item.name}</a>
+                                       <a href="https://{!domain}/{!item.userId}" class="member_detail_description_underline">{!item.name}</a>
                                     </td>
                                     <td class="member_detail_description"></td>
                                     <td class="member_detail_description">{!item.alias}</td>
@@ -851,6 +930,11 @@
 				deleteAvatarNow();
 			}
 			return cond;
+		}
+		
+		function setAccessItem(index){
+											
+			document.getElementById('WikiCreateWiki:createNewTeamForm:accessRadioButton:'+index).checked = true
 		}
 		
 	</script>

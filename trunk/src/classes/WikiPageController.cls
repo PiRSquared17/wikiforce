@@ -25,15 +25,46 @@ public class WikiPageController {
 	
 	public Boolean currentUsCanManage = false;
 	public Boolean currentUsIsOwner = false;
+	
+	private String domain;
+	
+	private Boolean isParentOwner;
+	
 	/**
 	* Costructor
 	*/
 	public WikiPageController () {
+		
+		isParentOwner = userPermissions.getCanManage();
+	
 		contructMethods();
+		
 		// Evaluatin "can manage" and "owner"
 		currentUsIsOwner = infoWP.getCreatedById() == UserInfo.getUserId() ;
 		currentUsCanManage = userPermissions.getCanManage();
+		
 	}
+	
+	/**
+    *@return Boolean
+    */
+    public Boolean getIsParentOwner(){
+        return this.isParentOwner;
+    }
+    
+    /**
+	*@param Boolean isParentOwner
+	*/
+	public void setIsParentOwner(Boolean isParentOwner){
+		this.isParentOwner = isParentOwner;
+	}
+	
+	/**
+    *@return String
+    */
+    public String getDomain(){
+        return this.domain;
+    }
 	
 	/**
 	*@return bool is instance owner
@@ -146,6 +177,34 @@ public class WikiPageController {
        		infoGen();
 		
 			genPermissions(wikiPageBody.PageCreatedBy__c);
+			
+			String wikiPageParentId  = wikiPageBody.Parent__c;
+			
+			List<WikiPage__c> parentUserPage = new List<WikiPage__c>();
+			List<WikiPage__c> parentPage = new List<WikiPage__c>();
+			
+			Integer i = 0;
+			
+			while(wikiPageParentId != null && !isParentOwner && i < 10){
+				
+				parentUserPage = [SELECT Id, PageCreatedBy__c
+							      FROM WikiPage__c 
+							      WHERE id =:wikiPageParentId];
+							  
+							  
+				if(parentUserPage[0].PageCreatedBy__c == currentUser){
+					isParentOwner = true;
+				}else{
+					parentPage = [SELECT Id, Parent__c 
+							  	  FROM WikiPage__c 
+							 	  WHERE id =:wikiPageParentId];
+							  
+					wikiPageParentId  = parentPage[0].Parent__c;
+				}
+				
+				i++;
+				
+			}
 			
 		}
 	}
@@ -282,7 +341,7 @@ public class WikiPageController {
     	}
  		
   		html = wikiHTML.Body__c;
-  		System.debug('html wikipage ------------------------ >>>>>>>>>>>>>>>>'+html);
+  		
  		ParseHtml ph =new ParseHtml();
  		ph.setHtml(html);
  		ph.setIdWikiPage(idWikiPage);
@@ -290,7 +349,6 @@ public class WikiPageController {
  		ph.parseHtml();
  		html=ph.html;
  		
- 		System.debug('html wikipage ------------------------ >>>>>>>>>>>>>>>>'+html);
  	}   
  	
  	/**
@@ -397,7 +455,7 @@ public class WikiPageController {
 	*/ 
 	public void SaveNew () {
 		TeamUtil.hostName = TeamUtil.getHost(ApexPages.currentPage());
-		System.debug( ')))>' + TeamUtil.hostName );
+		
 		newWP.Parent__c = idWikiPage;
 		newWP.Wiki__c = idWikiSite; 
 		newWP.Body__c = '=== Congratulations! === \n You created a new wiki page for your team. Begin by clicking the "Edit" button above to modify this page.';
@@ -901,16 +959,17 @@ public class WikiPageController {
    	/* ---------------------------- */  
    	
    	public void DeleteAttach () { 
-
-		if( currentUsCanManage || currentUsIsOwner )
-		{
-	   		String idAttach = System.currentPageReference().getParameters().get('idAttach');
-	   		Attachment delAttach;
-	   		delAttach = [select Id, Name from Attachment where id =: idAttach ];
+   		
+   		String idAttach = System.currentPageReference().getParameters().get('idAttach');
+	   	Attachment delAttach;
+	   	delAttach = [select Id, Name, CreatedById from Attachment where id =: idAttach ];
+ 
+		if( currentUsCanManage || delAttach.CreatedById == currentUser){
+	   		
 	   		delete delAttach; 
 		}
 		else
-			throw new CustomException( 'Insufient privilegies' );
+			throw new CustomException( 'Insufficient privilegies' );
    	}
  
    	/* ---------------------------- */

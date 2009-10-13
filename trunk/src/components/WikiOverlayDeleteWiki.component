@@ -21,7 +21,10 @@
 				</a>
 			</div>
 		</div>
-		<div class="overlayMainContent">
+		<div id="deleting" class="deleting" style="display: none;">
+			Deleting...
+		</div>
+		<div id="overlayMainContent" class="overlayMainContent">
 			<div class="overlayFormContent">
 				<b>Are you sure you want to delete this wiki?</b><br />
 				<span>Once a wiki is deleted, wiki pages and comments are not recoverable</span>
@@ -29,7 +32,7 @@
 			<div class="overlaySeparateLine"></div>
 			<div class="overlayFromButtons" align="center">
 				<span id="deleteButton">
-					<input type="button" class="allButtons actionButtons" value="Continue and delete wiki" onclick="statusDeleteWiki(this); removeWiki('id');" />
+					<input type="button" class="allButtons actionButtons" value="Continue and delete wiki" onclick="statusDeleteWiki(); removeWiki('id');" />
 				</span>
 				<input type="button" class="allButtons cancelButtons" value="Cancel" onclick="modal.close(); "/>
 			</div>	

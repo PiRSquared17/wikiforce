@@ -198,4 +198,5 @@
     <relatedObjects>AccountId</relatedObjects>
     <showEmailCheckbox>true</showEmailCheckbox>
     <showRunAssignmentRulesCheckbox>true</showRunAssignmentRulesCheckbox>
+    <showSubmitAndAttachButton>true</showSubmitAndAttachButton>
 </Layout>

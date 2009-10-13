@@ -6,12 +6,23 @@ public class WikiPageLinksController {
     public String idWikiPage = System.currentPageReference().getParameters().get('idWP');
     public String teamId = '';
     
+    private String domain;
+    
 	/**
 	* Costructor
 	*/
 	public WikiPageLinksController () {
 		genTeamId();
+		
+		domain = TeamUtil.getDomain();
 	} 	
+	
+	/**
+    *@return String
+    */
+    public String getDomain(){
+        return this.domain;
+    }
  	
  	/**
  	* Read Team for wiki page

@@ -5,10 +5,12 @@ trigger WikiPageAfterUpdate on WikiPage__c ( after update )
         try 
         {
         	WikiSubscribersEmailServices wEmail = new WikiSubscribersEmailServices();
+        	System.debug('+++++++++++++++++++ Trigger outside for');
             for ( WikiPage__c wp : Trigger.new ) 
             {
             	wEmail.sendNewPageMessage( 'updatePage',  wp.Id );  
             	wEmail.sendModifiedPageMessage( wp.Id, 'update' );
+            	System.debug('+++++++++++++++++++ Trigger inside for '+ wp.Id);
             }			
 		} 
 		finally 

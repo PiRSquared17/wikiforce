@@ -4,6 +4,29 @@ public class WikiCreateWikiController {
 	List<Group> allowPartnetActivated = new List<Group>();
 	public static Boolean allowCustomer = false;
 	public static Boolean allowPartner = false;  
+	
+	private String domain;
+	
+	public String access = 'Open';
+	
+	public List<SelectOption> getAccessOptions() {
+		
+		List<SelectOption> options = new List<SelectOption>(); 
+		
+		options.add(new	SelectOption('Open','Open')); 
+		options.add(new SelectOption('Closed','Closed')); 
+		options.add(new SelectOption('Private','Private')); 
+		
+		return options;
+	}
+	
+	public String getAccess() {
+		return access;
+	}
+	
+	public void setAccess(String access) { 
+		this.access = access; 
+	}
 
 	/**
 	*@param Boolean
@@ -55,28 +78,9 @@ public class WikiCreateWikiController {
 		return allowPartnetActivated.size() > 0;
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	public String getDomain(){
+		return this.domain;	
+	}
 
     //Get id from team item
     String param = System.currentPageReference().getParameters().get('id');
@@ -106,6 +110,8 @@ public class WikiCreateWikiController {
     	
 		allowCustomerActivated = [ SELECT Id FROM Group WHERE Type = 'AllCustomerPortal' ];
 		allowPartnetActivated = [ SELECT Id FROM Group WHERE Type = 'PRMOrganization' ]; 
+		
+		domain = TeamUtil.getDomain();
  
         if (param != null){
         	setWiki(param);
