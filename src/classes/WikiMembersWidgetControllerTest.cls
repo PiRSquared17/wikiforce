@@ -88,9 +88,11 @@
 			member.setMessage( 'aaaaaaaaaaaa' );
 			member.getProfileId();
 			member.setProfileId( 'Public Profile' );
-
+			delete GenerateEnvironmentTest.wiki;
 	
             team.saveMembers();            
+            
+            
             team.saveMembers();            
 			
 			team.genPermissions();

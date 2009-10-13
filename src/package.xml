@@ -110,7 +110,15 @@
     </types>
     <types>
         <members>*</members>
+        <name>Portal</name>
+    </types>
+    <types>
+        <members>*</members>
         <name>Profile</name>
+    </types>
+    <types>
+        <members>unfiled$public</members>
+        <name>Report</name>
     </types>
     <types>
         <members>*</members>
@@ -128,5 +136,5 @@
         <members>*</members>
         <name>Workflow</name>
     </types>
-    <version>14.0</version>
+    <version>16.0</version>
 </Package>

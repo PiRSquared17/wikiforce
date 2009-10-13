@@ -9,6 +9,8 @@ public without sharing class WikiPageEditController {
     public String idWikiPage = System.currentPageReference().getParameters().get('id'); 
 	public WikiPage__c editWP = new WikiPage__c();   
 	public Replace replace = new Replace();
+	
+	public String domain;
 
    	// SHARING RULES
 	public UserPermissions userPermissions = new UserPermissions();
@@ -17,7 +19,9 @@ public without sharing class WikiPageEditController {
     * Constructor
     */
     public WikiPageEditController () {
- 		constWikiPageEdit();		
+ 		constWikiPageEdit();	
+ 		
+ 		domain = TeamUtil.getDomain();	
  	}	
 	
 	/**
@@ -1122,7 +1126,7 @@ public without sharing class WikiPageEditController {
  					if (attName == 'src') {
  						String srcImage = '';
  						attVal = attVal.replaceAll('"', '');
- 						if (attVal.toLowerCase().indexOf('https://na1.salesforce.com/servlet/servlet') != -1) {
+ 						if (attVal.toLowerCase().indexOf('https://'+domain+'salesforce.com/servlet/servlet') != -1) {
 	 						String[] srcParts = attVal.split('(?i)file=',2);
 				  			String imageId = srcParts[1];				
 				 			List<Attachment> AttachmentsImage = [select Name, Id from Attachment where id =:imageId  limit 1];

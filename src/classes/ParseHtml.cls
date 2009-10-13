@@ -16,6 +16,7 @@ public class ParseHtml {
  	
  	static Integer countCode = 0;
  	
+ 	public String domain;
 	
 	
 	public void setHtml(String html){
@@ -632,7 +633,7 @@ public class ParseHtml {
 						 			if (attachmentsMap.get(imageName) != null) {	
 							 			Attachment AttachmentsImage = attachmentsMap.get(imageName);	
 							 			String idSrc = AttachmentsImage.Id;
-							 			srcImg = 'https://na1.salesforce.com/servlet/servlet.FileDownload?file=' + idSrc;
+							 			srcImg = 'https://'+domain+'/servlet/servlet.FileDownload?file=' + idSrc;
 						 			}
 		 						}
 		 						imgTag += ' src="' + srcImg + '"';	
@@ -653,7 +654,7 @@ public class ParseHtml {
 					 			if (attachmentsMap.get(imageName) != null ) {	
 							 		Attachment AttachmentsImage = attachmentsMap.get(imageName);
 						 			String idSrc = AttachmentsImage.Id;
-						 			srcImg = 'https://na1.salesforce.com/servlet/servlet.FileDownload?file=' + idSrc;
+						 			srcImg = 'https://'+domain+'/servlet/servlet.FileDownload?file=' + idSrc;
 					 			}
 	 						}
 	 						imgTag += ' src="' + srcImg + '"';	
@@ -688,7 +689,7 @@ public class ParseHtml {
 	 			if (attachmentsMap.get(fileName) != null) {	
 		 			Attachment AttachmentsImage = attachmentsMap.get(fileName);	
 		 			String idHref = AttachmentsImage.Id;
-		 			href = 'https://na1.salesforce.com/servlet/servlet.FileDownload?file=' + idHref;
+		 			href = 'https://'+domain+'/servlet/servlet.FileDownload?file=' + idHref;
 		 			
 		            String ContentType2 = AttachmentsImage.ContentType;
 		            String image2 = '';
@@ -711,7 +712,7 @@ public class ParseHtml {
 		           			image2 = 'generic.gif';
 		           		}
 		            }
-		 			fileType = '<img style="vertical-align:bottom;" src="https://na1.salesforce.com/resource/1204814978000/FileTypeIcons/' + image2 + '"/>';
+		 			fileType = '<img style="vertical-align:bottom;" src="https://'+domain+'salesforce.com/resource/1204814978000/FileTypeIcons/' + image2 + '"/>';
 	 			}else {
 	 				href = '';
 	 				fileType = '';
@@ -931,7 +932,7 @@ public class ParseHtml {
 		html = html.replaceAll('\r\n','<br />');
 		html = html.replaceAll('\n','<br />');
 	
-		
+		domain = TeamUtil.getDomain();
  			
  		parseTables();
  		parseCode();

@@ -275,19 +275,22 @@
 					</apex:outputPanel>
 				</td>
 				<td class="buttons" align="rigth">
-				<form action="" class="btnActionForm"><apex:outputpanel rendered="{!userPermissions.canManage}">
-					<input type="button" value="Edit"
-						onclick="location.href='/apex/WikiPageEdit?id={!wikiBody.Id}';"
-						class="btnEdit" />
-				</apex:outputpanel> <apex:outputpanel rendered="{!userPermissions.canCreate}">
-					<input type="button" value="Add"
-						onclick="createOverlay('','AddChildForm','305',''); relocateOverlay();"
-						class="btnAdd" />
-				</apex:outputpanel> <apex:outputpanel rendered="{!userPermissions.canManage}">
-					<input type="button"
-						onclick="createOverlay('','WikiPage:deletePageOverlay','180',''); relocateOverlay()"
-						value="Delete" class="btnDelete" />
-				</apex:outputpanel> <!-- <input type="button" value="SiteMap" class="btnSiteMap" /> -->
+				<form action="" class="btnActionForm">
+					<apex:outputpanel rendered="{!isParentOwner || userPermissions.canManage}">
+						<input type="button" value="Edit"
+							onclick="location.href='/apex/WikiPageEdit?id={!wikiBody.Id}';"
+							class="btnEdit" />
+					</apex:outputpanel> 
+					<apex:outputpanel rendered="{!userPermissions.canCreate}">
+						<input type="button" value="Add"
+							onclick="createOverlay('','AddChildForm','305',''); relocateOverlay();"
+							class="btnAdd" />
+					</apex:outputpanel> 
+					<apex:outputpanel rendered="{!isParentOwner || userPermissions.canManage}">
+						<input type="button"
+							onclick="createOverlay('','WikiPage:deletePageOverlay','180',''); relocateOverlay()"
+							value="Delete" class="btnDelete" />
+					</apex:outputpanel> 
 				</form>
 				</td>
 			</tr>
@@ -405,18 +408,21 @@
 		<tr>
 			<td></td>
 			<td class="buttons" align="rigth">
-			<form action="" class="btnActionForm"><apex:outputpanel rendered="{!userPermissions.canManage}">
-				<input type="button" value="Edit"
-					onclick="location.href='/apex/WikiPageEdit?id={!wikiBody.Id}';"
-					class="btnEdit" />
-			</apex:outputpanel> <apex:outputpanel rendered="{!userPermissions.canCreate}">
-				<input type="button" value="Add"
-					onclick="createOverlay('','AddChildForm','305',''); relocateOverlay();" class="btnAdd" />
-			</apex:outputpanel> <apex:outputpanel rendered="{!userPermissions.canManage}">
-				<input type="button"
-					onclick="createOverlay('','WikiPage:deletePageOverlay','180','');relocateOverlay()"
-					value="Delete" class="btnDelete" />
-			</apex:outputpanel> <!-- <input type="button" value="SiteMap" class="btnSiteMap" /> -->
+			<form action="" class="btnActionForm">
+				<apex:outputpanel rendered="{!isParentOwner || userPermissions.canManage}">
+					<input type="button" value="Edit"
+						onclick="location.href='/apex/WikiPageEdit?id={!wikiBody.Id}';"
+						class="btnEdit" />
+				</apex:outputpanel> 
+				<apex:outputpanel rendered="{!userPermissions.canCreate}">
+					<input type="button" value="Add"
+						onclick="createOverlay('','AddChildForm','305',''); relocateOverlay();" class="btnAdd" />
+				</apex:outputpanel> 
+				<apex:outputpanel rendered="{!isParentOwner || userPermissions.canManage}">
+					<input type="button"
+						onclick="createOverlay('','WikiPage:deletePageOverlay','180','');relocateOverlay()"
+						value="Delete" class="btnDelete" />
+				</apex:outputpanel> 
 			</form>
 			</td>
 		</tr>
@@ -563,7 +569,7 @@
 											</table>
 										</td>
 										<td class="name">
-											<img style="vertical-align: bottom;" src="https://na1.salesforce.com{!URLFOR($Resource.FileTypeIcons, item5.attachImage)}" />
+											<img style="vertical-align: bottom;" src="https://{!domain}{!URLFOR($Resource.FileTypeIcons, item5.attachImage)}" />
 											&nbsp; 
 											<a href="#" onclick="window.open('/servlet/servlet.FileDownload?file={!item5.Id}')">
 												{!item5.Name} 

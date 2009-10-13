@@ -67,7 +67,7 @@
 								This page hasn't been updated
 							</apex:outputpanel>
 							<apex:outputpanel rendered="{!IF(infoWiki.LastModifiedDate == infoWiki.CreatedDate,false,true)}">
-								Updated {!infoWiki.LastModifiedDate} by <a href="javascript:;" onclick="location.href ='/{!infoWiki.LastModifiedById}';">{!infoWiki.LastModifiedBy}</a> (<a href="javascript:;" class="WikiLink">more...</a>)
+								Updated on {!infoWiki.LastModifiedDate} by <a href="javascript:;" onclick="location.href ='/{!infoWiki.LastModifiedById}';">{!infoWiki.LastModifiedBy}</a><!-- (<a href="javascript:;" class="WikiLink">more...</a>) -->
 							</apex:outputpanel>
 						</div>
 					</apex:outputpanel>
@@ -93,10 +93,16 @@
 						<!-- - - - - - - - 	EDIT BODY  - - - - - - - -->
 						<!-- - - - - - - - - - - - - - - - - - - - - -->
 						<br>
+						<style>
+						.editorContainer{
+							background-color: white;
+						}
+						</style>
 						<table class="mainTable" id="mainTableWiki">
 							<tr>
 								<td valign="top" style="padding-top:23px">
 									<apex:outputpanel id="original">
+									<div class="editorContainer">
 										<div class="tabsContainer" id="tabsContainerWiki">
 											<div id="tabsDiv" class="tabsDiv">
 												<!-- - - - - - - - - - - - - - - - - - - -->	
@@ -122,7 +128,7 @@
 												</table>
 											</div>
 										</div>
-										
+									</div>
 										
 										<div id="htmlDiv" style="visibility: hidden;" class="htmlDiv" ><apex:inputTextArea id="theTextArea1" value="{!iniBody}"></apex:inputTextArea></div>
 										<div style="dispaly:none;" class="wikiSyntaxDiv" id="wikiSyntax"><apex:inputTextArea value="{!replace.Content}" id="theTextArea2" ></apex:inputTextArea></div>

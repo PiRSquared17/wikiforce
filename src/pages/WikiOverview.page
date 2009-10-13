@@ -1,5 +1,4 @@
 <apex:page id="WikiOverview" controller="WikiOverviewController" tabStyle="Wiki__c" sidebar="false" action="{!genProfiles}" >
-		
 	
 	<!-- Scripts --> 
 	<apex:includeScript value="{!URLFOR($Resource.WikiResource, 'inc/js/common.js')}"/>
@@ -330,13 +329,13 @@
 																				
 																				<apex:image value="{!URLFOR($Resource.commonResources, 'images/placeholders/unknownperson32x32.jpg')}" />
 																			</td>
-																			<td class="recentlyUpdated">
-																				&nbsp;
+																			<td class="avatarSeparator">
+																				&nbsp;&nbsp;&nbsp;
 																			</td> 
 																			<td valign="top" class="recentlyUpdated">
 																				<a href="/apex/WikiPage?idWP={!item.Id}" class="WikiLink">{!item.Name}</a>
 																				<br>
-																				<div class="description">{!item.shortDescription}</div>
+																				<div class="descriptionUpdated">{!item.shortDescription}</div>
 																				<span class="updatedDate">
 																					<a href ="/{!item.LastModifiedById}" class="WikiSite">{!item.LastModifiedBy}</a>&nbsp; in 
 																					&nbsp;

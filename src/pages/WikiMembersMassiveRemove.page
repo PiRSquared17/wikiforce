@@ -1,4 +1,38 @@
 <apex:page sidebar="false" tabStyle="Wiki__c" controller="WikiMembersRemoveController" id="WMROverlay">
+
+  <script>
+        /**
+        * Change the values of buttons to 'Deleting...'
+        * when an ajax call is being made. This function is here 'cause it should
+        * be preprocessed by visual force (in order to resolve the component's id)
+        * @param loading : false to restore buttons, true to put on 'Deleting'
+        */
+        function changeStatusButtonsRemoveOverlay(isLoading) {
+            var newContinue;
+            var newCancel;
+            
+            newContinue = document.getElementById('{!$Component.newMemberForm.massiveRemoveAction}');
+            newCancel = document.getElementById('removeCancelButtonOverlay');
+        
+            if(isLoading) {
+                newContinue.value = 'Deleting...';
+                newContinue.disabled = true;
+                newCancel.value = 'Deleting...';
+                newCancel.disabled = true;
+            }
+            else {
+                newContinue.value = 'Continue';
+                newContinue.disabled = false;
+                newCancel.value = 'Cancel';
+                newCancel.disabled = false;
+            }
+           
+        }
+        
+        
+    </script>
+    
+    
 	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamsMembersMassiveDelete.css')}" />
 	<!-- Content  -->
 	<div id="massiveRemoveMemberOverlay" style="display:none;" class="overlayForm">	
@@ -49,7 +83,7 @@
 							oncomplete="changeStatusButtonsRemoveOverlay(false);"
 							value="Continue" 
 							rerender="masiveRemoveContainer"/>
-							<input class="allButtons cancelButtons" type="button" value="Cancel" onclick="modal.close();"/>
+							<input class="allButtons cancelButtons" type="button" id="removeCancelButtonOverlay" value="Cancel" onclick="modal.close();"/>
 						</div>
 					</apex:outputPanel>
 					

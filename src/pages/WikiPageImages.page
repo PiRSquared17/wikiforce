@@ -27,12 +27,12 @@
 		<apex:repeat value="{!attachments}" var="item">
 			<div class="imageItem">
 				<div class="imageHolder">
-					<a href="Javascript:;" onclick="SelectFile('https://na1.salesforce.com/servlet/servlet.FileDownload?file={!item.Id}');">
-						<img src="https://na1.salesforce.com/servlet/servlet.FileDownload?file={!item.Id}" width="56" height="56" />
+					<a href="Javascript:;" onclick="SelectFile('https://{!domain}/servlet/servlet.FileDownload?file={!item.Id}');">
+						<img src="https://{!domain}/servlet/servlet.FileDownload?file={!item.Id}" width="56" height="56" />
 					</a>
 				</div>
 				<div class="imageName">
-					<a href="Javascript:;" onclick="SelectFile('https://na1.salesforce.com/servlet/servlet.FileDownload?file={!item.Id}');">
+					<a href="Javascript:;" onclick="SelectFile('https://{!domain}/servlet/servlet.FileDownload?file={!item.Id}');">
 						{!item.Name}
 					</a>
 					<br />

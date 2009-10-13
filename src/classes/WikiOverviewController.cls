@@ -290,14 +290,18 @@ public with sharing class WikiOverviewController {
    	* Move to next page
    	*/
    	public void nextPage () {
+   		genWikiSites();
+		setSiteCount();
    		currentPagination++;
    		firstRow = firstRow + numSitesRows;	
    	}
    	
    	/**
-   	* Move to previus page
+   	* Move to previous page
    	*/
    	public void prevPage () {
+   		genWikiSites();
+		setSiteCount();
    		currentPagination--;
    		firstRow = firstRow - numSitesRows;	
    	}

@@ -127,7 +127,7 @@ public class WikiSubscribersEmailServices {
 		{			
 
 			emailSub = 'Wiki page ' + wikiName + ' has been added to the Wiki ' + wp.Wiki__r.Name + '\'s wiki';
-			emailMsj = 'Wiki page ' + wikiName + ' has been added to the Wiki <a href="//' + TeamUtil.hostName + '/apex/WikiPage?idWP=' + IdNewPage + '">' + wp.Wiki__r.Name + '\'s</a> wiki<br><a href="//' + TeamUtil.hostName + '/apex/WikiPage?idWP=' + wp.Id + '">Click here to see the page</a>.';
+			emailMsj = 'Wiki page ' + wikiName + ' has been added to the Wiki <a href="//' + TeamUtil.hostName + '/apex/WikiTeamOverview?tid=' + wp.Wiki__r.Id + '">' + wp.Wiki__r.Name + '\'s</a> wiki<br><a href="//' + TeamUtil.hostName + '/apex/WikiPage?idWP=' + wp.Id + '">Click here to see the page</a>.';
 			if (!isTest) {
 			TeamMemberSubscription = [Select 
 				t.WikiPageUpdated__c, 
@@ -152,11 +152,8 @@ public class WikiSubscribersEmailServices {
 				System.debug( '::: updating' );
 				List<WikiPage__c> wikiPageList = [select id, PageCreatedBy__c from WikiPage__c where id=: IdNewPage ];
 				String createdById = wikiPageList[0].PageCreatedBy__c;
-				//wp = [ SELECT Id, Wiki__c, Wiki__r.Name, LastMo FROM WikiPage__c WHERE Id =: IdNewPage ];
 			
-				//wikiName = mf.Message__c.replaceFirst('.*<a href="/apex/WikiPage\\?idWP=[^>]*">', '');
-				//wikiName = wikiName.replaceFirst('</a>.*', '');
-				emailSub = 'Wiki page ' + wikiName + ' with in Wiki ' + wp.Wiki__r.Name + ' has been edited';
+				emailSub = 'Wiki page ' + wikiName + ' within Wiki ' + wp.Wiki__r.Name + ' has been edited';
 				emailMsj = 'Wiki page ' + wikiName + ' has been edited by <a href="https://' + TeamUtil.hostName + '/?id=' + wp.LastModifiedById + '">' +  wp.LastModifiedBy.Name + '</a><br><a href="https://' + TeamUtil.hostName + '/apex/WikiPage?idWP=' + wp.Id + '">Click here to see the page</a>.';
 			
 				if (!isTest) 

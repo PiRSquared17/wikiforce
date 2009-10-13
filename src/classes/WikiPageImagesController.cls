@@ -10,9 +10,20 @@ public class WikiPageImagesController {
     
     public Boolean validAttSize = true;
     
+    private String domain;
+    
     public WikiPageImagesController(){
     	if(idWikiPage == null)
     		idWikiPage = System.currentPageReference().getParameters().get('idWP');
+    	
+    	domain = TeamUtil.getDomain();
+    }
+    
+    /**
+    *@return String
+    */
+    public String getDomain(){
+        return this.domain;
     }
     
 	/**

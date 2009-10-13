@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
-    <listViews>
-        <fullName>AllProducts</fullName>
-        <filterScope>Everything</filterScope>
-        <label>All Products</label>
-    </listViews>
+    <fields>
+        <fullName>Family</fullName>
+        <picklist>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
 </CustomObject>

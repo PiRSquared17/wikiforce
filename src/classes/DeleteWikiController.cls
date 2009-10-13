@@ -19,7 +19,7 @@ public class DeleteWikiController {
 	}
 	
 	/**
-	* Set age from which delete function has 
+	* Set page from which delete function has 
 	* been called from
 	*@param String
 	*/
@@ -44,12 +44,11 @@ public class DeleteWikiController {
 	public void setWikiId(String wID) {	
 		wikiId = wID;
 	}
-	
+
 	/**
 	* Delete Topic by Id
 	*/
 	public PageReference deleteWiki(){
-		
 		List<Wiki__c> wikiToDelete = [select Id from Wiki__c where Id =: WIKIID];
 		if (wikiToDelete.size() > 0) {
 			delete wikiToDelete[0];
