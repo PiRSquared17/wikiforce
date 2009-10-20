@@ -17,6 +17,10 @@ public class WikiMembersRemoveController {
 	*/
 	public WikiMembersRemoveController(){}
 	
+	public void resetError(){
+		error = false;
+	}
+	
 	public Boolean getError()
 	{
 		return this.error;

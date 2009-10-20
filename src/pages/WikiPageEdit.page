@@ -1,5 +1,5 @@
 <apex:page controller="WikiPageEditController" tabStyle="Wiki__c" id="WikiPageEdit" sidebar="false" >
-	<script src="{!URLFOR($Resource.FCKeditorV263, 'fckeditor/fckeditor.js')}"/>
+	<!-- <script src="{!URLFOR($Resource.FCKeditorV263, 'fckeditor/fckeditor.js')}"/> -->
 
 	<!-- Scripts -->
 	<script src="{!URLFOR($Resource.WikiResource, 'inc/js/common.js')}"/>
@@ -16,15 +16,8 @@
 	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/commonLayout.css')}" />
 	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/WikiPageEdit.css')}" />
 
-	<script type="text/javascript">
-		// Inicialize FCK editor	
-		var idWikiPage = "{!idWikiPage}";
-		var basePathResource = "{!URLFOR($Resource.FCKeditorV263, 'fckeditor/')}";
-		var globalArrowDown = "{!URLFOR($Resource.WikiResource, 'images/layout/rc_boxes/arrow_down.gif')}";
-		var globalArrowTop =  "{!URLFOR($Resource.WikiResource, 'images/layout/rc_boxes/arrow_top.gif')}";
-		
-		document.observe('dom:loaded',initializeFCK);
-	</script>
+	<script src="{!URLFOR($Resource.ckeditor, 'ckeditor/ckeditor.js')}" /> 
+	
 	
 	<!-- - - - - - - - - - - - - - - - - - - - - -->	
 	<!-- - - - - - - -   OVERLAY   - - - - - - - -->
@@ -130,7 +123,7 @@
 										</div>
 									</div>
 										
-										<div id="htmlDiv" style="visibility: hidden;" class="htmlDiv" ><apex:inputTextArea id="theTextArea1" value="{!iniBody}"></apex:inputTextArea></div>
+										<div id="htmlDiv" style="visibility: hidden;display:none;" class="htmlDiv" ><apex:inputTextArea id="theTextArea1" value="{!iniBody}"></apex:inputTextArea></div>
 										<div style="dispaly:none;" class="wikiSyntaxDiv" id="wikiSyntax"><apex:inputTextArea value="{!replace.Content}" id="theTextArea2" ></apex:inputTextArea></div>
 										<!-- - - - - - - - - - - - - - - - - - - - - -->	
 										<!-- 				AUX TEXT 				 -->
@@ -141,12 +134,14 @@
 										<!-- - - - - - - - - - - - - - - - - - - - - -->	
 										<!-- 				FCK LOADER 				 -->
 										<!-- - - - - - - - - - - - - - - - - - - - - -->
-										<div class="FCKloader" id="FCKloader" style="display:block;"><center><img src="{!URLFOR($Resource.WikiResource, 'images/layout/FCKloader.gif')}" /></center><br />Loading...</div>
+										<div id="loader" style="text-align:center;"><center><img src="{!URLFOR($Resource.WikiResource, 'images/layout/FCKloader.gif')}" /></center><br />Loading...</div>
+										<textarea id="FCKloader" name="FCKloader" cols="80" rows="50">{!html}</textarea>
+										<!--  <div class="FCKloader" id="FCKloader" style="display:block;"><center><img src="{!URLFOR($Resource.WikiResource, 'images/layout/FCKloader.gif')}" /></center><br />Loading...</div> -->
 										<br>
 										
 									</apex:outputpanel>	
 								</td>
-								<td valign="top" width="200px" id="rightSideBarWiki" style="display:none;"> 
+								<td valign="top" width="200px" id="rightSideBarWiki" style="display:none;">
 									<!-- - - - - - - - - - - - - - - - - - - - - -->	
 									<!-- - - - - - - RIGHT SIDEBAR - - - - - - - -->
 									<!-- - - - - - - - - - - - - - - - - - - - - -->
@@ -266,4 +261,36 @@
 		</div>
 	</div>
 	<apex:outputpanel id="aux" />
+	
+	<script type="text/javascript">
+		//$('FCKloader').hide();
+		window.onload = function(){
+			
+			CKEDITOR.replace( 'FCKloader', {
+				
+				resize_enabled : false,
+				skin : 'v2',
+				height : '400px',
+		        filebrowserBrowseUrl : '/apex/WikiPageImages?idWP='+'{!idWikiPage}',
+		        toolbar :
+				[
+				    ['Source'],
+				    ['Cut','Copy','Paste','PasteText','PasteFromWord','-','Print'],
+				    ['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
+				    ['Bold','Italic','Underline','Strike'],
+				    '/',
+				    ['Subscript','Superscript'],
+				    ['NumberedList','BulletedList','-','Outdent','Indent','Blockquote'],
+				    ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],
+				    ['Link','Unlink','Anchor'],
+				    ['Image','Flash','Table','HorizontalRule','Smiley','SpecialChar','PageBreak'],
+				    '/',
+				    ['Styles','Format','Font','FontSize'],
+				    ['TextColor','BGColor']
+				]
+		        
+			}); 
+			$('loader').hide();
+		}
+	</script>
 </apex:page>

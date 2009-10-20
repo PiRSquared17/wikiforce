@@ -1,5 +1,5 @@
 trigger WikiBeforeDelete on Wiki__c bulk (before delete) { 
-	if (!TeamUtil.currentlyExeTrigger) {
+    if (!TeamUtil.currentlyExeTrigger) {
         try{
             TeamUtil.currentlyExeTrigger = true;
             TeamUtil.DeletingWiki = true;
@@ -29,7 +29,7 @@ trigger WikiBeforeDelete on Wiki__c bulk (before delete) {
                 System.debug('\n Member to delete' + m.Name);
             }
 
-			TeamUtil.currentlyExeTrigger = false;
+            TeamUtil.currentlyExeTrigger = false;
             delete pagesList;
             delete membersList;  
             
@@ -37,9 +37,9 @@ trigger WikiBeforeDelete on Wiki__c bulk (before delete) {
             TeamUtil.setSendsEmailTriggerWikiMemberBeforeDelete(true);
                       
         } catch(Exception e){
-        	TeamUtil.setSendsEmailTriggerWikiPageBeforeDelete(true);
+            TeamUtil.setSendsEmailTriggerWikiPageBeforeDelete(true);
             TeamUtil.setSendsEmailTriggerWikiMemberBeforeDelete(true);
-        	throw e;
+            throw e;
         }
     }
 }

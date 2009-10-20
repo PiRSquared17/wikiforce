@@ -80,7 +80,7 @@
 							<apex:commandButton styleClass="allButtons actionButtons" 
 							action="{!massiveRemoveMember}" id="massiveRemoveAction" 
 							onclick="changeStatusButtonsRemoveOverlay(true); $('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay');" 
-							oncomplete="changeStatusButtonsRemoveOverlay(false);"
+							oncomplete="rRemoveOverlay();"
 							value="Continue" 
 							rerender="masiveRemoveContainer"/>
 							<input class="allButtons cancelButtons" type="button" id="removeCancelButtonOverlay" value="Cancel" onclick="modal.close();"/>

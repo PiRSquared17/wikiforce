@@ -144,8 +144,8 @@
 	<!-- CSS de TS -->
 	<apex:stylesheet value="{!URLFOR($Resource.commonResources, '/inc/css/validator.css')}" />
 	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, '/inc/css/commonLayout.css')}" /> 	
-	 <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, '/inc/css/teamDetailEdit.css')}" />
-	 <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, '/inc/css/teamCreateNew.css')}" /> 
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, '/inc/css/teamDetailEdit.css')}" />
+	<apex:stylesheet value="{!URLFOR($Resource.TeamsResources, '/inc/css/teamCreateNew.css')}" /> 
 	
     <!--  <apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/wikiCreateWiki.css')}" />-->
     <apex:stylesheet value="{!URLFOR($Resource.TeamsResources, 'inc/css/teamOverview.css')}" />	
@@ -332,7 +332,7 @@
 														</td>
 														<td></td>
 														<td colspan="2">&nbsp;
-															<apex:inputTextarea value="{!Wiki.Description__c}" id="TeamDescription" cols="38" rows="4" style="height: 83px; width: 430px" onkeyup="countStringLimit2(this, 'stringSizeCounter');" />
+															<apex:inputTextarea value="{!Wiki.Description__c}" id="TeamDescription" cols="38" rows="4" style="height: 83px; width: 430px; word-wrap: break-word" onkeyup="countStringLimit2(this, 'stringSizeCounter');" />
 														</td>
 													</tr>
 													<tr>
@@ -938,6 +938,26 @@
 		}
 		
 	</script>
+	<script>
+	window.onLoad = function(){
+		alert('hello');
+		/* setAccess(document.getElementById('privateTeam')); */
+		/* if (document.getElementById('privateTeam').checked == true){
+			$('TeamsCreateNewTeam:createNewTeamForm:openOrClosed').value = 'private';
+			$('TeamsCreateNewTeam:createNewTeamForm:memberProfileSelect').disabled = true;
+			$('TeamsCreateNewTeam:createNewTeamForm:publicProfileSelect').disabled = true;
+			$('TeamsCreateNewTeam:createNewTeamForm:closedPublicProfileSelect').disabled = true; 
+		} */                 
+	}          
+	alert('i\'ve said helloo');
 	
-	
+	setTimeout(setAccess(document.getElementById('privateTeam')),2000);  
+	if (document.getElementById('privateTeam').checked){    
+		alert('private is checked');
+		$('TeamsCreateNewTeam:createNewTeamForm:openOrClosed').value = 'private';
+		$('TeamsCreateNewTeam:createNewTeamForm:memberProfileSelect').disabled = true;
+		$('TeamsCreateNewTeam:createNewTeamForm:publicProfileSelect').disabled = true;
+		$('TeamsCreateNewTeam:createNewTeamForm:closedPublicProfileSelect').disabled = true; 
+	}               
+	</script>
 </apex:page>
