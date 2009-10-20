@@ -7,28 +7,12 @@
         * be preprocessed by visual force (in order to resolve the component's id)
         * @param loading : false to restore buttons, true to put on 'Deleting'
         */
-        function changeStatusButtonsRemoveOverlay(isLoading) {
-            var newContinue;
-            var newCancel;
-            
-            newContinue = document.getElementById('{!$Component.removeMemberForm.removeContinueButton}');
-            newCancel = document.getElementById('removeCancelButton');
-        
-            if(isLoading) {
-                newContinue.value = 'Deleting...';
-                newContinue.disabled = true;
-                newCancel.value = 'Deleting...';
-                newCancel.disabled = true;
-            }
-            else {
-                newContinue.value = 'Continue';
-                newContinue.disabled = false;
-                newCancel.value = 'Cancel';
-                newCancel.disabled = false;
-            }
-           
+        function changeState(){
+        	$('{!$Component.removeMemberForm.removeContinueButton}').value = 'Deleting...'
+        	$('{!$Component.removeMemberForm.removeContinueButton}').disabled = true
+        	$('removeCancelButton').value = 'Deleting...'
+        	$('removeCancelButton').disabled = true
         }
-        
         
     </script>
 
@@ -81,20 +65,36 @@
 							<apex:commandButton style="background-color: #526921!important"
 								styleclass="overlaySaveBtn allButtons actionButtons"
 								action="{!massiveRemoveMember}"
-                                id="removeContinueButton" 
-								onclick="changeStatusButtonsRemoveOverlay(true); $('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay');"  
-								oncomplete="changeStatusButtonsRemoveOverlay(false); " 
+                                id="removeContinueButton"
+								onclick="changeState(); $('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay');"  
+								oncomplete="rRemoveOverlay(); " 
 								value="Continue"
 								rerender="removeMemberStatus" />
 							<input class="overlayCancelBtn allButtons cancelButtons" id="removeCancelButton" type="button" value="Cancel" onclick="modal.close();" />
 							
 						</apex:outputPanel> 
+						
+						<apex:outputPanel rendered="{!error}">
+						<div class="overlayFormContent" style="padding-bottom: 10px;">
+							<table style="width:95%;"> 
+								<tr>
+									<td><span class="inputInfoDark">You can not remove all admin members</span></td>
+								</tr>
+							</table>
+						</div>
+						<div class="overlaySeparateLine" />
+						<!-- Saven and Cancel Buttons -->
+						<div class="overlayFromButtons" align="center">
+							<input class="allButtons cancelButtons" type="button" value="Cancel" onclick="modal.close();$('paginationOverlay').hide()"/>
+						</div>
+					</apex:outputPanel>
 					
 						<apex:outputPanel rendered="{!IF(error, true, false)}">
 							<input class="overlayCancelBtn allButtons cancelButtons" id="removeCancelButton" type="button" value="Cancel" onclick="modal.close();" />
 						</apex:outputPanel>
 						
 					</div>
+					<apex:actionFunction name="rRemoveOverlay" rerender="removeMemberContainer" />
 				</apex:form>
 			</div>
 		</apex:outputpanel>
@@ -109,7 +109,6 @@
 				}
 				
 				var errorStatus = '{!error}';
-				//alert('{!error}');
 				if( errorStatus == 'true' ){
 					$('paginationOverlay').hide();
 					document.getElementById('{!$Component.removeMemberForm}').innerHTML = '<span id="j_id455"><div class="overlayFormContent" style="padding-bottom: 10px;"><table style="width: 95%;"><tbody><tr><td><span class="inputInfoDark">You can not remove all admin members</span></td></tr></tbody></table></div> <div class="overlaySeparateLine"></div> <div align="center" class="overlayFromButtons"><input type="button" class="allButtons cancelButtons" onclick="modal.close();" value="Cancel"/></div></span>';
