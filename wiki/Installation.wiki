@@ -23,11 +23,15 @@ http://wikiforce.googlecode.com/svn/wiki/images/installation/install5.png
 
 http://wikiforce.googlecode.com/svn/wiki/images/installation/pInstallLogin.png
 
-*_6. Check "I have read and agree..." and click on "Install" button._*
+*_7. Check "I have read and agree..." and click on "Install" button._*
 
 http://wikiforce.googlecode.com/svn/wiki/images/installation/install6.png
 
-*_7. Click on "Continue"_*
+*_8. Enter your password, and click on "Submit" button._*
+
+http://wikiforce.googlecode.com/svn/wiki/images/installation/pInstallSubmit.png
+
+*_9. Click on "Continue"_*
 
 http://wikiforce.googlecode.com/svn/wiki/images/installation/step1.jpg
 
