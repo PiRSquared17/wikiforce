@@ -71,7 +71,7 @@ http://wikiforce.googlecode.com/svn/wiki/images/installation/step9.jpg
 
 *_19. Scroll down the page_*
 
-*_20. Click on the "Override" link which is next to "Discussions Tab"_*
+*_20. Click on the "Override" link which is next to "Wikis Tab"_*
 
 http://wikiforce.googlecode.com/svn/wiki/images/installation/step10.jpg
 
