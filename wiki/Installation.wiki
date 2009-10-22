@@ -77,7 +77,7 @@ http://wikiforce.googlecode.com/svn/wiki/images/installation/step10.jpg
 
 *_21. Click on "Visualforce Page"_*
 
-*_22. Select "Discussion Overview'['wikiforce _ Discussion Overview']'_*
+*_22. Select "Wiki Overview'['wikiforce _ wf Overview']'_*
 
 *_23. Click on "Save"_*
 
