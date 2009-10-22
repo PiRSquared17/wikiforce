@@ -19,6 +19,10 @@ http://wikiforce.googlecode.com/svn/wiki/images/installation/install4.png
 
 http://wikiforce.googlecode.com/svn/wiki/images/installation/install5.png
 
+*_6dddddddddd. Enter your UserName, Password and click on "Login" button._*
+
+http://projectforce.googlecode.com/svn/wiki/images/installation/Install6.jpg
+
 *_6. Check "I have read and agree..." and click on "Install" button._*
 
 http://wikiforce.googlecode.com/svn/wiki/images/installation/install6.png
