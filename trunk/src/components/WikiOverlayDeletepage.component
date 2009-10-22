@@ -1,0 +1,31 @@
+<apex:component controller="WikiPageController" allowDML="true">    
+<apex:outputpanel id="deletePageOverlay" style="display:none;">
+	<div class="attach__Overlay" id="DeletePageForm">
+	<div class="formsHeader">
+	<table>
+		<tr>
+			<td>Delete Page</td>
+			<td align="right"><img
+				src="{!URLFOR($Resource.WikiResource, 'images/layout/closeWindow.gif')}"
+				onclick="modal.close();" /></td>
+		</tr>
+	</table>
+	</div>
+	<div id="deleting" class="saving" style="display: none;">
+	Deleting...</div>
+	<apex:form id="deleteOvlyForm">
+		<div class="overlayBody"><br>
+		<br>
+		<b>Are you sure you want to delete this page?</b><br>
+		<span class="infoText">Once a page is deleted, it is not
+		recoverable.</span><br>
+		<br>
+		<br>
+		</div>
+		<div class="separateLine"></div>
+		<div align="center">
+		    <apex:commandButton styleclass="allButtons actionButtons" action="{!deletePage}" value="Continue and delete page" onclick="savingShowWP('{!$Component.deleteOvlyForm}','deleting');" oncomplete="modal.close();" rerender="auxPanel" />
+                  <input type="button" class="allButtons cancelButtons" value="Cancel" onclick="modal.close();" /></div>
+	</apex:form></div>
+</apex:outputpanel>
+</apex:component>

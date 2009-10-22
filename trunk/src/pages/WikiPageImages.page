@@ -1,6 +1,5 @@
 <apex:page sidebar="false" showHeader="false" controller="WikiPageImagesController">
 	
-	
 	<apex:includeScript value="{!URLFOR($Resource.PeopleResourceFiles, 'inc/js/prototype.js')}"/>
 	
 	<apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/wikiPageImages.css')}"/>
@@ -13,6 +12,12 @@
 			window.close();
 		}
 	</script>
+	
+	<style>
+	 body {width:100%; height:100%; overflow:auto; margin:0}
+	 html {width:100%; height:100%; overflow:auto;}
+	</style>
+	
 	<div class="title"><strong>Upload Image</strong></div>
 	<span class="infoText">Type the path of the file or click the Browse button to find it.</span><br/>
 	<div class="form">
@@ -53,4 +58,5 @@
 		//Execute for disabled 'Done' button first time
 		active_desactive();
 	</script> 
+	
 </apex:page>

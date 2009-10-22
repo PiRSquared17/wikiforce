@@ -1,6 +1,6 @@
 <apex:page id="WikiOverview" controller="WikiTeamOverviewController" tabStyle="Wiki__c" sidebar="false" >
 	<apex:includeScript value="/soap/ajax/11.1/connection.js" />
-	<!-- Scripts -->
+	<!-- Scripts --> 
 	<apex:includeScript value="{!URLFOR($Resource.WikiResource, 'inc/js/common.js')}"/>
 	<apex:includeScript value="{!URLFOR($Resource.Script_aculo_us, 'prototype.js')}"/>
 	<apex:includeScript value="{!URLFOR($Resource.Script_aculo_us, 'scriptaculous.js')}"/>
@@ -66,8 +66,11 @@
 	<div id="modal_container"></div>
 	<script>createOverlay('initializeModal')</script>
 	
-	<!-- Delete Wiki -->
+	<!-- Delete Wiki & WikiPages-->
 	<c:WikiOverlayDeleteWiki pageFrom="WikiTeamOverview"/>
+	<apex:outputpanel id="formsOverlays">
+		<c:WikiOverlayDeletepage />
+	</apex:outputpanel>
 
     <!-- Overlay Add Child -->
 	<c:WikiNewPageWidget />
@@ -168,12 +171,15 @@
 															<div class="WPwrapper">
 																<div id="actionContainer-{!wiki.Id}" class="actions">
 																	<apex:outputpanel rendered="{!wiki.hasChilds}" styleClass="wikiChilds" >
-																		<a href="javascript:;" onclick="expandCollapse('{!wiki.Id}','collapse');"><img src="{!URLFOR($Resource.WikiResource, 'images/layout/icons/collapsewiki.gif')}" alt="" title="" /></a>
+																		<a href="javascript:;" onclick="expandCollapse('','','{!wiki.Id}','collapse');"><img src="{!URLFOR($Resource.WikiResource, 'images/layout/icons/collapsewiki.gif')}" alt="" title="" /></a>
 																	</apex:outputpanel>
 																</div>
 																<div class="wikiPage">
 																	<a href="/apex/WikiPage?idWP={!wiki.Id}"><apex:outputText value="{!wiki.Name}"/></a>
 																</div>
+																<apex:outputpanel rendered="{!IF(OR(userPermissions.canManage,BEGINS(wiki.CreatedById, $User.Id)),true,false)}">
+																	&nbsp;|&nbsp;<a href="javascript:;" onclick="createOverlay('','deleteWikiOverlay','180',''); relocateOverlay()">Delete</a>
+																</apex:outputpanel>
 															</div>
 															<apex:outputpanel rendered="{!wiki.hasChilds}" layout="block">
 																<div id="childs-{!wiki.Id}" class="wikiChilds">
@@ -181,12 +187,15 @@
 																		<div id="pagecontainer-{!wikiChild.Id}" class="wikiPageContainer">
 																			<div id="actionContainer-{!wikiChild.Id}" class="actions">
 																				<apex:outputpanel rendered="{!wikiChild.hasChilds}" styleClass="wikiChilds" >
-																					<a href="javascript:;" onclick="expandCollapse('{!wikiChild.Id}','expand');"><img src="{!URLFOR($Resource.WikiResource, 'images/layout/icons/expandwiki.gif')}" alt="" title="" /></a>
+																					<a href="javascript:;" onclick="expandCollapse('{!userPermissions.canManage}', '{!$User.Id}', '{!wikiChild.Id}', 'expand');"><img src="{!URLFOR($Resource.WikiResource, 'images/layout/icons/expandwiki.gif')}" alt="" title="" /></a>
 																				</apex:outputpanel>
 																			</div>
 																			<div class="wikiPage">
 																				<a href="/apex/WikiPage?idWP={!wikiChild.Id}"><apex:outputText value="{!wikiChild.Name}"/></a>
 																			</div>
+																			<apex:outputpanel rendered="{!IF(OR(userPermissions.canManage,BEGINS(wikiChild.CreatedById, $User.Id)),true,false)}">
+																				&nbsp;|&nbsp;<a href="javascript:;" onclick="createOverlay('','deleteWikiOverlay','180',''); relocateOverlay()">Delete</a>
+																			</apex:outputpanel>
 																			<apex:outputpanel rendered="{!wikiChild.hasChilds}" layout="block">
 																				<div id="childs-{!wikiChild.Id}" class="wikiChilds"></div>
 																			</apex:outputpanel>	
@@ -195,7 +204,7 @@
 																</div>
 															</apex:outputpanel>
 														</div>
-													</apex:repeat>	
+													</apex:repeat>	  
 												</apex:outputpanel>												
 											</div>											
 											<!-- Wiki Page Tree End -->											
