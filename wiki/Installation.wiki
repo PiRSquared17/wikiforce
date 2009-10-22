@@ -83,10 +83,10 @@ http://wikiforce.googlecode.com/svn/wiki/images/installation/step10.jpg
 
 http://wikiforce.googlecode.com/svn/wiki/images/installation/step11.jpg
 
-*_23. Select "Discussion"_*
+*_24. Select "Wiki"_*
 
 http://wikiforce.googlecode.com/svn/wiki/images/installation/step12.jpg
 
-*_24. This is the main page, enjoy!_*
+*_25. This is the main page, enjoy!_*
 
 http://wikiforce.googlecode.com/svn/wiki/images/installation/step13.jpg
