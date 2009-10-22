@@ -495,7 +495,7 @@
 											    </td>
 											    <td>	
 											    </td>
-											    <td colspan="2">&nbsp;<apex:inputCheckbox id="allowCustomer" value="{!AllowCustomer}" /> 
+											    <td colspan="2">&nbsp;<apex:inputCheckbox disabled="{!IF(WikiType == 'private',true,false)}" id="allowCustomer" value="{!AllowCustomer}" />
 													<span class="inputInfoDescription">Allow Customer Portal Users</span>
 											    </td>    
 											</tr>
@@ -512,7 +512,7 @@
 										    </td>
 										    <td>
 										    </td>
-										    <td colspan="2">&nbsp;<apex:inputCheckbox id="allowPartner" value="{!AllowPartner}"/>
+										    <td colspan="2">&nbsp;<apex:inputCheckbox disabled="{!IF(WikiType == 'private',true,false)}" id="allowPartner" value="{!AllowPartner}"/>
 										    <span class="inputInfoDescription">Allow Partner Portal Users</span>
 										    </td>    
 										</tr>
@@ -815,12 +815,12 @@
 								<tr>
 									<td>
 										<apex:outputpanel >  <!-- rendered="{!userPermissions.canManage}" -->
-											<input value="{!item.wikiMemberId}" class="actionCheck"	type="checkbox" onclick="toDelete()" />
+											<input id="{!item.wikiMemberId}" value="{!item.wikiMemberId}" class="actionCheck"	type="checkbox" onclick="toDelete()" />
 										</apex:outputpanel>
 									</td>
-									<td> 
+									<td>
 										<apex:outputpanel > <!-- rendered="{!userPermissions.canManage}" -->
-                                            <a href="Javascript:;" onclick="setHiddenMemberId('{!item.WikiMemberId}'); createOverlay('','removeMemberOverlay','','','');relocateOverlay();">Delete</a>
+                                            <a href="Javascript:;" onclick="setHiddenMemberId('{!item.WikiMemberId}'); checkToDelete('{!item.WikiMemberId}'); toDelete(); massiveRemoveOverlay(); relocateOverlay();">Delete</a>
                                         </apex:outputpanel>
                                     </td>
                                     <td class="member_detail_description">
@@ -914,7 +914,20 @@
 			str = str.substring( 0, str.length -1 );
 			
 			$( 'WikiCreateWiki:incWMMROverlay:WMROverlay:newMemberForm:idsToDelete' ).value = str;
-			//alert( 'L:' + arr.length + ':::' + $( 'WikiCreateWiki:incWMMROverlay:WMROverlay:newMemberForm:idsToDelete' ).value );
+			
+		}
+		
+		//check in when user click in delete link beside a member and check out the rest if there is any
+		function checkToDelete(checkboxId){
+			
+			array = $$( 'input.actionCheck' );
+			for( var box in array )
+			{
+				array[box].checked = false 
+			}
+			
+			$(checkboxId).checked = true
+			
 		}
 
 		function backUpDivsForFirstTime(){
@@ -937,27 +950,5 @@
 			document.getElementById('WikiCreateWiki:createNewTeamForm:accessRadioButton:'+index).checked = true
 		}
 		
-	</script>
-	<script>
-	window.onLoad = function(){
-		alert('hello');
-		/* setAccess(document.getElementById('privateTeam')); */
-		/* if (document.getElementById('privateTeam').checked == true){
-			$('TeamsCreateNewTeam:createNewTeamForm:openOrClosed').value = 'private';
-			$('TeamsCreateNewTeam:createNewTeamForm:memberProfileSelect').disabled = true;
-			$('TeamsCreateNewTeam:createNewTeamForm:publicProfileSelect').disabled = true;
-			$('TeamsCreateNewTeam:createNewTeamForm:closedPublicProfileSelect').disabled = true; 
-		} */                 
-	}          
-	alert('i\'ve said helloo');
-	
-	setTimeout(setAccess(document.getElementById('privateTeam')),2000);  
-	if (document.getElementById('privateTeam').checked){    
-		alert('private is checked');
-		$('TeamsCreateNewTeam:createNewTeamForm:openOrClosed').value = 'private';
-		$('TeamsCreateNewTeam:createNewTeamForm:memberProfileSelect').disabled = true;
-		$('TeamsCreateNewTeam:createNewTeamForm:publicProfileSelect').disabled = true;
-		$('TeamsCreateNewTeam:createNewTeamForm:closedPublicProfileSelect').disabled = true; 
-	}               
 	</script>
 </apex:page>

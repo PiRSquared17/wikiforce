@@ -3,7 +3,7 @@ public class WikiCreateWikiController {
 	List<Group> allowCustomerActivated = new List<Group>();
 	List<Group> allowPartnetActivated = new List<Group>();
 	public static Boolean allowCustomer = false;
-	public static Boolean allowPartner = false;  
+	public static Boolean allowPartner = false;
 	
 	private String domain;
 	

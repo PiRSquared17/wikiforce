@@ -183,9 +183,7 @@ public class WikiPageController {
 			List<WikiPage__c> parentUserPage = new List<WikiPage__c>();
 			List<WikiPage__c> parentPage = new List<WikiPage__c>();
 			
-			Integer i = 0;
-			
-			while(wikiPageParentId != null && !isParentOwner && i < 10){
+			while(wikiPageParentId != null && !isParentOwner){
 				
 				parentUserPage = [SELECT Id, PageCreatedBy__c
 							      FROM WikiPage__c 
@@ -201,8 +199,6 @@ public class WikiPageController {
 							  
 					wikiPageParentId  = parentPage[0].Parent__c;
 				}
-				
-				i++;
 				
 			}
 			

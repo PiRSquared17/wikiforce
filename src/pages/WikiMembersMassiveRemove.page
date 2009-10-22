@@ -10,21 +10,25 @@
         function changeStatusButtonsRemoveOverlay(isLoading) {
             var newContinue;
             var newCancel;
+            var closeLink
             
             newContinue = document.getElementById('{!$Component.newMemberForm.massiveRemoveAction}');
             newCancel = document.getElementById('removeCancelButtonOverlay');
+            closeLink = document.getElementById('closeLink');
         
             if(isLoading) {
                 newContinue.value = 'Deleting...';
                 newContinue.disabled = true;
                 newCancel.value = 'Deleting...';
                 newCancel.disabled = true;
+                closeLink.style.display = 'none';
             }
             else {
                 newContinue.value = 'Continue';
                 newContinue.disabled = false;
                 newCancel.value = 'Cancel';
                 newCancel.disabled = false;
+                closeLink.style.display = 'inline';
             }
            
         }
@@ -41,7 +45,7 @@
 			<div class="overlayTitleContent">
 				<div class="overlayTitle">Confirmation</div>
 				<div class="overlayCloseEvent">
-					<a href="Javascript:;" onclick="modal.close();">
+					<a id ="closeLink" href="Javascript:;" onclick="modal.close(); $('paginationOverlay').hide(); $('errorMessage').hide(); $('questionMessage').show();">
 						<img src="{!URLFOR($Resource.TeamsResources, 'images/layout/genericClose.gif')}" alt="Close Window" title="Close Window" />
 					</a> 
 				</div>
@@ -63,7 +67,8 @@
 				<apex:form id="newMemberForm">
 					<apex:inputHidden id="idsToDelete" value="{!RemoveMemberIds}" />
 					
-					<apex:outputPanel rendered="{!NOT(error)}">
+					<div id="questionMessage" style="display: {!IF(error, 'none', 'inline')}">
+					<apex:outputPanel >
 						<div class="overlayFormContent" style="padding-bottom: 10px;">
 							<table style="width:95%;"> 
 								<tr>
@@ -75,19 +80,22 @@
 							</table>
 						</div>
 						<div class="overlaySeparateLine" />
+						
 						<!-- Saven and Cancel Buttons -->
 						<div class="overlayFromButtons" align="center">
 							<apex:commandButton styleClass="allButtons actionButtons" 
-							action="{!massiveRemoveMember}" id="massiveRemoveAction" 
-							onclick="changeStatusButtonsRemoveOverlay(true); $('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay');" 
-							oncomplete="rRemoveOverlay();"
-							value="Continue" 
-							rerender="masiveRemoveContainer"/>
+								action="{!massiveRemoveMember}" id="massiveRemoveAction" 
+								onclick="changeStatusButtonsRemoveOverlay(true); $('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay');" 
+								
+								value="Continue" 
+								rerender="masiveRemoveContainer"/>
 							<input class="allButtons cancelButtons" type="button" id="removeCancelButtonOverlay" value="Cancel" onclick="modal.close();"/>
 						</div>
 					</apex:outputPanel>
+					</div> <!-- questionMessage  -->
 					
-					<apex:outputPanel rendered="{!error}">
+					<div id="errorMessage" style="display: {!IF(error, 'inline', 'none')}">
+					<apex:outputPanel >
 						<div class="overlayFormContent" style="padding-bottom: 10px;">
 							<table style="width:95%;"> 
 								<tr>
@@ -98,9 +106,10 @@
 						<div class="overlaySeparateLine" />
 						<!-- Saven and Cancel Buttons -->
 						<div class="overlayFromButtons" align="center">
-							<input class="allButtons cancelButtons" type="button" value="Cancel" onclick="modal.close();$('paginationOverlay').hide()"/>
+							<input class="allButtons cancelButtons" type="button" value="Cancel" onclick="modal.close();$('paginationOverlay').hide(); $('errorMessage').hide(); $('questionMessage').show();"/>
 						</div>
 					</apex:outputPanel>
+					</div> <!-- errorMessage  -->
 					
 					<apex:actionFunction name="rRemoveOverlay" rerender="masiveRemoveContainer" />
 				</apex:form>

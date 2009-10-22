@@ -279,15 +279,17 @@ public with sharing class WikiTeamOverviewController {
 		wikiPagesList.clear();
 		List<WikiPage__c> wpl = new List<WikiPage__c>();
 		
-	   	wpl = [ Select Id, Parent__c,  Name, (Select Parent__c , Name , Id From WikiPages__r) From WikiPage__c where Wiki__c =: TEAMID and Parent__c = ''];
+	   	wpl = [ Select Id, CreatedById, Parent__c,  Name, (Select Parent__c , Name , Id From WikiPages__r) From WikiPage__c where Wiki__c =: TEAMID and Parent__c = ''];
 		
-		List <WikiPage__c> wpchildListSecondLevel = [ Select Id, Parent__c,  Name, (Select Parent__c , Name , Id From WikiPages__r) From WikiPage__c where Parent__c in :wpl];
+		List <WikiPage__c> wpchildListSecondLevel = [ Select Id, CreatedById, Parent__c,  Name, (Select Parent__c , Name , Id From WikiPages__r) From WikiPage__c where Parent__c in :wpl];
 		
 		for(WikiPage__c wp: wpl){
 			wikiPageInfo wpage = new wikiPageInfo();
 			wpage.Id = wp.Id; 
 			wpage.Parent = wp.Parent__c;
 			wpage.Name = trunkText(wp.Name);
+			wpage.CreatedById = wp.CreatedById;
+			
 			if(wp.WikiPages__r.size() != 0 ){
 				wpage.HasChilds = true;
 				List<wikiPageChild> wikiChilds = new List<wikiPageChild>();
@@ -298,6 +300,7 @@ public with sharing class WikiTeamOverviewController {
 						wikiChildItem.Id = wpchild.Id;
 						wikiChildItem.Parent = wpchild.Parent__c;
 						wikiChildItem.Name = trunkText(wpchild.Name);
+						wikiChildItem.CreatedById = wpchild.CreatedById;
 						
 						if(wpchild.WikiPages__r.size() != 0){
 							wikiChildItem.HasChilds = true;
@@ -340,6 +343,7 @@ public with sharing class WikiTeamOverviewController {
 		public String Name { set; get; }
 		public Boolean HasChilds { set; get; }
 		public List<wikiPageChild> childs { set; get; }
+		public String CreatedById { set; get; }
 	}
 	
 	/**
@@ -350,6 +354,7 @@ public with sharing class WikiTeamOverviewController {
 		public String Parent { set; get; }
 		public String Name { set; get; }
 		public Boolean HasChilds { set; get; }
+		public String CreatedById { set; get; }
 	}
 	
 	/**

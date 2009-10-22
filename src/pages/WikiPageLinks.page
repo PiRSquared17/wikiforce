@@ -1,13 +1,18 @@
 <apex:page sidebar="false" showHeader="false" controller="WikiPageLinksController">
 	<apex:includeScript value="{!URLFOR($Resource.WikiResource, 'inc/js/wikiPageLinks.js')}" />
-	<!--  
-	<script>
+
+	<script> 
 		function SelectFile( fileUrl ) {
-			window.opener.SetUrl( fileUrl ) ;
-			window.close() ;
+			window.opener.CKEDITOR.tools.callFunction(1, fileUrl);
+			window.close();
 		}
+		
 	</script>
-	-->
+	<style>
+	 body {width:100%; height:100%; overflow:auto; margin:0}
+	 html {width:100%; height:100%; overflow:auto;}
+	</style>
+	
 	<apex:outputpanel rendered="{!IF(cntAttachments == 0, false, true)}">
 		<h3>Attachments</h3>
 		<apex:repeat value="{!attachments}" var="item">
@@ -16,6 +21,7 @@
 			</apex:outputpanel>
 		</apex:repeat>
 	</apex:outputpanel>
+	
 	<apex:outputpanel rendered="{!IF(cntWikiChilds == 0, false, true)}">
 		<h3>Current Page Children</h3>
 		<apex:repeat value="{!wikiChilds}" var="item">
@@ -34,4 +40,8 @@
 			<a href="javascript:SelectFile('https://{!domain}/apex/WikiPage?idWP={!item.Id}');">{!item.Name} ({!item.Wiki__r.Name})</a><br>
 		</apex:repeat> 
 	</apex:outputpanel>
+	
+	<div class="closeBtn">
+		<input type="button" class="btn" value="Cancel" onclick="window.close();" />
+	</div>
 </apex:page>

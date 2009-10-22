@@ -64,36 +64,7 @@
 	
 	<apex:outputpanel id="formsOverlays">
 		<!-- 		 Delete Page Form 		-->
-		<apex:outputpanel id="deletePageOverlay"
-			rendered="{!userPermissions.canManage}" style="display:none;">
-			<div class="attach__Overlay" id="DeletePageForm">
-			<div class="formsHeader">
-			<table>
-				<tr>
-					<td>Delete Page</td>
-					<td align="right"><img
-						src="{!URLFOR($Resource.WikiResource, 'images/layout/closeWindow.gif')}"
-						onclick="modal.close();" /></td>
-				</tr>
-			</table>
-			</div>
-			<div id="deleting" class="saving" style="display: none;">
-			Deleting...</div>
-			<apex:form id="deleteOvlyForm">
-				<div class="overlayBody"><br>
-				<br>
-				<b>Are you sure you want to delete this page?</b><br>
-				<span class="infoText">Once a page is deleted, it is not
-				recoverable.</span><br>
-				<br>
-				<br>
-				</div>
-				<div class="separateLine"></div>
-				<div align="center">
-				    <apex:commandButton styleclass="allButtons actionButtons" action="{!deletePage}" value="Continue and delete page" onclick="savingShowWP('{!$Component.deleteOvlyForm}','deleting');" oncomplete="modal.close();" rerender="auxPanel" />
-                    <input type="button" class="allButtons cancelButtons" value="Cancel" onclick="modal.close();" /></div>
-			</apex:form></div>
-		</apex:outputpanel>
+		<c:WikiOverlayDeletepage />
 
 		<!-- 		 New Attachment Form 		-->
 		<apex:outputpanel id="newAttachmentOverlay" style="display:none;" rendered="{!userPermissions.canComment}">
@@ -288,7 +259,7 @@
 					</apex:outputpanel> 
 					<apex:outputpanel rendered="{!isParentOwner || userPermissions.canManage}">
 						<input type="button"
-							onclick="createOverlay('','WikiPage:deletePageOverlay','180',''); relocateOverlay()"
+							onclick="createOverlay('','WikiPage:j_id48:j_id49:deletePageOverlay','180',''); relocateOverlay()"
 							value="Delete" class="btnDelete" />
 					</apex:outputpanel> 
 				</form>
@@ -420,7 +391,7 @@
 				</apex:outputpanel> 
 				<apex:outputpanel rendered="{!isParentOwner || userPermissions.canManage}">
 					<input type="button"
-						onclick="createOverlay('','WikiPage:deletePageOverlay','180','');relocateOverlay()"
+						onclick="createOverlay('','WikiPage:j_id48:j_id49:deletePageOverlay','180','');relocateOverlay()"
 						value="Delete" class="btnDelete" />
 				</apex:outputpanel> 
 			</form>
