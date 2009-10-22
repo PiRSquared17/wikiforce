@@ -49,6 +49,10 @@ http://wikiforce.googlecode.com/svn/wiki/images/installation/step3.jpg
 
 http://wikiforce.googlecode.com/svn/wiki/images/installation/wInstallCheck.png
 
+*_14. Wait for the email of SalesForce and then click on "Setup" link at the top of the page._*
+
+http://projectforce.googlecode.com/svn/wiki/images/installation/Install13.jpg
+
 *_14. Click on "Deploy now"_*
 
 http://wikiforce.googlecode.com/svn/wiki/images/installation/step5.jpg
