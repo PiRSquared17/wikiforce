@@ -53,44 +53,48 @@ http://wikiforce.googlecode.com/svn/wiki/images/installation/wInstallCheck.png
 
 http://projectforce.googlecode.com/svn/wiki/images/installation/Install13.jpg
 
-*_14. Click on "Deploy now"_*
+*_15. Click on "View Installed Packages" link and select WikiForce._*
+
+http://projectforce.googlecode.com/svn/wiki/images/installation/Install20.jpg
+
+*_16. Click on "Deploy now"_*
 
 http://wikiforce.googlecode.com/svn/wiki/images/installation/step5.jpg
 
-*_15. Click on "Deploy"_*
+*_17. Click on "Deploy"_*
 
 http://wikiforce.googlecode.com/svn/wiki/images/installation/step6.jpg
 
-*_16. Click on "Create"_*
+*_18. Click on "Create"_*
 
 http://wikiforce.googlecode.com/svn/wiki/images/installation/step7.jpg
 
-*_17. Click on "Objects"_*
+*_19. Click on "Objects"_*
 
 http://wikiforce.googlecode.com/svn/wiki/images/installation/step8.jpg
 
-*_18. Click on "Wiki"_*
+*_20. Click on "Wiki"_*
 
 http://wikiforce.googlecode.com/svn/wiki/images/installation/step9.jpg
 
-*_19. Scroll down the page_*
+*_21. Scroll down the page_*
 
-*_20. Click on the "Override" link which is next to "Wikis Tab"_*
+*_22. Click on the "Override" link which is next to "Wikis Tab"_*
 
 http://wikiforce.googlecode.com/svn/wiki/images/installation/step10.jpg
 
-*_21. Click on "Visualforce Page"_*
+*_23. Click on "Visualforce Page"_*
 
-*_22. Select "Wiki Overview'['wikiforce _ wf Overview']'_*
+*_24. Select "Wiki Overview'['wikiforce _ wf Overview']'_*
 
-*_23. Click on "Save"_*
+*_25. Click on "Save"_*
 
 http://wikiforce.googlecode.com/svn/wiki/images/installation/step11.jpg
 
-*_24. Select "Wiki"_*
+*_26. Select "Wiki"_*
 
 http://wikiforce.googlecode.com/svn/wiki/images/installation/step12.jpg
 
-*_25. This is the main page, enjoy!_*
+*_27. This is the main page, enjoy!_*
 
 http://wikiforce.googlecode.com/svn/wiki/images/installation/step13.jpg
