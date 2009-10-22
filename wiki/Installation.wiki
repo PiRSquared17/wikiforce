@@ -19,9 +19,9 @@ http://wikiforce.googlecode.com/svn/wiki/images/installation/install4.png
 
 http://wikiforce.googlecode.com/svn/wiki/images/installation/install5.png
 
-*_6dddddddddd. Enter your UserName, Password and click on "Login" button._*
+*_6. Enter your UserName, Password and click on "Login" button._*
 
-http://wikiforce.googlecode.com/svn/wiki/images/installation/pInstallLogin.png
+http://wikiforce.googlecode.com/svn/wiki/images/installation/wInstallLogin.png
 
 *_7. Check "I have read and agree..." and click on "Install" button._*
 
@@ -29,59 +29,57 @@ http://wikiforce.googlecode.com/svn/wiki/images/installation/install6.png
 
 *_8. Enter your password, and click on "Submit" button._*
 
-http://wikiforce.googlecode.com/svn/wiki/images/installation/pInstallSubmit.png
+http://wikiforce.googlecode.com/svn/wiki/images/installation/wInstallSubmit.png
 
 *_9. Click on "Continue"_*
 
 http://wikiforce.googlecode.com/svn/wiki/images/installation/step1.jpg
 
-*_8. Click "Next"_*
+*_10. Click "Next"_*
 
 http://wikiforce.googlecode.com/svn/wiki/images/installation/step2.jpg
 
-*_9. Select "Grant access to all users"_*
+*_11. Select "Grant access to all users"_*
 
-*_10. Click "Next"_*
+*_12. Click "Next"_*
 
 http://wikiforce.googlecode.com/svn/wiki/images/installation/step3.jpg
 
-*_11. Check "Ignore Apex... "_*
-
-*_12. Click on "Install"_*
+*_13. Click on "Install"_*
 
 http://wikiforce.googlecode.com/svn/wiki/images/installation/step4.jpg
 
-*_13. Click on "Deploy now"_*
+*_14. Click on "Deploy now"_*
 
 http://wikiforce.googlecode.com/svn/wiki/images/installation/step5.jpg
 
-*_14. Click on "Deploy"_*
+*_15. Click on "Deploy"_*
 
 http://wikiforce.googlecode.com/svn/wiki/images/installation/step6.jpg
 
-*_15. Click on "Create"_*
+*_16. Click on "Create"_*
 
 http://wikiforce.googlecode.com/svn/wiki/images/installation/step7.jpg
 
-*_16. Click on "Objects"_*
+*_17. Click on "Objects"_*
 
 http://wikiforce.googlecode.com/svn/wiki/images/installation/step8.jpg
 
-*_17. Click on "Discussion"_*
+*_18. Click on "Discussion"_*
 
 http://wikiforce.googlecode.com/svn/wiki/images/installation/step9.jpg
 
-*_18. Scroll down the page_*
+*_19. Scroll down the page_*
 
-*_19. Click on the "Override" link which is next to "Discussions Tab"_*
+*_20. Click on the "Override" link which is next to "Discussions Tab"_*
 
 http://wikiforce.googlecode.com/svn/wiki/images/installation/step10.jpg
 
-*_20. Click on "Visualforce Page"_*
+*_21. Click on "Visualforce Page"_*
 
-*_21. Select "Discussion Overview'['wikiforce _ Discussion Overview']'_*
+*_22. Select "Discussion Overview'['wikiforce _ Discussion Overview']'_*
 
-*_22. Click on "Save"_*
+*_23. Click on "Save"_*
 
 http://wikiforce.googlecode.com/svn/wiki/images/installation/step11.jpg
 
