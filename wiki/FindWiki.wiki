@@ -1,4 +1,4 @@
-From all the pages of Wiki you can search for wikis, pages and comments. 
+From all the pages of Wiki you can search for wikis pages and comments. 
 
 In order to find a wiki there must be at least one page in that wiki.
 
