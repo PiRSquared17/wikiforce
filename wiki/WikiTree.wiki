@@ -1,3 +1,0 @@
-From here you can reach and edit wiki pages.
-
-<img src="http://wikiforce.googlecode.com/svn/wiki/images/PageListReal.png" align="left" />
