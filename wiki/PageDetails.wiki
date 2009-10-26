@@ -1,3 +1,0 @@
-From here you can edit a wiki page. You can do it in two ways: Rich Text Editor mode and Wiki Syntax mode.
-
-<img src="http://wikiforce.googlecode.com/svn/wiki/images/PageDetailsReal.png" align="left" />
