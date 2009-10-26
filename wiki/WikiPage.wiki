@@ -1,4 +1,0 @@
-From here you can view, delete and edit the page. You can also add a child to the page and make comments.
-
-
-<img src="http://wikiforce.googlecode.com/svn/wiki/images/WikiPage.png" align="left" />
