@@ -11,3 +11,7 @@
 - Mark this wiki page as a Favorite.
 
 - Add new comments and attachments.
+
+<img src="http://wikiforce.googlecode.com/svn/wiki/images/New/WikiPageDetails1.png" align="left" />
+
+<img src="http://wikiforce.googlecode.com/svn/wiki/images/New/WikiPageDetails2.png" align="left" />
