@@ -1,5 +1,4 @@
 <apex:page controller="WikiPageEditController" tabStyle="Wiki__c" id="WikiPageEdit" sidebar="false" >
-    <!-- <script src="{!URLFOR($Resource.FCKeditorV263, 'fckeditor/fckeditor.js')}"/> -->
 
     <!-- Scripts -->
     <script src="{!URLFOR($Resource.WikiResource, 'inc/js/common.js')}"/>

@@ -64,7 +64,7 @@
 	
 	<apex:outputpanel id="formsOverlays">
 		<!-- 		 Delete Page Form 		-->
-		<c:WikiOverlayDeletepage />
+		<c:WikiOverlayDeletepage canManage="{!userPermissions.canManage}" />
 
 		<!-- 		 New Attachment Form 		-->
 		<apex:outputpanel id="newAttachmentOverlay" style="display:none;" rendered="{!userPermissions.canComment}">

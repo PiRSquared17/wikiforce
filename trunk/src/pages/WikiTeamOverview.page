@@ -42,7 +42,40 @@
 		.bodyTable{
 			margin-bottom: -2px;
 		}
+		
+		.LinkDeletePage{
+			text-decoration: none;
+		}
+		.LinkDeletePage img{
+			border: 0;
+			width: 9px;
+			heigth: 9px;
+		}
+		
+		.swirly_overlay {
+			background:#000 url({!URLFOR($Resource.WikiResource, 'images/layout/ajax-loader.gif')}) no-repeat scroll center center;
+			opacity:0.6;
+			overflow:hidden;
+			position:absolute;
+			z-index:9999;
+		}
 	</style>
+
+	<script>
+	function ShowSwirly(id) {
+        var swirlyElem = document.getElementById(id);
+        var div = swirlyElem.ancestors()[0];
+        swirlyElem.style.height = div.getHeight()+'px';
+        swirlyElem.style.width = div.getWidth()+'px';
+        Effect.Appear(swirlyElem, { duration: 0.1, to: 0.6 });
+    }
+    
+    function HideSwirly(id){
+        var swirlyElem = document.getElementById(id);
+        Effect.Fade(swirlyElem);
+    }
+
+	</script>
 
 	<script>
 		/**
@@ -69,14 +102,14 @@
 	<!-- Delete Wiki & WikiPages-->
 	<c:WikiOverlayDeleteWiki pageFrom="WikiTeamOverview"/>
 	<apex:outputpanel id="formsOverlays">
-		<c:WikiOverlayDeletepage />
+		<c:WikiOverlayDeletepage canManage="{!userPermissions.canManage}" />
 	</apex:outputpanel>
 
     <!-- Overlay Add Child -->
 	<c:WikiNewPageWidget />
 	
 	<apex:form >
-		<apex:actionFunction name="refreshTeamOverview" action="{!genWikiTree}" rerender="wikiTreePanel, updatedPanel" />
+		<apex:actionFunction name="refreshTeamOverview" action="{!genWikiTree}" rerender="wikiTreePanel, updatedPanel" oncomplete="HideSwirly('swirlyWikiTree')" />
 	</apex:form>
 	<div class="BodyPage">
 		
@@ -90,7 +123,7 @@
 		<apex:composition template="HeaderTemplate">
 			<apex:define name="moduleId"><apex:variable var="moduleId" value="headerWiki"/></apex:define>
 		    <apex:define name="module">Wiki</apex:define>
-		    <apex:define name="title">Overview</apex:define>
+		    <apex:define name="title">Details</apex:define>
 		    <apex:define name="help">WikiTree</apex:define>
 		    <apex:define name="search">
 		    	<c:Search module="wiki" />
@@ -165,21 +198,22 @@
 											<br style="clear:both;"/>
 											<!-- Wiki Page Tree Start -->											
 											<div class="wikiPageTree" id="wikiPageTree">
+											<div id="swirlyWikiTree" class="swirly_overlay" style="display:none;"></div>
 												<apex:outputpanel id="wikiTreePanel">
 													<apex:repeat value="{!wpl}" var="wiki">												
 														<div id="pagecontainer-{!wiki.Id}" class="wikiPageContainer">
 															<div class="WPwrapper">
 																<div id="actionContainer-{!wiki.Id}" class="actions">
 																	<apex:outputpanel rendered="{!wiki.hasChilds}" styleClass="wikiChilds" >
-																		<a href="javascript:;" onclick="expandCollapse('','','{!wiki.Id}','collapse');"><img src="{!URLFOR($Resource.WikiResource, 'images/layout/icons/collapsewiki.gif')}" alt="" title="" /></a>
+																		<a href="javascript:;" onclick="expandCollapse('{!userPermissions.canManage}','{!$User.Id}','{!wiki.Id}','collapse');"><img src="{!URLFOR($Resource.WikiResource, 'images/layout/icons/collapsewiki.gif')}" alt="" title="" /></a>
 																	</apex:outputpanel>
 																</div>
 																<div class="wikiPage">
 																	<a href="/apex/WikiPage?idWP={!wiki.Id}"><apex:outputText value="{!wiki.Name}"/></a>
 																</div>
 																<apex:outputpanel rendered="{!IF(OR(userPermissions.canManage,BEGINS(wiki.CreatedById, $User.Id)),true,false)}">
-																	&nbsp;|&nbsp;<a href="javascript:;" onclick="createOverlay('','deleteWikiOverlay','180',''); relocateOverlay()">Delete</a>
-																</apex:outputpanel>
+																	&nbsp;<a href="javascript:;" title="Delete this page" onclick="createOverlay('','WikiOverview:j_id51:j_id52:deletePageOverlay','180',''); relocateOverlay(); updateDeleteHidden('{!wiki.Id}')" class="LinkDeletePage"><img src="{!URLFOR($Resource.WikiResource, 'images/layout/closeWindow.gif')}" border="0" /></a>
+																</apex:outputpanel> 
 															</div>
 															<apex:outputpanel rendered="{!wiki.hasChilds}" layout="block">
 																<div id="childs-{!wiki.Id}" class="wikiChilds">
@@ -194,7 +228,7 @@
 																				<a href="/apex/WikiPage?idWP={!wikiChild.Id}"><apex:outputText value="{!wikiChild.Name}"/></a>
 																			</div>
 																			<apex:outputpanel rendered="{!IF(OR(userPermissions.canManage,BEGINS(wikiChild.CreatedById, $User.Id)),true,false)}">
-																				&nbsp;|&nbsp;<a href="javascript:;" onclick="createOverlay('','deleteWikiOverlay','180',''); relocateOverlay()">Delete</a>
+																				&nbsp;<a href="javascript:;" title="Delete this page" onclick="createOverlay('','WikiOverview:j_id51:j_id52:deletePageOverlay','180',''); relocateOverlay(); updateDeleteHidden('{!wikiChild.Id}')" class="LinkDeletePage"><img src="{!URLFOR($Resource.WikiResource, 'images/layout/closeWindow.gif')}" border="0" /></a>
 																			</apex:outputpanel>
 																			<apex:outputpanel rendered="{!wikiChild.hasChilds}" layout="block">
 																				<div id="childs-{!wikiChild.Id}" class="wikiChilds"></div>
@@ -306,4 +340,9 @@
 		readPortalCSSRules();
 	</script>
 
+	<script>
+	function updateDeleteHidden(wikiPageID) {
+		document.getElementById('WikiOverview:j_id51:j_id52:deleteOvlyForm:wikiPageToDelete').value = wikiPageID;
+	}
+	</script>
 </apex:page>

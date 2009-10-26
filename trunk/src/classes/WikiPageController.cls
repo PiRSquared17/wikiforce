@@ -25,10 +25,22 @@ public class WikiPageController {
 	
 	public Boolean currentUsCanManage = false;
 	public Boolean currentUsIsOwner = false;
+	public Boolean deleteRedirect = true;
+	public Boolean canManage { get; set; }
 	
 	private String domain;
 	
 	private Boolean isParentOwner;
+	
+	public String wikiPageToDelete = null;
+    
+    public String getWikiPageToDelete(){
+    	return this.wikiPageToDelete;
+    }
+    
+    public void setWikiPageToDelete(String value ){ 
+		this.wikiPageToDelete = value;
+    }
 	
 	/**
 	* Costructor
@@ -148,6 +160,8 @@ public class WikiPageController {
 	*@throws CustomException
 	*/
 	public void contructMethods () {
+		if(paramIdWP == null){paramIdWP = wikiPageToDelete; deleteRedirect = false;}
+		System.debug('\n\n============\nwikiPageId = '+paramIdWP);
 		if(paramIdWP != null) {
 			wikiPageBodyList = [SELECT Id, 
 									   Name, 
@@ -220,7 +234,7 @@ public class WikiPageController {
 		userPermissions.setTeam(idWikiSite);
 		userPermissions.setOwnerId(OwnerId);
 		userPermissions.setObjectType('Wiki');
-		userPermissions.setPermissions();		
+		userPermissions.setPermissions();
 	}
 	
 	/**
@@ -974,7 +988,7 @@ public class WikiPageController {
 	  	
 	/**
 	*@return String
-	*/
+	**/
 	public String getBreadCrumbing () {
 	   	WikiPage__c wikiBC;
 	   	String breadCrumbing = '';
@@ -1600,14 +1614,16 @@ public class WikiPageController {
 	* Class DeleteWiki
 	*/
    	public without sharing class DeleteWiki {
-   		
+   		   		
    		/**
 		*@return PageReference
 		*@throws CustomException
 		*/
-   		public PageReference deleteWikiPage (List<WikiPage__c> wikiPageBodyList, UserPermissions userPermissions) {
+   		public PageReference deleteWikiPage (List<WikiPage__c> wikiPageBodyList, UserPermissions userPermissions, Boolean deletePageRedirect, Boolean canManage) {
    			PageReference pageRef;
-   			if (userPermissions.getCanManage()) {
+   			
+   			if (canManage || UserInfo.getUserId() == wikiPageBodyList[0].CreatedById) {
+   			//if (1 == 1) {
 		   		String wikiParent = '';
 		   		String idWikiSite = '';
 		   		if (wikiPageBodyList.size() > 0) {
@@ -1617,19 +1633,26 @@ public class WikiPageController {
 		   			idWikiSite = wikiPageBodyList[0].Wiki__c;
 		   			delete wikiPageBodyList;
 		   		}
-		   		if (wikiParent != '') {
-		   			pageRef = Page.WikiPage;
-		   			pageRef.getParameters().put('idWP', wikiParent);
+		   		if (deletePageRedirect){
+		   			System.debug('\n\n====================>>> Have to redirect');
+			   		if (wikiParent != '') {
+			   			pageRef = Page.WikiPage;
+			   			pageRef.getParameters().put('idWP', wikiParent);
+			   		}
+			   		else {
+			   			pageRef = Page.WikiTeamOverview;
+			   			pageRef.getParameters().put('tid', idWikiSite);
+			   		}
 		   		}
-		   		else {
+		   		else{
+		   			System.debug('\n\n====================>>> Don\'t have to redirect');
 		   			pageRef = Page.WikiTeamOverview;
-		   			pageRef.getParameters().put('tid', idWikiSite);
 		   		}
 	   		}
 	   		else {
-	   			throw new CustomException('Insufficient Privileges');		
+	   			throw new CustomException('Insufficient Privileges');
 	   		}
-	   		pageRef.setRedirect(true);
+	   		pageRef.setRedirect(deletePageRedirect);
 			return pageRef;
    		}	
    	}
@@ -1639,7 +1662,15 @@ public class WikiPageController {
 	*/ 
    	public PageReference deletePage () {
    		DeleteWiki delW = new DeleteWiki();
-   		return delW.deleteWikiPage(wikiPageBodyList,userPermissions);
+   		List<WikiPage__c> wikisToDelete = new List<WikiPage__c>();
+   		if (wikiPageToDelete != null && wikiPageToDelete != '') { 
+   			wikisToDelete = [select id, CreatedById, Parent__c, Wiki__c from WikiPage__c where id=: wikiPageToDelete];
+   		}
+   		else {
+   			wikisToDelete = wikiPageBodyList;
+   		}
+   		
+   		return delW.deleteWikiPage(wikisToDelete,userPermissions,deleteRedirect,canManage);
    	}
 
 }

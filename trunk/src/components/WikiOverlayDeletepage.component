@@ -1,4 +1,32 @@
-<apex:component controller="WikiPageController" allowDML="true">    
+<apex:component controller="WikiPageController" allowDML="true">
+<apex:attribute name="canManage" description="Defines if User can Manage Current Wiki" type="Boolean" />
+<style>
+.saving {
+color:#566A22;
+font-size:15px;
+font-weight:bold;
+margin:30px;
+}
+</style>
+<script>
+function savingShowWP(formDiv, savingDiv) {
+	$(formDiv).getElementsByClassName(savingDiv)[0].style.display = 'block';	
+	$(formDiv).getElementsByClassName('deleteOvlyForm')[0].style.display='none';
+}
+
+function afterDeletePage(){
+	// If we are in wikiTeamOverview, refresh the outputpanels.
+	if(document.URL.toLowerCase().indexOf('wikiteamoverview') != -1){
+		ShowSwirly('swirlyWikiTree');
+		refreshTeamOverview();
+		refreshRecentChanges();
+	}
+	modal.close();
+	
+}
+
+</script>
+
 <apex:outputpanel id="deletePageOverlay" style="display:none;">
 	<div class="attach__Overlay" id="DeletePageForm">
 	<div class="formsHeader">
@@ -13,18 +41,20 @@
 	</div>
 	<div id="deleting" class="saving" style="display: none;">
 	Deleting...</div>
-	<apex:form id="deleteOvlyForm">
+	<apex:form id="deleteOvlyForm" styleClass="deleteOvlyForm">
 		<div class="overlayBody"><br>
 		<br>
 		<b>Are you sure you want to delete this page?</b><br>
 		<span class="infoText">Once a page is deleted, it is not
 		recoverable.</span><br>
+		<apex:inputHidden id="wikiPageToDelete" value="{!wikiPageToDelete}" />
+		<apex:inputHidden id="canManage" value="{!canManage}" />
 		<br>
 		<br>
 		</div>
 		<div class="separateLine"></div>
 		<div align="center">
-		    <apex:commandButton styleclass="allButtons actionButtons" action="{!deletePage}" value="Continue and delete page" onclick="savingShowWP('{!$Component.deleteOvlyForm}','deleting');" oncomplete="modal.close();" rerender="auxPanel" />
+		    <apex:commandButton styleclass="allButtons actionButtons" action="{!deletePage}" value="Continue and delete page" onclick="savingShowWP('DeletePageForm','saving');" oncomplete="afterDeletePage();" rerender="auxPanel" />
                   <input type="button" class="allButtons cancelButtons" value="Cancel" onclick="modal.close();" /></div>
 	</apex:form></div>
 </apex:outputpanel>
