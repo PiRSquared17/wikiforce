@@ -14,6 +14,6 @@
 
 <img src="http://wikiforce.googlecode.com/svn/wiki/images/New/WikiPageDetails1.png" align="left" />
 
-.
+__
 
 <img src="http://wikiforce.googlecode.com/svn/wiki/images/New/WikiPageDetails2.png" align="left" />
