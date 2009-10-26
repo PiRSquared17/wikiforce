@@ -26,5 +26,3 @@ Admins can create wikis.
 To join the wiki an admin must invite you
 Members can create and view pages and add comments.
 Admins can create wikis.
-
-<img src="http://wikiforce.googlecode.com/svn/wiki/images/AccessWikiReal.png" align="left" />
