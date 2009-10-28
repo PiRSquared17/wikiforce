@@ -12,7 +12,7 @@
 					<apex:form onsubmit="if(!validateSearchLenght()) return false;">
 						<div class="search_box_input f_left">
 							<div class="legend_portal">
-								<span><img class="f_left" alt="" src="{!URLFOR($Resource.TeamsResources, 'images/layout/magnifier.gif')}" />Find&nbsp;Wikis</span>
+								<span><img class="f_left" alt="" src="{!URLFOR($Resource.TeamsResources, 'images/layout/magnifier.gif')}" />Find&nbsp;{!label}</span>
 							</div>
 							<apex:inputText value="{!key}" styleClass="key_imput" onfocus="changeInputValue('focus');" onblur="changeInputValue('blur');"/>
 							<apex:inputText style="display: none;"/>
