@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
         <members>*</members>
@@ -25,6 +25,7 @@
         <name>CustomLabels</name>
     </types>
     <types>
+        <members>*</members>
         <members>Account</members>
         <members>AccountContactRole</members>
         <members>AccountPartner</members>
@@ -50,7 +51,6 @@
         <members>Solution</members>
         <members>Task</members>
         <members>User</members>
-        <members>*</members>
         <name>CustomObject</name>
     </types>
     <types>
@@ -76,6 +76,9 @@
         <members>unfiled$public/NewUserEmail</members>
         <members>unfiled$public/NewUserEmail1</members>
         <members>unfiled$public/RejectionEmail</members>
+        <members>unfiled$public/SUPPORTSelfServiceNewCommentNotificationSAMPLE</members>
+        <members>unfiled$public/SUPPORTSelfServiceNewUserLoginInformationSAMPLE</members>
+        <members>unfiled$public/SUPPORTSelfServiceResetPasswordSAMPLE</members>
         <members>unfiled$public/SalesNewCustomerEmail</members>
         <members>unfiled$public/SelfRegUserEmail</members>
         <members>unfiled$public/SupportCaseAssignmentNotification</members>
@@ -84,11 +87,8 @@
         <members>unfiled$public/SupportCaseResponse</members>
         <members>unfiled$public/SupportEscalatedCaseNotification</members>
         <members>unfiled$public/SupportEscalatedCaseReassignment</members>
-        <members>unfiled$public/SUPPORTSelfServiceNewCommentNotificationSAMPLE</members>
         <members>unfiled$public/SupportSelfServiceNewLoginandPassword</members>
-        <members>unfiled$public/SUPPORTSelfServiceNewUserLoginInformationSAMPLE</members>
         <members>unfiled$public/SupportSelfServiceResetPassword</members>
-        <members>unfiled$public/SUPPORTSelfServiceResetPasswordSAMPLE</members>
         <members>unfiled$public/UpdateConnEmail</members>
         <name>EmailTemplate</name>
     </types>
@@ -136,6 +136,5 @@
         <members>*</members>
         <name>Workflow</name>
     </types>
-    <version>15.0</version>
+    <version>16.0</version>
 </Package>
-
