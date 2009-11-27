@@ -294,6 +294,8 @@ public without sharing class WikiPageEditController {
  	*@return String
  	*/
  	public String getHtml () {
+ 		System.debug('-----------------------------------------------------------');
+ 		System.debug('XXX-'+html);
  		return html;	
  	}
  	
@@ -1456,7 +1458,6 @@ public without sharing class WikiPageEditController {
  		html = html.replaceAll('(?i)' + '</p>([ ]*[\r\n]*)*<p>','<br /><br />');
  		html = html.replaceAll('(?i)' + '<p>','');
  		html = html.replaceAll('(?i)' + '</p>','<br />'); 		
- 		
  	}
 
 	WikiVersions__c editWV;
