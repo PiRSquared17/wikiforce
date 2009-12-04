@@ -16,7 +16,7 @@
     <apex:stylesheet value="{!URLFOR($Resource.WikiResource, 'inc/css/WikiPageEdit.css')}" />
 
     <script src="{!URLFOR($Resource.ckeditor, 'ckeditor/ckeditor.js')}" />
-   
+
    
     <!-- - - - - - - - - - - - - - - - - - - - - -->   
     <!-- - - - - - - -   OVERLAY   - - - - - - - -->
@@ -47,7 +47,7 @@
             </div>
         </apex:outputpanel>
         <div class="MainPage">
-            <apex:form id="editForm" onsubmit="return validateBody();">
+            <apex:form id="editForm" onsubmit="return validateBody();" onsubmit="hideLoader();">
                 <apex:actionFunction rerender="controllerVar, theTextArea2" action="{!dummyRefresh}"  name="dummyRefresh" />
                 <div class="PageBlock">   
                     <!-- - - - - - - - - - - - - - - - - - - - - -->   
@@ -105,13 +105,16 @@
                                                         <tr>                       
                                                             <td id="htmlTab" class="selectTab">
                                                                 <div>
-                                                                    <apex:commandLink value="Rich Text Editor"  action="{!parseHTML}" style="text-decoration:none;" oncomplete="replicateOutputtoIframe();switchOverlay(false);" onclick="setValResult();switchOverlay(true);" reRender="controllerVar, theTextArea2"/>
+                                                                    <apex:commandLink value="Rich Text Editor"  action="{!parseHTML}" style="text-decoration:none;" oncomplete="replicateOutputtoIframe();hideLoader();$('loader__').hide();" onclick="switchOverlay(true);setValResult();" reRender="controllerVar, theTextArea2"/>
+                                                                    <!-- <apex:commandLink value="Rich Text Editor"  action="{!parseHTML}" style="text-decoration:none;" oncomplete="replicateOutputtoIframe();switchOverlay(false);$('UPF__overlay__').hide();$('loader__').style.display='none';" onclick="setValResult();switchOverlay(true);" reRender="controllerVar, theTextArea2"/> -->
                                                                     <!-- <apex:commandLink value="Rich Text Editor"  action="{!parseHTML}" style="text-decoration:none;" oncomplete="replicateOutputtoIframe();switchOverlay(false);" onclick="setValResult();iframeContent();switchOverlay(true);" reRender="controllerVar, theTextArea2"/> -->
                                                                 </div>
                                                             </td>
                                                             <td id="wikiTab" class="unselectTab">
                                                                 <div>
-                                                                    <apex:commandLink value="Wiki Syntax"  style="text-decoration:none;" action="{!parseWiki}" oncomplete="replicateOutput();switchOverlay(false);" onclick="setValResult();switchOverlay(true);" reRender="controllerVar, theTextArea2"  />
+                                                                	<apex:commandLink value="Wiki Syntax"  style="text-decoration:none;" action="{!parseWiki}" oncomplete="replicateOutput();hideLoader();$('loader__').hide();" onclick="setValResult();iframeContent();switchOverlay(true);" reRender="controllerVar, theTextArea2"  />
+                                                                	<!--	<apex:commandLink value="Wiki Syntax"  style="text-decoration:none;" action="{!parseWiki}" oncomplete="replicateOutput();$('UPF__overlay__').hide();$('loader__').style.display='none';" onclick="setValResult();iframeContent();switchOverlay(true);" reRender="controllerVar, theTextArea2"  /> -->
+                                                                	<!-- <apex:commandLink value="Wiki Syntax"  style="text-decoration:none;" action="{!parseWiki}" oncomplete="replicateOutput();switchOverlay(false);$('UPF__overlay__').hide();$('loader__').style.display='none';" onclick="setValResult();iframeContent();switchOverlay(true);" reRender="controllerVar, theTextArea2"  /> -->
                                                                     <!-- <apex:commandLink value="Wiki Syntax"  style="text-decoration:none;" action="{!parseWiki}" oncomplete="(FCKAlertMode())?wikiOnComplete():''" onclick="(FCKAlertMode())?wikiProcess():alert('You must turn off the code view to get Wiki Syntax!')" rerender="(FCKAlertMode())?wikiRerender():''" /> -->
                                                                     <!-- <apex:commandLink value="Wiki Syntax"  style="text-decoration:none;" action="{!parseWiki}" oncomplete="wikiOnComplete()" onclick="FCKAlertMode()" rerender="wikiRerender()" /> -->
                                                                 </div>

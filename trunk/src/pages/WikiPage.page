@@ -115,6 +115,7 @@
 									<td class="requiredTD"><span class="requiredInput"></span></td>
 									<td>
 										<!-- <input type="text" value="{!infoWiki.Name}"	style="width: 98%" /> -->
+										<!-- <apex:inputText value="{!infoWiki.Name}" id="nameNewWP" style="width:98%" maxlength="79"/> -->
 										<apex:inputText value="{!infoWiki.Name}" id="nameNewWP" style="width:98%" maxlength="79"/>
 									</td>
 								</tr>
@@ -221,7 +222,8 @@
 	<apex:outputpanel id="breadCrumbringPanel" rendered="true">
 		<div class="breadCrumbring"><apex:outputLabel escape="false"
 			value="{!wikiSiteName} {!breadCrumbing}" />
-			<apex:outputLabel escape="false" value="{!infoWiki.Name}" />
+			<!-- <apex:outputLabel escape="false" value="{!infoWiki.Name}" /> -->
+			<apex:outputLabel escape="false" value="{!infoWiki.NameShort}" />
 			<br />
 		</div>
 	</apex:outputpanel>
@@ -242,7 +244,8 @@
 			<tr>
 				<td>
 					<apex:outputPanel id="bodyPageHeaderName" rendered="true">
-						<span class="bodyPageHeaderName">{!infoWiki.Name}</span>
+						<!-- <span class="bodyPageHeaderName">{!infoWiki.Name}</span> -->
+						<span class="bodyPageHeaderName">{!infoWiki.NameShort}</span>
 					</apex:outputPanel>
 				</td>
 				<td class="buttons" align="rigth">
@@ -320,8 +323,10 @@
 							<tr>
 								<td valign="top"><apex:image style="vertical-align:bottom;"
 									value="{!URLFOR($Resource.commonResources, 'images/icons/favOn.gif')}" /></td>
-								<td><a href="/apex/WikiPage?idWP={!item.WikiPage__r.Id}"
-									class="WikiLink">{!item.WikiPage__r.Name}</a></td>
+								<td>
+									<!-- <a href="/apex/WikiPage?idWP={!item.WikiPage__r.Id}" class="WikiLink">{!item.WikiPage__r.Name}</a> -->
+									<a href="/apex/WikiPage?idWP={!item.WikiPage__r.Id}" class="WikiLink">{!item.WikiPage__r.Name}</a>
+								</td>
 							</tr>
 						</apex:repeat>
 					</table>
@@ -335,8 +340,10 @@
 					<apex:form id="formRecentlyUpdate">
 						<ul class="sideBarList">
 							<apex:repeat value="{!recentlyUpdated}" var="item">
-								<li><a href="/apex/WikiPage?idWP={!item.id}"
-									class="WikiLink">{!item.name}</a></li>
+								<li>
+									<!-- <a href="/apex/WikiPage?idWP={!item.id}" class="WikiLink">{!item.name}</a> -->
+									<a href="/apex/WikiPage?idWP={!item.id}" class="WikiLink">{!item.name}</a>
+								</li>
 							</apex:repeat>
 						</ul>
 					</apex:form> 
@@ -349,8 +356,10 @@
 				<apex:form id="formMostPopular2">
 					<ul class="cloud">
 						<apex:repeat value="{!linkCount}" var="item">
-							<li><a href="/apex/WikiPage?idWP={!item.linkId}"
-								class="{!item.linkClass}">{!item.linkName}</a></li>
+							<li>
+								<!-- <a href="/apex/WikiPage?idWP={!item.linkId}" class="{!item.linkClass}">{!item.linkName}</a> -->
+								<a href="/apex/WikiPage?idWP={!item.linkId}" class="{!item.linkClass}">{!item.linkNameShort}</a>
+							</li>
 						</apex:repeat>
 					</ul>
 					<apex:outputpanel layout="block" id="noPopular"
@@ -416,8 +425,9 @@
 						style="display: none;"><br>
 					<table border="0" style="margin-left: 10px; width: 100%">
 						<tr>
-							<td valign="top" class="dashed" style="width: 25%"><span
-								class="infoText">Page Name:</span>&nbsp; {!infoWiki.Name}<br>
+							<td valign="top" class="dashed" style="width: 25%">
+								<!-- <span class="infoText">Page Name:</span>&nbsp; {!infoWiki.Name}<br> -->
+								<span class="infoText">Page Name:</span>&nbsp; {!infoWiki.NameShort}<br>
 							<span class="infoText">Page Description:</span><br>
 							{!infoWiki.ShortDescription}</td>
 							<td valign="top" class="dashed"
@@ -648,6 +658,7 @@
 	<br>
 	</div>
 	</div>
+
 	
 	<apex:form id="auxForm" style="display:none;">
 		<!-- style="display:none;"> -->

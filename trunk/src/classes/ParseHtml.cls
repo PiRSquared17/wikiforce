@@ -1028,7 +1028,7 @@ public class ParseHtml {
  		html = html.replaceAll('> ','>&nbsp;');
  		html = html.replaceAll(' <','&nbsp;<');
  		 		
- 		System.debug('\n\n HTML final ----------------------------------->' + html + '\n\n'); 
+ 		// System.debug('\n\n HTML final ----------------------------------->' + html + '\n\n'); 
  	}
 
     private String getMatch(String regExp,String theString) {

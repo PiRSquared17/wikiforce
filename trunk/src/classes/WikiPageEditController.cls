@@ -1,4 +1,4 @@
-/** 
+/**
 *@author Yuri Alvarez @ 5-2-2008
 */
 public without sharing class WikiPageEditController {
@@ -288,17 +288,16 @@ public without sharing class WikiPageEditController {
  		ph.setIdWikiPage(idWikiPage);
  		ph.parseHtml();
  		html = ph.html;
+ 	
  	}   
  	/**
  	* Return parsed HTML
  	*@return String
  	*/
  	public String getHtml () {
- 		System.debug('-----------------------------------------------------------');
- 		System.debug('XXX-'+html);
  		return html;	
  	}
- 	
+	
  	
  	/**
  	* Convert the word size to html size in pixels
@@ -1457,7 +1456,11 @@ public without sharing class WikiPageEditController {
  		
  		html = html.replaceAll('(?i)' + '</p>([ ]*[\r\n]*)*<p>','<br /><br />');
  		html = html.replaceAll('(?i)' + '<p>','');
- 		html = html.replaceAll('(?i)' + '</p>','<br />'); 		
+ 		html = html.replaceAll('(?i)' + '</p>','<br />'); 	
+
+	
+		replace.content=html;
+
  	}
 
 	WikiVersions__c editWV;
