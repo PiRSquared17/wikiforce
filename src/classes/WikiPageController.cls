@@ -542,6 +542,7 @@ public class WikiPageController {
 	public class Info {
         
         String name;
+        String nameShort;
         String createdBy;
         String createdById;
         String createdDate;
@@ -554,21 +555,47 @@ public class WikiPageController {
         *@return String
         */
         public String getName() {
+        		System.debug('XXX - getNameeeeeeeeeeeeeee = '+name);
                 return name;
+        }
+        
+        /**
+        *@return String
+        */
+        public String getNameShort() {
+        		System.debug('XXX - getNameShortttttttttttttt = '+nameShort);
+                return nameShort;
         }
 
 		/**
         *@param String
         */
         public void setName(String name) {
-                if (name.length() > 60) {
-	            	this.name = name.substring(0,58) + '..';
+                //if (name.length() > 60) {
+	            	//this.name = name.substring(0,58) + '.. :-p  jeje';
+	            //}
+	            //else {
+	            	System.debug('XXX - setNameShort: '+name);
+	            	this.name = name;
+	            	this.setNameShort(name);
+	            //}
+        }
+        
+        /**
+        *@param String
+        * Return the name but more short
+        */
+        public void setNameShort(String nameaux) {
+                if (nameaux.length() > 60) {
+	            	this.nameShort = nameaux.substring(0,58) + '.. :-p  jeje';
+	            	System.debug('XXX - setNameShort , entre : ' + nameaux.substring(0,58));
 	            }
 	            else {
-	            	this.name = name;
+	            	this.nameShort = nameaux;
+	            	System.debug('XXX - setNameShort, no entre: ' + nameaux);
 	            }
-        }  
-        
+	            
+        }
         /**
         *@return String
         */
@@ -689,6 +716,7 @@ public class WikiPageController {
     	}
 		
 		infoWP.setName(wiki.Name);
+		infoWP.setNameShort(wiki.Name);
 		infoWP.setCreatedBy(wiki.CreatedById);
 		infoWP.setCreatedById(wiki.CreatedById);
 		infoWP.setCreatedDate(wiki.CreatedDate);
@@ -1086,15 +1114,24 @@ public class WikiPageController {
 	*/
  	public class Links {
  		String linkName;
+ 		String linkNameShort;
  		Integer linkCount;
  		String linkId;
  		String linkClass;
+ 		
  		
  		/**
         *@return String
         */
         public String getLinkName () {
         	return linkName;
+        }
+        
+        /**
+        *@return String
+        */
+        public String getLinkNameShort (){
+        	return linkNameShort;
         }
         
         /**
@@ -1123,6 +1160,19 @@ public class WikiPageController {
         */
         public void setLinkName (String linkName) {
         	this.linkName = linkName;
+        }
+        
+        /**
+        *@param String
+        * Return a short version of name
+        */
+        public void setLinkNameShort (String linkNameShort) {
+        	if (linkNameShort.length() > 60) {
+            	this.linkNameShort = linkNameShort.substring(0,58) + '.. :-p  jeje';
+            }
+            else {
+            	this.linkNameShort = linkNameShort;
+            }
         }
         
         /**
@@ -1471,7 +1521,8 @@ public class WikiPageController {
 	        		
 			if(commentBy.length() > charDisplayed){
 	           return commentBy.substring(0,charDisplayed-1) + '...';            	
-	        }else{
+	        }
+	        else{
 	        	return commentBy;
 	        }
 		}

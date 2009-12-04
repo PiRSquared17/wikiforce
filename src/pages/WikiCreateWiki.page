@@ -334,15 +334,19 @@
 														<td colspan="2">&nbsp;
 															<apex:inputTextarea value="{!Wiki.Description__c}" id="TeamDescription" cols="38" rows="4" style="height: 83px; width: 430px; word-wrap: break-word" onkeyup="countStringLimit2(this, 'stringSizeCounter');" />
 														</td>
+														
 													</tr>
 													<tr>
 														<td></td>
 														<td></td>
 														<td colspan="2">&nbsp;
-															<span id="warning" class="explain">(32k character limit) - Characters remaining:</span>
-															<span class="explain" id="stringSizeCounter">32000</span>
+															<span id="warning" class="explain">(31k character limit) - Characters remaining:</span>
+															<span class="explain" id="stringSizeCounter">31000</span>
 															<span class="explain" style="display:none;color:red;" id="numberOfCharacterExceeded">The number of characters was exceeded</span>
 															<br />
+															<span id="DescriptionErrorMessage" class="errorText" style="display:none;">
+																<b>Error: The number of characters was exceeded  </b> 
+															</span>
 														</td>
 													</tr>
 													<tr> 

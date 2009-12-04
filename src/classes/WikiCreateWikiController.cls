@@ -357,17 +357,14 @@ public class WikiCreateWikiController {
     *@throws Exception
     */    
     public PageReference saveWiki(){
-    	
     	try{
 	    	validSizePicture = true;
 			validTypePicture = true; 
-			System.debug('WIKI SAVING..');
 			if (document.name == null || document.name == '' || document.BodyLength > MAX_SIZE || 
 					!(document.ContentType == 'image/jpeg' || document.ContentType == 'image/pjpeg' 
 					|| document.ContentType == 'image/gif' 
 					|| document.ContentType == 'image/png'
 					|| document.ContentType == 'image/x-png')) {
-				System.debug('First IF passed');
 				if (document.BodyLength > MAX_SIZE) {
 					validSizePicture = false;
 				}
@@ -401,7 +398,13 @@ public class WikiCreateWikiController {
 					return null;
 				}
 			}
-		 	System.debug(theWiki.Type__c);		
+			
+
+    		if (theWiki.Description__c.length()>35000){
+    			return null;
+    		}
+			
+		 	//System.debug(theWiki.Type__c);		
 			if(theWiki.Type__c == 'open'){
     			List<WikiProfile__c> wp = [SELECT Name, Id 
     										FROM WikiProfile__c 
@@ -460,7 +463,7 @@ public class WikiCreateWikiController {
 			throw e;
 		}
 		
-  	}
+  	} 
   	
   	
   	/**
@@ -473,7 +476,7 @@ public class WikiCreateWikiController {
         }
         return nextAction;
 	}
-  	
+
   	
   	/********************************
   	***** WikiMembersList logic 
@@ -778,6 +781,7 @@ public class WikiCreateWikiController {
 		*/
 		public String getName () {
 			return name;
+			
 		}
 		
 		/**
