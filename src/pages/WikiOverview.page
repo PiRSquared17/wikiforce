@@ -257,7 +257,7 @@
 																					<tr>
 																						<td valign="top" colspan="2">
 																							<div class="description">
-																								<apex:outputText title="{!item.fullDescription}" escape="false" value="{!item.description}" />
+																								<apex:outputText title="{!item.fullDescription}" escape="false" value="{!item.shortDescription}" />
 																							</div>
 																						</td>
 																					</tr>
@@ -337,7 +337,7 @@
 																				<br>
 																				<div class="descriptionUpdated">{!item.shortDescription}</div>
 																				<span class="updatedDate">
-																					<a href ="/{!item.LastModifiedById}" class="WikiSite">{!item.LastModifiedBy}</a>&nbsp; in 
+																					{!item.LastModifiedBy}&nbsp; in 
 																					&nbsp;
 																					<a href="/apex/WikiTeamOverview?tid={!item.parentId}" class="WikiSite">{!item.parentName}</a>
 																					&nbsp;

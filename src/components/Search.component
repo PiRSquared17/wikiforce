@@ -14,7 +14,7 @@
 							<div class="legend_portal">
 								<span><img class="f_left" alt="" src="{!URLFOR($Resource.TeamsResources, 'images/layout/magnifier.gif')}" />Find&nbsp;{!label}</span>
 							</div>
-							<apex:inputText value="{!key}" styleClass="key_imput" onfocus="changeInputValue('focus');" onblur="changeInputValue('blur');"/>
+							<apex:inputText value="{!key}" styleClass="key_imput" onfocus="changeInputValue('focus');" onkeypress="changeInputValue('focus');" onblur="changeInputValue('blur');"/>
 							<apex:inputText style="display: none;"/>
 						</div>
 						<apex:commandButton value="Search" action="{!searchKey}" id="searchBtn" styleClass="search_btn f_left" style="background-image: none !important;" />

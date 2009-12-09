@@ -828,7 +828,7 @@
                                         </apex:outputpanel>
                                     </td>
                                     <td class="member_detail_description">
-                                       <a href="https://{!domain}/{!item.userId}" class="member_detail_description_underline">{!item.name}</a>
+                                       {!item.name}
                                     </td>
                                     <td class="member_detail_description"></td>
                                     <td class="member_detail_description">{!item.alias}</td>

@@ -432,8 +432,7 @@
 							{!infoWiki.ShortDescription}</td>
 							<td valign="top" class="dashed"
 								style="padding-left: 7px; width: 25%"><span
-								class="infoText">Created By:</span>&nbsp;<a
-								href="/{!infoWiki.createdById}">{!infoWiki.CreatedBy}</a><br>
+								class="infoText">Created By:</span>&nbsp;{!infoWiki.CreatedBy}<br>
 							<span class="infoText">Created Date:</span>&nbsp;
 							{!infoWiki.CreatedDate}</td>
 							<td valign="top" class="dashed"
@@ -678,7 +677,7 @@
 	</apex:form>
 
 	<apex:form >  
-		<apex:actionFunction name="reloadPageInfo" rerender="breadCrumbringPanel, bodyPageHeaderName, informationPanel, RecentChanges, editPageInfoOverlay" />					
+		<apex:actionFunction name="reloadPageInfo" rerender="breadCrumbringPanel, bodyPageHeaderName, informationPanel, RecentChanges, editPageInfoOverlay, rightSidebarPanel" />					
 	</apex:form>	
 	<apex:outputpanel id="auxPanel" />
 	<!-- <img src="{!URLFOR($Resource.FCKeditor ,'fckeditor/editor/images/smiley/msn/teeth_smile.gif')}" /> -->

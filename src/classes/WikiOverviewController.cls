@@ -194,10 +194,11 @@ public with sharing class WikiOverviewController {
 			teamWikiItem.setIsPublic(item.PublicProfile__c != null);
 			teamWikiItem.setIsMember(mapMembers.containsKey(item.Id));
 			teamWikiItem.setId(item.Id);
-			teamWikiItem.setName(item.Name);
+			teamWikiItem.setName( TeamUtil.chopWords( item.Name ));
 			String nameProfileAdmin = 'Wiki Administrator';
 			teamWikiItem.setIsAdmin(teamAdmin[0].Profile.PermissionsModifyAllData || nameProfileAdmin.equals(wAdmin.get(item.Id)));
-			teamWikiItem.setDescription(item.Description__c);
+			teamWikiItem.setDescription( item.Description__c );
+			teamWikiItem.shortDescription = TeamUtil.chopWords( TeamUtil.chopPhrase( item.Description__c ));
 			teamWikiItem.setPicture(item.PictureId__c);
 			teamWikiItem.setStateWiki(item.Type__c);
 			teamWikiList.add(teamWikiItem);
@@ -455,6 +456,7 @@ public with sharing class WikiOverviewController {
    		String id;
    		String name;
    		String description;
+   		public String shortDescription {set; get;}
    		String picture;
    		Boolean isAdmin;
    		Boolean isPublic;
@@ -841,13 +843,13 @@ public with sharing class WikiOverviewController {
    		for (WikiPage__c item: wikiPages) {
    			Wiki wiki = new Wiki();
    			wiki.setId(item.Id);
-   			wiki.setName(item.Name);
+   			wiki.setName( TeamUtil.chopWords( item.Name ));
    			wiki.setLastModifiedBy(item.LastModifiedById);
    			wiki.setLastModifiedById(item.LastModifiedById);
    			wiki.setLastModifiedDate(item.LastModifiedDate);
    			wiki.setParentName(item.Wiki__r.Name);
    			wiki.setParentId(item.Wiki__r.Id);
-   			wiki.setShortDescription(item.ShortDescription__c);
+   			wiki.setShortDescription( TeamUtil.chopWords(item.ShortDescription__c ));
    			wikis.add(wiki);
    		}
    	}
