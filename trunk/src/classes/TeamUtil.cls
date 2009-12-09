@@ -3,6 +3,8 @@
 */
 public class TeamUtil { 
 	
+	public static Integer maxLongWord = 60;
+	public static Integer maxLongPhrase = 128;	
 	public static Boolean currentlyExeTrigger = false;
 	public static Boolean isTest = false;
 	public static Boolean alreadyGenEnv = false;
@@ -179,5 +181,61 @@ public class TeamUtil {
             }
         }
         return domain;  
+    }
+    
+    /**
+    *@return String
+    */
+    public static String joinStrListByToken( List<String> listToJoin, String token ){
+ 		String joinedStr = '';
+ 		Integer listSize = listToJoin.size();
+ 		
+		if( listSize > 0 ){ 	
+	 		for( Integer k = 0; k < listSize - 1; k++ )
+	 			joinedStr += listToJoin[ k ] + token;
+	 			
+			joinedStr += listToJoin[ listSize - 1 ];
+		}
+		
+		return joinedStr;
+ 		   	
+    }
+    
+    public static String chopWords( String words ){
+    	return TeamUtil.chopWords( words, TeamUtil.maxLongWord );
+    }
+    public static String chopWords( String words, Integer len ){
+    	String strToReturn = '';
+    	if( words != null && words.length() > 0 ){
+	    	List<String> listOfWords = new List<String>();
+	    	listOfWords = words.split( ' ' );
+	    	
+	    	for( Integer k = 0; k < listOfWords.size(); k++ )
+	    		if( listOfWords[ k ].length() > len )
+	    			listOfWords[ k ] = listOfWords[ k ].substring( 0, len ) + '.';
+	    			
+	    	strToReturn = TeamUtil.joinStrListByToken( listOfWords, ' ' );
+    	}
+    	
+    	return strToReturn;
+    }
+    
+    public static String chopPhrase( String phrase ){
+    	return TeamUtil.chopPhrase( phrase, TeamUtil.maxLongPhrase );
+    }
+    
+    public static String chopPhrase( String phrase, Integer len ){
+    	
+    	List<String> cPhrase = new List<String>();
+    	String rPhrase = '';
+    	if( phrase != null ){
+	    	if( phrase.length() > len ){
+		    	cPhrase = phrase.substring( 0, len ).split( ' ' );
+
+		    	rPhrase = TeamUtil.joinStrListByToken( cPhrase, ' ' ) + '...';
+	    	}else
+	    		rPhrase = phrase;
+    	}
+    	return rPhrase;
     }
 }

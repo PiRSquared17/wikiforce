@@ -28,6 +28,12 @@ public class WikiSubscriptionController {
 		return w.name;
 	}
 	
+	public String getWikiNameShort(){
+		Wiki__c w = new Wiki__c();
+		w = [ select Id, name from Wiki__c where id =: idTeam limit 1 ];
+		return TeamUtil.chopWords( TeamUtil.chopPhrase( w.name , 47 ));
+	}
+	
 	public WikiSubscription__c subscription = new WikiSubscription__c();
 	
 	/**
@@ -88,6 +94,7 @@ public class WikiSubscriptionController {
 		PageReference pageRef = Page.WikiTeamOverview;
 		pageRef.getParameters().put('tid', idTeam);
 		pageRef.setRedirect(true);
+		
 		return pageRef;
 	}
 	

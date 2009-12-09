@@ -79,7 +79,7 @@
 	<apex:form id="form_content" onsubmit="getInputValue(); if(!isCloneAction){if(validator('{!$Component.form_content}', 'warning_to_user'))return false;};">
 		<div class="breadcrumbs"  align="center">
 			<div class="bread">
-				<a href="WikiTeamOverview?tid={!idTeam}">{!wikiName}</a>&nbsp;&gt;&nbsp;<span class="End">Manage Subscriptionss</span>
+				<a title="{!wikiName}" href="WikiTeamOverview?tid={!idTeam}">{!WikiNameShort}</a>&nbsp;&gt;&nbsp;<span class="End">Manage Subscriptionss</span>
 			</div>
 		
 			<apex:outputpanel rendered="{!IF(subscriptionCount == 0, true, false)}">

@@ -266,7 +266,7 @@
 																		</apex:commandLink><br>
 																		<div class="descriptionUpdated">{!item.shortDescription}</div>
 																		<span class="updatedDate"> 
-																			<apex:commandLink rerender="auxPanel" onclick="location.href='/{!item.LastModifiedById}';" value="{!item.LastModifiedBy}" styleclass="WikiSite" />&nbsp; in 
+																			{!item.LastModifiedBy}&nbsp; in 
 																			&nbsp;
 																			<apex:commandLink onclick="location.href='/apex/WikiTeamOverview?tid={!item.parentId}';"
 																				value="{!item.parentName}" 

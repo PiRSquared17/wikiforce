@@ -1,5 +1,4 @@
 trigger WikiAfterUpdate on Wiki__c (after update) {
-  
 	if (!TeamUtil.currentlyExeTrigger) {
 		try {
 			

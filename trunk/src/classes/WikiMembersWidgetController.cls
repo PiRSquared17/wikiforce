@@ -255,11 +255,12 @@ public with sharing class WikiMembersWidgetController {
 		{	
 			WikiName = [select Name from Wiki__c where Id =: idWiki].Name;
 			WikiCompleteName = WikiName;
-			WikiName = ( WikiName.length() > 45 ) ? WikiName.substring( 0, 44 ) + ' ...' : WikiName;
+
+			WikiName = TeamUtil.chopWords( TeamUtil.chopPhrase( WikiName , 27 ));
 		}
 		return WikiName;	
 	}
-	
+	 
 	/**
 	* Get Wiki Complete Name
 	*@return String Wiki name

@@ -37,7 +37,7 @@ public class WikiPageController {
     public String getWikiPageToDelete(){
     	return this.wikiPageToDelete;
     }
-    
+
     public void setWikiPageToDelete(String value ){ 
 		this.wikiPageToDelete = value;
     }
@@ -126,12 +126,8 @@ public class WikiPageController {
 	*/
 	public String getWikiPageName () {
 		String trunkName;
-		if (wikiPageName.length() > 25) {
-			trunkName = wikiPageName.substring(0,23) + '..';
-		}
-		else {
-			trunkName = wikiPageName;
-		}
+
+		trunkName = TeamUtil.chopWords( TeamUtil.chopPhrase( wikiPageName ));
 		return '<strong>' + trunkName + '</strong>';	
 	}
 
@@ -161,7 +157,7 @@ public class WikiPageController {
 	*/
 	public void contructMethods () {
 		if(paramIdWP == null){paramIdWP = wikiPageToDelete; deleteRedirect = false;}
-		System.debug('\n\n============\nwikiPageId = '+paramIdWP);
+		//System.debug('\n\n============\nwikiPageId = '+paramIdWP);
 		if(paramIdWP != null) {
 			wikiPageBodyList = [SELECT Id, 
 									   Name, 
@@ -555,7 +551,6 @@ public class WikiPageController {
         *@return String
         */
         public String getName() {
-        		System.debug('XXX - getNameeeeeeeeeeeeeee = '+name);
                 return name;
         }
         
@@ -563,7 +558,6 @@ public class WikiPageController {
         *@return String
         */
         public String getNameShort() {
-        		System.debug('XXX - getNameShortttttttttttttt = '+nameShort);
                 return nameShort;
         }
 
@@ -571,14 +565,8 @@ public class WikiPageController {
         *@param String
         */
         public void setName(String name) {
-                //if (name.length() > 60) {
-	            	//this.name = name.substring(0,58) + '.. :-p  jeje';
-	            //}
-	            //else {
-	            	System.debug('XXX - setNameShort: '+name);
-	            	this.name = name;
-	            	this.setNameShort(name);
-	            //}
+        	this.name = name;
+        	this.setNameShort(name);
         }
         
         /**
@@ -586,14 +574,8 @@ public class WikiPageController {
         * Return the name but more short
         */
         public void setNameShort(String nameaux) {
-                if (nameaux.length() > 60) {
-	            	this.nameShort = nameaux.substring(0,58) + '.. :-p  jeje';
-	            	System.debug('XXX - setNameShort , entre : ' + nameaux.substring(0,58));
-	            }
-	            else {
-	            	this.nameShort = nameaux;
-	            	System.debug('XXX - setNameShort, no entre: ' + nameaux);
-	            }
+
+	            this.nameShort = TeamUtil.chopWords( TeamUtil.chopPhrase( nameaux , 57 ));
 	            
         }
         /**
@@ -1101,8 +1083,14 @@ public class WikiPageController {
 	*@return List<WikiPage__c>
 	*/
    	public List<WikiPage__c> getRecentlyUpdated () {
-   		return	[ SELECT Id, Name, ShortDescription__c, Parent__c, LastModifiedDate FROM WikiPage__c WHERE Wiki__c =: idWikiSite ORDER BY LastModifiedDate desc limit 5];
+   		List<WikiPage__c>  wikifavo = [ SELECT Id, Name, ShortDescription__c, Parent__c, LastModifiedDate FROM WikiPage__c WHERE Wiki__c =: idWikiSite ORDER BY LastModifiedDate desc limit 5 ];
+		for (WikiPage__c item :  wikifavo) {
+			item.Name = TeamUtil.chopWords( TeamUtil.chopPhrase( item.Name ,57 ));
+   		}   		
+   		return	wikifavo ;
    	}
+   	
+   	
    	    
    	/* ---------------------------- */
    	/*   	     TAG CLOUD			*/
@@ -1167,12 +1155,7 @@ public class WikiPageController {
         * Return a short version of name
         */
         public void setLinkNameShort (String linkNameShort) {
-        	if (linkNameShort.length() > 60) {
-            	this.linkNameShort = linkNameShort.substring(0,58) + '.. :-p  jeje';
-            }
-            else {
-            	this.linkNameShort = linkNameShort;
-            }
+            this.linkNameShort = TeamUtil.chopWords( TeamUtil.chopPhrase( linkNameShort,57 ));
         }
         
         /**
@@ -1238,7 +1221,11 @@ public class WikiPageController {
 	 			if (intCount > 25) { link.setLinkClass('tag10');}
 	 			
 	 			link.setLinkCount(intCount);
-	 			link.setLinkName(item.Name);
+	 			
+	 			//link.setLinkName(item.Name);
+	            link.setLinkName(TeamUtil.chopWords( TeamUtil.chopPhrase( item.name, 57 )));
+
+	 			
 	 			link.setLinkId(item.Id);
 	 			popularLinks.add(link);
  			}		
@@ -1256,14 +1243,18 @@ public class WikiPageController {
    	/* ---------------------------- */
    	/*   	   MY FAVOURITES		*/
    	/* ---------------------------- */
-   	
+
    	/**
 	*@return List<FavoriteWikis__c>
 	*/
    	public List<FavoriteWikis__c> getFavorite () {
-   		return	[ SELECT WikiPage__r.Name, WikiPage__r.Id FROM FavoriteWikis__c WHERE User__c = :UserInfo.getUserId() and WikiPage__r.Wiki__c =:idWikiSite order by WikiPage__r.Name];
+   		List<FavoriteWikis__c>  wikifavo = [ SELECT WikiPage__r.Name, WikiPage__r.Id FROM FavoriteWikis__c WHERE User__c = :UserInfo.getUserId() and WikiPage__r.Wiki__c =:idWikiSite order by WikiPage__r.Name];
+		for (FavoriteWikis__c item :  wikifavo) {
+			item.WikiPage__r.Name = TeamUtil.chopWords( TeamUtil.chopPhrase( item.WikiPage__r.Name , 57));
+   		}   		
+   		return	wikifavo ;
+   		//return	[ SELECT WikiPage__r.Name, WikiPage__r.Id FROM FavoriteWikis__c WHERE User__c = :UserInfo.getUserId() and WikiPage__r.Wiki__c =:idWikiSite order by WikiPage__r.Name];
    	}   	
-   	
    	
    	/**
 	* Class FavoriteSharing
@@ -1685,7 +1676,7 @@ public class WikiPageController {
 		   			delete wikiPageBodyList;
 		   		}
 		   		if (deletePageRedirect){
-		   			System.debug('\n\n====================>>> Have to redirect');
+		   		//	System.debug('\n\n====================>>> Have to redirect');
 			   		if (wikiParent != '') {
 			   			pageRef = Page.WikiPage;
 			   			pageRef.getParameters().put('idWP', wikiParent);
@@ -1696,7 +1687,7 @@ public class WikiPageController {
 			   		}
 		   		}
 		   		else{
-		   			System.debug('\n\n====================>>> Don\'t have to redirect');
+		   		//	System.debug('\n\n====================>>> Don\'t have to redirect');
 		   			pageRef = Page.WikiTeamOverview;
 		   		}
 	   		}
