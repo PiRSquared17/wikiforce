@@ -3,7 +3,7 @@
 */
 public class TeamUtil { 
 	
-	public static Integer maxLongWord = 60;
+	public static Integer maxLongWord = 50;
 	public static Integer maxLongPhrase = 128;	
 	public static Boolean currentlyExeTrigger = false;
 	public static Boolean isTest = false;

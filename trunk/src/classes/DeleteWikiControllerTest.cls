@@ -10,12 +10,13 @@
             DeleteWikiController t = new DeleteWikiController();
             t.setWikiId( GenerateEnvironmentTest.wiki.Id );
             t.getWikiId();
-            //t.deleteWiki();
+            t.setPageFrom('');
+            
+            t.getPageFrom();
+            t.deleteWiki();
             
             Test.stopTest();
-        }
-        catch(Exception e)
-        {
+        }catch(Exception e){
             throw e;
         }
     }

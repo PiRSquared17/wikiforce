@@ -63,7 +63,7 @@ public with sharing class WikiWidgetMyRecentChangesController {
    		*@return String
    		*/
    		public String getParentName () {
-   			return parentName;
+   			return TeamUtil.chopWords( TeamUtil.chopPhrase( parentName , 25 ));
    		}
    		
    		/**
@@ -91,7 +91,7 @@ public with sharing class WikiWidgetMyRecentChangesController {
    		*@return String
    		*/
    		public String getName () {
-   			return name;
+   			return TeamUtil.chopWords( TeamUtil.chopPhrase( name , 18 ));
    		}
    		
    		/**
