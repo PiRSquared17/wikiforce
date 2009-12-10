@@ -195,7 +195,15 @@
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>WikiSetupControllerTest</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>WikiSubscribeController</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>WikiSubscribeControllerTest</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
@@ -204,6 +212,10 @@
     </classAccesses>
     <classAccesses>
         <apexClass>WikiSubscriptionController</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>WikiSubscriptionControllerTest</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>

@@ -120,9 +120,9 @@ public class WikiSubscribersEmailServices {
 		String emailMsj = '';
 		WikiPage__c wp = new WikiPage__c();
 		wp = [ SELECT Id,Name, Wiki__c, Wiki__r.Name, LastModifiedById, LastModifiedBy.Name FROM WikiPage__c WHERE Id =: IdNewPage ];
-
-
-
+System.debug('XXX sendNewPageMessage entreee WP ='+wp);
+System.debug('XXX sendNewPageMessage entreee wikic='+IdNewPage);
+System.debug('XXX sendNewPageMessage entreee acction='+acction+', IdNewPage='+IdNewPage);
 		if( acction == 'newPage' )
 		{			
 
@@ -174,6 +174,10 @@ public class WikiSubscribersEmailServices {
 						t.Id
 						From WikiSubscription__c t
 						where Team__c =: wp.Wiki__c and ((WikiPageUpdated__c = true and User__c !=:createdById) or (WikiCreatedByMeUpdated__c = true and User__c =:createdById))];
+						
+						String aa = 'Select t.WikiPageUpdated__c,t.WikiNewPage__c,t.WikiCreatedByMeUpdated__c,t.User__c,t.User__r.Id,t.User__r.Name,t.User__r.Email,t.Team__c,t.Team__r.Name,t.Team__r.Id,t.TeamMemberStatusUpdated__c,t.TeamMemberJoinLeave__c,t.Id From WikiSubscription__c t where Team__c =: '+wp.Wiki__c+' and ((WikiPageUpdated__c = true and User__c !=:'+createdById+') or (WikiCreatedByMeUpdated__c = true and User__c =:'+createdById+'))';
+					System.debug('XXX update :'+TeamMemberSubscription);
+					System.debug('XXX update SQL :'+aa);
 				}			
 			}else{
 				if( acction == 'deletePage' ){
@@ -212,16 +216,22 @@ public class WikiSubscribersEmailServices {
 		//Array address
 		String[] address = new String[]{}; 
 		Integer it = 0;
+		System.debug('XXX size:'+TeamMemberSubscription.size());
+		System.debug('XXX tms:'+TeamMemberSubscription);
 		if(TeamMemberSubscription.size() > 10)
 		{
+			System.debug('XXX entre if:');
 			for(Integer i =0; i < TeamMemberSubscription.size(); i++ )
 			{	
+				System.debug('XXX entre for:');
 				if(it < 10 || i == TeamMemberSubscription.size() ){
+					System.debug('XXX entre segundo if:');
 					address.add(TeamMemberSubscription[i].User__r.Email);
 					it ++;
 				}
 				else
 				{
+					System.debug('XXX entre else del segundo if:');
 					SendMail(address, TeamMemberSubscription[0].Team__r, emailMsj, emailSub);
 					it = 0;
 				}
@@ -229,8 +239,10 @@ public class WikiSubscribersEmailServices {
 		}
 		else if(TeamMemberSubscription.size() > 0 && TeamMemberSubscription != null)
 		{	
+			System.debug('XXX entre else if, ...');
 			for(WikiSubscription__c ts : TeamMemberSubscription)
 			{
+				System.debug('XXX entre al else if: y for, mail  :'+ts.User__r.Email);
 				address.add(ts.User__r.Email);
 			}
 			SendMail(address, TeamMemberSubscription[0].Team__r, emailMsj, emailSub);

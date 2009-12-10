@@ -300,10 +300,10 @@
 				</apex:outputText>
 				<br>
 			</apex:outputpanel></td>
-			<td valign="top" width="200px"><!-- - - - - - - - - - - - - - - - - - - - - -->
+			<td valign="top" width="349px" style="float:right;"><!-- - - - - - - - - - - - - - - - - - - - - -->
 			<!-- - - - - - - RIGHT SIDEBAR - - - - - - - --> <!-- - - - - - - - - - - - - - - - - - - - - -->
-			<apex:outputpanel id="rightSidebarPanel">
-				<div class="rightSideBar">
+			<apex:outputpanel id="rightSidebarPanel" >
+				<div class="rightSideBar" style="width:100%;">
 				<div class="box_round">
 				<div class="top_borders">
 				<div>
@@ -530,7 +530,6 @@
 								<apex:repeat value="{!attachments}" var="item5">
 									<tr>
 										<td class="delete">
-											
 											<table>
 												<tr>
 													<td>
@@ -556,8 +555,7 @@
 											</a>
 										</td>
 										<td class="date"><apex:outputtext value="{!item5.createdDate}" /></td>
-										<td class="user"><a
-											href="/{!item5.lastModifiedById}">{!item5.lastModifiedBy}</a>
+										<td class="user">{!item5.lastModifiedBy}
 										</td>
 										<td class="date"><apex:outputtext value="{!item5.lastModifiedDate}" /></td>
 									</tr>

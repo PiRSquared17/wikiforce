@@ -20,6 +20,16 @@ public class WikiMembersRemoveControllerTest {
 			wmr.getIsLastMemberAdmin();
 			
 			wmr.removeMember();
+			
+			wmr.resetError();
+			wmr.getError();
+			wmr.getFinish();
+			wmr.setRemoveMemberIds('');
+			wmr.getRemoveMemberIds();
+			wmr.setRemoveMemberId('');
+			wmr.massiveRemoveMember();
+			
+			
 
             Test.stopTest();
  
