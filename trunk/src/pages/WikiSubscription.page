@@ -128,7 +128,7 @@
 								<td><apex:inputCheckbox value="{!subscription.WikiCreatedByMeUpdated__c}"/></td>
 							</tr>
 							<tr>
-								<td class="labelTD"><label>When any changes happen to the {!$ObjectType.WikiPage__c.labelPlural}</label></td>
+								<td class="labelTD"><label>When a {!$ObjectType.WikiPage__c.label} I don't author is edited</label></td>
 								<td><apex:inputCheckbox value="{!subscription.WikiPageUpdated__c}"/></td>
 							</tr>
 						</table>
