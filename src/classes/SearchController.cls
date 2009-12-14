@@ -93,6 +93,8 @@ public class SearchController {
 		String txt;
 		if(module == 'wiki'){
 			txt = 'Wiki Pages';
+		}else if(module == 'wikioverview'){
+			txt = 'Wiki';
 		}else {
 			txt = '';
 		}
