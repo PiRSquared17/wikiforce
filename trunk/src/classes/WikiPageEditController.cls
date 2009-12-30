@@ -1470,7 +1470,7 @@ public without sharing class WikiPageEditController {
 	*@return PageReference
 	*/
 	public PageReference SaveEdit () {
-System.debug('XXX entree...');
+//System.debug('XXX entree...');
 		parseWiki();
 		html = html.replaceAll('&nbsp;',' ');
 		html = html.replaceAll('&#43;','+');
