@@ -906,6 +906,9 @@
 		readPortalCSSRules();
 		countStringLimit($('WikiCreateWiki:createNewTeamForm:TeamDescription'),'stringSizeCounter');
         
+        Event.observe(window, 'load', countStringLimit2($('WikiCreateWiki:createNewTeamForm:TeamDescription'),'stringSizeCounter'));
+         
+        
 		function toDelete()
 		{
 			var str = '';
