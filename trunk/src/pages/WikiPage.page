@@ -116,7 +116,9 @@
 									<td>
 										<!-- <input type="text" value="{!infoWiki.Name}"	style="width: 98%" /> -->
 										<!-- <apex:inputText value="{!infoWiki.Name}" id="nameNewWP" style="width:98%" maxlength="79"/> -->
-										<apex:inputText value="{!infoWiki.Name}" id="nameNewWP" style="width:98%" maxlength="79"/>
+
+										<apex:inputText value="{!infoWiki.Name}" id="nameNewWP" style="width:380px;" maxlength="79"/>
+										<!-- <apex:inputText value="{!infoWiki.Name}" id="nameNewWP" style="width:98%" maxlength="79"/> -->
 									</td>
 								</tr>
 								<tr>
@@ -130,7 +132,8 @@
 									<td align="right" valign="top"><span class="inputLabel">Description</span></td>
 									<td></td>
 									<td class="descriptionInput">
-									<apex:inputTextarea id="descNewWP" value="{!infoWiki.ShortDescription}" onkeyup="countLimit(this, 'textCounter2', 250)" style="width: 98%; height: 110px;" />
+									<apex:inputTextarea id="descNewWP" value="{!infoWiki.ShortDescription}" onkeyup="countLimit(this, 'textCounter2', 250)" style="width: 380px; height: 110px;" />
+									<!-- <apex:inputTextarea id="descNewWP" value="{!infoWiki.ShortDescription}" onkeyup="countLimit(this, 'textCounter2', 250)" style="width: 98%; height: 110px;" /> -->
 										<span class="infoText"><span id="textCounter2">250</span> character limit</span>
 									</td>
 								</tr>

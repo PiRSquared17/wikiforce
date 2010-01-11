@@ -70,7 +70,7 @@
 		    <apex:define name="title">Overview</apex:define>
 		    <apex:define name="help">WikiOverview</apex:define>
 		    <apex:define name="search">
-		     	<c:Search module="wikioverview" />
+		     	<c:Search module="wiki" />
 		    </apex:define>
 	    </apex:composition>
 	    <div class="MainPage">
@@ -232,8 +232,9 @@
 																				<apex:commandLink value="Unjoin" action="{!unjoinWiki}" rendered="{!IF(item.isMember,true,false)}" onclick="changeStatusToLoading(this);" oncomplete="refreshJoinList();" >
 																					<apex:param name="wid" value="{!item.Id}" />
 																				</apex:commandLink>  
-																				<apex:outputpanel rendered="{!IF(item.IsAdmin,true,false)}" >
-																					|&nbsp;<a href="WikiCreateWiki?id={!item.Id}" >Edit</a> | <a href="Javascript:;" onclick="deleteWikiOverlay('{!item.Id}');relocateOverlay();">Del</a>
+																				<apex:outputpanel rendered="{!IF(item.IsAdmin,true,false)}">
+																					|&nbsp;<a href="WikiCreateWiki?id={!item.Id}" >Edit</a> 
+																					| <a href="Javascript:;" onclick="deleteWikiOverlay('{!item.Id}');relocateOverlay();">Del</a>
 																				</apex:outputpanel>
 																			</td>
 																			<td width="70px" valign="top">
@@ -318,6 +319,11 @@
 												<div class="teamBlockTitle">
 													<h4>Recently Updated Pages</h4>
 												</div>
+												
+												<apex:form >
+													<apex:actionFunction name="reloadFormRecentlyUpdate" rerender="updatedPanel" />
+												</apex:form>
+												
 
 												<apex:outputpanel id="updatedPanel">
 													<apex:outputpanel id="formRecentlyUpdate">
@@ -376,6 +382,11 @@
 		function changeStatusToLoading(o){
 			$(o.id).innerHTML = "Loading...";  
 		}
+		
+		/**Reload Side bar
+		*
+		*/
+		
 	</script>
 
 	
