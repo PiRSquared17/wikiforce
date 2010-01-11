@@ -3,7 +3,8 @@
 */
 public class WikiWidgetMyFavoritesController {
 	
-	public List<FavoriteWikis__c> favorites = new List<FavoriteWikis__c>();
+	public List<FavoriteWikis__c> favorites;
+	//public List<FavoriteWikis__c> favorites = new List<FavoriteWikis__c>();
 	
 	/**
 	* Costructor
@@ -23,6 +24,9 @@ public class WikiWidgetMyFavoritesController {
 	* Read 5 favorites (A-Z order) for current user
 	*/
 	public void readFavorites(){
+		//Empty favorites list
+		this.favorites = new List<FavoriteWikis__c>();
+		
 		List<FavoriteWikis__c> aux = new List<FavoriteWikis__c>();
 		aux =	[SELECT WikiPage__r.Wiki__r.Id, WikiPage__r.Wiki__r.Name, WikiPage__r.Name, WikiPage__r.Id FROM 
 						FavoriteWikis__c WHERE User__c = :UserInfo.getUserId() order by WikiPage__r.Name LIMIT 5];	
