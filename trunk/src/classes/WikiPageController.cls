@@ -1657,21 +1657,6 @@ public class WikiPageController {
 	*/
    	public without sharing class DeleteWiki {
    		   		
-   		/** Children recursive deletion
-	   	*@param String id
-	   	*/
-	   	public void deletePagesChildren(String idDelete){
-	   		List<WikiPage__c> listDelete = [select Id,Name from WikiPage__c where Parent__c =: idDelete];
-	   		for (WikiPage__c item :  listDelete) {
-	   			deletePagesChildren (item.Id);
-	   			
-	   			//System.debug('XXX borro hijo ='+item);
-	   			
-	   			//Deleting the item....
-	   			delete item;
-	   		}
-	   	}
-	   	
    		/**
 		*@return PageReference
 		*@throws CustomException
@@ -1680,7 +1665,7 @@ public class WikiPageController {
    			PageReference pageRef;
    			
    			if (canManage || UserInfo.getUserId() == wikiPageBodyList[0].CreatedById) {
-
+   			//if (1 == 1) {
 		   		String wikiParent = '';
 		   		String idWikiSite = '';
 		   		if (wikiPageBodyList.size() > 0) {
@@ -1688,16 +1673,10 @@ public class WikiPageController {
 		   				wikiParent = wikiPageBodyList[0].Parent__c;	
 		   			}
 		   			idWikiSite = wikiPageBodyList[0].Wiki__c;
-		   		
-		   			//Children RECURSIVE Deletion
-		   			deletePagesChildren(wikiPageBodyList[0].Id);
-		   			
-		   			//System.debug('XXX - a Borrar ='+wikiPageBodyList[0]);
-		   			
-		   			//Deleting the orignal object...
-		   			delete wikiPageBodyList[0];
+		   			delete wikiPageBodyList;
 		   		}
 		   		if (deletePageRedirect){
+		   		//	System.debug('\n\n====================>>> Have to redirect');
 			   		if (wikiParent != '') {
 			   			pageRef = Page.WikiPage;
 			   			pageRef.getParameters().put('idWP', wikiParent);
@@ -1708,6 +1687,7 @@ public class WikiPageController {
 			   		}
 		   		}
 		   		else{
+		   		//	System.debug('\n\n====================>>> Don\'t have to redirect');
 		   			pageRef = Page.WikiTeamOverview;
 		   		}
 	   		}
@@ -1717,7 +1697,7 @@ public class WikiPageController {
 	   		pageRef.setRedirect(deletePageRedirect);
 			return pageRef;
    		}	
-   	}// END of class DeleteWiki
+   	}
    	
    	/**
 	*@return PageReference
@@ -1726,7 +1706,7 @@ public class WikiPageController {
    		DeleteWiki delW = new DeleteWiki();
    		List<WikiPage__c> wikisToDelete = new List<WikiPage__c>();
    		if (wikiPageToDelete != null && wikiPageToDelete != '') { 
-   			wikisToDelete = [select id, CreatedById, Parent__c, Wiki__c,Name from WikiPage__c where id=: wikiPageToDelete];
+   			wikisToDelete = [select id, CreatedById, Parent__c, Wiki__c from WikiPage__c where id=: wikiPageToDelete];
    		}
    		else {
    			wikisToDelete = wikiPageBodyList;

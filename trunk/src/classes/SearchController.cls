@@ -19,22 +19,24 @@ public class SearchController {
 	
 	// Map with action=>PageReference
 	private Map<String, PageReference> searchIn = new Map<String, PageReference>{
+		//'discussion'=> Page.DiscussionSearchResults, 
+		//'people_keyword' => Page.PeopleKeywordSearchResults,
+		//'team' => Page.TeamSearchResult,
+		//'team_detail' => Page.TeamDetailSearchResult,
 		'wiki' => Page.WikiSearchResult
-	};
+		};
 	
 	/**
 	* Redirect to the specific result
 	*@return PageReference
 	*/
 	public PageReference searchKey(){
-
 		if(this.module != null && this.module != ''){
 			PageReference pageRef = searchIn.get(module);
 			pageRef.getParameters().put('key', this.key);
 			if(this.teamId != null || this.teamId != '')
 				pageRef.getParameters().put('id', this.teamId);
 			pageRef.setRedirect(true);
-			
 			return pageRef;
 		}else {
 			return null;

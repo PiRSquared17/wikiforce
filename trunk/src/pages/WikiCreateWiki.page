@@ -176,7 +176,6 @@
 	<div id="modal_container" style="display:none;"></div>
 	<script>
 		createOverlay('initializeModalOverlay');
-		console.log('incializando overlay...');
 	</script>
 
 	<apex:form >
@@ -222,11 +221,9 @@
 				<table border="0" class="bodyTable" cellpadding="0" cellspacing="0">
 					<tr>
 						<td colspan="2" class="Breadcrums">
-							<a href="/apex/WikiOverview">Wiki Overview</a> > 
-							<a href="{!IF (inEdition == true, '/apex/WikiTeamOverview?tid='+Wiki.Id, 'WikiOverview')}">	Wiki {!IF (inEdition == true,'Team','')} Overview</a> >
-							<span>Wiki Create Wiki</span>
+							<a href="/apex/WikiOverview">Wiki Overview</a> > <a href="/apex/WikiTeamOverview?tid={!Wiki.Id}">Wiki Team Overview</a> > <span>Wiki Create Wiki</span>
 						</td>
-			
+						
 					</tr>
 					<tr>
 						<td valign="top" class="sideBarTD">
@@ -383,10 +380,9 @@
 																<span class="explain">
 																	current picture 
 																	<br>
-																	 <apex:outputPanel rendered="{!IF( wikiPicture != '', true, false)}" > 
-																	 <!-- <apex:outputPanel rendered="{!IF( wiki.PictureId__c != null, true, false)}" >  -->
+																	 <apex:outputPanel rendered="{!IF( wiki.PictureId__c != null, true, false)}" > 
 																	 	<a href="javascript:;" onclick="javascript:return confirmDelAvatar(); " >
-																	 		Remove
+																	 		remove
 																	 	</a>
 																	</apex:outputPanel>
 																</span>
@@ -674,7 +670,7 @@
 							<td>
 								<div>
 									<apex:outputpanel rendered="true"> 
-										<a onclick="createOverlay('','inviteTeam','','showSelects()'); relocateOverlay();" href="javascript:;" class="blackbutton">New</a>
+										<a onclick="createOverlay('','inviteTeam','','showSelects()'); relocateOverlay()" href="javascript:;" class="blackbutton">New</a>
 										<a href="javascript:;" class="blackbutton" onclick="massiveRemoveOverlay(); relocateOverlay()">Remove</a>
 									</apex:outputpanel>
 								</div>
@@ -702,7 +698,7 @@
 						<apex:form id="filterForm">
 							<ul class="letterFilter">
 								<li><apex:commandLink action="{!genMembers}" value="ALL"
-									styleclass="{!IF( Letter == 'ALL', 'AllBtn', 'contains') }" rerender="membersList, filterForm" onclick="$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay')" oncomplete="$('paginationOverlay').hide();"
+									styleclass="{!IF( Letter == 'ALL', 'AllBtn', 'contains') }" rerender="membersList, filterForm" onclick="$('paginationOverlay').show();setHeight('memberListContainer', 'paginationOverlay')" oncomplete="$('paginationOverlay').hide()"
 									onmouseover="$(this.id).toggleClassName( 'contains' );$(this.id).toggleClassName( 'AllBtn' );"
 									onmouseout="$(this.id).toggleClassName( 'contains' );$(this.id).toggleClassName( 'AllBtn' );">
 									<apex:param name="ltr" value="ALL" />
@@ -876,9 +872,7 @@
 								<td>
 								<div><!-- BUTTONS --> 
 									<apex:outputpanel id="thisIs"> <!-- rendered="{!userPermissions.canManage}" -->
-									
 										<a onclick="createOverlay('','inviteTeam','','showSelects()'); relocateOverlay(); setTimeout( 'focusToWikiMW()', 1200 );" href="javascript:;" class="blackbutton">New</a>
-										<!-- <a onclick="initializeAndSwitchF();createOverlay('','inviteTeam','','showSelects()'); relocateOverlay(); setTimeout( 'focusToWikiMW()', 1200 );" href="javascript:;" class="blackbutton">New XXX</a> -->
 										<a href="javascript:;" class="blackbutton" onclick="massiveRemoveOverlay(); relocateOverlay()">Remove</a>
 									</apex:outputpanel> <!-- BUTTONS --></div>
 								</td>
@@ -952,7 +946,7 @@
 		function confirmDelAvatar(){
 			cond = confirm('Are you sure you want to remove the wiki avatar');
 			if( cond ){
-				//$('avatarOverlay').show();
+				$('avatarOverlay').show();
 				deleteAvatarNow();
 			}
 			return cond;

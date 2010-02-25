@@ -280,7 +280,6 @@ public class WikiCreateWikiController {
 	    			newProfile.publicProfileClosed = theWiki.PublicProfile__c;
 	    		}
 		    }
-		    
     }
     /**
     * Team Profile Select
@@ -323,14 +322,9 @@ public class WikiCreateWikiController {
 			delete avatar;
 			
 			wiki.PictureId__c = null;
-			theWiki.PictureId__c=null;
-			//theWiki.PictureId__c='';
-			
 			upsert wiki;
-			
-			this.wikiPicture = null;
+			this.wikiPicture = '';
 			setWiki( theWiki.Id );
-			theWiki.PictureId__c=null;
 		}
 
 		PageReference pageRef = new PageReference('/apex/WikiCreateWiki?id=' + theWiki.Id );
@@ -365,11 +359,7 @@ public class WikiCreateWikiController {
     public PageReference saveWiki(){
     	try{
 	    	validSizePicture = true;
-			validTypePicture = true;
-			
-			if (this.wikiPicture == null)
-				theWiki.PictureId__c=null;
-			
+			validTypePicture = true; 
 			if (document.name == null || document.name == '' || document.BodyLength > MAX_SIZE || 
 					!(document.ContentType == 'image/jpeg' || document.ContentType == 'image/pjpeg' 
 					|| document.ContentType == 'image/gif' 
@@ -378,7 +368,7 @@ public class WikiCreateWikiController {
 				if (document.BodyLength > MAX_SIZE) {
 					validSizePicture = false;
 				}
-				//System.debug('File Upload: '+ document.ContentType);
+				System.debug('File Upload: '+ document.ContentType);
 				if(document.ContentType != null){
 					if (document.ContentType != 'image/jpeg' || document.ContentType != 'image/pjpeg' 
 						|| document.ContentType != 'image/gif' || document.ContentType != 'image/png' 
@@ -433,11 +423,13 @@ public class WikiCreateWikiController {
     			theWiki.PublicProfile__c = null;
     			theWiki.NewMemberProfile__c = null;
     		}
+			
 			if(theWiki.Id == null){
 	    		insert theWiki;	
 			}else {
 	    		update theWiki;
 	    	}
+			
 			if(document.name != null && document.name != ''){
 	    		document.ParentId = theWiki.Id;
 		    	insert document;
@@ -447,7 +439,6 @@ public class WikiCreateWikiController {
 	    	
 			PageReference pageRef = new PageReference('/apex/WikiTeamOverview?tid=' + theWiki.Id);
 			pageRef.setRedirect(true);
-			
 			return pageRef;
     	}catch(Exception e){
     		throw e;
