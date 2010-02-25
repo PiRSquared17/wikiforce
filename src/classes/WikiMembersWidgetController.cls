@@ -18,18 +18,8 @@ public with sharing class WikiMembersWidgetController {
 	/**
 	* Constructor
 	*/
-	public WikiMembersWidgetController(){
-		this.initializeErrNotAllUsersAdded();
-	}
+	public WikiMembersWidgetController(){}
 
-	/**
-	* initialize variable errorNotAllUsersAdded
-	* @void
-	*/
-	public void initializeErrNotAllUsersAdded(){
-		errNotAllUsersAdded = false;
-	}
-	
 	/**
 	* Return the Namespace Prefix
 	*@return String
@@ -128,8 +118,6 @@ public with sharing class WikiMembersWidgetController {
 	*@return List<WikiMember>
 	*/
 	public List<WikiMember> getWikispaceMembers() {
-		
-		
 		List<WikiMember__c> temp = new List<WikiMember__c>();
       	
     	temp = [select User__r.Id, User__r.Name from WikiMember__c where Wiki__c =: Wiki and User__r.IsActive != false order by User__r.Name];
@@ -433,7 +421,7 @@ public with sharing class WikiMembersWidgetController {
     */
     public Boolean getWasDeleted(){
     	String wikiToCheck = ApexPages.currentPage().getParameters().get('id');
-    	//System.debug('\n\n------------------------\nwikiToCheck=' + wikiToCheck);
+    	System.debug('\n\n------------------------\nwikiToCheck=' + wikiToCheck);
     	Boolean wasDeleted = false;
     	if(wikiToCheck!=null){
     		List<Wiki__c> quantityOfWiki = [select Id from Wiki__c where Id=:wikiToCheck];
@@ -443,7 +431,7 @@ public with sharing class WikiMembersWidgetController {
     		}else{
     			wasDeleted = true;
     		}
-    	//System.debug('\n\n------------------------\nwasDeleted=' + wasDeleted);
+    	System.debug('\n\n------------------------\nwasDeleted=' + wasDeleted);
     	}
 	return wasDeleted;
     }
@@ -455,17 +443,17 @@ public with sharing class WikiMembersWidgetController {
 	*/
 	public PageReference saveMembers () {
 		
-		this.initializeErrNotAllUsersAdded();
-		Boolean auxErrNotAllUsersAdded = false;
 		Boolean wasDeleted = getWasDeleted();
+		
 		if(!wasDeleted) {
-			//System.debug('\n\n==========\n/**********/ Saving members /**********/');
+			System.debug('\n\n==========\n/**********/ Saving members /**********/');
 			List<WikiMember__c> newMemberList = new List<WikiMember__c>();
 			List<String> newMembers = newMemberVars.colleagueNames.split('[ ]*,[ ]*');
 			List<User> userList = new List<User>();
 			already = false;
-			//errNotAllUsersAdded = false;
+			errNotAllUsersAdded = false;
 			finishedAdding = false;
+			
 			Map<String, User> usersMap = new Map<String, User>();
 			
 			for (User iterUser :[select id, Name, IsActive, Email from User where Name in:newMembers]) {
@@ -476,14 +464,14 @@ public with sharing class WikiMembersWidgetController {
 			errorMembers.clear();
 			for( String n : newMembers )
 				if( usersMap.get( n ) == null)
-					errorMembers.add( n );
+				errorMembers.add( n );
 			
 			this.errorMembersFlag = errorMembers.size() > 0;
 			
 			this.memberAdd = (errorMembers.size() != newMembers.size()) ? true : false ;
+	 		
 			if (usersMap.size() != newMembers.size())
-				auxErrNotAllUsersAdded = true;
-				//errNotAllUsersAdded = true;
+				errNotAllUsersAdded = true;
 	 
 			for(String item: newMembers) {
 				if (usersMap.get(item) != null) {
@@ -502,6 +490,7 @@ public with sharing class WikiMembersWidgetController {
 					}
 				}
 			}
+			
 			Map<Id, WikiMember__c> WikiMemberMap = new Map<Id, WikiMember__c>();
 			for (WikiMember__c iterMember : [select id, User__c  from WikiMember__c where Wiki__c =:idWiki]) {
 				WikiMemberMap.put(iterMember.User__c,iterMember);
@@ -518,7 +507,7 @@ public with sharing class WikiMembersWidgetController {
 			} else {
 	            wikiMemberProfile = [Select Name, Id From WikiProfile__c Where Name = 'Member Profile'];	
 			}
-
+			
 			for (User user : userList) {
 				if (WikiMemberMap.get(user.Id) == null && usersMap.get(user.Name).IsActive != false) {
 					WikiMember__c newMember = new WikiMember__c();
@@ -542,7 +531,7 @@ public with sharing class WikiMembersWidgetController {
 						mailList.add(user);
 				}
 			}
-
+			
 			userList.clear();
 			WikiMemberMap.clear();
 			usersMap.clear();
@@ -559,15 +548,12 @@ public with sharing class WikiMembersWidgetController {
 			
 			finishedAdding = true;
 			
-			errNotAllUsersAdded = auxErrNotAllUsersAdded;
-			
 			return null;
 		}
 		else {
-			//System.debug('\n\n====================\n Redirecting, wiki was deleted \n\n=======================\n\n');
+			System.debug('\n\n====================\n Redirecting, wiki was deleted \n\n=======================\n\n');
 			PageReference pr=new PageReference('/apex/WikiOverview');
 			pr.setRedirect(true);
-			errNotAllUsersAdded = auxErrNotAllUsersAdded;
 			return pr;
 		}
 	}
@@ -606,9 +592,6 @@ public with sharing class WikiMembersWidgetController {
 			}else{
 				countSaved += 3;
 			}
-			
-			
-			this.initializeErrNotAllUsersAdded();
 			return null;
 			
 	}

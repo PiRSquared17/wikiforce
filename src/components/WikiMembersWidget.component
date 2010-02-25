@@ -18,12 +18,9 @@
         */
 		var namespace = "{!namespace}";	
 		
-		
 		/**
 		* Load Gobal Vars
 		*/
-		
-		console.log('entreeee');
 		var API_SESSION_ID = "{!$Api.Session_ID}";
 		var rootResource = "{!URLFOR($Resource.TeamsResources)}";	
 		var globalTeamLabel = "{!$ObjectType.Wiki__c.label}";		
@@ -59,32 +56,11 @@
         }
         
         function switchF(){
-        	//initializeErrNotAllUsersAdded();
 			$$('.NewMemberErrorPanel')[0].hide();
 			$$('.NewMemberErrorPanel')[1].show();        
         }
-        
-        function switchError(){
-			//initializeErrNotAllUsersAdded();  
-			$$('.NewMemberErrorPanel')[0].show();
-			$$('.NewMemberErrorPanel')[1].hide();
-        }
-        
-        function initializeAndSwitchF(){
-        	initializeErrNotAllUsersAdded();
-        	switchF();        	
-        }
-        
-        function auxAux(){
-        	console.log('var = {!errNotAllUsersAdded}');
-        }
 	</script>
 	
-	<apex:form >
-	<apex:outputpanel id="initializeErrNotAllUsersAddedPanel" />
-	<apex:actionFunction immediate="true" rerender="initializeErrNotAllUsersAddedPanel" name="initializeErrNotAllUsersAdded" action="{!initializeErrNotAllUsersAdded}" />	
-	</apex:form>
-
 	<!-- Sync Save Members -->
 	<apex:form id="saveMembersSync">
 		<apex:actionPoller action="{!syncSaveMembers}" enabled="{!initAddMembers}" rerender="auxPanel, membersListContainer" interval="5" onComplete="refreshCount(); memberSefreshSwirly('swirlyDiv');" />
@@ -95,16 +71,12 @@
 	<!-- AuxPanel - When 'add member' on poller complete sync save we need reload member list. -->
 	<apex:outputpanel id="auxPanel">
 		<script>
-			
-			
 			var remaingToSave = '{!initAddMembers}';
 			if (remaingToSave == 'false' && !firstExecuteTime){
 				//Show swirly here
 				reloadMemberList();
 			}
-
 			firstExecuteTime = false;
-			
 		</script>
 	</apex:outputpanel>		
 
@@ -128,20 +100,17 @@
 						alt="Close Window" title="Close Window" /> </a>
 				</div>
 			</div>
-			<div class="overlayMainContent" id="overlayMainContentDiv">
+			<div class="overlayMainContent">
 				<span class="overlayRequiredInfo">= Required Information</span> 
 				<apex:form id="newMemberForm" onSubmit="if(validateColleguesInput()){memberShowSwirly('swirlyDiv');Form.disable(this.id);}else return false;">
-				
+					
                     <script>
-
                         if ( {!finishedAdding} && ! {!errNotAllUsersAdded} ) {
                             modal.close();
                         }
                     </script>
                     
-					<!-- <apex:outputpanel styleClass="NewMemberErrorPanel" id="newMemberErrorPanel" style="{!IF(errNotAllUsersAdded,'','display: none;')}">  -->                    
-                   <apex:outputpanel styleClass="NewMemberErrorPanel" id="newMemberErrorPanel" style="display: none;"> 
-                    
+                    <apex:outputpanel styleClass="NewMemberErrorPanel" id="newMemberErrorPanel" style="{!IF(errNotAllUsersAdded,'','display: none;')}"> <!-- rendered="{!errNotAllUsersAdded}"> -->
                         <br> 
                         <table style="width: 95%; text-align: center;">
                             <tr>
@@ -154,12 +123,10 @@
                         </table>
                         <div class="overlaySeparateLine"></div>
                         <div class="overlayFromButtons" align="center" >
-                            <input class="allButtons cancelButtons" type="button" value="Ok" onclick="initializeAndSwitchF();"/> 
+                            <input class="allButtons cancelButtons" type="button" value="Ok" onclick="switchF();"/> 
                         </div>
                     </apex:outputpanel>
-                  
-                    <apex:outputpanel styleClass="NewMemberErrorPanel" id="newMemberInfoPanel" >
-                    <!-- <apex:outputpanel styleClass="NewMemberErrorPanel" id="newMemberInfoPanel" style="{!IF(errNotAllUsersAdded,'display: none;','')}"> -->
+                    <apex:outputpanel styleClass="NewMemberErrorPanel" id="newMemberInfoPanel" style="{!IF(errNotAllUsersAdded,'display: none;','')}">
                         <div class="overlayFormContent">
     						<table cellpadding="0" cellspacing="0"	style="margin: 0px; padding: 0px; width: 100%;">
     							<tr>
@@ -218,13 +185,11 @@
     					
     					<!-- Save and Cancel Buttons -->
     					<div class="overlayFromButtons" align="center">
-    					<!--XXX oncomplete="memberHideSwirly('swirlyDiv');setHeight('memberListContainer', 'paginationOverlay');showSwirly('paginationOverlay');{!IF(errNotAllUsersAdded,'switchError();','')};initializeErrNotAllUsersAdded();" -->
     						<apex:commandButton action="{!saveMembers}"
-    							oncomplete="memberHideSwirly('swirlyDiv');setHeight('memberListContainer', 'paginationOverlay');showSwirly('paginationOverlay');{!IF(errNotAllUsersAdded,'switchError();','')}"
+    							oncomplete="memberHideSwirly('swirlyDiv');setHeight('memberListContainer', 'paginationOverlay');showSwirly('paginationOverlay');"
     							styleclass="allButtons actionButtons" value="Send"
     							rerender="membersListContainer, saveMembersSync, auxPanel, newMemberForm" /> 
     							<input class="allButtons cancelButtons" type="button" value="Cancel" onclick="modal.close();" />
-    							<!-- <input class="allButtons cancelButtons" type="button" value="Cancel" onclick="initializeErrNotAllUsersAdded();modal.close();" /> -->
     					</div>
                     </apex:outputpanel>
                     

@@ -847,10 +847,7 @@ public with sharing class WikiOverviewController {
    			wiki.setLastModifiedBy(item.LastModifiedById);
    			wiki.setLastModifiedById(item.LastModifiedById);
    			wiki.setLastModifiedDate(item.LastModifiedDate);
-   			
-   			//wiki.setParentName(item.Wiki__r.Name);
-   			wiki.setParentName(TeamUtil.chopWords( TeamUtil.chopPhrase( item.Wiki__r.Name , 50 )));
-   			
+   			wiki.setParentName(item.Wiki__r.Name);
    			wiki.setParentId(item.Wiki__r.Id);
    			wiki.setShortDescription( TeamUtil.chopWords(item.ShortDescription__c ));
    			wikis.add(wiki);

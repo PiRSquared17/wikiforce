@@ -599,16 +599,11 @@ public with sharing class WikiTeamOverviewController {
    		for (WikiPage__c item: [ SELECT Wiki__r.Name, Id, Name, ShortDescription__c, LastModifiedById, LastModifiedDate FROM WikiPage__c WHERE Wiki__c =: TEAMID ORDER BY LastModifiedDate desc limit 10]) {
    			Wiki wiki = new Wiki();
    			wiki.setId(item.Id);
-   			//wiki.setName(item.Name);
-   			wiki.setName(TeamUtil.chopWords( TeamUtil.chopPhrase( item.Name , 50 )));
-   			
+   			wiki.setName(item.Name);
    			wiki.setLastModifiedBy(item.LastModifiedById);
    			wiki.setLastModifiedById(item.LastModifiedById);
    			wiki.setLastModifiedDate(item.LastModifiedDate);
-   			
-   			//wiki.setParentName(item.Wiki__r.Name);
-   			wiki.setParentName(TeamUtil.chopWords( TeamUtil.chopPhrase( item.Wiki__r.Name , 50 )));
-   			
+   			wiki.setParentName(item.Wiki__r.Name);
    			wiki.setParentId(item.Wiki__r.Id);
    			wiki.setShortDescription(item.ShortDescription__c);
    			wikis.add(wiki);
