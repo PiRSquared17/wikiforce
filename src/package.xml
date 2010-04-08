@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
         <members>*</members>
@@ -21,11 +21,6 @@
         <name>CustomApplication</name>
     </types>
     <types>
-        <members>*</members>
-        <name>CustomLabels</name>
-    </types>
-    <types>
-        <members>*</members>
         <members>Account</members>
         <members>AccountContactRole</members>
         <members>Activity</members>
@@ -43,86 +38,13 @@
         <members>Opportunity</members>
         <members>OpportunityContactRole</members>
         <members>OpportunityLineItem</members>
+        <members>PartnerRole</members>
         <members>Product2</members>
         <members>Solution</members>
         <members>Task</members>
         <members>User</members>
+        <members>*</members>
         <name>CustomObject</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>CustomObjectTranslation</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>CustomPageWebLink</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>CustomTab</name>
-    </types>
-    <types>
-        <members>unfiled$public</members>
-        <members>unfiled$public/AcceptanceEmail</members>
-        <members>unfiled$public/ChangePwdEmail</members>
-        <members>unfiled$public/ChangePwdEmail1</members>
-        <members>unfiled$public/DeactivationEmail</members>
-        <members>unfiled$public/InvitationEmail</members>
-        <members>unfiled$public/MarketingProductInquiryResponse</members>
-        <members>unfiled$public/NewUserEmail</members>
-        <members>unfiled$public/NewUserEmail1</members>
-        <members>unfiled$public/RejectionEmail</members>
-        <members>unfiled$public/SUPPORTSelfServiceNewCommentNotificationSAMPLE</members>
-        <members>unfiled$public/SUPPORTSelfServiceNewUserLoginInformationSAMPLE</members>
-        <members>unfiled$public/SUPPORTSelfServiceResetPasswordSAMPLE</members>
-        <members>unfiled$public/SalesNewCustomerEmail</members>
-        <members>unfiled$public/SelfRegUserEmail</members>
-        <members>unfiled$public/SupportCaseAssignmentNotification</members>
-        <members>unfiled$public/SupportCaseCreatedPhoneInquiries</members>
-        <members>unfiled$public/SupportCaseCreatedWebInquiries</members>
-        <members>unfiled$public/SupportCaseResponse</members>
-        <members>unfiled$public/SupportEscalatedCaseNotification</members>
-        <members>unfiled$public/SupportEscalatedCaseReassignment</members>
-        <members>unfiled$public/SupportSelfServiceNewLoginandPassword</members>
-        <members>unfiled$public/SupportSelfServiceResetPassword</members>
-        <members>unfiled$public/UpdateConnEmail</members>
-        <name>EmailTemplate</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>HomePageComponent</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>HomePageLayout</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>Layout</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>Letterhead</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>Portal</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>Profile</name>
-    </types>
-    <types>
-        <members>unfiled$public</members>
-        <name>Report</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>ReportType</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>Scontrol</name>
     </types>
     <types>
         <members>*</members>
@@ -130,7 +52,7 @@
     </types>
     <types>
         <members>*</members>
-        <name>Workflow</name>
+        <name>CustomLabels</name>
     </types>
-    <version>16.0</version>
+    <version>15.0</version>
 </Package>
